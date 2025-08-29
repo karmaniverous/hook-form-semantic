@@ -5,6 +5,7 @@ export default defineConfig({
     globals: true,
     environment: 'happy-dom',
     setupFiles: ['./vitest.setup.ts'],
+    exclude: ['.rollup.cache/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
