@@ -10,12 +10,12 @@ Next up
 - Consider pruning unused devDependencies flagged by knip.
 
 Completed (recent)
+- Updated README to reflect React component template usage and features.
 - Replaced eslint.config.js with eslint.config.ts (flat config), updated
   npm scripts to run ESLint via node --loader tsx.
 - Scoped linting to avoid type-aware parse errors; ignore playground;
   tests use Vitest recommended rules (non type-checked).
-- Excluded tests and playground from ts typecheck; removed jest-dom types
-  from tsconfig to prevent build/docs errors if not installed.
+- Excluded tests and playground from ts typecheck; removed jest-dom types  from tsconfig to prevent build/docs errors if not installed.
 - Excluded .rollup.cache from Vitest to avoid stale compiled tests.
 - Excluded playground from lint/typecheck to reduce false positives.
 - Added vitest.setup.ts and configured jest-dom globally.
