@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 
 import { HelloWorld } from './HelloWorld';
 
@@ -13,3 +14,4 @@ describe('HelloWorld', () => {
     expect(screen.getByText('Hello React')).toBeInTheDocument();
   });
 });
+

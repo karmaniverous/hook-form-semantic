@@ -15,6 +15,7 @@
 
     // [req-1] Do not type-check dependency .d.ts files (incl. node_modules).
     "skipLibCheck": true,
+
     // Existing settings retained to satisfy [req-3] and [req-4].
     "allowJs": true,
     "checkJs": true,
@@ -33,7 +34,7 @@
     // React JSX runtime
     "jsx": "react-jsx"
   },
-  "exclude": ["coverage", "dist", "docs", "node_modules"],
-  "include": ["src/**/*", "vitest.config.ts", "vitest.setup.ts"]
+  "exclude": ["coverage", "dist", "docs", "node_modules", "playground"],
+  "include": ["src/**/*", "vitest.setup.ts"]
 }
 

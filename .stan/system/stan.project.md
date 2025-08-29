@@ -22,6 +22,9 @@ Baseline decisions
 - Linting
   - TS-only rules; no react-specific eslint plugins for now.
   - Ignore playground/\*\* from lint to avoid dev-only noise.
+  - Flat config in eslint.config.ts (TypeScript), executed via
+    `node --loader tsx` in npm scripts.
+  - Tests linted with Vitest recommended rules (non type-checked).
 - Testing
   - Vitest with happy-dom environment (project default).
   - @testing-library/react and @testing-library/jest-dom for component tests.
