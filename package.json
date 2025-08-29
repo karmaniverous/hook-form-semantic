@@ -1,8 +1,5 @@
 {
   "author": "Jason Williscroft",
-  "bin": {
-    "mycli": "./dist/cli/mycli/index.js"
-  },
   "auto-changelog": {
     "output": "CHANGELOG.md",
     "unreleased": true,
@@ -10,27 +7,28 @@
     "hideCredit": true
   },
   "bugs": {
-    "url": "https://github.com/karmaniverous/npm-package-template-ts/issues"
+    "url": "https://github.com/your-org/react-component-template/issues"
   },
   "dependencies": {
-    "@karmaniverous/stan": "^0.1.0",
-    "commander": "^14.0.0"
+    "@karmaniverous/stan": "^0.1.0"
   },
-  "description": "A feature-rich NPM package template for TypeScript projects.",
+  "description": "A React component library template for TypeScript projects.",
   "devDependencies": {
-    "@commander-js/extra-typings": "^14.0.0",
     "@dotenvx/dotenvx": "^1.49.0",
     "@eslint/js": "^9.33.0",
     "@rollup/plugin-alias": "^5.1.1",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
-    "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.4",
     "@types/eslint__js": "^9.14.0",
     "@types/eslint-config-prettier": "^6.11.3",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^24.3.0",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.0",
     "@vitest/coverage-v8": "^3.2.4",
     "auto-changelog": "^2.5.0",
     "concurrently": "^9.2.0",
@@ -51,51 +49,51 @@
     "rollup-plugin-dts": "^6.2.3",
     "tar": "^7.4.3",
     "tslib": "^2.8.1",
-    "tsx": "^4.20.4",
     "typedoc": "^0.28.10",
     "typedoc-plugin-mdn-links": "^5.0.8",
     "typedoc-plugin-replace-text": "^4.2.0",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.40.0",
-    "vitest": "^3.2.4"
+    "vite": "^5.4.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "vitest": "^3.2.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "engines": {
     "node": ">=20"
   },
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/mjs/index.js"
-      },
-      "require": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/cjs/index.js"
-      }
+      "types": "./dist/index.d.ts",
+      "default": "./dist/mjs/index.js"
     }
   },
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/karmaniverous/npm-package-template-ts#readme",
+  "homepage": "https://github.com/your-org/react-component-template#readme",
   "keywords": [
-    "eslint",
-    "lefthook",
-    "npm",
-    "prettier",
-    "rollup",
-    "template",
+    "react",
+    "component",
     "typescript",
-    "vitest"
+    "rollup",
+    "vite",
+    "vitest",
+    "template",
+    "eslint",
+    "prettier"
   ],
   "license": "BSD-3-Clause",
-  "main": "dist/cjs/index.js",
   "module": "dist/mjs/index.js",
-  "name": "@karmaniverous/npm-package-template-ts",
+  "name": "@your-scope/react-component-template",
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
   "publishConfig": {
     "access": "public"
-  },
-  "release-it": {
+  },  "release-it": {
     "git": {
       "changelog": "npx auto-changelog --unreleased-only --stdout --template https://raw.githubusercontent.com/release-it/release-it/main/templates/changelog-compact.hbs",
       "commitMessage": "chore: release v${version}",
@@ -128,11 +126,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/karmaniverous/npm-package-template-ts.git"
+    "url": "git+https://github.com/your-org/react-component-template.git"
   },
   "scripts": {
-    "build": "rimraf dist && rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
-    "changelog": "auto-changelog",
+    "build": "rimraf dist && rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",    "changelog": "auto-changelog",
     "diagrams": "cd diagrams/src && plantuml -tpng -o ../out -r .",
     "docs": "typedoc",
     "knip": "knip",
@@ -144,8 +141,11 @@
     "stan:build": "rimraf stan.dist && rollup --config stan.rollup.config.ts --configPlugin @rollup/plugin-typescript && rimraf stan.dist",
     "stan:docs": "typedoc --emit none",
     "test": "vitest --run --coverage",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "dev": "vite --config playground/vite.config.ts",
+    "preview": "vite preview --config playground/vite.config.ts"
   },
+  "sideEffects": false,
   "type": "module",
   "types": "dist/index.d.ts",
   "version": "0.6.13"

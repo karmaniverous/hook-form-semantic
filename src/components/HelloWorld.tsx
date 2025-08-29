@@ -1,0 +1,22 @@
+import React from 'react';
+
+/**
+ * HelloWorldProps defines the props for the HelloWorld component.
+ */
+export type HelloWorldProps = {
+  /**
+   * Whom to greet. Defaults to "World".
+   */
+  who?: string;
+};
+
+/**
+ * A simple Hello World React component.
+ *
+ * @remarks
+ * - Targets React 18 with the modern react-jsx runtime.
+ * - No styling is applied by default.
+ */
+export const HelloWorld: React.FC<HelloWorldProps> = ({ who = 'World' }) => {
+  return <div>Hello {who}</div>;
+};

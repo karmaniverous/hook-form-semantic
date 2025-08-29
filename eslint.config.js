@@ -25,11 +25,10 @@ export default tseslint.config(
   prettierConfig,
   {
     ...vitestPlugin.configs.recommended,
-    files: ['**/*.test.ts'],
+    files: ['**/*.test.ts', '**/*.test.tsx'],
   },
   {
-    languageOptions: {
-      parserOptions: {
+    languageOptions: {      parserOptions: {
         project: true,
         tsconfigRootDir,
       },
