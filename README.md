@@ -73,7 +73,7 @@ Given that your underlying library is solid, wrapping it into a CLI is fairly st
 1. The `bin` field in [`package.json`](https://github.com/karmaniverous/npm-package-template-ts/tree/main/package.json) must specifically reference each of these compiled CLI commands. On installation, you can then execute your CLI command like this:
 
 ```bash
-> npx mycli      # if installed localy
+> npx mycli      # if installed locally
 
 > mycli          # if installed globally
 
@@ -262,3 +262,4 @@ Also note that this template generates [API Documentation](#api-documentation) w
 ---
 
 Built for you with ❤️ on Bali! Find more great tools & templates on [my GitHub Profile](https://github.com/karmaniverous).
+
