@@ -1,5 +1,3 @@
-import React from 'react';
-
 /**
  * HelloWorldProps defines the props for the HelloWorld component.
  */
@@ -17,6 +15,6 @@ export type HelloWorldProps = {
  * - Targets React 18 with the modern react-jsx runtime.
  * - No styling is applied by default.
  */
-export const HelloWorld: React.FC<HelloWorldProps> = ({ who = 'World' }) => {
+export function HelloWorld({ who = 'World' }: HelloWorldProps): JSX.Element {
   return <div>Hello {who}</div>;
-};
+}

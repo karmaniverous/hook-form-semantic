@@ -29,9 +29,11 @@
     "strict": true,
     "tsBuildInfoFile": "./.tsbuildinfo",
     // [req-4] Test environment globals.
-    "types": ["node", "vitest/globals"],
+    "types": ["node", "vitest/globals", "@testing-library/jest-dom"],
     // React JSX runtime
     "jsx": "react-jsx"
   },
   "exclude": ["coverage", "dist", "docs", "node_modules"],
-  "include": ["**/*"]}
+  "include": ["src/**/*", "vitest.config.ts", "vitest.setup.ts"]
+}
+

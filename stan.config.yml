@@ -12,6 +12,6 @@ scripts:
   test: npm run test
   diagrams: npm run diagrams
   docs: npm run stan:docs
-  build: npm run stan:build
+  build: npm run build
   knip: npm run knip
 stanPath: .stan

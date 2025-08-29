@@ -18,6 +18,7 @@ export default tseslint.config(
       'dist/**/*',
       'docs/**/*',
       'node_modules/**/*',
+      'playground/**/*',
     ],
   },
   eslint.configs.recommended,
@@ -28,7 +29,8 @@ export default tseslint.config(
     files: ['**/*.test.ts', '**/*.test.tsx'],
   },
   {
-    languageOptions: {      parserOptions: {
+    languageOptions: {
+      parserOptions: {
         project: true,
         tsconfigRootDir,
       },
@@ -50,3 +52,4 @@ export default tseslint.config(
     },
   },
 );
+
