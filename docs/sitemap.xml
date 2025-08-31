@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
-		<loc>https://docs.karmanivero.us/npm-package-template-ts/index.html</loc>
-		<lastmod>2025-08-31T05:56:00.659Z</lastmod>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/index.html</loc>
+		<lastmod>2025-08-31T05:59:52.442Z</lastmod>
 	</url>
 	<url>
-		<loc>https://docs.karmanivero.us/npm-package-template-ts/modules.html</loc>
-		<lastmod>2025-08-31T05:56:00.659Z</lastmod>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/modules.html</loc>
+		<lastmod>2025-08-31T05:59:52.442Z</lastmod>
 	</url>
 	<url>
-		<loc>https://docs.karmanivero.us/npm-package-template-ts/hierarchy.html</loc>
-		<lastmod>2025-08-31T05:56:00.659Z</lastmod>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/hierarchy.html</loc>
+		<lastmod>2025-08-31T05:59:52.442Z</lastmod>
 	</url>
 	<url>
-		<loc>https://docs.karmanivero.us/npm-package-template-ts/documents/CHANGELOG.html</loc>
-		<lastmod>2025-08-31T05:56:00.659Z</lastmod>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/documents/CHANGELOG.html</loc>
+		<lastmod>2025-08-31T05:59:52.442Z</lastmod>
 	</url>
 	<url>
-		<loc>https://docs.karmanivero.us/npm-package-template-ts/modules/index.html</loc>
-		<lastmod>2025-08-31T05:56:00.659Z</lastmod>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/modules/index.html</loc>
+		<lastmod>2025-08-31T05:59:52.442Z</lastmod>
 	</url>
 	<url>
-		<loc>https://docs.karmanivero.us/npm-package-template-ts/types/index.HelloWorldProps.html</loc>
-		<lastmod>2025-08-31T05:56:00.659Z</lastmod>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/types/index.HelloWorldProps.html</loc>
+		<lastmod>2025-08-31T05:59:52.442Z</lastmod>
 	</url>
 	<url>
-		<loc>https://docs.karmanivero.us/npm-package-template-ts/functions/index.HelloWorld.html</loc>
-		<lastmod>2025-08-31T05:56:00.659Z</lastmod>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.HelloWorld.html</loc>
+		<lastmod>2025-08-31T05:59:52.442Z</lastmod>
 	</url>
 </urlset>
