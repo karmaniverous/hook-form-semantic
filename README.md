@@ -301,7 +301,6 @@ Notes
 - The test environment is happy‑dom for speed and stability. You can switch to jsdom later if needed.
 - Vitest excludes stale compiled tests from .rollup.cache.
 
-- Also verify your library entry (src/index.ts) re-exports what you intend.
 - Also verify your library entry (src/index.ts) re-exports what you intend. A tiny test can import from the library entry instead of deep paths:
 
 ```tsx
