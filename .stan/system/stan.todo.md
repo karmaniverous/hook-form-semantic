@@ -1,4 +1,4 @@
-When updated: 2025-08-31T00:18:00Z
+When updated: 2025-08-31T00:28:00Z
 
 Next up
 
@@ -11,6 +11,7 @@ Next up
 
 Completed (recent)
 
+- Deduped ESLint config: shared Prettier/import-sort for JS/TS; kept TS-specific rules; expanded Vitest test globs to include JS.
 - Fixed ESLint parser error on Windows by setting parserOptions.tsconfigRootDir = path.resolve() in eslint.config.ts.
 - Clarified lint/format policy: include /playground; exclude generated outputs; rely on editor Prettier (no new Lefthook script).
 - Added tests for library entry re-exports and HelloWorld edge cases.
