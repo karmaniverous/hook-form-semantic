@@ -1,7 +1,7 @@
 import path from 'node:path';
 
-import prettierConfig from 'eslint-config-prettier';
 import eslint from '@eslint/js';
+import prettierConfig from 'eslint-config-prettier';
 import prettierPlugin from 'eslint-plugin-prettier';
 import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort';
 import tsDocPlugin from 'eslint-plugin-tsdoc';

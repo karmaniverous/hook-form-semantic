@@ -8,7 +8,7 @@
 
 This template gives you a production‑ready foundation to build and publish React components with TypeScript. It prioritizes a smooth developer experience (DX) with fast feedback, predictable builds, and clear test and lint ergonomics.
 
-What you get out of the box
+What's in the box:
 
 - React 18 + TypeScript (react‑jsx runtime)
 - ESM‑only bundling with Rollup (react and react‑dom externalized)
