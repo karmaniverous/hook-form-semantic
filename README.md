@@ -20,6 +20,7 @@ What's in the box:
 - 📚 TypeDoc for API documentation
 - 🚀 release‑it for releases (optional Lefthook Git hooks)
 - 🤖 STAN — AI‑assisted refactoring & patch workflow
+- ☁️ GitHub Actions cloud sync backup (Rclone)
 - 🧩 Peer dependencies: react, react‑dom (>=18); sideEffects: false
 
 Contents
@@ -97,10 +98,18 @@ Delightful defaults with modern tooling — batteries included, no drama.
 - STAN: https://github.com/karmaniverous/stan
 - A rigorous, patch‑first assistant that helps refactor safely, keep docs in sync, and maintain clean diffs
 
+### ☁️ GitHub Actions cloud sync backup (Rclone)
+
+- Workflow: this repo ships a backup workflow at `.github/workflows/sync.yml` which calls a shared workflow: https://github.com/karmaniverous/gha-workflows/blob/main/.github/workflows/cloud-sync.yml
+- It leverages the Setup Rclone Action: https://github.com/marketplace/actions/setup-rclone-action
+- Free and useful: a simple, no‑cost alternative to pricey GitHub backup tools.
+- Safe by default: a clone from this template will NOT back up to anyone’s cloud without credentials. The action will FAIL unless the `RCLONE_CONFIG` repo secret is set (providing auth + destination).
+- Don’t want it? Just delete `.github/workflows/sync.yml`.
+- See the action page for details on configuring `RCLONE_CONFIG`.
+
 ### 🧩 Peer dependencies & tree‑shaking
 
-- peerDependencies (npm): https://docs.npmjs.com/files/package.json/
-- `sideEffects: false` (tree‑shaking hint): https://webpack.js.org/guides/tree-shaking/
+- peerDependencies (npm): https://docs.npmjs.com/files/package.json/- `sideEffects: false` (tree‑shaking hint): https://webpack.js.org/guides/tree-shaking/
 
 ---
 

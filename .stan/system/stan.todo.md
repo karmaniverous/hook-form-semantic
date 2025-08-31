@@ -1,4 +1,4 @@
-When updated: 2025-08-31T00:28:00Z
+When updated: 2025-08-31T00:45:00Z
 
 Next up
 
@@ -8,9 +8,13 @@ Next up
 - Re-run: npm run lint to confirm the Windows tseslint parser fix.
 - Normalize line endings to LF if you see CRLF noise: • git add --renormalize . • npm run lint:fix • commit the normalization
 - Verify lint includes /playground and excludes only generated output.
+- To enable cloud backups, set the RCLONE_CONFIG repo secret (see Setup Rclone Action). If you don’t want backups, delete .github/workflows/sync.yml.
 
 Completed (recent)
 
+- README: documented GitHub Actions cloud sync backup via Rclone; added safety/secret/opt‑out notes and links.
+- README: added STAN to “What’s in the box” and a new “In The Box” section with emoji-rich, linked subsections; updated Contents.
+- Lint: sorted imports and ensured EOF newline in eslint.config.ts to satisfy simple-import-sort and Prettier.
 - Deduped ESLint config: shared Prettier/import-sort for JS/TS; kept TS-specific rules; expanded Vitest test globs to include JS.
 - Fixed ESLint parser error on Windows by setting parserOptions.tsconfigRootDir = path.resolve() in eslint.config.ts.
 - Clarified lint/format policy: include /playground; exclude generated outputs; rely on editor Prettier (no new Lefthook script).
