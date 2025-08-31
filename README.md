@@ -21,10 +21,10 @@ What you get out of the box
 
 Contents
 
+- How to use this template
 - Getting Started
 - Develop React components
-- Test your components
-- View in the browser (Vite playground)
+- Test your components- View in the browser (Vite playground)
 - Build and publish
 - Linting & formatting
 - Type checking
@@ -33,10 +33,100 @@ Contents
 
 ---
 
+## How to use this template
+
+Option A — GitHub “Use this template”
+
+1) Open this repository on GitHub.
+2) Click “Use this template” → “Create a new repository”.
+3) Pick your owner/org and repo name, then create the repo.
+4) Clone your new repo locally.
+
+Option B — degit (no git history)
+
+```bash
+npx degit karmaniverous/react-component-npm-package-template-ts my-lib
+cd my-lib
+git init && git add -A && git commit -m "chore: scaffold from template"
+```
+
+Option C — shallow clone then reset history
+
+```bash
+git clone --depth=1 https://github.com/karmaniverous/react-component-npm-package-template-ts my-lib
+cd my-lib
+rm -rf .git
+git init && git add -A && git commit -m "chore: scaffold from template"
+```
+
+Replace placeholders (package.json and docs)
+
+- package.json
+  - name: Use your scoped package, e.g. @your-scope/my-lib
+  - version: 0.0.0 (start here; release-it will bump on first release)
+  - description, author, license
+  - repository.url: git+https://github.com/your-org/my-lib.git
+  - bugs.url: https://github.com/your-org/my-lib/issues
+  - homepage: https://github.com/your-org/my-lib#readme
+  - keywords: adjust for your library
+  - publishConfig.access: public (keep for public scoped packages)
+- README.md
+  - Title, import examples (replace @your-scope/react-component-template with your real package name)
+- typedoc.json
+  - hostedBaseUrl and navigationLinks.GitHub to point to your repo/docs
+- FUNDING.yml (optional)
+  - Update to your funding info or remove
+
+Quick package.json edits with npm
+
+```bash
+npm pkg set name='@your-scope/my-lib' version='0.0.0' \
+  description='My awesome React component library' \
+  author='Your Name <you@example.com>' license='MIT' \
+  repository.type='git' \
+  repository.url='git+https://github.com/your-org/my-lib.git' \
+  bugs.url='https://github.com/your-org/my-lib/issues' \
+  homepage='https://github.com/your-org/my-lib#readme'
+```
+
+Prepare for your first release
+
+1) Install and verify
+
+```bash
+npm install
+npx lefthook install   # optional
+npm run lint
+npm run test
+npm run typecheck
+npm run build
+```
+
+2) Configure your GitHub token (for release-it)
+   - Copy .env.local.template to .env.local.
+   - Create a GitHub Personal Access Token (classic) with “repo” scope:
+     https://github.com/settings/tokens
+   - Set GITHUB_TOKEN in .env.local.
+
+3) Push to your repo (main branch)
+
+```bash
+git remote add origin git@github.com:your-org/my-lib.git
+git push -u origin main
+```
+
+4) Release (interactive)
+
+```bash
+npm run release
+```
+
+release-it will bump the version (starting from 0.0.0), run lint/test/knip/build,
+tag, publish to npm, and create a GitHub Release.
+
 ## Getting Started
 
 Prerequisites
-
 - Node.js 20+ (recommended). If you use node >= 20.6, see the lint note under
   “Linting & formatting” about “--import tsx”.
 
@@ -144,8 +234,8 @@ Notes
 - Vitest excludes stale compiled tests from .rollup.cache.
 
 - Also verify your library entry (src/index.ts) re-exports what you intend.
+- Also verify your library entry (src/index.ts) re-exports what you intend.
   A tiny test can import from the library entry instead of deep paths:
-
 ```tsx
 // src/index.test.tsx
 import { render, screen } from '@testing-library/react';
@@ -162,8 +252,7 @@ it('re-exports HelloWorld', () => {
   test.coverage.exclude as needed if you want to include or exclude
   additional paths.
 
----
-## View in the browser (Vite playground)
+---## View in the browser (Vite playground)
 
 A minimal playground is included under playground/ for fast, local viewing with
 HMR. It imports your components directly from src (no publishing required).
