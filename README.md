@@ -1,10 +1,12 @@
-# React Component Library Template (TypeScript)
-
 > A fast, minimal, batteries‑included starter for React 18 component libraries.
 
-This template gives you a production‑ready foundation to build and publish React
-components with TypeScript. It prioritizes a smooth developer experience (DX)
-with fast feedback, predictable builds, and clear test and lint ergonomics.
+# React Component Library Template (TypeScript)
+
+> 👇 NPM & Node Current badges will be activated when you publish your component to NPM!
+
+[![npm version](https://img.shields.io/npm/v/@karmaniverous/react-component-npm-package-template-ts.svg)](https://www.npmjs.com/package/@karmaniverous/react-component-npm-package-template-ts) ![Node Current](https://img.shields.io/node/v/@karmaniverous/react-component-npm-package-template-ts) <!-- TYPEDOC_EXCLUDE --> [![docs](https://img.shields.io/badge/docs-website-blue)](https://docs.karmanivero.us/react-component-npm-package-template-ts) [![changelog](https://img.shields.io/badge/changelog-latest-blue.svg)](https://github.com/karmaniverous/react-component-npm-package-template-ts/tree/main/CHANGELOG.md)<!-- /TYPEDOC_EXCLUDE --> [![license](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://github.com/karmaniverous/react-component-npm-package-template-ts/tree/main/LICENSE.md)
+
+This template gives you a production‑ready foundation to build and publish React components with TypeScript. It prioritizes a smooth developer experience (DX) with fast feedback, predictable builds, and clear test and lint ergonomics.
 
 What you get out of the box
 
@@ -37,10 +39,10 @@ Contents
 
 Option A — GitHub “Use this template”
 
-1) Open this repository on GitHub.
-2) Click “Use this template” → “Create a new repository”.
-3) Pick your owner/org and repo name, then create the repo.
-4) Clone your new repo locally.
+1. Open this repository on GitHub.
+2. Click “Use this template” → “Create a new repository”.
+3. Pick your owner/org and repo name, then create the repo.
+4. Clone your new repo locally.
 
 Option B — degit (no git history)
 
@@ -91,7 +93,7 @@ npm pkg set name='@your-scope/my-lib' version='0.0.0' \
 
 Prepare for your first release
 
-1) Install and verify
+1. Install and verify
 
 ```bash
 npm install
@@ -102,33 +104,31 @@ npm run typecheck
 npm run build
 ```
 
-2) Configure your GitHub token (for release-it)
+2. Configure your GitHub token (for release-it)
    - Copy .env.local.template to .env.local.
-   - Create a GitHub Personal Access Token (classic) with “repo” scope:
-     https://github.com/settings/tokens
+   - Create a GitHub Personal Access Token (classic) with “repo” scope: https://github.com/settings/tokens
    - Set GITHUB_TOKEN in .env.local.
 
-3) Push to your repo (main branch)
+3. Push to your repo (main branch)
 
 ```bash
 git remote add origin git@github.com:your-org/my-lib.git
 git push -u origin main
 ```
 
-4) Release (interactive)
+4. Release (interactive)
 
 ```bash
 npm run release
 ```
 
-release-it will bump the version (starting from 0.0.0), run lint/test/knip/build,
-tag, publish to npm, and create a GitHub Release.
+release-it will bump the version (starting from 0.0.0), run lint/test/knip/build, tag, publish to npm, and create a GitHub Release.
 
 ## Getting Started
 
 Prerequisites
-- Node.js 20+ (recommended). If you use node >= 20.6, see the lint note under
-  “Linting & formatting” about “--import tsx”.
+
+- Node.js 20+ (recommended). If you use node >= 20.6, see the lint note under “Linting & formatting” about “--import tsx”.
 
 Install and initialize
 
@@ -229,13 +229,12 @@ npm run test
 
 Notes
 
-- The test environment is happy‑dom for speed and stability. You can switch to
-  jsdom later if needed.
+- The test environment is happy‑dom for speed and stability. You can switch to jsdom later if needed.
 - Vitest excludes stale compiled tests from .rollup.cache.
 
 - Also verify your library entry (src/index.ts) re-exports what you intend.
-- Also verify your library entry (src/index.ts) re-exports what you intend.
-  A tiny test can import from the library entry instead of deep paths:
+- Also verify your library entry (src/index.ts) re-exports what you intend. A tiny test can import from the library entry instead of deep paths:
+
 ```tsx
 // src/index.test.tsx
 import { render, screen } from '@testing-library/react';
@@ -247,15 +246,11 @@ it('re-exports HelloWorld', () => {
 });
 ```
 
-- Coverage scope: docs/, dist/, and playground/ are excluded in
-  vitest.config.ts so coverage focuses on your source. Adjust
-  test.coverage.exclude as needed if you want to include or exclude
-  additional paths.
+- Coverage scope: docs/, dist/, and playground/ are excluded in vitest.config.ts so coverage focuses on your source. Adjust test.coverage.exclude as needed if you want to include or exclude additional paths.
 
 ---## View in the browser (Vite playground)
 
-A minimal playground is included under playground/ for fast, local viewing with
-HMR. It imports your components directly from src (no publishing required).
+A minimal playground is included under playground/ for fast, local viewing with HMR. It imports your components directly from src (no publishing required).
 
 Commands
 
@@ -290,19 +285,15 @@ Outputs
 
 Externalized
 
-- react, react-dom, and react/jsx-runtime are marked external and must be
-  installed by consumers. They are listed as peerDependencies and devDependencies
-  here for DX.
+- react, react-dom, and react/jsx-runtime are marked external and must be installed by consumers. They are listed as peerDependencies and devDependencies here for DX.
 
 ESM only
 
-- This template ships ESM only (no CJS/IIFE). Most modern toolchains support
-  this directly. If you need CJS, add a second Rollup target.
+- This template ships ESM only (no CJS/IIFE). Most modern toolchains support this directly. If you need CJS, add a second Rollup target.
 
 Release flow (optional)
 
-- release-it is configured to run lint/test/knip/build, generate changelog, and
-  publish to npm + GitHub releases.
+- release-it is configured to run lint/test/knip/build, generate changelog, and publish to npm + GitHub releases.
 
 ---
 
@@ -324,8 +315,7 @@ npm run lint:fix
 
 Node 20.6+ note
 
-- If you see “tsx must be loaded with --import instead of --loader”, update the
-  lint scripts to:
+- If you see “tsx must be loaded with --import instead of --loader”, update the lint scripts to:
 
 ```json
 {
@@ -348,8 +338,7 @@ npm run typecheck
 
 Scoping
 
-- Type checks focus on src/\*\* and test setup. Playground and test files are
-  excluded from typecheck to keep the build/docs pipeline friction‑free.
+- Type checks focus on src/\*\* and test setup. Playground and test files are excluded from typecheck to keep the build/docs pipeline friction‑free.
 
 ---
 
@@ -361,25 +350,20 @@ Generate docs from your TSDoc comments
 npm run docs
 ```
 
-Output is written to docs/. You can host this via GitHub Pages or your preferred
-static host. Additional behavior is configured in typedoc.json.
+Output is written to docs/. You can host this via GitHub Pages or your preferred static host. Additional behavior is configured in typedoc.json.
 
 ---
 
 ## FAQ and tips
 
 - Why ESM only?
-  - Simpler outputs and smaller surface area. Add a CJS target in Rollup if you
-    must support CJS consumers.
+  - Simpler outputs and smaller surface area. Add a CJS target in Rollup if you must support CJS consumers.
 - Where do I put styles?
-  - This template ships “sideEffects: false” and no CSS by default. Add your own
-    styling approach (CSS modules, CSS‑in‑JS, etc.) per component need.
+  - This template ships “sideEffects: false” and no CSS by default. Add your own styling approach (CSS modules, CSS‑in‑JS, etc.) per component need.
 - How do I add more components?
-  - Create new files under src/components, export from src/index.ts, add tests,
-    and render them in the playground during development.
+  - Create new files under src/components, export from src/index.ts, add tests, and render them in the playground during development.
 - Can I use Storybook or Ladle?
-  - Yes — add it later if you need richer component docs/demos. The Vite
-    playground keeps things minimal to start.
+  - Yes — add it later if you need richer component docs/demos. The Vite playground keeps things minimal to start.
 
 ---
 
@@ -387,11 +371,9 @@ static host. Additional behavior is configured in typedoc.json.
 
 - Build, docs, and typecheck pass.
 - Tests pass with Vitest + Testing Library.
-- Lint is configured with a TS flat config; if you’re on Node ≥ 20.6, consider
-  switching lint scripts from “--loader tsx” to “--import tsx” (see above).
+- Lint is configured with a TS flat config; if you’re on Node ≥ 20.6, consider switching lint scripts from “--loader tsx” to “--import tsx” (see above).
 - For a typical React 18 component workflow, this template is ready to use.
 
 ---
 
 Built for you with ❤️ on Bali! Find more great tools & templates on [my GitHub Profile](https://github.com/karmaniverous).
-
