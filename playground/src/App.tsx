@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { HelloWorld } from '../../src/components/HelloWorld';
 
 export default function App() {
@@ -8,4 +9,3 @@ export default function App() {
     </div>
   );
 }
-

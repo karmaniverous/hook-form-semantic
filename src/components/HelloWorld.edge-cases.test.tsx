@@ -19,4 +19,3 @@ describe('HelloWorld edge cases', () => {
     expect(screen.getByText('Hello 🚀')).toBeInTheDocument();
   });
 });
-

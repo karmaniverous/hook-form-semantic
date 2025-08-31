@@ -9,4 +9,3 @@ describe('library entry (src/index.ts)', () => {
     expect(screen.getByText('Hello Library')).toBeInTheDocument();
   });
 });
-

@@ -5,4 +5,3 @@
  */
 
 export { HelloWorld, type HelloWorldProps } from './components/HelloWorld';
-

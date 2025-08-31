@@ -65,4 +65,3 @@ const config: RollupOptions[] = [
 ];
 
 export default config;
-

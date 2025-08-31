@@ -14,4 +14,3 @@ describe('HelloWorld', () => {
     expect(screen.getByText('Hello React')).toBeInTheDocument();
   });
 });
-
