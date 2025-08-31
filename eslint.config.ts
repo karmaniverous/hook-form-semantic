@@ -38,6 +38,8 @@ export default tseslint.config(
       tsdoc: tsDocPlugin,
     },
     rules: {
+      // Defer to the repo Prettier config (.prettierrc.json) as the single source of truth.
+      'prettier/prettier': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
@@ -52,4 +54,3 @@ export default tseslint.config(
   // Disable stylistic conflicts with Prettier.
   prettierConfig,
 );
-
