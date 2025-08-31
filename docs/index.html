@@ -1,0 +1,346 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="./"><head><meta charset="utf-8"/><link rel="canonical" href="https://docs.karmanivero.us/react-component-npm-package-template-ts/"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>@karmaniverous/react-component-npm-package-template-ts</title><meta name="description" content="Documentation for @karmaniverous/react-component-npm-package-template-ts"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><a href="index.html" class="title">@karmaniverous/react-component-npm-package-template-ts</a><div id="tsd-toolbar-links"><a href="https://github.com/karmaniverous/react-component-npm-package-template-ts">GitHub</a></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/><ul role="listbox" id="tsd-search-results"></ul><div id="tsd-search-status" aria-live="polite" aria-atomic="true"><div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h1>@karmaniverous/react-component-npm-package-template-ts</h1></div><div class="tsd-panel tsd-typography"><blockquote>
+<p><strong><em>A modern, batteries‑included React 18 component library template for TypeScript with ESM‑only bundling, Vite playground, Vitest, ESLint/Prettier, TypeDoc, release‑it, STAN, and optional cloud backup.</em></strong></p>
+</blockquote>
+<h1 id="react-component-library-template-typescript" class="tsd-anchor-link">React Component Library Template (TypeScript)<a href="#react-component-library-template-typescript" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><blockquote>
+<p>👇 NPM &amp; Node Current badges will be activated when you publish your component to NPM!</p>
+</blockquote>
+<p><a href="https://www.npmjs.com/package/@karmaniverous/react-component-npm-package-template-ts" target="_blank" class="external"><img src="https://img.shields.io/npm/v/@karmaniverous/react-component-npm-package-template-ts.svg" alt="npm version"></a> <img src="https://img.shields.io/node/v/@karmaniverous/react-component-npm-package-template-ts" alt="Node Current">  <a href="https://github.com/karmaniverous/react-component-npm-package-template-ts/tree/main/LICENSE.md" target="_blank" class="external"><img src="https://img.shields.io/badge/license-BSD--3--Clause-blue.svg" alt="license"></a></p>
+<p>This template gives you a production‑ready foundation to build and publish React components with TypeScript. It prioritizes a smooth developer experience (DX) with fast feedback, predictable builds, and clear test and lint ergonomics.</p>
+<p>What's in the box:</p>
+<ul>
+<li>⚛️ React 18 + TypeScript (react‑jsx runtime)</li>
+<li>📦 ESM‑only bundling with Rollup (react and react‑dom externalized)</li>
+<li>🧾 Type declarations (.d.ts) via rollup‑plugin‑dts</li>
+<li>✅ Vitest + React Testing Library + jest‑dom (happy‑dom env)</li>
+<li>⚡ Vite playground for live browser testing (HMR)</li>
+<li>🧹 ESLint flat config (TypeScript) + simple‑import‑sort</li>
+<li>✨ Prettier formatting</li>
+<li>📚 TypeDoc for API documentation</li>
+<li>🚀 release‑it for releases (optional Lefthook Git hooks)</li>
+<li>🤖 STAN — AI‑assisted refactoring &amp; patch workflow</li>
+<li>☁️ GitHub Actions cloud sync backup (Rclone)</li>
+<li>🧩 Peer dependencies: react, react‑dom (&gt;=18); sideEffects: false</li>
+</ul>
+<h2 id="contents" class="tsd-anchor-link">Contents<a href="#contents" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li><a href="#in-the-box">In The Box</a></li>
+<li><a href="#how-to-use-this-template">How to use this template</a></li>
+<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#develop-react-components">Develop React components</a></li>
+<li><a href="#test-your-components">Test your components</a></li>
+<li><a href="#view-in-the-browser-vite-playground">View in the browser (Vite playground)</a></li>
+<li><a href="#build-and-publish">Build and publish</a></li>
+<li><a href="#linting--formatting">Linting &amp; formatting</a></li>
+<li><a href="#type-checking">Type checking</a></li>
+<li><a href="#api-docs-with-typedoc">API docs with TypeDoc</a></li>
+<li><a href="#faq-and-tips">FAQ and tips</a></li>
+</ul>
+<hr>
+<h2 id="in-the-box" class="tsd-anchor-link">In The Box<a href="#in-the-box" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Delightful defaults with modern tooling — batteries included, no drama.</p>
+<h3 id="⚛️-react-18--typescript-reactjsx-runtime" class="tsd-anchor-link">⚛️ React 18 + TypeScript (react‑jsx runtime)<a href="#⚛️-react-18--typescript-reactjsx-runtime" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>React: <a href="https://react.dev" target="_blank" class="external">https://react.dev</a></li>
+<li>TypeScript JSX options (react‑jsx automatic runtime): <a href="https://www.typescriptlang.org/docs/handbook/jsx.html" target="_blank" class="external">https://www.typescriptlang.org/docs/handbook/jsx.html</a></li>
+<li>New JSX Transform (background): <a href="https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html" target="_blank" class="external">https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html</a></li>
+</ul>
+<h3 id="📦-esmonly-bundling-with-rollup" class="tsd-anchor-link">📦 ESM‑only bundling with Rollup<a href="#📦-esmonly-bundling-with-rollup" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>Rollup (bundler): <a href="https://rollupjs.org" target="_blank" class="external">https://rollupjs.org</a></li>
+<li>Externalized: <code>react</code>, <code>react-dom</code>, and <code>react/jsx-runtime</code> (smaller bundles; consumers bring their own React)</li>
+</ul>
+<h3 id="🧾-type-declarations-dts-via-rollupplugindts" class="tsd-anchor-link">🧾 Type declarations (.d.ts) via rollup‑plugin‑dts<a href="#🧾-type-declarations-dts-via-rollupplugindts" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>rollup‑plugin‑dts: <a href="https://github.com/Swatinem/rollup-plugin-dts" target="_blank" class="external">https://github.com/Swatinem/rollup-plugin-dts</a></li>
+<li>Ships <code>dist/index.d.ts</code> for consumers and API docs</li>
+</ul>
+<h3 id="✅-testing-vitest--testing-library--jestdom-happydom" class="tsd-anchor-link">✅ Testing: Vitest + Testing Library + jest‑dom (happy‑dom)<a href="#✅-testing-vitest--testing-library--jestdom-happydom" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>Vitest: <a href="https://vitest.dev" target="_blank" class="external">https://vitest.dev</a></li>
+<li>React Testing Library: <a href="https://testing-library.com/docs/react-testing-library/intro/" target="_blank" class="external">https://testing-library.com/docs/react-testing-library/intro/</a></li>
+<li>jest‑dom matchers: <a href="https://testing-library.com/docs/ecosystem-jest-dom/" target="_blank" class="external">https://testing-library.com/docs/ecosystem-jest-dom/</a></li>
+<li>happy‑dom (fast, stable DOM env): <a href="https://github.com/capricorn86/happy-dom" target="_blank" class="external">https://github.com/capricorn86/happy-dom</a></li>
+</ul>
+<h3 id="⚡-vite-playground-hmr" class="tsd-anchor-link">⚡ Vite playground (HMR)<a href="#⚡-vite-playground-hmr" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>Vite: <a href="https://vite.dev" target="_blank" class="external">https://vite.dev</a></li>
+<li>Local dev playground under <code>/playground</code> for instant feedback without publishing</li>
+</ul>
+<h3 id="🧹-eslint-flat-config-typescript--simpleimportsort" class="tsd-anchor-link">🧹 ESLint flat config (TypeScript) + simple‑import‑sort<a href="#🧹-eslint-flat-config-typescript--simpleimportsort" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>ESLint “flat” config: <a href="https://eslint.org/docs/latest/use/configure/configuration-files" target="_blank" class="external">https://eslint.org/docs/latest/use/configure/configuration-files</a></li>
+<li>typescript‑eslint: <a href="https://typescript-eslint.io" target="_blank" class="external">https://typescript-eslint.io</a></li>
+<li>simple‑import‑sort keeps imports tidy by default</li>
+</ul>
+<h3 id="✨-prettier-formatting" class="tsd-anchor-link">✨ Prettier formatting<a href="#✨-prettier-formatting" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>Prettier: <a href="https://prettier.io" target="_blank" class="external">https://prettier.io</a></li>
+<li>Opinionated, consistent formatting with <code>endOfLine: &quot;lf&quot;</code> for cross‑platform harmony</li>
+</ul>
+<h3 id="📚-typedoc-api-documentation" class="tsd-anchor-link">📚 TypeDoc API documentation<a href="#📚-typedoc-api-documentation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>TypeDoc: <a href="https://typedoc.org" target="_blank" class="external">https://typedoc.org</a></li>
+<li>Generates browsable API docs from your TSDoc comments</li>
+</ul>
+<h3 id="🚀-release-automation-releaseit--optional-lefthook" class="tsd-anchor-link">🚀 Release automation (release‑it) + optional Lefthook<a href="#🚀-release-automation-releaseit--optional-lefthook" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>release‑it: <a href="https://github.com/release-it/release-it" target="_blank" class="external">https://github.com/release-it/release-it</a></li>
+<li>Lefthook (optional Git hooks manager): <a href="https://lefthook.dev" target="_blank" class="external">https://lefthook.dev</a></li>
+<li>Version bump, changelog, GitHub release, npm publish — all wired</li>
+</ul>
+<h3 id="🤖-stan--aiassisted-refactoring--patch-workflow" class="tsd-anchor-link">🤖 STAN — AI‑assisted refactoring &amp; patch workflow<a href="#🤖-stan--aiassisted-refactoring--patch-workflow" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>STAN: <a href="https://github.com/karmaniverous/stan" target="_blank" class="external">https://github.com/karmaniverous/stan</a></li>
+<li>A rigorous, patch‑first assistant that helps refactor safely, keep docs in sync, and maintain clean diffs</li>
+</ul>
+<h3 id="☁️-github-actions-cloud-sync-backup-rclone" class="tsd-anchor-link">☁️ GitHub Actions cloud sync backup (Rclone)<a href="#☁️-github-actions-cloud-sync-backup-rclone" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>Workflow: this repo ships a backup workflow at <code>.github/workflows/sync.yml</code> which calls a shared workflow: <a href="https://github.com/karmaniverous/gha-workflows/blob/main/.github/workflows/cloud-sync.yml" target="_blank" class="external">https://github.com/karmaniverous/gha-workflows/blob/main/.github/workflows/cloud-sync.yml</a></li>
+<li>It leverages the Setup Rclone Action: <a href="https://github.com/marketplace/actions/setup-rclone-action" target="_blank" class="external">https://github.com/marketplace/actions/setup-rclone-action</a></li>
+<li>Free and useful: a simple, no‑cost alternative to pricey GitHub backup tools.</li>
+<li>Safe by default: a clone from this template will NOT back up to anyone’s cloud without credentials. The action will FAIL unless the <code>RCLONE_CONFIG</code> repo secret is set (providing auth + destination).</li>
+<li>Don’t want it? Just delete <code>.github/workflows/sync.yml</code>.</li>
+<li>See the action page for details on configuring <code>RCLONE_CONFIG</code>.</li>
+</ul>
+<h3 id="🧩-peer-dependencies--treeshaking" class="tsd-anchor-link">🧩 Peer dependencies &amp; tree‑shaking<a href="#🧩-peer-dependencies--treeshaking" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>peerDependencies (npm): <a href="https://docs.npmjs.com/files/package.json/-" target="_blank" class="external">https://docs.npmjs.com/files/package.json/-</a> <code>sideEffects: false</code> (tree‑shaking hint): <a href="https://webpack.js.org/guides/tree-shaking/" target="_blank" class="external">https://webpack.js.org/guides/tree-shaking/</a></li>
+</ul>
+<hr>
+<h2 id="how-to-use-this-template" class="tsd-anchor-link">How to use this template<a href="#how-to-use-this-template" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Option A — GitHub “Use this template”</p>
+<ol>
+<li>Open this repository on GitHub.</li>
+<li>Click “Use this template” → “Create a new repository”.</li>
+<li>Pick your owner/org and repo name, then create the repo.</li>
+<li>Clone your new repo locally.</li>
+</ol>
+<p>Option B — degit (no git history)</p>
+<pre><code class="bash"><span class="hl-0">npx</span><span class="hl-1"> </span><span class="hl-2">degit</span><span class="hl-1"> </span><span class="hl-2">karmaniverous/react-component-npm-package-template-ts</span><span class="hl-1"> </span><span class="hl-2">my-lib</span><br/><span class="hl-0">cd</span><span class="hl-1"> </span><span class="hl-2">my-lib</span><br/><span class="hl-0">git</span><span class="hl-1"> </span><span class="hl-2">init</span><span class="hl-1"> &amp;&amp; </span><span class="hl-0">git</span><span class="hl-1"> </span><span class="hl-2">add</span><span class="hl-1"> </span><span class="hl-3">-A</span><span class="hl-1"> &amp;&amp; </span><span class="hl-0">git</span><span class="hl-1"> </span><span class="hl-2">commit</span><span class="hl-1"> </span><span class="hl-3">-m</span><span class="hl-1"> </span><span class="hl-2">&quot;chore: scaffold from template&quot;</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Option C — shallow clone then reset history</p>
+<pre><code class="bash"><span class="hl-0">git</span><span class="hl-1"> </span><span class="hl-2">clone</span><span class="hl-1"> </span><span class="hl-3">--depth=1</span><span class="hl-1"> </span><span class="hl-2">https://github.com/karmaniverous/react-component-npm-package-template-ts</span><span class="hl-1"> </span><span class="hl-2">my-lib</span><br/><span class="hl-0">cd</span><span class="hl-1"> </span><span class="hl-2">my-lib</span><br/><span class="hl-0">rm</span><span class="hl-1"> </span><span class="hl-3">-rf</span><span class="hl-1"> </span><span class="hl-2">.git</span><br/><span class="hl-0">git</span><span class="hl-1"> </span><span class="hl-2">init</span><span class="hl-1"> &amp;&amp; </span><span class="hl-0">git</span><span class="hl-1"> </span><span class="hl-2">add</span><span class="hl-1"> </span><span class="hl-3">-A</span><span class="hl-1"> &amp;&amp; </span><span class="hl-0">git</span><span class="hl-1"> </span><span class="hl-2">commit</span><span class="hl-1"> </span><span class="hl-3">-m</span><span class="hl-1"> </span><span class="hl-2">&quot;chore: scaffold from template&quot;</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Replace placeholders (package.json and docs)</p>
+<ul>
+<li>package.json
+<ul>
+<li>name: Use your scoped package, e.g. @your-scope/my-lib</li>
+<li>version: 0.0.0 (start here; release-it will bump on first release)</li>
+<li>description, author, license</li>
+<li>repository.url: git+https://github.com/your-org/my-lib.git</li>
+<li>bugs.url: <a href="https://github.com/your-org/my-lib/issues" target="_blank" class="external">https://github.com/your-org/my-lib/issues</a></li>
+<li>homepage: <a href="https://github.com/your-org/my-lib#readme" target="_blank" class="external">https://github.com/your-org/my-lib#readme</a></li>
+<li>keywords: adjust for your library</li>
+<li>publishConfig.access: public (keep for public scoped packages)</li>
+</ul>
+</li>
+<li><a href="http://README.md" target="_blank" class="external">README.md</a>
+<ul>
+<li>Title, import examples (replace @your-scope/react-component-template with your real package name)</li>
+</ul>
+</li>
+<li>typedoc.json
+<ul>
+<li>hostedBaseUrl and navigationLinks.GitHub to point to your repo/docs</li>
+</ul>
+</li>
+<li>FUNDING.yml (optional)
+<ul>
+<li>Update to your funding info or remove</li>
+</ul>
+</li>
+</ul>
+<p>Quick package.json edits with npm</p>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">pkg</span><span class="hl-1"> </span><span class="hl-2">set</span><span class="hl-1"> </span><span class="hl-2">name=&#39;@your-scope/my-lib&#39;</span><span class="hl-1"> </span><span class="hl-2">version=&#39;0.0.0&#39;</span><span class="hl-1"> </span><span class="hl-4">\</span><br/><span class="hl-1">  </span><span class="hl-2">description=&#39;My awesome React component library&#39;</span><span class="hl-1"> </span><span class="hl-4">\</span><br/><span class="hl-1">  </span><span class="hl-2">author=&#39;Your Name &lt;you@example.com&gt;&#39;</span><span class="hl-1"> </span><span class="hl-2">license=&#39;MIT&#39;</span><span class="hl-1"> </span><span class="hl-4">\</span><br/><span class="hl-1">  </span><span class="hl-2">repository.type=&#39;git&#39;</span><span class="hl-1"> </span><span class="hl-4">\</span><br/><span class="hl-1">  </span><span class="hl-2">repository.url=&#39;git+https://github.com/your-org/my-lib.git&#39;</span><span class="hl-1"> </span><span class="hl-4">\</span><br/><span class="hl-1">  </span><span class="hl-2">bugs.url=&#39;https://github.com/your-org/my-lib/issues&#39;</span><span class="hl-1"> </span><span class="hl-4">\</span><br/><span class="hl-1">  </span><span class="hl-2">homepage=&#39;https://github.com/your-org/my-lib#readme&#39;</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Prepare for your first release</p>
+<ol>
+<li>Install and verify</li>
+</ol>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span><br/><span class="hl-0">npx</span><span class="hl-1"> </span><span class="hl-2">lefthook</span><span class="hl-1"> </span><span class="hl-2">install</span><span class="hl-1">   </span><span class="hl-5"># optional</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">lint</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">test</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">typecheck</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">build</span>
+</code><button type="button">Copy</button></pre>
+
+<ol start="2">
+<li>
+<p>Configure your GitHub token (for release-it)</p>
+<ul>
+<li>Copy .env.local.template to .env.local.</li>
+<li>Create a GitHub Personal Access Token (classic) with “repo” scope: <a href="https://github.com/settings/tokens" target="_blank" class="external">https://github.com/settings/tokens</a></li>
+<li>Set GITHUB_TOKEN in .env.local.</li>
+</ul>
+</li>
+<li>
+<p>Push to your repo (main branch)</p>
+</li>
+</ol>
+<pre><code class="bash"><span class="hl-0">git</span><span class="hl-1"> </span><span class="hl-2">remote</span><span class="hl-1"> </span><span class="hl-2">add</span><span class="hl-1"> </span><span class="hl-2">origin</span><span class="hl-1"> </span><span class="hl-2">git@github.com:your-org/my-lib.git</span><br/><span class="hl-0">git</span><span class="hl-1"> </span><span class="hl-2">push</span><span class="hl-1"> </span><span class="hl-3">-u</span><span class="hl-1"> </span><span class="hl-2">origin</span><span class="hl-1"> </span><span class="hl-2">main</span>
+</code><button type="button">Copy</button></pre>
+
+<ol start="4">
+<li>Release (interactive)</li>
+</ol>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">release</span>
+</code><button type="button">Copy</button></pre>
+
+<p>release-it will bump the version (starting from 0.0.0), run lint/test/knip/build, tag, publish to npm, and create a GitHub Release.</p>
+<h2 id="getting-started" class="tsd-anchor-link">Getting Started<a href="#getting-started" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Prerequisites</p>
+<ul>
+<li>Node.js 20+ (recommended). If you use node &gt;= 20.6, see the lint note under “Linting &amp; formatting” about “--import tsx”.</li>
+</ul>
+<p>Install and initialize</p>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span><br/><span class="hl-0">npx</span><span class="hl-1"> </span><span class="hl-2">lefthook</span><span class="hl-1"> </span><span class="hl-2">install</span><span class="hl-1">   </span><span class="hl-5"># optional Git hooks (branch naming, etc.)</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Run tests and type checks to verify your environment</p>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">test</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">typecheck</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">build</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">docs</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Start the browser playground (HMR)</p>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">dev</span><br/><span class="hl-5"># opens http://localhost:5173 (by default)</span>
+</code><button type="button">Copy</button></pre>
+
+<hr>
+<h2 id="develop-react-components" class="tsd-anchor-link">Develop React components<a href="#develop-react-components" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Structure</p>
+<ul>
+<li>Put components in src/components.</li>
+<li>Export public surface from src/index.ts.</li>
+</ul>
+<p>Example: a simple HelloWorld component (already included)</p>
+<pre><code class="tsx"><span class="hl-5">// src/components/HelloWorld.tsx</span><br/><span class="hl-6">export</span><span class="hl-1"> </span><span class="hl-3">type</span><span class="hl-1"> </span><span class="hl-7">HelloWorldProps</span><span class="hl-1"> = { </span><span class="hl-8">who</span><span class="hl-1">?: </span><span class="hl-7">string</span><span class="hl-1"> };</span><br/><br/><span class="hl-6">export</span><span class="hl-1"> </span><span class="hl-3">function</span><span class="hl-1"> </span><span class="hl-0">HelloWorld</span><span class="hl-1">({ </span><span class="hl-8">who</span><span class="hl-1"> = </span><span class="hl-2">&#39;World&#39;</span><span class="hl-1"> }: </span><span class="hl-7">HelloWorldProps</span><span class="hl-1">): </span><span class="hl-7">JSX</span><span class="hl-1">.</span><span class="hl-7">Element</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-6">return</span><span class="hl-1"> </span><span class="hl-9">&lt;</span><span class="hl-10">div</span><span class="hl-9">&gt;</span><span class="hl-1">Hello </span><span class="hl-3">{</span><span class="hl-8">who</span><span class="hl-3">}</span><span class="hl-9">&lt;/</span><span class="hl-10">div</span><span class="hl-9">&gt;</span><span class="hl-1">;</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Re-export in your library entry</p>
+<pre><code class="ts"><span class="hl-5">// src/index.ts</span><br/><span class="hl-6">export</span><span class="hl-1"> { </span><span class="hl-8">HelloWorld</span><span class="hl-1">, </span><span class="hl-6">type</span><span class="hl-1"> </span><span class="hl-8">HelloWorldProps</span><span class="hl-1"> } </span><span class="hl-6">from</span><span class="hl-1"> </span><span class="hl-2">&#39;./components/HelloWorld&#39;</span><span class="hl-1">;</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Consume from another app after publishing</p>
+<pre><code class="tsx"><span class="hl-6">import</span><span class="hl-1"> { </span><span class="hl-8">HelloWorld</span><span class="hl-1"> } </span><span class="hl-6">from</span><span class="hl-1"> </span><span class="hl-2">&#39;@your-scope/react-component-template&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-6">export</span><span class="hl-1"> </span><span class="hl-6">default</span><span class="hl-1"> </span><span class="hl-3">function</span><span class="hl-1"> </span><span class="hl-0">App</span><span class="hl-1">() {</span><br/><span class="hl-1">  </span><span class="hl-6">return</span><span class="hl-1"> </span><span class="hl-9">&lt;</span><span class="hl-7">HelloWorld</span><span class="hl-1"> </span><span class="hl-11">who</span><span class="hl-1">=</span><span class="hl-2">&quot;React&quot;</span><span class="hl-1"> </span><span class="hl-9">/&gt;</span><span class="hl-1">;</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
+
+<hr>
+<h2 id="test-your-components" class="tsd-anchor-link">Test your components<a href="#test-your-components" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>This template uses:</p>
+<ul>
+<li>Vitest (happy‑dom)</li>
+<li>@testing-library/react</li>
+<li>jest‑dom (registered via vitest.setup.ts)</li>
+</ul>
+<p>Add tests alongside components (co‑located)</p>
+<pre><code class="tsx"><span class="hl-5">// src/components/HelloWorld.test.tsx</span><br/><span class="hl-6">import</span><span class="hl-1"> { </span><span class="hl-8">render</span><span class="hl-1">, </span><span class="hl-8">screen</span><span class="hl-1"> } </span><span class="hl-6">from</span><span class="hl-1"> </span><span class="hl-2">&#39;@testing-library/react&#39;</span><span class="hl-1">;</span><br/><span class="hl-6">import</span><span class="hl-1"> { </span><span class="hl-8">describe</span><span class="hl-1">, </span><span class="hl-8">expect</span><span class="hl-1">, </span><span class="hl-8">it</span><span class="hl-1"> } </span><span class="hl-6">from</span><span class="hl-1"> </span><span class="hl-2">&#39;vitest&#39;</span><span class="hl-1">;</span><br/><span class="hl-6">import</span><span class="hl-1"> { </span><span class="hl-8">HelloWorld</span><span class="hl-1"> } </span><span class="hl-6">from</span><span class="hl-1"> </span><span class="hl-2">&#39;./HelloWorld&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-0">describe</span><span class="hl-1">(</span><span class="hl-2">&#39;HelloWorld&#39;</span><span class="hl-1">, () </span><span class="hl-3">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-0">it</span><span class="hl-1">(</span><span class="hl-2">&#39;renders default greeting&#39;</span><span class="hl-1">, () </span><span class="hl-3">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">render</span><span class="hl-1">(</span><span class="hl-9">&lt;</span><span class="hl-7">HelloWorld</span><span class="hl-1"> </span><span class="hl-9">/&gt;</span><span class="hl-1">);</span><br/><span class="hl-1">    </span><span class="hl-0">expect</span><span class="hl-1">(</span><span class="hl-8">screen</span><span class="hl-1">.</span><span class="hl-0">getByText</span><span class="hl-1">(</span><span class="hl-2">&#39;Hello World&#39;</span><span class="hl-1">)).</span><span class="hl-0">toBeInTheDocument</span><span class="hl-1">();</span><br/><span class="hl-1">  });</span><br/><br/><span class="hl-1">  </span><span class="hl-0">it</span><span class="hl-1">(</span><span class="hl-2">&#39;renders custom greeting&#39;</span><span class="hl-1">, () </span><span class="hl-3">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">render</span><span class="hl-1">(</span><span class="hl-9">&lt;</span><span class="hl-7">HelloWorld</span><span class="hl-1"> </span><span class="hl-11">who</span><span class="hl-1">=</span><span class="hl-2">&quot;Developer&quot;</span><span class="hl-1"> </span><span class="hl-9">/&gt;</span><span class="hl-1">);</span><br/><span class="hl-1">    </span><span class="hl-0">expect</span><span class="hl-1">(</span><span class="hl-8">screen</span><span class="hl-1">.</span><span class="hl-0">getByText</span><span class="hl-1">(</span><span class="hl-2">&#39;Hello Developer&#39;</span><span class="hl-1">)).</span><span class="hl-0">toBeInTheDocument</span><span class="hl-1">();</span><br/><span class="hl-1">  });</span><br/><span class="hl-1">});</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Run tests (with coverage)</p>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">test</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Notes</p>
+<ul>
+<li>
+<p>The test environment is happy‑dom for speed and stability. You can switch to jsdom later if needed.</p>
+</li>
+<li>
+<p>Vitest excludes stale compiled tests from .rollup.cache.</p>
+</li>
+<li>
+<p>Also verify your library entry (src/index.ts) re-exports what you intend. A tiny test can import from the library entry instead of deep paths:</p>
+</li>
+</ul>
+<pre><code class="tsx"><span class="hl-5">// src/index.test.tsx</span><br/><span class="hl-6">import</span><span class="hl-1"> { </span><span class="hl-8">render</span><span class="hl-1">, </span><span class="hl-8">screen</span><span class="hl-1"> } </span><span class="hl-6">from</span><span class="hl-1"> </span><span class="hl-2">&#39;@testing-library/react&#39;</span><span class="hl-1">;</span><br/><span class="hl-6">import</span><span class="hl-1"> { </span><span class="hl-8">HelloWorld</span><span class="hl-1"> } </span><span class="hl-6">from</span><span class="hl-1"> </span><span class="hl-2">&#39;./index&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-0">it</span><span class="hl-1">(</span><span class="hl-2">&#39;re-exports HelloWorld&#39;</span><span class="hl-1">, () </span><span class="hl-3">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-0">render</span><span class="hl-1">(</span><span class="hl-9">&lt;</span><span class="hl-7">HelloWorld</span><span class="hl-1"> </span><span class="hl-11">who</span><span class="hl-1">=</span><span class="hl-2">&quot;Library&quot;</span><span class="hl-1"> </span><span class="hl-9">/&gt;</span><span class="hl-1">);</span><br/><span class="hl-1">  </span><span class="hl-0">expect</span><span class="hl-1">(</span><span class="hl-8">screen</span><span class="hl-1">.</span><span class="hl-0">getByText</span><span class="hl-1">(</span><span class="hl-2">&#39;Hello Library&#39;</span><span class="hl-1">)).</span><span class="hl-0">toBeInTheDocument</span><span class="hl-1">();</span><br/><span class="hl-1">});</span>
+</code><button type="button">Copy</button></pre>
+
+<ul>
+<li>Coverage scope: docs/, dist/, and playground/ are excluded in vitest.config.ts so coverage focuses on your source. Adjust test.coverage.exclude as needed if you want to include or exclude additional paths.</li>
+</ul>
+<hr>
+<h2 id="view-in-the-browser-vite-playground" class="tsd-anchor-link">View in the browser (Vite playground)<a href="#view-in-the-browser-vite-playground" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>A minimal playground is included under playground/ for fast, local viewing with HMR. It imports your components directly from src (no publishing required).</p>
+<p>Commands</p>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">dev</span><span class="hl-1">       </span><span class="hl-5"># start Vite dev server for the playground</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">preview</span><span class="hl-1">   </span><span class="hl-5"># preview a production build of the playground</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Where to edit</p>
+<ul>
+<li>playground/src/App.tsx: Import and render your components from ../../src.</li>
+<li>playground/index.html and playground/vite.config.ts are already wired.</li>
+</ul>
+<p>Publishing note</p>
+<ul>
+<li>The playground is excluded from your npm package (files: [&quot;dist&quot;]).</li>
+</ul>
+<hr>
+<h2 id="build-and-publish" class="tsd-anchor-link">Build and publish<a href="#build-and-publish" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Build the library</p>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">build</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Outputs</p>
+<ul>
+<li>dist/mjs/** for ESM modules (preserveModules enabled)</li>
+<li>dist/index.d.ts for types</li>
+</ul>
+<p>Externalized</p>
+<ul>
+<li>react, react-dom, and react/jsx-runtime are marked external and must be installed by consumers. They are listed as peerDependencies and devDependencies here for DX.</li>
+</ul>
+<p>ESM only</p>
+<ul>
+<li>This template ships ESM only (no CJS/IIFE). Most modern toolchains support this directly. If you need CJS, add a second Rollup target.</li>
+</ul>
+<p>Release flow (optional)</p>
+<ul>
+<li>release-it is configured to run lint/test/knip/build, generate changelog, and publish to npm + GitHub releases.</li>
+</ul>
+<hr>
+<h2 id="linting--formatting" class="tsd-anchor-link">Linting &amp; formatting<a href="#linting--formatting" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>This template uses a TypeScript ESLint flat config in eslint.config.ts with:</p>
+<ul>
+<li>ESLint recommended + TypeScript recommended (non type‑checked)</li>
+<li>Vitest recommended rules for test files</li>
+<li>Prettier integration</li>
+<li>simple-import-sort and basic TSDoc checks</li>
+</ul>
+<p>Run lint</p>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">lint</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">lint:fix</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Node 20.6+ note</p>
+<ul>
+<li>If you see “tsx must be loaded with --import instead of --loader”, update the lint scripts to:</li>
+</ul>
+<pre><code class="json"><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-12">&quot;lint&quot;</span><span class="hl-1">: </span><span class="hl-2">&quot;node --import tsx ./node_modules/eslint/bin/eslint.js .&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-12">&quot;lint:fix&quot;</span><span class="hl-1">: </span><span class="hl-2">&quot;node --import tsx ./node_modules/eslint/bin/eslint.js --fix .&quot;</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
+
+<p>(Your current scripts may already work depending on Node version.)</p>
+<hr>
+<h2 id="type-checking" class="tsd-anchor-link">Type checking<a href="#type-checking" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>TypeScript runs in check‑only mode (no emit):</p>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">typecheck</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Scoping</p>
+<ul>
+<li>Type checks focus on src/** and test setup. Playground and test files are excluded from typecheck to keep the build/docs pipeline friction‑free.</li>
+</ul>
+<hr>
+<h2 id="api-docs-with-typedoc" class="tsd-anchor-link">API docs with TypeDoc<a href="#api-docs-with-typedoc" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Generate docs from your TSDoc comments</p>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">docs</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Output is written to docs/. You can host this via GitHub Pages or your preferred static host. Additional behavior is configured in typedoc.json.</p>
+<hr>
+<h2 id="faq-and-tips" class="tsd-anchor-link">FAQ and tips<a href="#faq-and-tips" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li>Why ESM only?
+<ul>
+<li>Simpler outputs and smaller surface area. Add a CJS target in Rollup if you must support CJS consumers.</li>
+</ul>
+</li>
+<li>Where do I put styles?
+<ul>
+<li>This template ships “sideEffects: false” and no CSS by default. Add your own styling approach (CSS modules, CSS‑in‑JS, etc.) per component need.</li>
+</ul>
+</li>
+<li>How do I add more components?
+<ul>
+<li>Create new files under src/components, export from src/index.ts, add tests, and render them in the playground during development.</li>
+</ul>
+</li>
+<li>Can I use Storybook or Ladle?
+<ul>
+<li>Yes — add it later if you need richer component docs/demos. The Vite playground keeps things minimal to start.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="status--readiness" class="tsd-anchor-link">Status &amp; readiness<a href="#status--readiness" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li>Build, docs, and typecheck pass.</li>
+<li>Tests pass with Vitest + Testing Library.</li>
+<li>Lint is configured with a TS flat config; if you’re on Node ≥ 20.6, consider switching lint scripts from “--loader tsx” to “--import tsx” (see above).</li>
+<li>For a typical React 18 component workflow, this template is ready to use.</li>
+</ul>
+<hr>
+<p>Built for you with ❤️ on Bali! Find more great tools &amp; templates on <a href="https://github.com/karmaniverous" target="_blank" class="external">my GitHub Profile</a>.</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#react-component-library-template-typescript"><span>React <wbr/>Component <wbr/>Library <wbr/>Template (<wbr/>Type<wbr/>Script)</span></a><ul><li><a href="#contents"><span>Contents</span></a></li><li><a href="#in-the-box"><span>In <wbr/>The <wbr/>Box</span></a></li><li><ul><li><a href="#⚛️-react-18--typescript-reactjsx-runtime"><span>⚛️ <wbr/>React 18 + <wbr/>Type<wbr/>Script (react‑jsx runtime)</span></a></li><li><a href="#📦-esmonly-bundling-with-rollup"><span>📦 <wbr/>ESM‑only bundling with <wbr/>Rollup</span></a></li><li><a href="#🧾-type-declarations-dts-via-rollupplugindts"><span>🧾 <wbr/>Type declarations (.d.ts) via rollup‑plugin‑dts</span></a></li><li><a href="#✅-testing-vitest--testing-library--jestdom-happydom"><span>✅ <wbr/>Testing: <wbr/>Vitest + <wbr/>Testing <wbr/>Library + jest‑dom (happy‑dom)</span></a></li><li><a href="#⚡-vite-playground-hmr"><span>⚡ <wbr/>Vite playground (<wbr/>HMR)</span></a></li><li><a href="#🧹-eslint-flat-config-typescript--simpleimportsort"><span>🧹 <wbr/>ES<wbr/>Lint flat config (<wbr/>Type<wbr/>Script) + simple‑import‑sort</span></a></li><li><a href="#✨-prettier-formatting"><span>✨ <wbr/>Prettier formatting</span></a></li><li><a href="#📚-typedoc-api-documentation"><span>📚 <wbr/>Type<wbr/>Doc <wbr/>API documentation</span></a></li><li><a href="#🚀-release-automation-releaseit--optional-lefthook"><span>🚀 <wbr/>Release automation (release‑it) + optional <wbr/>Lefthook</span></a></li><li><a href="#🤖-stan--aiassisted-refactoring--patch-workflow"><span>🤖 <wbr/>STAN — <wbr/>AI‑assisted refactoring &amp; patch workflow</span></a></li><li><a href="#☁️-github-actions-cloud-sync-backup-rclone"><span>☁️ <wbr/>Git<wbr/>Hub <wbr/>Actions cloud sync backup (<wbr/>Rclone)</span></a></li><li><a href="#🧩-peer-dependencies--treeshaking"><span>🧩 <wbr/>Peer dependencies &amp; tree‑shaking</span></a></li></ul></li><li><a href="#how-to-use-this-template"><span>How to use this template</span></a></li><li><a href="#getting-started"><span>Getting <wbr/>Started</span></a></li><li><a href="#develop-react-components"><span>Develop <wbr/>React components</span></a></li><li><a href="#test-your-components"><span>Test your components</span></a></li><li><a href="#view-in-the-browser-vite-playground"><span>View in the browser (<wbr/>Vite playground)</span></a></li><li><a href="#build-and-publish"><span>Build and publish</span></a></li><li><a href="#linting--formatting"><span>Linting &amp; formatting</span></a></li><li><a href="#type-checking"><span>Type checking</span></a></li><li><a href="#api-docs-with-typedoc"><span>API docs with <wbr/>Type<wbr/>Doc</span></a></li><li><a href="#faq-and-tips"><span>FAQ and tips</span></a></li><li><a href="#status--readiness"><span>Status &amp; readiness</span></a></li></ul></div></details></div><div class="site-menu"><nav id="tsd-sidebar-links" class="tsd-navigation"><a href="https://github.com/karmaniverous/react-component-npm-package-template-ts" class="tsd-nav-link">GitHub</a></nav><nav class="tsd-navigation"><a href="modules.html">@karmaniverous/react-component-npm-package-template-ts</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>
