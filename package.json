@@ -12,7 +12,7 @@
   "dependencies": {
     "@karmaniverous/stan": "^0.5.6"
   },
-  "description": "A React component library template for TypeScript projects.",
+  "description": "A modern, batteries‑included React 18 component library template for TypeScript with ESM‑only bundling, Vite playground, Vitest, ESLint/Prettier, TypeDoc, release‑it, STAN, and optional cloud backup.",
   "devDependencies": {
     "@dotenvx/dotenvx": "^1.49.0",
     "@eslint/js": "^9.33.0",
@@ -76,14 +76,25 @@
   "homepage": "https://github.com/karmaniverous/react-component-npm-package-template-ts#readme",
   "keywords": [
     "react",
-    "component",
+    "react-components",
+    "component-library",
     "typescript",
+    "esm",
     "rollup",
+    "rollup-plugin-dts",
     "vite",
     "vitest",
-    "template",
+    "testing-library",
+    "jest-dom",
     "eslint",
-    "prettier"
+    "typescript-eslint",
+    "prettier",
+    "typedoc",
+    "release-it",
+    "template",
+    "starter",
+    "boilerplate",
+    "react-18"
   ],
   "license": "BSD-3-Clause",
   "module": "dist/mjs/index.js",

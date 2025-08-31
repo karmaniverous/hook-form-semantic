@@ -1,4 +1,4 @@
-> **_A fast, minimal, batteries‑included starter for React 18 component libraries._**
+> **_A modern, batteries‑included React 18 component library template for TypeScript with ESM‑only bundling, Vite playground, Vitest, ESLint/Prettier, TypeDoc, release‑it, STAN, and optional cloud backup._**
 
 # React Component Library Template (TypeScript)
 
@@ -23,19 +23,19 @@ What's in the box:
 - ☁️ GitHub Actions cloud sync backup (Rclone)
 - 🧩 Peer dependencies: react, react‑dom (>=18); sideEffects: false
 
-Contents
+## Contents
 
-- In The Box
-- How to use this template
-- Getting Started
-- Develop React components
-- Test your components
-- View in the browser (Vite playground)
-- Build and publish
-- Linting & formatting
-- Type checking
-- API docs with TypeDoc
-- FAQ and tips
+- [In The Box](#in-the-box)
+- [How to use this template](#how-to-use-this-template)
+- [Getting Started](#getting-started)
+- [Develop React components](#develop-react-components)
+- [Test your components](#test-your-components)
+- [View in the browser (Vite playground)](#view-in-the-browser-vite-playground)
+- [Build and publish](#build-and-publish)
+- [Linting & formatting](#linting--formatting)
+- [Type checking](#type-checking)
+- [API docs with TypeDoc](#api-docs-with-typedoc)
+- [FAQ and tips](#faq-and-tips)
 
 ---
 
