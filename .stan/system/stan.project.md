@@ -4,8 +4,7 @@ When updated: 2025-08-29T00:00:00Z
 
 Repository goal
 
-- Provide a ready-to-use template for building and publishing React 18
-  component libraries using TypeScript.
+- Provide a ready-to-use template for building and publishing React 18 component libraries using TypeScript.
 
 Baseline decisions
 
@@ -21,9 +20,9 @@ Baseline decisions
   - Mark package as "sideEffects": false (no global CSS side-effects).
 - Linting
   - TS-only rules; no react-specific eslint plugins for now.
-  - Ignore playground/\*\* from lint to avoid dev-only noise.
-  - Flat config in eslint.config.ts (TypeScript), executed via
-    `node --loader tsx` in npm scripts.
+  - Ignore playground/\*_/_ from lint to avoid dev-only noise.
+  - Flat config in eslint.config.ts (TypeScript), executed via `node --loader tsx` in npm scripts.
+  - Windows: set ESLint languageOptions.parserOptions.tsconfigRootDir to path.resolve() to avoid a known typescript-eslint path bug affecting tsconfigRootDir resolution on Windows.
   - Tests linted with Vitest recommended rules (non type-checked).
 - Testing
   - Vitest with happy-dom environment (project default).
@@ -31,8 +30,7 @@ Baseline decisions
   - jest-dom is registered via vitest.setup.ts.
 - Dev preview
   - Vite playground under /playground for interactive browser viewing.
-  - Playground is excluded from npm package (files: ["dist"]) and from
-    typecheck/lint.
+  - Playground is excluded from npm package (files: ["dist"]) and from typecheck/lint.
 - Source layout
   - Components under src/components.
   - Public entry at src/index.ts re-exports components.
@@ -47,4 +45,3 @@ Operational notes
 - Rollup marks react and react/jsx-runtime as externals.
 - Keep release and docs scripts; they may be adjusted later as needed.
 - Consider adding Storybook or Ladle later if richer docs are required.
-

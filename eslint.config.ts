@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import eslint from '@eslint/js';
 import prettierConfig from 'eslint-config-prettier';
 import prettierPlugin from 'eslint-plugin-prettier';
@@ -18,6 +20,13 @@ export default tseslint.config(
       'node_modules/**/*',
       'playground/**/*',
     ],
+    languageOptions: {
+      parserOptions: {
+        // Windows: force a resolved absolute path to work around a
+        // typescript-eslint parser bug affecting tsconfigRootDir.
+        tsconfigRootDir: path.resolve(),
+      },
+    },
   },
 
   // Base JS + TS (non type-checked) recommendations.

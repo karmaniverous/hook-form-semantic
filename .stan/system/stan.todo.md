@@ -1,23 +1,21 @@
-When updated: 2025-08-31T00:00:00Z
+When updated: 2025-08-31T00:00:30Z
 
 Next up
 
-- Run: npm install to ensure new devDependencies (react, react-dom,
-  @types/react, @types/react-dom, vite, @vitejs/plugin-react,
-  @testing-library/\*, tsx) are installed before running test/docs/typecheck.
+- Run: npm install to ensure new devDependencies (react, react-dom, @types/react, @types/react-dom, vite, @vitejs/plugin-react, @testing-library/\*, tsx) are installed before running test/docs/typecheck.
 - Optionally add story tooling (Storybook or Ladle) if docs scale up.
 - Consider pruning unused devDependencies flagged by knip.
+- Re-run: npm run lint to confirm the Windows tseslint parser fix.
 
 Completed (recent)
 
+- Fixed ESLint parser error on Windows by setting parserOptions.tsconfigRootDir = path.resolve() in eslint.config.ts.
 - Added tests for library entry re-exports and HelloWorld edge cases.
 - Tuned Vitest coverage to exclude docs/, dist/, and playground/ by default.
 - Updated README test section with entry re-export example and coverage notes.
 - Updated README to reflect React component template usage and features.
-- Replaced eslint.config.js with eslint.config.ts (flat config), updated
-  npm scripts to run ESLint via node --loader tsx.
-- Scoped linting to avoid type-aware parse errors; ignore playground;
-  tests use Vitest recommended rules (non type-checked).
+- Replaced eslint.config.js with eslint.config.ts (flat config), updated npm scripts to run ESLint via node --loader tsx.
+- Scoped linting to avoid type-aware parse errors; ignore playground; tests use Vitest recommended rules (non type-checked).
 - Excluded tests and playground from ts typecheck; removed jest-dom types from tsconfig to prevent build/docs errors if not installed.
 - Excluded .rollup.cache from Vitest to avoid stale compiled tests.
 - Excluded playground from lint/typecheck to reduce false positives.
