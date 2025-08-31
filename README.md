@@ -10,28 +10,97 @@ This template gives you a production‑ready foundation to build and publish Rea
 
 What's in the box:
 
-- React 18 + TypeScript (react‑jsx runtime)
-- ESM‑only bundling with Rollup (react and react‑dom externalized)
-- Type declarations (.d.ts) bundled via rollup-plugin-dts
-- Vitest + @testing-library/react + jest‑dom (happy‑dom env)
-- Vite playground for live browser testing (HMR)
-- TypeScript ESLint flat config (no project parser friction)
-- Prettier formatting
-- TypeDoc for API documentation
-- Release tooling (release-it), optional lefthook Git hooks
-- Peer dependencies: react, react‑dom (>=18); sideEffects: false
+- ⚛️ React 18 + TypeScript (react‑jsx runtime)
+- 📦 ESM‑only bundling with Rollup (react and react‑dom externalized)
+- 🧾 Type declarations (.d.ts) via rollup‑plugin‑dts
+- ✅ Vitest + React Testing Library + jest‑dom (happy‑dom env)
+- ⚡ Vite playground for live browser testing (HMR)
+- 🧹 ESLint flat config (TypeScript) + simple‑import‑sort
+- ✨ Prettier formatting
+- 📚 TypeDoc for API documentation
+- 🚀 release‑it for releases (optional Lefthook Git hooks)
+- 🤖 STAN — AI‑assisted refactoring & patch workflow
+- 🧩 Peer dependencies: react, react‑dom (>=18); sideEffects: false
 
 Contents
 
+- In The Box
 - How to use this template
 - Getting Started
 - Develop React components
-- Test your components- View in the browser (Vite playground)
+- Test your components
+- View in the browser (Vite playground)
 - Build and publish
 - Linting & formatting
 - Type checking
 - API docs with TypeDoc
 - FAQ and tips
+
+---
+
+## In The Box
+
+Delightful defaults with modern tooling — batteries included, no drama.
+
+### ⚛️ React 18 + TypeScript (react‑jsx runtime)
+
+- React: https://react.dev
+- TypeScript JSX options (react‑jsx automatic runtime): https://www.typescriptlang.org/docs/handbook/jsx.html
+- New JSX Transform (background): https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html
+
+### 📦 ESM‑only bundling with Rollup
+
+- Rollup (bundler): https://rollupjs.org
+- Externalized: `react`, `react-dom`, and `react/jsx-runtime` (smaller bundles; consumers bring their own React)
+
+### 🧾 Type declarations (.d.ts) via rollup‑plugin‑dts
+
+- rollup‑plugin‑dts: https://github.com/Swatinem/rollup-plugin-dts
+- Ships `dist/index.d.ts` for consumers and API docs
+
+### ✅ Testing: Vitest + Testing Library + jest‑dom (happy‑dom)
+
+- Vitest: https://vitest.dev
+- React Testing Library: https://testing-library.com/docs/react-testing-library/intro/
+- jest‑dom matchers: https://testing-library.com/docs/ecosystem-jest-dom/
+- happy‑dom (fast, stable DOM env): https://github.com/capricorn86/happy-dom
+
+### ⚡ Vite playground (HMR)
+
+- Vite: https://vite.dev
+- Local dev playground under `/playground` for instant feedback without publishing
+
+### 🧹 ESLint flat config (TypeScript) + simple‑import‑sort
+
+- ESLint “flat” config: https://eslint.org/docs/latest/use/configure/configuration-files
+- typescript‑eslint: https://typescript-eslint.io
+- simple‑import‑sort keeps imports tidy by default
+
+### ✨ Prettier formatting
+
+- Prettier: https://prettier.io
+- Opinionated, consistent formatting with `endOfLine: "lf"` for cross‑platform harmony
+
+### 📚 TypeDoc API documentation
+
+- TypeDoc: https://typedoc.org
+- Generates browsable API docs from your TSDoc comments
+
+### 🚀 Release automation (release‑it) + optional Lefthook
+
+- release‑it: https://github.com/release-it/release-it
+- Lefthook (optional Git hooks manager): https://lefthook.dev
+- Version bump, changelog, GitHub release, npm publish — all wired
+
+### 🤖 STAN — AI‑assisted refactoring & patch workflow
+
+- STAN: https://github.com/karmaniverous/stan
+- A rigorous, patch‑first assistant that helps refactor safely, keep docs in sync, and maintain clean diffs
+
+### 🧩 Peer dependencies & tree‑shaking
+
+- peerDependencies (npm): https://docs.npmjs.com/files/package.json/
+- `sideEffects: false` (tree‑shaking hint): https://webpack.js.org/guides/tree-shaking/
 
 ---
 
