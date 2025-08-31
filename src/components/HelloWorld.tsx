@@ -18,3 +18,4 @@ export type HelloWorldProps = {
 export function HelloWorld({ who = 'World' }: HelloWorldProps): JSX.Element {
   return <div>Hello {who}</div>;
 }
+

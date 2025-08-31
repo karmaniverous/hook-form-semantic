@@ -6,7 +6,7 @@ import { HelloWorld } from './HelloWorld';
 describe('HelloWorld edge cases', () => {
   it('respects empty string (no defaulting)', () => {
     render(<HelloWorld who="" />);
-    expect(screen.getByText('Hello ')).toBeInTheDocument();
+    expect(screen.getByText(/^Hello\s*$/)).toBeInTheDocument();
   });
 
   it('renders falsy-but-defined values', () => {
