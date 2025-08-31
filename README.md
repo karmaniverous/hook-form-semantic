@@ -316,7 +316,9 @@ it('re-exports HelloWorld', () => {
 
 - Coverage scope: docs/, dist/, and playground/ are excluded in vitest.config.ts so coverage focuses on your source. Adjust test.coverage.exclude as needed if you want to include or exclude additional paths.
 
----## View in the browser (Vite playground)
+---
+
+## View in the browser (Vite playground)
 
 A minimal playground is included under playground/ for fast, local viewing with HMR. It imports your components directly from src (no publishing required).
 
