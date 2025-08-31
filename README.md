@@ -1,4 +1,4 @@
-> A fast, minimal, batteries‑included starter for React 18 component libraries.
+> **_A fast, minimal, batteries‑included starter for React 18 component libraries._**
 
 # React Component Library Template (TypeScript)
 
