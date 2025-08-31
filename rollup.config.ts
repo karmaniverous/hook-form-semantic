@@ -5,12 +5,16 @@ import commonjsPlugin from '@rollup/plugin-commonjs';
 import jsonPlugin from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescriptPlugin from '@rollup/plugin-typescript';
+import type { RollupOptions } from 'rollup';
 import dtsPlugin from 'rollup-plugin-dts';
 
 const require = createRequire(import.meta.url);
-const pkg = require('./package.json');
+const pkg = require('./package.json') as {
+  dependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
+};
 
-const outputPath = `dist`;
+const outputPath = 'dist';
 
 const commonPlugins = [
   commonjsPlugin(),
@@ -19,7 +23,7 @@ const commonPlugins = [
   typescriptPlugin(),
 ];
 
-const commonAliases = [];
+const commonAliases: Array<{ find: string; replacement: string }> = [];
 
 const commonInputOptions = {
   input: 'src/index.ts',
@@ -32,7 +36,7 @@ const commonInputOptions = {
   plugins: [aliasPlugin({ entries: commonAliases }), ...commonPlugins],
 };
 
-const config = [
+const config: RollupOptions[] = [
   // ESM output only.
   {
     ...commonInputOptions,
@@ -49,7 +53,7 @@ const config = [
   // Type definitions output.
   {
     ...commonInputOptions,
-    plugins: [commonInputOptions.plugins, dtsPlugin()],
+    plugins: [...commonInputOptions.plugins, dtsPlugin()],
     output: [
       {
         extend: true,

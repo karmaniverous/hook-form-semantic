@@ -131,7 +131,7 @@
     "url": "git+https://github.com/your-org/react-component-template.git"
   },
   "scripts": {
-    "build": "rimraf dist && rollup --config rollup.config.js",
+    "build": "rimraf dist && rollup --config rollup.config.ts --configPlugin typescript",
     "changelog": "auto-changelog",
     "diagrams": "cd diagrams/src && plantuml -tpng -o ../out -r .",
     "docs": "typedoc",
@@ -152,3 +152,4 @@
   "types": "dist/index.d.ts",
   "version": "0.6.13"
 }
+
