@@ -143,8 +143,26 @@ Notes
   jsdom later if needed.
 - Vitest excludes stale compiled tests from .rollup.cache.
 
----
+- Also verify your library entry (src/index.ts) re-exports what you intend.
+  A tiny test can import from the library entry instead of deep paths:
 
+```tsx
+// src/index.test.tsx
+import { render, screen } from '@testing-library/react';
+import { HelloWorld } from './index';
+
+it('re-exports HelloWorld', () => {
+  render(<HelloWorld who="Library" />);
+  expect(screen.getByText('Hello Library')).toBeInTheDocument();
+});
+```
+
+- Coverage scope: docs/, dist/, and playground/ are excluded in
+  vitest.config.ts so coverage focuses on your source. Adjust
+  test.coverage.exclude as needed if you want to include or exclude
+  additional paths.
+
+---
 ## View in the browser (Vite playground)
 
 A minimal playground is included under playground/ for fast, local viewing with

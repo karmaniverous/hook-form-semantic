@@ -9,7 +9,12 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
+      exclude: [
+        'docs/**',
+        'dist/**',
+        'playground/**',
+        '.rollup.cache/**',
+      ],
     },
   },
 });
-
