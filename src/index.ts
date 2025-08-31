@@ -4,4 +4,4 @@
  * @packageDocumentation
  */
 
-export { foo, type FooTarget } from './foo';
+export { HelloWorld, type HelloWorldProps } from './components/HelloWorld';
