@@ -1,4 +1,4 @@
-When updated: 2025-08-31T00:00:30Z
+When updated: 2025-08-31T00:18:00Z
 
 Next up
 
@@ -6,10 +6,13 @@ Next up
 - Optionally add story tooling (Storybook or Ladle) if docs scale up.
 - Consider pruning unused devDependencies flagged by knip.
 - Re-run: npm run lint to confirm the Windows tseslint parser fix.
+- Normalize line endings to LF if you see CRLF noise: • git add --renormalize . • npm run lint:fix • commit the normalization
+- Verify lint includes /playground and excludes only generated output.
 
 Completed (recent)
 
 - Fixed ESLint parser error on Windows by setting parserOptions.tsconfigRootDir = path.resolve() in eslint.config.ts.
+- Clarified lint/format policy: include /playground; exclude generated outputs; rely on editor Prettier (no new Lefthook script).
 - Added tests for library entry re-exports and HelloWorld edge cases.
 - Tuned Vitest coverage to exclude docs/, dist/, and playground/ by default.
 - Updated README test section with entry re-export example and coverage notes.

@@ -20,9 +20,11 @@ Baseline decisions
   - Mark package as "sideEffects": false (no global CSS side-effects).
 - Linting
   - TS-only rules; no react-specific eslint plugins for now.
-  - Ignore playground/\*_/_ from lint to avoid dev-only noise.
+  - Playground IS included in lint/Prettier scope (treat as first-class source). Exclude only generated output: dist/, docs/, coverage/, .rollup.cache/, .stan/, context/, diagrams/out/.
   - Flat config in eslint.config.ts (TypeScript), executed via `node --loader tsx` in npm scripts.
   - Windows: set ESLint languageOptions.parserOptions.tsconfigRootDir to path.resolve() to avoid a known typescript-eslint path bug affecting tsconfigRootDir resolution on Windows.
+  - Limit lint to non-generated code; exclude dist/, docs/, coverage/, .rollup.cache/, .stan/, context/, and diagrams/out/.
+  - Line endings (cross-platform): enforce LF-only in the repo via .gitattributes, .editorconfig, and Prettier (endOfLine: "lf"). If CRLF noise appears locally, normalize once: • git add --renormalize . • npm run lint:fix Editors with Prettier on save should keep files normalized.
   - Tests linted with Vitest recommended rules (non type-checked).
 - Testing
   - Vitest with happy-dom environment (project default).
@@ -30,7 +32,7 @@ Baseline decisions
   - jest-dom is registered via vitest.setup.ts.
 - Dev preview
   - Vite playground under /playground for interactive browser viewing.
-  - Playground is excluded from npm package (files: ["dist"]) and from typecheck/lint.
+  - Playground is excluded from npm package (files: ["dist"]) and from typecheck.
 - Source layout
   - Components under src/components.
   - Public entry at src/index.ts re-exports components.

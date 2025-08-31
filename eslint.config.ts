@@ -18,19 +18,27 @@ export default tseslint.config(
       'dist/**/*',
       'docs/**/*',
       'node_modules/**/*',
-      'playground/**/*',
+      'assets/**/*',
+      'diagrams/out/**/*',
     ],
-    languageOptions: {
-      parserOptions: {
-        // Windows: force a resolved absolute path to work around a
-        // typescript-eslint parser bug affecting tsconfigRootDir.
-        tsconfigRootDir: path.resolve(),
-      },
+  },
+
+  // JavaScript files: ESLint recommended + Prettier + import sorting.
+  {
+    files: ['**/*.js', '**/*.cjs', '**/*.mjs'],
+    ...eslint.configs.recommended,
+    plugins: {
+      prettier: prettierPlugin,
+      'simple-import-sort': simpleImportSortPlugin,
+    },
+    rules: {
+      'prettier/prettier': 'error',
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
     },
   },
 
-  // Base JS + TS (non type-checked) recommendations.
-  eslint.configs.recommended,
+  // TypeScript (non type-checked) recommendations.
   ...tseslint.configs.recommended,
 
   // Test files: Vitest recommended rules.
@@ -41,6 +49,14 @@ export default tseslint.config(
 
   // Common plugins & rules.
   {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parserOptions: {
+        // Windows: force a resolved absolute path to work around a
+        // typescript-eslint parser bug affecting tsconfigRootDir.
+        tsconfigRootDir: path.resolve(),
+      },
+    },
     plugins: {
       prettier: prettierPlugin,
       'simple-import-sort': simpleImportSortPlugin,
