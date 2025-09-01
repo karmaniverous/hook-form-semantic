@@ -4,7 +4,7 @@
     "playground/vite.config.ts",
     "src/**/index.ts"
   ],
-  "ignoreBinaries": ["plantuml", "stan"],
+  "ignoreBinaries": ["plantuml"],
   "project": ["*/**", "!docs/**"],
   "rules": {
     "exports": "off",
