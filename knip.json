@@ -1,8 +1,8 @@
 {
   "entry": [
-    "src/**/index.ts",
     "playground/src/main.tsx",
-    "playground/vite.config.ts"
+    "playground/vite.config.ts",
+    "src/**/index.ts"
   ],
   "ignoreBinaries": ["plantuml"],
   "project": ["*/**", "!docs/**"],

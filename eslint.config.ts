@@ -13,12 +13,12 @@ export default tseslint.config(
     ignores: [
       '.rollup.cache/**/*',
       '.stan/**/*',
+      'assets/**/*',
       'coverage/**/*',
+      'diagrams/out/**/*',
       'dist/**/*',
       'docs/**/*',
       'node_modules/**/*',
-      'assets/**/*',
-      'diagrams/out/**/*',
     ],
   },
 
