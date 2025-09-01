@@ -1,10 +1,10 @@
 {
   "entry": [
-    "src/**/index.ts",
     "playground/src/main.tsx",
-    "playground/vite.config.ts"
+    "playground/vite.config.ts",
+    "src/**/index.ts"
   ],
-  "ignoreBinaries": ["plantuml"],
+  "ignoreBinaries": ["plantuml", "stan"],
   "project": ["*/**", "!docs/**"],
   "rules": {
     "exports": "off",

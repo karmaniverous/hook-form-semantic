@@ -9,9 +9,6 @@
   "bugs": {
     "url": "https://github.com/karmaniverous/react-component-npm-package-template-ts/issues"
   },
-  "dependencies": {
-    "@karmaniverous/stan": "^0.5.6"
-  },
   "description": "A modern, batteries‑included React 18 component library template for TypeScript with ESM‑only bundling, Vite playground, Vitest, ESLint/Prettier, TypeDoc, release‑it, STAN, and optional cloud backup.",
   "devDependencies": {
     "@dotenvx/dotenvx": "^1.49.0",
@@ -147,7 +144,6 @@
     "preview": "vite preview --config playground/vite.config.ts",
     "release": "dotenvx run -f .env.local -- release-it",
     "release:pre": "dotenvx run -f .env.local -- release-it --no-git.requireBranch --github.prerelease --preRelease",
-    "stan": "stan",
     "stan:docs": "typedoc --emit none",
     "test": "vitest --run --coverage",
     "typecheck": "tsc"
