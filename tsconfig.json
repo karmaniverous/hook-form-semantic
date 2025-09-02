@@ -35,6 +35,5 @@
     "jsx": "react-jsx"
   },
   "exclude": ["coverage", "dist", "docs", "node_modules", "playground"],
-  "include": ["src/**/*", "vitest.setup.ts", "rollup.config.ts"]
+  "include": ["src/**/*", "lib/**/*", "vitest.setup.ts", "rollup.config.ts"]
 }
-

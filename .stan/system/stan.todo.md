@@ -1,7 +1,6 @@
-When updated: 2025-08-31T00:45:00Z
+When updated: 2025-01-02T20:53:00Z
 
 Next up
-
 - Run: npm install to ensure new devDependencies (react, react-dom, @types/react, @types/react-dom, vite, @vitejs/plugin-react, @testing-library/\*, tsx) are installed before running test/docs/typecheck.
 - Optionally add story tooling (Storybook or Ladle) if docs scale up.
 - Consider pruning unused devDependencies flagged by knip.

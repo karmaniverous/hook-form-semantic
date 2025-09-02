@@ -7,7 +7,7 @@
     "hideCredit": true
   },
   "bugs": {
-    "url": "https://github.com/karmaniverous/react-component-npm-package-template-ts/issues"
+    "url": "https://github.com/karmaniverous/hook-form-semantic/issues"
   },
   "description": "A modern, batteries‑included React 18 component library template for TypeScript with ESM‑only bundling, Vite playground, Vitest, ESLint/Prettier, TypeDoc, release‑it, STAN, and optional cloud backup.",
   "devDependencies": {
@@ -20,6 +20,7 @@
     "@rollup/plugin-typescript": "^12.1.4",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.0",
+    "@types/lodash": "^4.17.20",
     "@types/node": "^24.3.0",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
@@ -38,10 +39,13 @@
     "prettier": "^3.6.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.62.0",
     "release-it": "^19.0.4",
     "rimraf": "^6.0.1",
     "rollup": "^4.46.4",
     "rollup-plugin-dts": "^6.2.3",
+    "semantic-ui-css": "^2.5.0",
+    "semantic-ui-react": "^3.0.0-beta.2",
     "tslib": "^2.8.1",
     "tsx": "^4.20.4",
     "typedoc": "^0.28.10",
@@ -58,13 +62,13 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/mjs/index.js"
+      "default": "./dist/mjs/src/index.js"
     }
   },
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/karmaniverous/react-component-npm-package-template-ts#readme",
+  "homepage": "https://github.com/karmaniverous/hook-form-semantic#readme",
   "keywords": [
     "react",
     "react-components",
@@ -88,11 +92,13 @@
     "react-18"
   ],
   "license": "BSD-3-Clause",
-  "module": "dist/mjs/index.js",
-  "name": "@karmaniverous/react-component-npm-package-template-ts",
+  "module": "dist/mjs/src/index.js",
+  "name": "@karmaniverous/hook-form-semantic",
   "peerDependencies": {
     "react": ">=18",
-    "react-dom": ">=18"
+    "react-dom": ">=18",
+    "react-hook-form": ">=7.0.0",
+    "semantic-ui-react": ">=3.0.0-beta.2"
   },
   "publishConfig": {
     "access": "public"
@@ -130,7 +136,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/karmaniverous/react-component-npm-package-template-ts.git"
+    "url": "git+https://github.com/karmaniverous/hook-form-semantic.git"
   },
   "scripts": {
     "build": "rimraf dist && rollup --config rollup.config.ts --configPlugin typescript",
@@ -151,5 +157,8 @@
   "sideEffects": false,
   "type": "module",
   "types": "dist/index.d.ts",
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
 }
