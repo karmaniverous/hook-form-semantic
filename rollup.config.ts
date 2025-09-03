@@ -7,6 +7,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescriptPlugin from '@rollup/plugin-typescript';
 import type { RollupOptions } from 'rollup';
 import dtsPlugin from 'rollup-plugin-dts';
+import postcssPlugin from 'rollup-plugin-postcss';
 
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json') as {
@@ -17,10 +18,17 @@ const pkg = require('./package.json') as {
 const outputPath = 'dist';
 
 const commonPlugins = [
+  postcssPlugin({
+    extract: false,
+    inject: false,
+    minimize: true,
+  }),
   commonjsPlugin(),
   jsonPlugin(),
   nodeResolve(),
-  typescriptPlugin(),
+  typescriptPlugin({
+    outputToFilesystem: false,
+  }),
 ];
 
 const commonAliases: Array<{ find: string; replacement: string }> = [];
