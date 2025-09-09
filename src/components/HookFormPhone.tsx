@@ -123,7 +123,7 @@ export const HookFormPhone = <T extends FieldValues>(
         event: React.SyntheticEvent<HTMLElement>,
         data: InputOnChangeData,
       ) => {
-        set(event, 'target.value', data.value);
+        set(event, 'target.value', data?.value);
         handlePhoneValueChange(event as ChangeEvent<HTMLInputElement>);
       },
       value: inputValue,

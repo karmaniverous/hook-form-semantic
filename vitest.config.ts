@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'happy-dom',
-    setupFiles: ['./vitest.setup.ts'],
+    setupFiles: ['./vitest.setup.tsx'],
     // Only include tests from your source directory
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,tsx}'],
     // Exclude everything else, especially node_modules and test-app

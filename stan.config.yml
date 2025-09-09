@@ -2,6 +2,9 @@ cliDefaults:
   run:
     sequential: true
 excludes:
+  - '**/*.ico'
+  - '**/*.png'
+  - '**/*.svg'
   - docs
   - package-lock.json
 includes: []
