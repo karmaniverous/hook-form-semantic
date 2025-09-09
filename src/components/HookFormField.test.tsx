@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import type React from 'react';
 import {
   type ControllerRenderProps,
   type Path,
@@ -24,7 +25,17 @@ function Harness() {
         hookName="name"
         label="Name"
       >
-        {(field) => <input aria-label="name-input" {...field} />}
+        {(field) => {
+          const f = field as ControllerRenderProps<FormData, Path<FormData>>;
+          return (
+            <input
+              aria-label="name-input"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                f.onChange(e, { value: e.currentTarget.value })
+              }
+            />
+          );
+        }}
       </HookFormField>
 
       <HookFormField<FormData, { checked: boolean }>
@@ -50,7 +61,6 @@ function Harness() {
           );
         }}
       </HookFormField>
-
       <button
         onClick={() =>
           setError('name', { type: 'manual', message: 'Required' })

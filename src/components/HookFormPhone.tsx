@@ -69,14 +69,12 @@ export const HookFormPhone = <T extends FieldValues>(
   const {
     field: {
       onChange: hookFieldOnChange,
-      // TECHDEBT: unsafe assignment
-
       value: hookFieldValue,
       ...hookFieldProps
     },
     fieldState: { error },
   } = useController({
-    ...(omit(hookProps, 'resetField') as UseControllerProps),
+    ...(omit(hookProps, 'resetField') as UseControllerProps<T>),
     rules: {
       ...hookProps.rules,
       validate: {
@@ -99,9 +97,7 @@ export const HookFormPhone = <T extends FieldValues>(
         phoneProps.onChange?.({ country, inputValue, phone });
         hookFieldOnChange(phone);
       },
-      // TECHDEBT: unsafe assignment
-
-      value: hookFieldValue,
+      value: hookFieldValue || '',
     });
 
   const placeholder = useMemo(() => {
@@ -132,9 +128,8 @@ export const HookFormPhone = <T extends FieldValues>(
   );
 
   const isMobile = useMediaQuery({
-    // TECHDEBT: unsafe assignment
-
-    maxWidth: breakpointCountryCode ?? NEXT_PUBLIC_MOBILE_BREAKPOINT,
+    maxWidth:
+      (breakpointCountryCode as number) ?? NEXT_PUBLIC_MOBILE_BREAKPOINT,
   });
 
   const countryOptions = useMemo(

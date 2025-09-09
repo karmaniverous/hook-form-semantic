@@ -11,11 +11,15 @@ When updated: 2025-09-09T00:00:00Z
 
 ## Completed (recent)
 
+- Fix failing tests:
+  - HookFormField: function-child calls `field.onChange` with both event
+    and `{ value }` data (Semantic UI signature) to avoid undefined value.
+  - HookFormPhone: await RHF state update with `waitFor` before asserting.
+
 - Fix test infra and types:
   - Rename vitest.setup.ts → vitest.setup.tsx and update vitest.config.ts.
   - Remove setup from tsconfig include to avoid build/typecheck churn.
-  - Rework mocks without `any`; add typed stubs for external widgets.
-  - Remove `any` from tests; correct DateRange presets typing.
+  - Rework mocks without `any`; add typed stubs for external widgets.  - Remove `any` from tests; correct DateRange presets typing.
 - Add comprehensive tests for HookForm components:
   - HookFormField (function child mapping, error propagation)
   - HookFormCheckbox (toggle via control labels, error)

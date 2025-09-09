@@ -39,8 +39,24 @@ vi.mock('semantic-ui-react', () => {
 
   const Input = React.forwardRef<
     HTMLInputElement,
-    React.InputHTMLAttributes<HTMLInputElement>
-  >((props, ref) => React.createElement('input', { ...props, ref }));
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
+      onChange?: (
+        event: React.SyntheticEvent<HTMLElement>,
+        data: { value?: string },
+      ) => void;
+    }
+  >(({ onChange, ...props }, ref) =>
+    React.createElement('input', {
+      ...props,
+      ref,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+        // Call the semantic-ui onChange
+        if (onChange) {
+          onChange(e, { value: e.target.value });
+        }
+      },
+    }),
+  );
 
   type CheckboxData = { checked: boolean } & Record<string, unknown>;
   interface CheckboxProps
@@ -314,10 +330,16 @@ vi.mock('react-international-phone', () => {
     }) => void;
     defaultCountry?: string;
   }) {
-    const [inputValue, setInputValue] = React.useState(config.value ?? '');
+    const [inputValue, setInputValue] = React.useState(config.value || '');
     const [country, setCountryState] = React.useState(
       parseCountry(config.defaultCountry ?? 'us'),
     );
+
+    // Update inputValue when config.value changes
+    React.useEffect(() => {
+      setInputValue(config.value || '');
+    }, [config.value]);
+
     const phone = inputValue;
     const setCountry = (iso2: string) => {
       const c = parseCountry(iso2);
