@@ -14,8 +14,6 @@ export const HookFormMenuDisplayMode = <T extends FieldValues>({
   ...props
 }: HookFormMenuDisplayModeProps<T>) => (
   <HookFormMenu<T>
-    // TECHDEBT: unsafe assignment
-    // eslint-disable-next-line
     hookName={hookName}
     menuColor="blue"
     menuCompact

@@ -1,10 +1,4 @@
-import 'react-date-picker/dist/DatePicker.css';
-import 'react-datetime-picker/dist/DateTimePicker.css';
-import 'react-calendar/dist/Calendar.css';
-import 'react-calendar/dist/Calendar.css';
-import 'react-clock/dist/Clock.css';
-
-import _ from 'lodash';
+import { omit } from 'lodash';
 import { useCallback, useMemo, useState } from 'react';
 import DatePicker, { type DatePickerProps } from 'react-date-picker';
 import DateTimePicker, {
@@ -75,7 +69,7 @@ export const HookFormDatePicker = <T extends FieldValues>(
     <Form.Field
       {...fieldProps}
       // TECHDEBT: unsafe assignment
-      // eslint-disable-next-line
+
       className={concatClassNames(className, 'hook-form-date-picker')}
       error={error?.message}
     >
@@ -105,7 +99,7 @@ export const HookFormDatePicker = <T extends FieldValues>(
             showLeadingZeros
             yearPlaceholder="yyyy"
             {...timePickerProps}
-            {..._.omit(hookFieldProps, ['onBlur', 'ref'])}
+            {...omit(hookFieldProps, ['onBlur', 'ref'])}
           />
         ) : (
           <DatePicker
@@ -115,7 +109,7 @@ export const HookFormDatePicker = <T extends FieldValues>(
             showLeadingZeros
             yearPlaceholder="yyyy"
             {...datePickerProps}
-            {..._.omit(hookFieldProps, ['onBlur', 'ref'])}
+            {...omit(hookFieldProps, ['onBlur', 'ref'])}
           />
         )}
       </div>

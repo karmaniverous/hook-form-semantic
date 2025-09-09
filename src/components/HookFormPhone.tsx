@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { omit, set } from 'lodash';
 import { type ChangeEvent, type ReactNode, useMemo, useState } from 'react';
 import type { UseControllerProps } from 'react-hook-form';
 import {
@@ -70,13 +70,13 @@ export const HookFormPhone = <T extends FieldValues>(
     field: {
       onChange: hookFieldOnChange,
       // TECHDEBT: unsafe assignment
-      // eslint-disable-next-line
+
       value: hookFieldValue,
       ...hookFieldProps
     },
     fieldState: { error },
   } = useController({
-    ...(_.omit(hookProps, 'resetField') as UseControllerProps),
+    ...(omit(hookProps, 'resetField') as UseControllerProps),
     rules: {
       ...hookProps.rules,
       validate: {
@@ -93,14 +93,14 @@ export const HookFormPhone = <T extends FieldValues>(
 
   const { inputValue, phone, country, setCountry, handlePhoneValueChange } =
     usePhoneInput({
-      ..._.omit(phoneProps, 'onChange'),
+      ...omit(phoneProps, 'onChange'),
       onChange: ({ country, inputValue, phone }) => {
         setDialCode(country.dialCode);
         phoneProps.onChange?.({ country, inputValue, phone });
         hookFieldOnChange(phone);
       },
       // TECHDEBT: unsafe assignment
-      // eslint-disable-next-line
+
       value: hookFieldValue,
     });
 
@@ -123,7 +123,7 @@ export const HookFormPhone = <T extends FieldValues>(
         event: React.SyntheticEvent<HTMLElement>,
         data: InputOnChangeData,
       ) => {
-        _.set(event, 'target.value', data.value);
+        set(event, 'target.value', data.value);
         handlePhoneValueChange(event as ChangeEvent<HTMLInputElement>);
       },
       value: inputValue,
@@ -133,7 +133,7 @@ export const HookFormPhone = <T extends FieldValues>(
 
   const isMobile = useMediaQuery({
     // TECHDEBT: unsafe assignment
-    // eslint-disable-next-line
+
     maxWidth: breakpointCountryCode ?? NEXT_PUBLIC_MOBILE_BREAKPOINT,
   });
 
@@ -153,7 +153,7 @@ export const HookFormPhone = <T extends FieldValues>(
   );
 
   return (
-    <Form.Field {..._.omit(fieldProps, 'label')}>
+    <Form.Field {...omit(fieldProps, 'label')}>
       {fieldProps.label && <label>{fieldProps.label as ReactNode}</label>}
 
       {isMobile && (

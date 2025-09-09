@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { omit } from 'lodash';
 import type { ChangeEventHandler } from 'react';
 import { useMemo } from 'react';
 import {
@@ -56,7 +56,7 @@ export const HookFormNumeric = <T extends FieldValues>({
       {label && <label>{label}</label>}
       <NumericFormat
         {...numericProps}
-        {..._.omit(hookFieldProps, ['ref'])}
+        {...omit(hookFieldProps, ['ref'])}
         customInput={Input}
         onValueChange={({ floatValue }) =>
           hookFieldOnChange({ target: { type: 'number', value: floatValue } })

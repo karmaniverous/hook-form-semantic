@@ -36,8 +36,6 @@ export const deprefix = <T, Prefixes extends string, RestKey extends string>(
 
   const blank = [...prefixes, restKey]
     .map((k) => ({ [k]: {} }))
-    // TECHDEBT: unbound method
-
     .reduce(_.merge, {}) as Deprefix<T, Prefixes, RestKey>;
 
   return _.transform(

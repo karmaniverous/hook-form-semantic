@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { omit } from 'lodash';
 import { lazy, type ReactNode, Suspense, useMemo } from 'react';
 import {
   type ControllerProps,
@@ -44,7 +44,7 @@ export const HookFormJsonEditor = <T extends FieldValues>(
     field: {
       onChange: hookFieldOnChange,
       // TECHDEBT: unsafe assignment
-      // eslint-disable-next-line
+
       value: hookFieldValue,
       ...hookFieldProps
     },
@@ -53,9 +53,9 @@ export const HookFormJsonEditor = <T extends FieldValues>(
 
   const hookField = useMemo(
     () => ({
-      ..._.omit(hookFieldProps, ['disabled', 'name']),
+      ...omit(hookFieldProps, ['disabled', 'name']),
       // TECHDEBT: unsafe assignment
-      // eslint-disable-next-line
+
       content: hookFieldValue,
       onChange: (
         content: Content,
@@ -71,7 +71,7 @@ export const HookFormJsonEditor = <T extends FieldValues>(
 
   return (
     <>
-      <Form.Field {..._.omit(fieldProps, 'label')}>
+      <Form.Field {...omit(fieldProps, 'label')}>
         {fieldProps.label && <label>{fieldProps.label as ReactNode}</label>}
 
         <Suspense fallback={<div>Loading editor...</div>}>

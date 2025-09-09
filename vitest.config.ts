@@ -5,11 +5,31 @@ export default defineConfig({
     globals: true,
     environment: 'happy-dom',
     setupFiles: ['./vitest.setup.ts'],
-    exclude: ['.rollup.cache/**', 'node_modules/**'],
+    // Only include tests from your source directory
+    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,tsx}'],
+    // Exclude everything else, especially node_modules and test-app
+    exclude: [
+      'node_modules/**',
+      'test-app/**',
+      'dist/**',
+      'docs/**',
+      'playground/**',
+      '.rollup.cache/**',
+      '**/*.d.ts',
+    ],
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'lcov'],
-      exclude: ['docs/**', 'dist/**', 'playground/**', '.rollup.cache/**'],
+      reporter: ['text', 'lcov', 'html'],
+      // Only include your source code in coverage
+      include: ['src/**/*.{js,ts,tsx}'],
+      exclude: [
+        'src/**/*.{test,spec}.*',
+        'src/**/*.d.ts',
+        'docs/**',
+        'dist/**',
+        'playground/**',
+        '.rollup.cache/**',
+      ],
     },
   },
 });

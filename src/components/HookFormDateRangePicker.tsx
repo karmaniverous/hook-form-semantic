@@ -1,16 +1,10 @@
-import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
-import 'react-calendar/dist/Calendar.css';
-import '@wojtekmaj/react-datetimerange-picker/dist/DateTimeRangePicker.css';
-import 'react-calendar/dist/Calendar.css';
-import 'react-clock/dist/Clock.css';
-
 import DateRangePicker, {
   type DateRangePickerProps,
 } from '@wojtekmaj/react-daterange-picker';
 import DateTimeRangePicker, {
   type DateTimeRangePickerProps,
 } from '@wojtekmaj/react-datetimerange-picker';
-import _ from 'lodash';
+import { findKey, isEqual, isFunction, map, omit, pickBy } from 'lodash';
 import React, {
   type SyntheticEvent,
   useCallback,
@@ -211,7 +205,7 @@ export const defaultPresets: Presets = {
 export const filterPresets = (
   epochs: Presets[string]['epoch'][],
   presets: Presets = defaultPresets,
-) => _.pickBy(presets, ({ epoch }) => epochs.includes(epoch));
+) => pickBy(presets, ({ epoch }) => epochs.includes(epoch));
 
 export interface HookFormDateRangePickerProps<T extends FieldValues>
   extends Omit<
@@ -266,7 +260,7 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
   );
 
   const presetOptions = useMemo(
-    () => _.map(presets, ({ text }, value) => ({ text, value })),
+    () => map(presets, ({ text }, value) => ({ text, value })),
     [presets],
   );
 
@@ -281,7 +275,7 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
       hookFieldOnChange({
         target: {
           type: 'date',
-          value: value ? (_.isFunction(value) ? value() : value) : [null, null],
+          value: value ? (isFunction(value) ? value() : value) : [null, null],
         },
       });
     },
@@ -291,11 +285,8 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
   useEffect(() => {
     setPreset(
       presets
-        ? (_.findKey(presets, ({ value }) =>
-            _.isEqual(
-              hookFieldProps.value,
-              _.isFunction(value) ? value() : value,
-            ),
+        ? (findKey(presets, ({ value }) =>
+            isEqual(hookFieldProps.value, isFunction(value) ? value() : value),
           ) ?? false)
         : false,
     );
@@ -305,7 +296,7 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
     <Form.Field
       {...fieldProps}
       // TECHDEBT: unsafe assignment
-      // eslint-disable-next-line
+
       className={concatClassNames(className, 'hook-form-date-range-picker')}
       error={error?.message}
     >
@@ -347,7 +338,7 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
             showLeadingZeros
             yearPlaceholder="yyyy"
             {...timePickerProps}
-            {..._.omit(hookFieldProps, ['onBlur', 'ref'])}
+            {...omit(hookFieldProps, ['onBlur', 'ref'])}
           />
         ) : (
           <DateRangePicker
@@ -358,7 +349,7 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
             showLeadingZeros
             yearPlaceholder="yyyy"
             {...datePickerProps}
-            {..._.omit(hookFieldProps, ['onBlur', 'ref'])}
+            {...omit(hookFieldProps, ['onBlur', 'ref'])}
           />
         )}
       </div>

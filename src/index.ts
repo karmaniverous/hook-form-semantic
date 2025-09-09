@@ -17,6 +17,7 @@ export {
 } from './components/HookFormDatePicker';
 export {
   type DateRange,
+  defaultPresets,
   extractTimestamps,
   filterPresets,
   HookFormDateRangePicker,
@@ -50,6 +51,7 @@ export {
 export {
   HookFormSort,
   type HookFormSortProps,
+  type Sort,
 } from './components/HookFormSort';
 export {
   HookFormWysiwygEditor,

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { get, omit, set } from 'lodash';
 import type { FormEvent, ReactNode } from 'react';
 import { useCallback, useMemo, useRef } from 'react';
 import {
@@ -56,8 +56,6 @@ export const HookFormCheckbox = <T extends FieldValues>({
   } = useMemo(() => deprefix(props, ['hook', 'checkbox']), [props]);
 
   const {
-    // TECHDEBT: unsafe assignment
-    // eslint-disable-next-line
     field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
     fieldState: { error },
   } = useController(hookProps as UseControllerProps);
@@ -66,7 +64,7 @@ export const HookFormCheckbox = <T extends FieldValues>({
     (event: FormEvent<HTMLInputElement>, data: StrictCheckboxProps) => {
       checkboxProps.onChange?.(event, data);
 
-      _.set(event, 'target.value', _.get(data, 'checked'));
+      set(event, 'target.value', get(data, 'checked'));
 
       hookFieldOnChange(event);
     },
@@ -97,9 +95,9 @@ export const HookFormCheckbox = <T extends FieldValues>({
 
         <Checkbox
           {...checkboxProps}
-          {..._.omit(hookFieldProps, 'ref')}
+          {...omit(hookFieldProps, 'ref')}
           // TECHDEBT: unsafe assignment
-          // eslint-disable-next-line
+
           checked={value}
           onChange={handleChange}
           ref={checkboxRef}

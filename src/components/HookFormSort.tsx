@@ -54,12 +54,14 @@ export interface HookFormSortProps<T extends FieldValues>
   ascIcon?: SemanticICONS;
   descIcon?: SemanticICONS;
   sortOptions?: StrictDropdownProps['options'];
+  dropdownOptions?: StrictDropdownProps['options']; // Backward compatibility
 }
 
 export const HookFormSort = <T extends FieldValues>({
   ascIcon = 'arrow up',
   descIcon = 'arrow down',
   sortOptions,
+  dropdownOptions,
   ...props
 }: HookFormSortProps<T>) => {
   const {
@@ -71,7 +73,7 @@ export const HookFormSort = <T extends FieldValues>({
 
   const {
     // TECHDEBT: unsafe assignment
-    // eslint-disable-next-line
+
     field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
     fieldState,
   } = useController(hookProps as UseControllerProps);
@@ -81,7 +83,7 @@ export const HookFormSort = <T extends FieldValues>({
       hookFieldOnChange({
         ...event,
         // TECHDEBT: unsafe member access
-        // eslint-disable-next-line
+
         target: { value: [data.value, value?.[1]] },
       }),
     [hookFieldOnChange, value],
@@ -92,7 +94,7 @@ export const HookFormSort = <T extends FieldValues>({
       hookFieldOnChange({
         ...event,
         // TECHDEBT: unsafe member access
-        // eslint-disable-next-line
+
         target: { value: [value?.[0], !value?.[1]] },
       }),
     [hookFieldOnChange, value],
@@ -111,18 +113,18 @@ export const HookFormSort = <T extends FieldValues>({
           {...dropdownProps}
           button
           onChange={handleDropdownChange}
-          options={sortOptions}
+          options={sortOptions || dropdownOptions}
           selection
           style={{ flexGrow: 1 }}
           // TECHDEBT: unsafe member access
-          // eslint-disable-next-line
+
           value={value?.[0]}
         />
 
         <Button
           {...buttonProps}
           // TECHDEBT: unsafe member access
-          // eslint-disable-next-line
+
           icon={value?.[1] ? ascIcon : descIcon}
           onClick={handleButtonClick}
         />

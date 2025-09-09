@@ -11,3 +11,4 @@ node_modules/
 .stan/diff/
 .stan/dist/
 .stan/patch/
+.DS_Store

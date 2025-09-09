@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { findIndex } from 'lodash';
 import { useCallback, useMemo } from 'react';
 import {
   type ControllerProps,
@@ -49,7 +49,7 @@ export const HookFormMenu = <T extends FieldValues>({
 
   const {
     // TECHDEBT: unsafe assignment
-    // eslint-disable-next-line
+
     field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
     fieldState,
   } = useController(hookProps as UseControllerProps);
@@ -71,8 +71,8 @@ export const HookFormMenu = <T extends FieldValues>({
       <Menu
         {...menuProps}
         // TECHDEBT: unsafe assignment
-        // eslint-disable-next-line
-        activeIndex={_.findIndex(menuProps.items, { name: value })}
+
+        activeIndex={findIndex(menuProps.items, { name: value })}
         onItemClick={handleItemClick}
       />
     </Form.Field>

@@ -14,7 +14,7 @@ const JSONEditorReact: React.FC<JSONEditorPropsOptional> = (props) => {
     return () => {
       if (refEditor.current) {
         // TECHDEBT: floating promise
-        // eslint-disable-next-line
+
         refEditor.current.destroy();
         refEditor.current = null;
       }
@@ -24,7 +24,7 @@ const JSONEditorReact: React.FC<JSONEditorPropsOptional> = (props) => {
   useEffect(() => {
     if (refEditor.current) {
       // TECHDEBT: floating promise
-      // eslint-disable-next-line
+
       refEditor.current.updateProps(props);
     }
   }, [props]);
