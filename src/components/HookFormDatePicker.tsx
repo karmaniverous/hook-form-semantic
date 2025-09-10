@@ -98,6 +98,12 @@ export const HookFormDatePicker = <T extends FieldValues>(
             secondPlaceholder="ss"
             showLeadingZeros
             yearPlaceholder="yyyy"
+            calendarProps={{
+              showNeighboringMonth: false,
+              showNavigation: true,
+              selectRange: false,
+              returnValue: 'start',
+            }}
             {...timePickerProps}
             {...omit(hookFieldProps, ['onBlur', 'ref'])}
           />
@@ -108,6 +114,12 @@ export const HookFormDatePicker = <T extends FieldValues>(
             onChange={handleChange}
             showLeadingZeros
             yearPlaceholder="yyyy"
+            calendarProps={{
+              showNeighboringMonth: false,
+              showNavigation: true,
+              selectRange: false,
+              returnValue: 'start',
+            }}
             {...datePickerProps}
             {...omit(hookFieldProps, ['onBlur', 'ref'])}
           />

@@ -4,8 +4,6 @@
  * @packageDocumentation
  */
 
-export { HelloWorld, type HelloWorldProps } from './components/HelloWorld';
-
 // HookForm Components
 export {
   HookFormCheckbox,

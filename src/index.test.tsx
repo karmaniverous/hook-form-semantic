@@ -1,11 +1,26 @@
 import { render, screen } from '@testing-library/react';
+import { useForm } from 'react-hook-form';
 import { describe, expect, it } from 'vitest';
 
-import { HelloWorld } from './index';
+import { HookFormField } from './index';
+
+// Test component to use HookFormField
+function TestComponent() {
+  const { control } = useForm();
+
+  return (
+    <HookFormField hookControl={control} hookName="test" label="Test Field">
+      <input />
+    </HookFormField>
+  );
+}
 
 describe('library entry (src/index.ts)', () => {
-  it('re-exports HelloWorld', () => {
-    render(<HelloWorld who="Library" />);
-    expect(screen.getByText('Hello Library')).toBeInTheDocument();
+  it('re-exports HookFormField', () => {
+    render(<TestComponent />);
+    expect(screen.getByTestId('form-field')).toHaveAttribute(
+      'label',
+      'Test Field',
+    );
   });
 });

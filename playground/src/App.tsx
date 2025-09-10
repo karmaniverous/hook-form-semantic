@@ -1,4 +1,43 @@
 import 'semantic-ui-css/semantic.min.css';
+import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
+import '@wojtekmaj/react-datetimerange-picker/dist/DateTimeRangePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-clock/dist/Clock.css';
+import 'react-date-picker/dist/DatePicker.css';
+import 'react-datetime-picker/dist/DateTimePicker.css';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import 'vanilla-jsoneditor/themes/jse-theme-dark.css';
+
+// Add some CSS to fix calendar warnings
+const calendarStyles = `
+  .react-calendar {
+    max-height: 300px;
+    overflow: hidden;
+  }
+  .react-calendar__month-view {
+    height: auto !important;
+  }
+  .react-calendar__tile {
+    max-height: 40px;
+  }
+  .react-calendar__viewContainer {
+    height: 250px !important;
+  }
+  .react-calendar__century-view,
+  .react-calendar__decade-view,
+  .react-calendar__year-view {
+    height: 250px !important;
+  }
+  .react-date-picker__calendar {
+    z-index: 4;}
+`;
+
+// Inject the styles
+if (typeof document !== 'undefined') {
+  const styleElement = document.createElement('style');
+  styleElement.textContent = calendarStyles;
+  document.head.appendChild(styleElement);
+}
 
 import { useForm } from 'react-hook-form';
 import {
@@ -12,15 +51,16 @@ import {
   Segment,
 } from 'semantic-ui-react';
 
-import { HelloWorld } from '../../src/components/HelloWorld';
 import { HookFormCheckbox } from '../../src/components/HookFormCheckbox';
 import { HookFormDatePicker } from '../../src/components/HookFormDatePicker';
 import { HookFormDateRangePicker } from '../../src/components/HookFormDateRangePicker';
 import { HookFormField } from '../../src/components/HookFormField';
+import { HookFormJsonEditor } from '../../src/components/HookFormJsonEditor';
 import { HookFormMenu } from '../../src/components/HookFormMenu';
 import { HookFormNumeric } from '../../src/components/HookFormNumeric';
 import { HookFormPhone } from '../../src/components/HookFormPhone';
 import { HookFormSort } from '../../src/components/HookFormSort';
+import { HookFormWysiwygEditor } from '../../src/components/HookFormWysiwygEditor';
 
 interface FormData {
   firstName: string;
@@ -35,6 +75,8 @@ interface FormData {
   priorities: string[];
   config: object;
   description: string;
+  content: string;
+  jsonData: any;
   newsletter: boolean;
   terms: boolean;
 }
@@ -54,6 +96,8 @@ export default function App() {
       priorities: [],
       config: {},
       description: '',
+      content: '',
+      jsonData: { example: 'data' },
       newsletter: false,
       terms: false,
     },
@@ -69,8 +113,6 @@ export default function App() {
   return (
     <Container style={{ padding: 24 }}>
       <Header as="h1">Hook Form Semantic Playground</Header>
-
-      <HelloWorld who="Developer" />
 
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Segment>
@@ -234,6 +276,33 @@ export default function App() {
               { key: 'hobbies', text: 'Hobbies', value: 'hobbies' },
               { key: 'travel', text: 'Travel', value: 'travel' },
             ]}
+          />
+        </Segment>
+
+        <Divider />
+
+        <Segment>
+          <Header as="h2">HookFormWysiwygEditor Demo</Header>
+
+          <HookFormWysiwygEditor<FormData>
+            hookName="content"
+            hookControl={control}
+            label="Rich Text Content"
+            placeholder="Enter rich text content here..."
+          />
+        </Segment>
+
+        <Divider />
+
+        <Segment>
+          <Header as="h2">HookFormJsonEditor Demo</Header>
+
+          <HookFormJsonEditor<FormData>
+            hookName="jsonData"
+            hookControl={control}
+            label="JSON Data"
+            jsonMainMenuBar={false}
+            jsonMode="text"
           />
         </Segment>
 

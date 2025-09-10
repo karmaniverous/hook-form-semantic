@@ -2,30 +2,138 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
 		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/index.html</loc>
-		<lastmod>2025-08-31T06:48:46.809Z</lastmod>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
 	</url>
 	<url>
 		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/modules.html</loc>
-		<lastmod>2025-08-31T06:48:46.809Z</lastmod>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
 	</url>
 	<url>
 		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/hierarchy.html</loc>
-		<lastmod>2025-08-31T06:48:46.809Z</lastmod>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
 	</url>
 	<url>
 		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/documents/CHANGELOG.html</loc>
-		<lastmod>2025-08-31T06:48:46.809Z</lastmod>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
 	</url>
 	<url>
 		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/modules/index.html</loc>
-		<lastmod>2025-08-31T06:48:46.809Z</lastmod>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
 	</url>
 	<url>
-		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/types/index.HelloWorldProps.html</loc>
-		<lastmod>2025-08-31T06:48:46.809Z</lastmod>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/interfaces/index.HookFormCheckboxProps.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
 	</url>
 	<url>
-		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.HelloWorld.html</loc>
-		<lastmod>2025-08-31T06:48:46.809Z</lastmod>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/interfaces/index.HookFormDatePickerProps.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/interfaces/index.HookFormDateRangePickerProps.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/interfaces/index.HookFormFieldProps.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/interfaces/index.HookFormJsonEditorProps.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/interfaces/index.HookFormMenuProps.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/interfaces/index.HookFormNumericProps.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/interfaces/index.HookFormPhoneProps.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/interfaces/index.HookFormSortProps.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/interfaces/index.HookFormWysiwygEditorProps.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/types/index.DateRange.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/types/index.DisplayMode.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/types/index.HookFormMenuDisplayModeProps.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/types/index.Sort.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/variables/index.defaultPresets.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.extractTimestamps.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.filterPresets.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.HookFormCheckbox.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.HookFormDatePicker.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.HookFormDateRangePicker.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.HookFormField.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.HookFormJsonEditor.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.HookFormMenu.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.HookFormMenuDisplayMode.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.HookFormNumeric.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.HookFormPhone.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.HookFormSort.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.HookFormWysiwygEditor.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
+	</url>
+	<url>
+		<loc>https://docs.karmanivero.us/react-component-npm-package-template-ts/functions/index.isPhoneValid.html</loc>
+		<lastmod>2025-09-10T03:04:00.085Z</lastmod>
 	</url>
 </urlset>

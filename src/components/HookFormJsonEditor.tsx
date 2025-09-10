@@ -56,14 +56,20 @@ export const HookFormJsonEditor = <T extends FieldValues>(
       ...omit(hookFieldProps, ['disabled', 'name']),
       // TECHDEBT: unsafe assignment
 
-      content: hookFieldValue,
+      content: hookFieldValue
+        ? typeof hookFieldValue === 'string'
+          ? { text: hookFieldValue }
+          : { json: hookFieldValue }
+        : { text: '{}' }, // Default empty JSON object as text
       onChange: (
         content: Content,
         previousContent: Content,
         status: OnChangeStatus,
       ) => {
         jsonOnChange?.(content, previousContent, status);
-        hookFieldOnChange({ target: { value: content } });
+        // Extract the actual value from content (either json or text)
+        const value = 'json' in content ? content.json : content.text;
+        hookFieldOnChange({ target: { value } });
       },
     }),
     [hookFieldOnChange, hookFieldProps, hookFieldValue, jsonOnChange],

@@ -5,7 +5,7 @@ import DateTimeRangePicker, {
   type DateTimeRangePickerProps,
 } from '@wojtekmaj/react-datetimerange-picker';
 import { findKey, isEqual, isFunction, map, omit, pickBy } from 'lodash';
-import React, {
+import {
   type SyntheticEvent,
   useCallback,
   useEffect,
@@ -337,6 +337,12 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
             secondPlaceholder="ss"
             showLeadingZeros
             yearPlaceholder="yyyy"
+            calendarProps={{
+              showNeighboringMonth: false,
+              showNavigation: true,
+              selectRange: true,
+              returnValue: 'range',
+            }}
             {...timePickerProps}
             {...omit(hookFieldProps, ['onBlur', 'ref'])}
           />
@@ -348,6 +354,12 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
             rangeDivider={<>&nbsp;to&nbsp;</>}
             showLeadingZeros
             yearPlaceholder="yyyy"
+            calendarProps={{
+              showNeighboringMonth: false,
+              showNavigation: true,
+              selectRange: true,
+              returnValue: 'range',
+            }}
             {...datePickerProps}
             {...omit(hookFieldProps, ['onBlur', 'ref'])}
           />
