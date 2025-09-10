@@ -125,6 +125,12 @@ export default function App() {
             hookName="isSubscribed"
             hookControl={control}
             label="Subscribe to newsletter"
+            style={{
+              alignSelf: 'flex-end',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'flex-end',
+            }}
           />
         </Form.Group>
 
