@@ -72,8 +72,6 @@ export const HookFormSort = <T extends FieldValues>({
   } = useMemo(() => deprefix(props, ['button', 'dropdown', 'hook']), [props]);
 
   const {
-    // TECHDEBT: unsafe assignment
-
     field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
     fieldState,
   } = useController(hookProps as UseControllerProps);
@@ -82,8 +80,6 @@ export const HookFormSort = <T extends FieldValues>({
     (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) =>
       hookFieldOnChange({
         ...event,
-        // TECHDEBT: unsafe member access
-
         target: { value: [data.value, value?.[1]] },
       }),
     [hookFieldOnChange, value],
@@ -93,8 +89,6 @@ export const HookFormSort = <T extends FieldValues>({
     (event: React.SyntheticEvent<HTMLElement>) =>
       hookFieldOnChange({
         ...event,
-        // TECHDEBT: unsafe member access
-
         target: { value: [value?.[0], !value?.[1]] },
       }),
     [hookFieldOnChange, value],
@@ -116,15 +110,11 @@ export const HookFormSort = <T extends FieldValues>({
           options={sortOptions || dropdownOptions}
           selection
           style={{ flexGrow: 1 }}
-          // TECHDEBT: unsafe member access
-
           value={value?.[0]}
         />
 
         <Button
           {...buttonProps}
-          // TECHDEBT: unsafe member access
-
           icon={value?.[1] ? ascIcon : descIcon}
           onClick={handleButtonClick}
         />

@@ -48,8 +48,6 @@ export const HookFormMenu = <T extends FieldValues>({
   } = useMemo(() => deprefix(props, ['menu', 'hook']), [props]);
 
   const {
-    // TECHDEBT: unsafe assignment
-
     field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
     fieldState,
   } = useController(hookProps as UseControllerProps);
@@ -70,8 +68,6 @@ export const HookFormMenu = <T extends FieldValues>({
 
       <Menu
         {...menuProps}
-        // TECHDEBT: unsafe assignment
-
         activeIndex={findIndex(menuProps.items, { name: value })}
         onItemClick={handleItemClick}
       />

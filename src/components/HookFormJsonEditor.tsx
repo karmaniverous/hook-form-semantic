@@ -43,8 +43,6 @@ export const HookFormJsonEditor = <T extends FieldValues>(
   const {
     field: {
       onChange: hookFieldOnChange,
-      // TECHDEBT: unsafe assignment
-
       value: hookFieldValue,
       ...hookFieldProps
     },
@@ -54,8 +52,6 @@ export const HookFormJsonEditor = <T extends FieldValues>(
   const hookField = useMemo(
     () => ({
       ...omit(hookFieldProps, ['disabled', 'name']),
-      // TECHDEBT: unsafe assignment
-
       content: hookFieldValue
         ? typeof hookFieldValue === 'string'
           ? { text: hookFieldValue }

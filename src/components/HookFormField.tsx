@@ -72,8 +72,6 @@ export const HookFormField = <T extends FieldValues, C>({
 
     return {
       onChange: handleChange,
-      // TECHDEBT: unsafe assignment
-
       ...(isBoolean(value) ? { checked: value } : { value: value ?? '' }),
       ...rest,
     };

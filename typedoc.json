@@ -13,13 +13,12 @@
     "tsx",
     "typescript"
   ],
-  "hostedBaseUrl": "https://docs.karmanivero.us/react-component-npm-package-template-ts",
+  "hostedBaseUrl": "https://docs.karmanivero.us/hook-form-semantic",
   "navigationLinks": {
-    "GitHub": "https://github.com/karmaniverous/react-component-npm-package-template-ts"
+    "GitHub": "https://github.com/karmaniverous/hook-form-semantic"
   },
   "out": "./docs/",
-  "plugin": ["typedoc-plugin-mdn-links", "typedoc-plugin-replace-text"],
-  "projectDocuments": ["./CHANGELOG.md"],
+  "plugin": ["typedoc-plugin-mdn-links", "typedoc-plugin-replace-text"],  "projectDocuments": ["./CHANGELOG.md"],
   "replaceText": {
     "replacements": [
       {
