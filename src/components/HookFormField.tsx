@@ -68,8 +68,6 @@ export const HookFormField = <T extends FieldValues, C>({
   );
 
   const hookField = useMemo(() => {
-    // TECHDEBT: unsafe assignment
-
     const { value, ...rest } = hookFieldProps;
 
     return {

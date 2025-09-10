@@ -96,8 +96,6 @@ export const HookFormCheckbox = <T extends FieldValues>({
         <Checkbox
           {...checkboxProps}
           {...omit(hookFieldProps, 'ref')}
-          // TECHDEBT: unsafe assignment
-
           checked={value}
           onChange={handleChange}
           ref={checkboxRef}

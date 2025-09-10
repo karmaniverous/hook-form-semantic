@@ -68,8 +68,6 @@ export const HookFormDatePicker = <T extends FieldValues>(
   return (
     <Form.Field
       {...fieldProps}
-      // TECHDEBT: unsafe assignment
-
       className={concatClassNames(className, 'hook-form-date-picker')}
       error={error?.message}
     >
@@ -101,7 +99,6 @@ export const HookFormDatePicker = <T extends FieldValues>(
             calendarProps={{
               showNeighboringMonth: false,
               showNavigation: true,
-              selectRange: false,
               returnValue: 'start',
             }}
             {...timePickerProps}
@@ -117,7 +114,6 @@ export const HookFormDatePicker = <T extends FieldValues>(
             calendarProps={{
               showNeighboringMonth: false,
               showNavigation: true,
-              selectRange: false,
               returnValue: 'start',
             }}
             {...datePickerProps}

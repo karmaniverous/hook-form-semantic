@@ -8,37 +8,6 @@ import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import 'vanilla-jsoneditor/themes/jse-theme-dark.css';
 
-// Add some CSS to fix calendar warnings
-const calendarStyles = `
-  .react-calendar {
-    max-height: 300px;
-    overflow: hidden;
-  }
-  .react-calendar__month-view {
-    height: auto !important;
-  }
-  .react-calendar__tile {
-    max-height: 40px;
-  }
-  .react-calendar__viewContainer {
-    height: 250px !important;
-  }
-  .react-calendar__century-view,
-  .react-calendar__decade-view,
-  .react-calendar__year-view {
-    height: 250px !important;
-  }
-  .react-date-picker__calendar {
-    z-index: 4;}
-`;
-
-// Inject the styles
-if (typeof document !== 'undefined') {
-  const styleElement = document.createElement('style');
-  styleElement.textContent = calendarStyles;
-  document.head.appendChild(styleElement);
-}
-
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -48,15 +17,13 @@ import {
   Form,
   Header,
   Input,
-  Segment,
 } from 'semantic-ui-react';
+import { Mode } from 'vanilla-jsoneditor';
 
-import { HookFormCheckbox } from '../../src/components/HookFormCheckbox';
 import { HookFormDatePicker } from '../../src/components/HookFormDatePicker';
 import { HookFormDateRangePicker } from '../../src/components/HookFormDateRangePicker';
 import { HookFormField } from '../../src/components/HookFormField';
 import { HookFormJsonEditor } from '../../src/components/HookFormJsonEditor';
-import { HookFormMenu } from '../../src/components/HookFormMenu';
 import { HookFormNumeric } from '../../src/components/HookFormNumeric';
 import { HookFormPhone } from '../../src/components/HookFormPhone';
 import { HookFormSort } from '../../src/components/HookFormSort';
@@ -76,7 +43,7 @@ interface FormData {
   config: object;
   description: string;
   content: string;
-  jsonData: any;
+  jsonData: object;
   newsletter: boolean;
   terms: boolean;
 }
@@ -115,28 +82,31 @@ export default function App() {
       <Header as="h1">Hook Form Semantic Playground</Header>
 
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Segment>
-          <Header as="h2">HookFormField Demo</Header>
+        <Header as="h2">HookFormField Demo</Header>
 
+        <Form.Group widths="equal">
           <HookFormField<FormData, { value: string }>
+            control={Input}
             hookName="firstName"
             hookControl={control}
             hookRules={{ required: 'First name is required' }}
             label="First Name"
-          >
-            <Input placeholder="Enter your first name" />
-          </HookFormField>
+            placeholder="Enter your first name"
+          />
 
           <HookFormField<FormData, { value: string }>
+            control={Input}
             hookName="lastName"
             hookControl={control}
             hookRules={{ required: 'Last name is required' }}
             label="Last Name"
-          >
-            <Input placeholder="Enter your last name" />
-          </HookFormField>
+            placeholder="Enter your last name"
+          />
+        </Form.Group>
 
+        <Form.Group widths="equal">
           <HookFormField<FormData, { value: string }>
+            control={Input}
             hookName="email"
             hookControl={control}
             hookRules={{
@@ -147,45 +117,22 @@ export default function App() {
               },
             }}
             label="Email"
-          >
-            <Input placeholder="Enter your email" type="email" />
-          </HookFormField>
+            placeholder="Enter your email"
+          />
 
           <HookFormField<FormData, { checked: boolean }>
+            control={Checkbox}
             hookName="isSubscribed"
             hookControl={control}
             label="Subscribe to newsletter"
-          >
-            <Checkbox />
-          </HookFormField>
-        </Segment>
+          />
+        </Form.Group>
 
         <Divider />
 
-        <Segment>
-          <Header as="h2">HookFormCheckbox Demo</Header>
+        <Header as="h2">HookFormNumeric Demo</Header>
 
-          <HookFormCheckbox<FormData>
-            hookName="newsletter"
-            hookControl={control}
-            label="Newsletter Preferences"
-            checkLabel="Subscribe to newsletter"
-          />
-
-          <HookFormCheckbox<FormData>
-            hookName="terms"
-            hookControl={control}
-            hookRules={{ required: 'You must accept the terms' }}
-            label="Terms and Conditions"
-            checkLabel="I accept the terms and conditions"
-          />
-        </Segment>
-
-        <Divider />
-
-        <Segment>
-          <Header as="h2">HookFormNumeric Demo</Header>
-
+        <Form.Group widths="equal">
           <HookFormNumeric<FormData>
             hookName="age"
             hookControl={control}
@@ -198,13 +145,13 @@ export default function App() {
             numericAllowNegative={false}
             numericDecimalScale={0}
           />
-        </Segment>
+        </Form.Group>
 
         <Divider />
 
-        <Segment>
-          <Header as="h2">HookFormPhone Demo</Header>
+        <Header as="h2">HookFormPhone Demo</Header>
 
+        <Form.Group widths="equal">
           <HookFormPhone<FormData>
             hookName="phone"
             hookControl={control}
@@ -212,59 +159,38 @@ export default function App() {
             label="Phone Number"
             phoneDefaultCountry="us"
           />
-        </Segment>
+        </Form.Group>
 
         <Divider />
 
-        <Segment>
-          <Header as="h2">HookFormDatePicker Demo</Header>
+        <Header as="h2">HookFormDatePicker Demo</Header>
 
+        <Form.Group widths="equal">
           <HookFormDatePicker<FormData>
             hookName="birthDate"
             hookControl={control}
             hookRules={{ required: 'Birth date is required' }}
             label="Birth Date"
           />
-        </Segment>
+        </Form.Group>
 
         <Divider />
 
-        <Segment>
-          <Header as="h2">HookFormDateRangePicker Demo</Header>
+        <Header as="h2">HookFormDateRangePicker Demo</Header>
 
+        <Form.Group widths="equal">
           <HookFormDateRangePicker<FormData>
             hookName="dateRange"
             hookControl={control}
             label="Date Range"
           />
-        </Segment>
+        </Form.Group>
 
         <Divider />
 
-        <Segment>
-          <Header as="h2">HookFormMenu Demo</Header>
+        <Header as="h2">HookFormSort Demo</Header>
 
-          <HookFormMenu<FormData>
-            hookName="favoriteColor"
-            hookControl={control}
-            hookRules={{ required: 'Please select a color' }}
-            label="Favorite Color"
-            menuOptions={[
-              { key: 'red', text: 'Red', value: 'red' },
-              { key: 'blue', text: 'Blue', value: 'blue' },
-              { key: 'green', text: 'Green', value: 'green' },
-              { key: 'yellow', text: 'Yellow', value: 'yellow' },
-              { key: 'purple', text: 'Purple', value: 'purple' },
-            ]}
-            menuPlaceholder="Select your favorite color"
-          />
-        </Segment>
-
-        <Divider />
-
-        <Segment>
-          <Header as="h2">HookFormSort Demo</Header>
-
+        <Form.Group widths="equal">
           <HookFormSort<FormData>
             hookName="priorities"
             hookControl={control}
@@ -277,34 +203,35 @@ export default function App() {
               { key: 'travel', text: 'Travel', value: 'travel' },
             ]}
           />
-        </Segment>
+        </Form.Group>
 
         <Divider />
 
-        <Segment>
-          <Header as="h2">HookFormWysiwygEditor Demo</Header>
+        <Header as="h2">HookFormWysiwygEditor Demo</Header>
 
+        <Form.Group widths="equal">
           <HookFormWysiwygEditor<FormData>
             hookName="content"
             hookControl={control}
             label="Rich Text Content"
             placeholder="Enter rich text content here..."
+            height={200}
           />
-        </Segment>
+        </Form.Group>
 
         <Divider />
 
-        <Segment>
-          <Header as="h2">HookFormJsonEditor Demo</Header>
+        <Header as="h2">HookFormJsonEditor Demo</Header>
 
+        <Form.Group widths="equal">
           <HookFormJsonEditor<FormData>
             hookName="jsonData"
             hookControl={control}
             label="JSON Data"
             jsonMainMenuBar={false}
-            jsonMode="text"
+            jsonMode={Mode.text}
           />
-        </Segment>
+        </Form.Group>
 
         <Divider />
 
