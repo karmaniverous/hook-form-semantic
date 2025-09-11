@@ -184,7 +184,7 @@
   "type": "module",
   "types": "dist/index.d.ts",
   "main": "dist/mjs/src/index.js",
-  "version": "0.1.2-1",
+  "version": "0.1.2",
   "dependencies": {
     "radash": "^12.1.1"
   }

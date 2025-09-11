@@ -2,8 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.2](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.2-1...0.1.2)
+
 #### [0.1.2-1](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.2-0...0.1.2-1)
 
+> 11 September 2025
+
+- chore: release v0.1.2-1 [`7e22c60`](https://github.com/karmaniverous/hook-form-semantic/commit/7e22c60814f026ee48c2ccc9f9883c216b3ee3bd)
 - Fix google-libphonenumber import [`330231a`](https://github.com/karmaniverous/hook-form-semantic/commit/330231a28c482e2613ca10aebd03ac1b394351f3)
 
 #### [0.1.2-0](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.1...0.1.2-0)
