@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import { omit } from 'radash';
 import { type ReactNode, useMemo } from 'react';
 import {
   type ControllerProps,
@@ -72,11 +72,10 @@ export const HookFormJsonEditor = <T extends FieldValues>(
 
   return (
     <>
-      <Form.Field {...omit(fieldProps, 'label')}>
+      <Form.Field {...omit(fieldProps as Record<string, unknown>, ['label'])}>
         {fieldProps.label && <label>{fieldProps.label as ReactNode}</label>}
 
         <JsonEditor {...jsonProps} {...hookField} />
-
         {error?.message && (
           <Label basic color="red" pointing="above">
             {error?.message}

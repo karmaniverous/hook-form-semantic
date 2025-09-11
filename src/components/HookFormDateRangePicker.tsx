@@ -4,7 +4,7 @@ import DateRangePicker, {
 import DateTimeRangePicker, {
   type DateTimeRangePickerProps,
 } from '@wojtekmaj/react-datetimerange-picker';
-import { findKey, isEqual, isFunction, map, omit, pickBy } from 'lodash';
+import { omit } from 'radash';
 import {
   type SyntheticEvent,
   useCallback,
@@ -34,7 +34,6 @@ import {
 } from '../../lib/utils/PrefixedPartial';
 
 export type DateRange = [Date | null, Date | null];
-
 export const extractTimestamps = (dateRange: DateRange) =>
   dateRange
     ? dateRange.map((d) => (d ? d.getTime() : undefined))
@@ -205,7 +204,13 @@ export const defaultPresets: Presets = {
 export const filterPresets = (
   epochs: Presets[string]['epoch'][],
   presets: Presets = defaultPresets,
-) => pickBy(presets, ({ epoch }) => epochs.includes(epoch));
+) =>
+  Object.fromEntries(
+    Object.entries(presets).filter(([, v]) => epochs.includes(v.epoch)),
+  ) as Presets;
+
+const isFn = (v: unknown): v is (...args: never[]) => unknown =>
+  typeof v === 'function';
 
 export interface HookFormDateRangePickerProps<T extends FieldValues>
   extends Omit<
@@ -226,6 +231,13 @@ export interface HookFormDateRangePickerProps<T extends FieldValues>
     PrefixedPartial<DateTimeRangePickerProps, 'timePicker'> {
   presets?: Presets;
 }
+
+const eqDate = (a: Date | null | undefined, b: Date | null | undefined) =>
+  (a == null && b == null) || (!!a && !!b && a.getTime() === b.getTime());
+const eqRange = (
+  a?: [Date | null, Date | null],
+  b?: [Date | null, Date | null],
+) => !!a && !!b && eqDate(a[0], b[0]) && eqDate(a[1], b[1]);
 
 export const HookFormDateRangePicker = <T extends FieldValues>({
   presets,
@@ -260,7 +272,11 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
   );
 
   const presetOptions = useMemo(
-    () => map(presets, ({ text }, value) => ({ text, value })),
+    () =>
+      Object.entries(presets ?? {}).map(([value, { text }]) => ({
+        text,
+        value,
+      })),
     [presets],
   );
 
@@ -275,7 +291,7 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
       hookFieldOnChange({
         target: {
           type: 'date',
-          value: value ? (isFunction(value) ? value() : value) : [null, null],
+          value: value ? (isFn(value) ? value() : value) : [null, null],
         },
       });
     },
@@ -283,13 +299,18 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
   );
 
   useEffect(() => {
-    setPreset(
-      presets
-        ? (findKey(presets, ({ value }) =>
-            isEqual(hookFieldProps.value, isFunction(value) ? value() : value),
-          ) ?? false)
-        : false,
-    );
+    if (!presets) {
+      setPreset(false);
+      return;
+    }
+    const current = hookFieldProps.value as DateRange | undefined;
+    const key =
+      Object.keys(presets).find((k) => {
+        const pv = presets[k]?.value;
+        const resolved = isFn(pv) ? (pv as () => DateRange)() : pv;
+        return eqRange(current, resolved as DateRange);
+      }) ?? false;
+    setPreset(key);
   }, [hookFieldProps.value, presets]);
 
   return (

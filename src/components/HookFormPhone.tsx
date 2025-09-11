@@ -1,6 +1,5 @@
-import { omit, set } from 'lodash';
+import { omit } from 'radash';
 import { type ChangeEvent, type ReactNode, useMemo, useState } from 'react';
-import type { UseControllerProps } from 'react-hook-form';
 import {
   type ControllerProps,
   type FieldValues,
@@ -20,7 +19,6 @@ import {
   Form,
   type FormFieldProps,
   Input,
-  type InputOnChangeData,
   Label,
 } from 'semantic-ui-react';
 
@@ -74,7 +72,7 @@ export const HookFormPhone = <T extends FieldValues>(
     },
     fieldState: { error },
   } = useController({
-    ...(omit(hookProps, 'resetField') as UseControllerProps<T>),
+    ...hookProps,
     rules: {
       ...hookProps.rules,
       validate: {
@@ -91,7 +89,7 @@ export const HookFormPhone = <T extends FieldValues>(
 
   const { inputValue, phone, country, setCountry, handlePhoneValueChange } =
     usePhoneInput({
-      ...omit(phoneProps, 'onChange'),
+      ...omit(phoneProps, ['onChange']),
       onChange: ({ country, inputValue, phone }) => {
         setDialCode(country.dialCode);
         phoneProps.onChange?.({ country, inputValue, phone });
@@ -115,11 +113,7 @@ export const HookFormPhone = <T extends FieldValues>(
   const hookField = useMemo(
     () => ({
       ...hookFieldProps,
-      onChange: (
-        event: React.SyntheticEvent<HTMLElement>,
-        data: InputOnChangeData,
-      ) => {
-        set(event, 'target.value', data?.value);
+      onChange: (event: React.SyntheticEvent<HTMLElement>) => {
         handlePhoneValueChange(event as ChangeEvent<HTMLInputElement>);
       },
       value: inputValue,
@@ -148,7 +142,7 @@ export const HookFormPhone = <T extends FieldValues>(
   );
 
   return (
-    <Form.Field {...omit(fieldProps, 'label')}>
+    <Form.Field {...omit(fieldProps as Record<string, unknown>, ['label'])}>
       {fieldProps.label && <label>{fieldProps.label as ReactNode}</label>}
 
       {isMobile && (

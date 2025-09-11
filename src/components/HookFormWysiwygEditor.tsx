@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import { omit } from 'radash';
 import { type ReactNode, Suspense, useMemo } from 'react';
 import React from 'react';
 import {
@@ -56,10 +56,11 @@ export const HookFormWysiwygEditor = <T extends FieldValues>(
 
   return (
     <>
-      <Form.Field {...omit(fieldProps, 'label')}>
+      <Form.Field {...omit(fieldProps as Record<string, unknown>, ['label'])}>
         {fieldProps.label && <label>{fieldProps.label as ReactNode}</label>}
 
         <Suspense fallback={<div>Loading editor...</div>}>
+          {' '}
           <WysiwygEditor {...wysiwygProps} {...hookField} />
         </Suspense>
 

@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export type PrefixedPartial<T, Prefix extends string> = {
   [K in keyof T as K extends string
     ? `${Prefix}${Capitalize<K>}`
@@ -32,23 +30,28 @@ export const deprefix = <T, Prefixes extends string, RestKey extends string>(
   prefixes: Prefixes | Prefixes[],
   restKey: RestKey = 'rest' as RestKey,
 ) => {
-  prefixes = _.castArray(prefixes);
+  const pfxs = Array.isArray(prefixes) ? prefixes : [prefixes];
+  const lowerFirst = (s: string) =>
+    s.length ? s[0].toLowerCase() + s.slice(1) : s;
 
-  const blank = [...prefixes, restKey]
-    .map((k) => ({ [k]: {} }))
-    .reduce(_.merge, {}) as Deprefix<T, Prefixes, RestKey>;
+  // Initialize result buckets for each prefix and the restKey
+  const initial = Object.fromEntries(
+    [...pfxs, restKey].map((k) => [k, {}]),
+  ) as unknown as Deprefix<T, Prefixes, RestKey>;
 
-  return _.transform(
-    obj as _.Dictionary<unknown>,
-    (a, v, k) => {
-      const prefix = prefixes.find((p) => k.startsWith(p));
+  const dict = obj as Record<string, unknown>;
+  const result = initial as Record<string, Record<string, unknown>>;
 
-      _.set(
-        a,
-        [prefix ?? restKey, prefix ? _.lowerFirst(k.slice(prefix.length)) : k],
-        v,
-      );
-    },
-    blank,
-  );
+  Object.keys(dict).forEach((rawKey) => {
+    const match = pfxs.find((p) => rawKey.startsWith(p));
+    if (match) {
+      const stripped = lowerFirst(rawKey.slice(match.length));
+      (result[match] as Record<string, unknown>)[stripped] = dict[rawKey];
+    } else {
+      (result[restKey as string] as Record<string, unknown>)[rawKey] =
+        dict[rawKey];
+    }
+  });
+
+  return result as Deprefix<T, Prefixes, RestKey>;
 };

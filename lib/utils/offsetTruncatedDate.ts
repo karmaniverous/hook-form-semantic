@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export const offsetTruncatedDate = ({
   date,
   truncateAt,
@@ -28,11 +26,16 @@ export const offsetTruncatedDate = ({
   offsetSeconds?: number;
   offsetMilliseconds?: number;
 }) => {
-  const baseDate = _.isNil(date)
+  const isNil = (v: unknown): v is null | undefined =>
+    v === null || v === undefined;
+  const isNumber = (v: unknown): v is number =>
+    typeof v === 'number' && Number.isFinite(v);
+
+  const baseDate = isNil(date)
     ? new Date()
-    : _.isNumber(date)
+    : isNumber(date)
       ? new Date(date)
-      : date;
+      : (date as Date);
 
   const truncation = truncateAt
     ? (

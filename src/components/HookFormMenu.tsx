@@ -1,4 +1,3 @@
-import { findIndex } from 'lodash';
 import { useCallback, useMemo } from 'react';
 import {
   type ControllerProps,
@@ -68,7 +67,10 @@ export const HookFormMenu = <T extends FieldValues>({
 
       <Menu
         {...menuProps}
-        activeIndex={findIndex(menuProps.items, { name: value })}
+        activeIndex={(menuProps.items ?? []).findIndex((i) => {
+          const item = i as Partial<MenuItemProps> | null | undefined;
+          return !!item && item.name === (value as unknown as string);
+        })}
         onItemClick={handleItemClick}
       />
     </Form.Field>

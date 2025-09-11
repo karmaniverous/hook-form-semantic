@@ -1,4 +1,3 @@
-import { get, isBoolean, isFunction, set } from 'lodash';
 import { type PropsWithChildren, useCallback, useMemo } from 'react';
 import type { ControllerFieldState } from 'react-hook-form';
 import {
@@ -60,9 +59,13 @@ export const HookFormField = <T extends FieldValues, C>({
   const handleChange = useCallback(
     (event: React.SyntheticEvent<HTMLElement>, data: C) => {
       onChange?.(event, data);
-      // Conform Semantic's event to react-hook-form's expectations.
-      set(event, 'target.value', get(data, 'value') ?? get(data, 'checked'));
-      hookFieldOnChange(event);
+      // Conform to RHF expectations by passing a minimal event-like payload
+      const nextValue =
+        (data as unknown as Record<string, unknown>)?.value ??
+        (data as unknown as Record<string, unknown>)?.checked;
+      hookFieldOnChange({ target: { value: nextValue } } as unknown as {
+        target: { value: unknown };
+      });
     },
     [hookFieldOnChange, onChange],
   );
@@ -72,7 +75,9 @@ export const HookFormField = <T extends FieldValues, C>({
 
     return {
       onChange: handleChange,
-      ...(isBoolean(value) ? { checked: value } : { value: value ?? '' }),
+      ...(typeof value === 'boolean'
+        ? { checked: value }
+        : { value: value ?? '' }),
       ...rest,
     };
   }, [handleChange, hookFieldProps]);
@@ -80,10 +85,10 @@ export const HookFormField = <T extends FieldValues, C>({
   return (
     <Form.Field
       {...fieldProps}
-      {...(isFunction(children) ? {} : hookField)}
+      {...(typeof children === 'function' ? {} : hookField)}
       error={fieldState.error?.message}
     >
-      {isFunction(children)
+      {typeof children === 'function'
         ? children(
             hookField as ControllerRenderProps<
               PropsWithChildren<PropsWithChildren<T>>,

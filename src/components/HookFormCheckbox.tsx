@@ -1,4 +1,4 @@
-import { get, omit, set } from 'lodash';
+import { omit } from 'radash';
 import type { FormEvent, ReactNode } from 'react';
 import { useCallback, useMemo, useRef } from 'react';
 import {
@@ -63,14 +63,13 @@ export const HookFormCheckbox = <T extends FieldValues>({
   const handleChange = useCallback(
     (event: FormEvent<HTMLInputElement>, data: StrictCheckboxProps) => {
       checkboxProps.onChange?.(event, data);
-
-      set(event, 'target.value', get(data, 'checked'));
-
-      hookFieldOnChange(event);
+      // Conform to RHF by sending a minimal event-like payload
+      hookFieldOnChange({
+        target: { value: !!data.checked },
+      } as unknown as React.SyntheticEvent<HTMLElement>);
     },
     [checkboxProps, hookFieldOnChange],
   );
-
   const checkboxRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -95,12 +94,11 @@ export const HookFormCheckbox = <T extends FieldValues>({
 
         <Checkbox
           {...checkboxProps}
-          {...omit(hookFieldProps, 'ref')}
+          {...omit(hookFieldProps as Record<string, unknown>, ['ref'])}
           checked={value}
           onChange={handleChange}
           ref={checkboxRef}
         />
-
         {checkLabel && (
           <label
             className="control"

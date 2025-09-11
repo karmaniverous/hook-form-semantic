@@ -1,20 +1,30 @@
 # Development Plan (STAN TODO)
-When updated: 2025-09-10T00:00:00Z
+When updated: 2025-09-11T00:30:00Z
 
 ## Next up
 - Expand negative-path tests (validation and error label rendering)
   for HookForm components (e.g., min/max for Numeric, invalid phone).
-- Add small unit tests for utility helpers if desired
-  (concatClassNames, PrefixedPartial.deprefix).
-- Cross-browser sanity checks in playground as needed.
+- Add small unit tests for utility helpers if desired  (concatClassNames, PrefixedPartial.deprefix).- Cross-browser sanity checks in playground as needed.
 
 ## Completed (recent)
+
+- Fix TypeScript/linting in core components:
+  - HookFormField: replace isFunction with typeof check; remove explicit
+    any in onChange bridge.
+  - HookFormMenu: narrow items to MenuItemProps and guard nullables.
+  - HookFormPhone: use radash omit with array keys; drop unused param.
+- Remove lodash and adopt radash:
+  - Replaced lodash usage with radash or native TS/JS across components.
+  - Rewrote internal helpers (PrefixedPartial.deprefix,
+    offsetTruncatedDate) to remove lodash.
+  - Updated package.json (drop peer lodash, remove @types/lodash, add    radash dependency).
+  - Updated README install instructions to remove lodash mention.
+
 
 - Docs refresh for release readiness:
   - Rewrite README to reflect Hook Form Semantic purpose, components,
     install matrix, CSS, quick start, tests, playground, and ESM notes.
-  - Update typedoc.json hostedBaseUrl and GitHub links to this repo.
-  - Keep CHANGELOG and scripts as-is; no code changes required.
+  - Update typedoc.json hostedBaseUrl and GitHub links to this repo.  - Keep CHANGELOG and scripts as-is; no code changes required.
 
 - Fix failing tests:
   - HookFormField: function-child calls `field.onChange` with both event
