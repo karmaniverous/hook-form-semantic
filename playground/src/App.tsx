@@ -18,7 +18,6 @@ import {
   Header,
   Input,
 } from 'semantic-ui-react';
-import { Mode } from 'vanilla-jsoneditor';
 
 import { HookFormDatePicker } from '../../src/components/HookFormDatePicker';
 import { HookFormDateRangePicker } from '../../src/components/HookFormDateRangePicker';
@@ -221,7 +220,11 @@ export default function App() {
             hookControl={control}
             label="Rich Text Content"
             placeholder="Enter rich text content here..."
-            height={200}
+            wysiwygEditorStyle={{
+              border: '1px solid #f1f1f1',
+              padding: '0 1rem',
+              minHeight: '400px', // Add this to make it taller
+            }}
           />
         </Form.Group>
 
@@ -235,7 +238,6 @@ export default function App() {
             hookControl={control}
             label="JSON Data"
             jsonMainMenuBar={false}
-            jsonMode={Mode.text}
           />
         </Form.Group>
 

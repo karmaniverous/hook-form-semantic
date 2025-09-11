@@ -1,0 +1,93 @@
+/*
+ * CSS overrides for hook-form-semantic components
+ * These styles are necessary for proper integration with Semantic UI React
+ */
+
+.ui.form .hook-form-date-range-picker > div:first-child > div.ui.checkbox > label,
+.ui.form .hook-form-date-range-picker > div:first-child > div.ui.checkbox > label {
+    position: relative;
+    top: 1px;
+}
+
+.ui.form .hook-form-date-picker div.input,
+.ui.form .hook-form-date-range-picker div.input {
+    background: #ffffff;
+    border-radius: 0.28571429rem;
+    border: 1px solid rgba(34,36,38,.15);
+    box-shadow: 0em 0em 0em 0em transparent inset;
+    margin: 0em;
+    outline: none;
+    transition: color 0.1s ease, border-color 0.1s ease;
+    padding: 0;
+    min-height: auto;
+}
+
+/* Style the actual input elements inside the date pickers */
+.ui.form .hook-form-date-picker div.input input,
+.ui.form .hook-form-date-range-picker div.input input {
+    border: none;
+    background: transparent;
+    padding: 0.67857143em 0.5em;
+    font-family: 'Lato','Helvetica Neue',Arial,Helvetica,sans-serif;
+    font-size: 1em;
+    line-height: 1.21428571em;
+    color: rgba(0,0,0,.87);
+    outline: none;
+    width: auto;
+    min-width: 2em;
+}
+
+.ui.form .hook-form-date-picker div.react-date-picker,
+.ui.form .hook-form-date-picker div.react-datetime-picker,
+.ui.form .hook-form-date-range-picker div.react-daterange-picker,
+.ui.form .hook-form-date-range-picker div.react-datetimerange-picker {
+   display: flex;
+}
+
+.ui.form .hook-form-date-picker div.react-date-picker > div:first-child,
+.ui.form .hook-form-date-picker div.react-datetime-picker > div:first-child,
+.ui.form .hook-form-date-range-picker div.react-daterange-picker > div:first-child,
+.ui.form .hook-form-date-range-picker div.react-datetimerange-picker > div:first-child {
+    border: initial;
+    flex-shrink: initial;
+    flex-wrap: wrap;
+    height: fit-content;
+}
+
+.ui.form .hook-form-date-picker div.react-date-picker > div:first-of-type div,
+.ui.form .hook-form-date-picker div.react-datetime-picker > div:first-of-type div,
+.ui.form .hook-form-date-range-picker div.react-daterange-picker > div:first-of-type div,
+.ui.form .hook-form-date-range-picker div.react-datetimerange-picker > div:first-of-type div {
+    flex-grow: initial;
+}
+
+.ui.form .hook-form-date-picker div.react-date-picker > div:first-of-type button,
+.ui.form .hook-form-date-picker div.react-datetime-picker > div:first-of-type button,
+.ui.form .hook-form-date-range-picker div.react-daterange-picker > div:first-of-type button,
+.ui.form .hook-form-date-range-picker div.react-datetimerange-picker > div:first-of-type button {
+    padding: initial;
+}
+
+.ui.form .hook-form-date-picker div.react-date-picker > div:first-of-type button:first-of-type,
+.ui.form .hook-form-date-picker div.react-datetime-picker > div:first-of-type button:first-of-type,
+.ui.form .hook-form-date-range-picker div.react-daterange-picker > div:first-of-type button:first-of-type,
+.ui.form .hook-form-date-range-picker div.react-datetimerange-picker > div:first-of-type button:first-of-type {
+    margin-left: auto;
+    margin-right: 0.5em;
+}
+
+.ui.form .hook-form-date-picker .react-date-picker__calendar--open,
+.ui.form .hook-form-date-picker .react-datetime-picker__calendar--open,
+.ui.form .hook-form-date-range-picker .react-daterange-picker__calendar--open,
+.ui.form .hook-form-date-range-picker .react-datetimerange-picker__calendar--open {
+    z-index: 1000;
+}
+
+.ui.form .field.hook-form-date-picker label,
+.ui.form .field.hook-form-date-range-picker label {
+  display: block;
+  margin: 0em 0em 0.28571429em 0em;
+  font-size: 0.85714286em;
+  font-weight: bold;
+  text-transform: none;
+}
