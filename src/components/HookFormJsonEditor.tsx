@@ -1,5 +1,5 @@
 import { omit } from 'lodash';
-import { lazy, type ReactNode, Suspense, useMemo } from 'react';
+import { type ReactNode, useMemo } from 'react';
 import {
   type ControllerProps,
   type FieldValues,
@@ -17,8 +17,7 @@ import {
   deprefix,
   type PrefixedPartial,
 } from '../../lib/utils/PrefixedPartial';
-
-const JsonEditor = lazy(() => import('./JsonEditor'));
+import JsonEditor from './JsonEditor';
 
 export interface HookFormJsonEditorProps<T extends FieldValues>
   extends Omit<
@@ -76,9 +75,7 @@ export const HookFormJsonEditor = <T extends FieldValues>(
       <Form.Field {...omit(fieldProps, 'label')}>
         {fieldProps.label && <label>{fieldProps.label as ReactNode}</label>}
 
-        <Suspense fallback={<div>Loading editor...</div>}>
-          <JsonEditor {...jsonProps} {...hookField} />
-        </Suspense>
+        <JsonEditor {...jsonProps} {...hookField} />
 
         {error?.message && (
           <Label basic color="red" pointing="above">

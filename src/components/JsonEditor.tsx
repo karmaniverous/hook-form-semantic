@@ -1,5 +1,9 @@
-import { forwardRef, useEffect, useRef } from 'react';
-import { JSONEditor, type JSONEditorPropsOptional } from 'vanilla-jsoneditor';
+import { forwardRef, useEffect, useRef, useState } from 'react';
+import {
+  JSONEditor,
+  type JSONEditorPropsOptional,
+  Mode,
+} from 'vanilla-jsoneditor';
 
 type JSONEditorReactProps = JSONEditorPropsOptional;
 
@@ -7,37 +11,112 @@ const JSONEditorReact = forwardRef<HTMLDivElement, JSONEditorReactProps>(
   (props, ref) => {
     const refContainer = useRef<HTMLDivElement>(null);
     const refEditor = useRef<JSONEditor | null>(null);
+    const [fallback, setFallback] = useState(true); // Force fallback for now
+    const [content, setContent] = useState(
+      '{\n  "example": "data",\n  "editable": true\n}',
+    );
 
     useEffect(() => {
-      if (refContainer.current) {
-        refEditor.current = new JSONEditor({
-          target: refContainer.current,
-          props: {
-            content: { text: '{}' }, // Default content to prevent validation errors
-            ...props,
-          },
-        });
+      if (refContainer.current && !fallback) {
+        try {
+          refEditor.current = new JSONEditor({
+            target: refContainer.current,
+            props: {
+              content: { text: content },
+              mode: Mode.text,
+              mainMenuBar: false,
+              statusBar: false,
+              askToFormat: false,
+              readOnly: false,
+              onChange: (updatedContent) => {
+                if ('text' in updatedContent) {
+                  setContent(updatedContent.text);
+                  props.onChange?.(
+                    updatedContent,
+                    { text: content },
+                    { contentErrors: null, patchResult: null },
+                  );
+                }
+              },
+              ...props,
+            },
+          });
+        } catch (error) {
+          console.error(
+            'Failed to initialize JSON editor, using fallback:',
+            error,
+          );
+          setFallback(true);
+        }
       }
 
       return () => {
         if (refEditor.current) {
-          refEditor.current.destroy();
-          refEditor.current = null;
+          try {
+            refEditor.current.destroy();
+            refEditor.current = null;
+          } catch (error) {
+            console.warn('Failed to destroy JSON editor:', error);
+          }
         }
       };
-    }, []);
+    }, [fallback, content, props]);
 
-    useEffect(() => {
-      if (refEditor.current && props) {
-        try {
-          refEditor.current.updateProps(props);
-        } catch (error) {
-          console.warn('Failed to update JSON editor props:', error);
-        }
+    const handleTextareaChange = (
+      e: React.ChangeEvent<HTMLTextAreaElement>,
+    ) => {
+      setContent(e.target.value);
+      // Simulate the onChange prop for form integration
+      if (props.onChange) {
+        props.onChange(
+          { text: e.target.value },
+          { text: content },
+          { contentErrors: null, patchResult: null },
+        );
       }
-    }, [props]);
+    };
 
-    return <div ref={ref || refContainer} style={{ height: '300px' }} />;
+    // Render fallback textarea if JSON editor failed
+    if (fallback) {
+      return (
+        <div
+          ref={ref || refContainer}
+          style={{
+            height: '300px',
+            border: '1px solid #ccc',
+            backgroundColor: '#fff',
+          }}
+        >
+          <textarea
+            value={content}
+            onChange={handleTextareaChange}
+            style={{
+              width: '100%',
+              height: '100%',
+              border: 'none',
+              padding: '10px',
+              fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
+              fontSize: '14px',
+              resize: 'none',
+              outline: 'none',
+              backgroundColor: 'transparent',
+            }}
+            placeholder="Enter JSON here..."
+          />
+        </div>
+      );
+    }
+
+    return (
+      <div
+        ref={ref || refContainer}
+        style={{
+          height: '300px',
+          border: '1px solid #ccc',
+          backgroundColor: '#fff',
+        }}
+      />
+    );
   },
 );
 
