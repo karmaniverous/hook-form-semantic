@@ -134,7 +134,9 @@
       "requireBranch": "main"
     },
     "github": {
-      "release": true
+      "release": true,
+      "autoGenerate": true,
+      "releaseName": "Release ${version}"
     },
     "hooks": {
       "after:init": [
