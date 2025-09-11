@@ -5,6 +5,7 @@
     "src/**/index.ts"
   ],
   "ignoreBinaries": ["plantuml"],
+  "ignoreDependencies": ["@types/react", "@types/react-dom"],
   "project": ["*/**", "!docs/**"],
   "rules": {
     "exports": "off",
