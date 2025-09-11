@@ -117,6 +117,7 @@ export const HookFormSort = <T extends FieldValues>({
           {...buttonProps}
           icon={value?.[1] ? ascIcon : descIcon}
           onClick={handleButtonClick}
+          type="button"
         />
       </div>
     </Form.Field>

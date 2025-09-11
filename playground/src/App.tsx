@@ -6,7 +6,6 @@ import 'react-clock/dist/Clock.css';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import 'vanilla-jsoneditor/themes/jse-theme-dark.css';
 
 import { useForm } from 'react-hook-form';
 import {
@@ -39,6 +38,7 @@ interface FormData {
   dateRange: { start: Date; end: Date };
   favoriteColor: string;
   priorities: string[];
+  sortBy: [string, boolean];
   config: object;
   description: string;
   content: string;
@@ -60,6 +60,7 @@ export default function App() {
       dateRange: undefined,
       favoriteColor: '',
       priorities: [],
+      sortBy: ['name', true],
       config: {},
       description: '',
       content: '',
@@ -197,15 +198,15 @@ export default function App() {
 
         <Form.Group widths="equal">
           <HookFormSort<FormData>
-            hookName="priorities"
+            hookName="sortBy"
             hookControl={control}
-            label="Priority List (drag to reorder)"
+            label="Sort By (field and direction)"
             sortOptions={[
-              { key: 'work', text: 'Work', value: 'work' },
-              { key: 'family', text: 'Family', value: 'family' },
-              { key: 'health', text: 'Health', value: 'health' },
-              { key: 'hobbies', text: 'Hobbies', value: 'hobbies' },
-              { key: 'travel', text: 'Travel', value: 'travel' },
+              { key: 'name', text: 'Name', value: 'name' },
+              { key: 'date', text: 'Date Created', value: 'date' },
+              { key: 'priority', text: 'Priority Level', value: 'priority' },
+              { key: 'status', text: 'Status', value: 'status' },
+              { key: 'category', text: 'Category', value: 'category' },
             ]}
           />
         </Form.Group>
