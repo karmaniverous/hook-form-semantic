@@ -129,7 +129,7 @@
   },
   "release-it": {
     "git": {
-      "changelog": "npx auto-changelog --unreleased-only --stdout --template https://raw.githubusercontent.com/release-it/release-it/main/templates/changelog-compact.hbs",
+      "changelog": "npx auto-changelog --stdout --template https://raw.githubusercontent.com/release-it/release-it/main/templates/changelog-compact.hbs",
       "commitMessage": "chore: release v${version}",
       "requireBranch": "main"
     },
@@ -184,7 +184,7 @@
   "type": "module",
   "types": "dist/index.d.ts",
   "main": "dist/mjs/src/index.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "dependencies": {
     "radash": "^12.1.1"
   }
