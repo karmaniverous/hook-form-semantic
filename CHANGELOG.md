@@ -2,7 +2,15 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.3](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.2...0.1.3)
+
+- Avoid null body error on github [`051b941`](https://github.com/karmaniverous/hook-form-semantic/commit/051b941358659df9d9eedb6cc9d9244b9be4d5ee)
+
 #### [0.1.2](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.2-1...0.1.2)
+
+> 11 September 2025
+
+- chore: release v0.1.2 [`6cfc3c3`](https://github.com/karmaniverous/hook-form-semantic/commit/6cfc3c3a6198eb1e6c243f7a4e8bde00ff514921)
 
 #### [0.1.2-1](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.2-0...0.1.2-1)
 
