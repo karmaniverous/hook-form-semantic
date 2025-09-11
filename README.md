@@ -31,7 +31,7 @@ Contents
 Core peer dependencies (always install in your app)
 
 ```bash
-npm i @karmaniverous/hook-form-semantic react react-dom react-hook-form semantic-ui-react semantic-ui-css lodash
+npm i @karmaniverous/hook-form-semantic react react-dom react-hook-form semantic-ui-react semantic-ui-css radash
 ```
 
 Install peers per component you use
