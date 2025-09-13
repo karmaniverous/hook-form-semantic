@@ -2,8 +2,17 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.4](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.3...0.1.4)
+
+- Improve playground layout [`a2e21ef`](https://github.com/karmaniverous/hook-form-semantic/commit/a2e21ef021816a875361f8bf2c02d5aa1663708e)
+- Update README and docs to reflect the switch from lodash to radash [`02b18e8`](https://github.com/karmaniverous/hook-form-semantic/commit/02b18e831dab4737b8a9c9f5c9312cab6a0b97da)
+- Remove unused dependency [`b234cbf`](https://github.com/karmaniverous/hook-form-semantic/commit/b234cbf667990bf8786959a7184a4eb4edb6f011)
+
 #### [0.1.3](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.2...0.1.3)
 
+> 11 September 2025
+
+- chore: release v0.1.3 [`75b672e`](https://github.com/karmaniverous/hook-form-semantic/commit/75b672e95beba6a148a15fc77e83bc9769a60c89)
 - Avoid null body error on github [`051b941`](https://github.com/karmaniverous/hook-form-semantic/commit/051b941358659df9d9eedb6cc9d9244b9be4d5ee)
 
 #### [0.1.2](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.2-1...0.1.2)
