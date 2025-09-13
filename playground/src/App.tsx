@@ -11,11 +11,11 @@ import { useForm } from 'react-hook-form';
 import {
   Button,
   Checkbox,
-  Container,
   Divider,
   Form,
   Header,
   Input,
+  Segment,
 } from 'semantic-ui-react';
 
 import { HookFormDatePicker } from '../../src/components/HookFormDatePicker';
@@ -78,7 +78,13 @@ export default function App() {
   };
 
   return (
-    <Container style={{ padding: 24 }}>
+    <Segment
+      style={{
+        maxWidth: '700px',
+        margin: '24px auto',
+        padding: 24,
+      }}
+    >
       <Header as="h1">Hook Form Semantic Playground</Header>
 
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -171,13 +177,15 @@ export default function App() {
 
         <Header as="h2">HookFormDatePicker Demo</Header>
 
-        <Form.Group widths="equal">
-          <HookFormDatePicker<FormData>
-            hookName="birthDate"
-            hookControl={control}
-            hookRules={{ required: 'Birth date is required' }}
-            label="Birth Date"
-          />
+        <Form.Group>
+          <Form.Field className="computer eight wide mobile sixteen wide">
+            <HookFormDatePicker<FormData>
+              hookName="birthDate"
+              hookControl={control}
+              hookRules={{ required: 'Birth date is required' }}
+              label="Birth Date"
+            />
+          </Form.Field>
         </Form.Group>
 
         <Divider />
@@ -248,6 +256,6 @@ export default function App() {
           Submit Form
         </Button>
       </Form>
-    </Container>
+    </Segment>
   );
 }

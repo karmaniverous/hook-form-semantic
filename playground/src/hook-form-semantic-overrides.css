@@ -1,86 +1,156 @@
 /*
  * CSS overrides for hook-form-semantic components
  * These styles are necessary for proper integration with Semantic UI React
+ * Based on the working styles from the web-app
  */
 
-.ui.form .hook-form-date-range-picker > div:first-child > div.ui.checkbox > label,
-.ui.form .hook-form-date-range-picker > div:first-child > div.ui.checkbox > label {
-    position: relative;
-    top: 1px;
+/* Reset and base styles for all date picker components */
+
+/* Ensure proper alignment of checkbox labels in date range picker */
+.ui.form
+  .hook-form-date-range-picker
+  > div:first-child
+  > div.ui.checkbox
+  > label,
+.ui.form
+  .hook-form-date-range-picker
+  > div:first-child
+  > div.ui.checkbox
+  > label {
+  position: relative;
+  top: 1px;
 }
 
 .ui.form .hook-form-date-picker div.input,
 .ui.form .hook-form-date-range-picker div.input {
-    background: #ffffff;
-    border-radius: 0.28571429rem;
-    border: 1px solid rgba(34,36,38,.15);
-    box-shadow: 0em 0em 0em 0em transparent inset;
-    margin: 0em;
-    outline: none;
-    transition: color 0.1s ease, border-color 0.1s ease;
-    padding: 0;
-    min-height: auto;
+  background: #ffffff;
+  border-radius: 0.28571429rem;
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  box-shadow: 0em 0em 0em 0em transparent inset;
+  margin: 0em;
+  outline: none;
+  transition:
+    color 0.1s ease,
+    border-color 0.1s ease;
+  padding: 0;
+  min-height: auto;
+  display: flex;
+  align-items: center;
 }
 
 /* Style the actual input elements inside the date pickers */
 .ui.form .hook-form-date-picker div.input input,
 .ui.form .hook-form-date-range-picker div.input input {
-    border: none;
-    background: transparent;
-    padding: 0.67857143em 0.5em;
-    font-family: 'Lato','Helvetica Neue',Arial,Helvetica,sans-serif;
-    font-size: 1em;
-    line-height: 1.21428571em;
-    color: rgba(0,0,0,.87);
-    outline: none;
-    width: auto;
-    min-width: 2em;
+  border: none;
+  background: transparent;
+  padding: 0.67857143em 0.5em;
+  font-size: 1em;
+  line-height: 1.21428571em;
+  color: rgba(0, 0, 0, 0.87);
+  outline: none;
+  width: auto;
+  min-width: 2em;
 }
 
 .ui.form .hook-form-date-picker div.react-date-picker,
 .ui.form .hook-form-date-picker div.react-datetime-picker,
 .ui.form .hook-form-date-range-picker div.react-daterange-picker,
 .ui.form .hook-form-date-range-picker div.react-datetimerange-picker {
-   display: flex;
+  display: flex;
 }
 
 .ui.form .hook-form-date-picker div.react-date-picker > div:first-child,
 .ui.form .hook-form-date-picker div.react-datetime-picker > div:first-child,
-.ui.form .hook-form-date-range-picker div.react-daterange-picker > div:first-child,
-.ui.form .hook-form-date-range-picker div.react-datetimerange-picker > div:first-child {
-    border: initial;
-    flex-shrink: initial;
-    flex-wrap: wrap;
-    height: fit-content;
+.ui.form
+  .hook-form-date-range-picker
+  div.react-daterange-picker
+  > div:first-child,
+.ui.form
+  .hook-form-date-range-picker
+  div.react-datetimerange-picker
+  > div:first-child {
+  border: initial;
+  flex-shrink: initial;
+  flex-wrap: nowrap !important;
+  height: fit-content;
+  width: 100%;
+  display: flex !important;
+  align-items: center !important;
 }
 
 .ui.form .hook-form-date-picker div.react-date-picker > div:first-of-type div,
-.ui.form .hook-form-date-picker div.react-datetime-picker > div:first-of-type div,
-.ui.form .hook-form-date-range-picker div.react-daterange-picker > div:first-of-type div,
-.ui.form .hook-form-date-range-picker div.react-datetimerange-picker > div:first-of-type div {
-    flex-grow: initial;
+.ui.form
+  .hook-form-date-picker
+  div.react-datetime-picker
+  > div:first-of-type
+  div,
+.ui.form
+  .hook-form-date-range-picker
+  div.react-daterange-picker
+  > div:first-of-type
+  div,
+.ui.form
+  .hook-form-date-range-picker
+  div.react-datetimerange-picker
+  > div:first-of-type
+  div {
+  flex-grow: initial;
 }
 
-.ui.form .hook-form-date-picker div.react-date-picker > div:first-of-type button,
-.ui.form .hook-form-date-picker div.react-datetime-picker > div:first-of-type button,
-.ui.form .hook-form-date-range-picker div.react-daterange-picker > div:first-of-type button,
-.ui.form .hook-form-date-range-picker div.react-datetimerange-picker > div:first-of-type button {
-    padding: initial;
+.ui.form
+  .hook-form-date-picker
+  div.react-date-picker
+  > div:first-of-type
+  button,
+.ui.form
+  .hook-form-date-picker
+  div.react-datetime-picker
+  > div:first-of-type
+  button,
+.ui.form
+  .hook-form-date-range-picker
+  div.react-daterange-picker
+  > div:first-of-type
+  button,
+.ui.form
+  .hook-form-date-range-picker
+  div.react-datetimerange-picker
+  > div:first-of-type
+  button {
+  padding: initial;
 }
 
-.ui.form .hook-form-date-picker div.react-date-picker > div:first-of-type button:first-of-type,
-.ui.form .hook-form-date-picker div.react-datetime-picker > div:first-of-type button:first-of-type,
-.ui.form .hook-form-date-range-picker div.react-daterange-picker > div:first-of-type button:first-of-type,
-.ui.form .hook-form-date-range-picker div.react-datetimerange-picker > div:first-of-type button:first-of-type {
-    margin-left: auto;
-    margin-right: 0.5em;
+.ui.form
+  .hook-form-date-picker
+  div.react-date-picker
+  > div:first-of-type
+  button:first-of-type,
+.ui.form
+  .hook-form-date-picker
+  div.react-datetime-picker
+  > div:first-of-type
+  button:first-of-type,
+.ui.form
+  .hook-form-date-range-picker
+  div.react-daterange-picker
+  > div:first-of-type
+  button:first-of-type,
+.ui.form
+  .hook-form-date-range-picker
+  div.react-datetimerange-picker
+  > div:first-of-type
+  button:first-of-type {
+  margin-left: auto;
+  margin-right: 0.5em;
 }
 
 .ui.form .hook-form-date-picker .react-date-picker__calendar--open,
 .ui.form .hook-form-date-picker .react-datetime-picker__calendar--open,
 .ui.form .hook-form-date-range-picker .react-daterange-picker__calendar--open,
-.ui.form .hook-form-date-range-picker .react-datetimerange-picker__calendar--open {
-    z-index: 1000;
+.ui.form
+  .hook-form-date-range-picker
+  .react-datetimerange-picker__calendar--open {
+  z-index: 1000;
 }
 
 .ui.form .field.hook-form-date-picker label,
@@ -90,4 +160,50 @@
   font-size: 0.85714286em;
   font-weight: bold;
   text-transform: none;
+}
+
+.ui.form .hook-form-date-picker .react-date-picker__inputGroup,
+.ui.form .hook-form-date-picker .react-datetime-picker__inputGroup,
+.ui.form .hook-form-date-range-picker .react-daterange-picker__inputGroup,
+.ui.form .hook-form-date-range-picker .react-datetimerange-picker__inputGroup {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0.67857143em 1em !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Ensure the wrapper div doesn't force wrapping */
+.ui.form .hook-form-date-picker div.react-date-picker > div:first-child,
+.ui.form .hook-form-date-picker div.react-datetime-picker > div:first-child {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+/* Style individual input fields to look seamless */
+.ui.form .hook-form-date-picker .react-date-picker__inputGroup__input,
+.ui.form .hook-form-date-picker .react-datetime-picker__inputGroup__input,
+.ui.form
+  .hook-form-date-range-picker
+  .react-daterange-picker__inputGroup__input,
+.ui.form
+  .hook-form-date-range-picker
+  .react-datetimerange-picker__inputGroup__input {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: 1em !important;
+  line-height: 1.21428571em !important;
+  width: auto !important;
+  min-width: 1.5em !important;
+  max-width: 4em !important;
+  text-align: center !important;
 }
