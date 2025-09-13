@@ -51,7 +51,6 @@
     "rollup-plugin-dts": "^6.2.3",
     "rollup-plugin-postcss": "^4.0.2",
     "semantic-ui-css": "^2.5.0",
-    "semantic-ui-less": "^2.5.0",
     "semantic-ui-react": "^3.0.0-beta.2",
     "tslib": "^2.8.1",
     "tsx": "^4.20.4",
