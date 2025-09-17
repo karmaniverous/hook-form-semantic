@@ -189,6 +189,7 @@
   "main": "dist/mjs/src/index.js",
   "version": "0.1.4",
   "dependencies": {
+    "@karmaniverous/rrstack": "^0.8.0",
     "radash": "^12.1.1"
   }
 }
