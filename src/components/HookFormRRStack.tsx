@@ -165,7 +165,9 @@ export const HookFormRRStack = <T extends FieldValues>({
   const handleRRStackChange = useCallback(
     (stack: { toJson: () => RRStackOptions }) => {
       try {
-        const newValue = stack.toJson();
+        const rawValue = stack.toJson();
+        // Clean the data using JSON serialization to remove any comments or non-serializable properties
+        const newValue = JSON.parse(JSON.stringify(rawValue));
         // Clear validation errors on successful change
         setValidationErrors({});
         hookFieldOnChange({ target: { value: newValue } } as {
