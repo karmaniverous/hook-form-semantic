@@ -26,11 +26,30 @@ vi.mock('semantic-ui-react', () => {
     return React.createElement('div', divProps, children);
   };
 
+  const FormGroup: React.FC<
+    React.PropsWithChildren<
+      React.HTMLAttributes<HTMLDivElement> & { widths?: string }
+    >
+  > = ({ children, widths, ...props }) =>
+    React.createElement(
+      'div',
+      { ...props, 'data-testid': 'form-group', 'data-widths': widths },
+      children,
+    );
+
   interface FormType extends React.FC<FormProps> {
     Field: React.FC<FieldProps>;
+    Group: React.FC<
+      React.PropsWithChildren<
+        React.HTMLAttributes<HTMLDivElement> & { widths?: string }
+      >
+    >;
   }
 
-  const Form = Object.assign(FormComponent, { Field }) as FormType;
+  const Form = Object.assign(FormComponent, {
+    Field,
+    Group: FormGroup,
+  }) as FormType;
 
   const Label: React.FC<
     React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
@@ -186,7 +205,134 @@ vi.mock('semantic-ui-react', () => {
       ),
     );
 
-  return { Form, Label, Input, Checkbox, Dropdown, Button, Menu };
+  const Header: React.FC<
+    React.PropsWithChildren<
+      React.HTMLAttributes<HTMLHeadingElement> & { size?: string }
+    >
+  > = ({ children, size, ...props }) =>
+    React.createElement(
+      size === 'small' ? 'h4' : size === 'tiny' ? 'h6' : 'h3',
+      props,
+      children,
+    );
+
+  const Card: React.FC<
+    React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
+  > = ({ children, ...props }) =>
+    React.createElement('div', { ...props, 'data-testid': 'card' }, children);
+
+  const CardContent: React.FC<
+    React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
+  > = ({ children, ...props }) =>
+    React.createElement(
+      'div',
+      { ...props, 'data-testid': 'card-content' },
+      children,
+    );
+
+  const CardHeader: React.FC<
+    React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
+  > = ({ children, ...props }) =>
+    React.createElement(
+      'div',
+      { ...props, 'data-testid': 'card-header' },
+      children,
+    );
+
+  const CardMeta: React.FC<
+    React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
+  > = ({ children, ...props }) =>
+    React.createElement(
+      'div',
+      { ...props, 'data-testid': 'card-meta' },
+      children,
+    );
+
+  Object.assign(Card, {
+    Content: CardContent,
+    Header: CardHeader,
+    Meta: CardMeta,
+  });
+
+  const Icon: React.FC<
+    { name?: string } & React.HTMLAttributes<HTMLSpanElement>
+  > = ({ name, ...props }) =>
+    React.createElement(
+      'span',
+      { ...props, 'data-testid': 'icon', 'data-name': name },
+      name,
+    );
+
+  const Message: React.FC<
+    React.PropsWithChildren<
+      React.HTMLAttributes<HTMLDivElement> & {
+        negative?: boolean;
+        info?: boolean;
+        size?: string;
+      }
+    >
+  > = ({ children, negative, info, size, ...props }) =>
+    React.createElement(
+      'div',
+      {
+        ...props,
+        'data-testid': 'message',
+        'data-negative': negative,
+        'data-info': info,
+        'data-size': size,
+      },
+      children,
+    );
+
+  const MessageHeader: React.FC<
+    React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
+  > = ({ children, ...props }) =>
+    React.createElement(
+      'div',
+      { ...props, 'data-testid': 'message-header' },
+      children,
+    );
+
+  Object.assign(Message, { Header: MessageHeader });
+
+  const Segment: React.FC<
+    React.PropsWithChildren<
+      React.HTMLAttributes<HTMLDivElement> & { basic?: boolean }
+    >
+  > = ({ children, basic, ...props }) =>
+    React.createElement(
+      'div',
+      { ...props, 'data-testid': 'segment', 'data-basic': basic },
+      children,
+    );
+
+  const ButtonGroup: React.FC<
+    React.PropsWithChildren<
+      React.HTMLAttributes<HTMLDivElement> & { size?: string }
+    >
+  > = ({ children, size, ...props }) =>
+    React.createElement(
+      'div',
+      { ...props, 'data-testid': 'button-group', 'data-size': size },
+      children,
+    );
+
+  Object.assign(Button, { Group: ButtonGroup });
+
+  return {
+    Form,
+    Label,
+    Input,
+    Checkbox,
+    Dropdown,
+    Button,
+    Menu,
+    Header,
+    Card,
+    Icon,
+    Message,
+    Segment,
+  };
 });
 
 // Date/time pickers

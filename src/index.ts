@@ -47,6 +47,10 @@ export {
   type HookFormPhoneProps,
 } from './components/HookFormPhone';
 export {
+  HookFormRRStack,
+  type HookFormRRStackProps,
+} from './components/HookFormRRStack';
+export {
   HookFormSort,
   type HookFormSortProps,
   type Sort,

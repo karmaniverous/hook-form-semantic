@@ -24,6 +24,7 @@ import { HookFormField } from '../../src/components/HookFormField';
 import { HookFormJsonEditor } from '../../src/components/HookFormJsonEditor';
 import { HookFormNumeric } from '../../src/components/HookFormNumeric';
 import { HookFormPhone } from '../../src/components/HookFormPhone';
+import { HookFormRRStack } from '../../src/components/HookFormRRStack';
 import { HookFormSort } from '../../src/components/HookFormSort';
 import { HookFormWysiwygEditor } from '../../src/components/HookFormWysiwygEditor';
 
@@ -45,6 +46,7 @@ interface FormData {
   jsonData: object;
   newsletter: boolean;
   terms: boolean;
+  rrstack: object;
 }
 
 export default function App() {
@@ -67,6 +69,11 @@ export default function App() {
       jsonData: { example: 'data' },
       newsletter: false,
       terms: false,
+      rrstack: {
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        timeUnit: 'ms',
+        rules: [],
+      },
     },
   });
 
@@ -249,6 +256,18 @@ export default function App() {
             jsonMainMenuBar={false}
           />
         </Form.Group>
+
+        <Divider />
+
+        <Header as="h2">HookFormRRStack Demo</Header>
+
+        <HookFormRRStack<FormData>
+          hookName="rrstack"
+          hookControl={control}
+          label="Schedule Rules"
+          timezone="America/New_York"
+          timeUnit="ms"
+        />
 
         <Divider />
 

@@ -19,7 +19,7 @@
 
     // [req-5] Use Node resolution for better consumer compatibility
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
 
     // [req-5] Enable interop flags for better ESModule compatibility
     "esModuleInterop": true,
