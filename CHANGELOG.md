@@ -2,8 +2,15 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.5-3](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.5-2...0.1.5-3)
+
+- Clean HookFormRRStack output [`adcf978`](https://github.com/karmaniverous/hook-form-semantic/commit/adcf9781dba8267947f0f19ae25593d921de246b)
+
 #### [0.1.5-2](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.5-1...0.1.5-2)
 
+> 18 September 2025
+
+- chore: release v0.1.5-2 [`9e5eec8`](https://github.com/karmaniverous/hook-form-semantic/commit/9e5eec86478a1a4b4a3309dd623412dbfb8a2e14)
 - Fix Rollup configuration problem [`39845e9`](https://github.com/karmaniverous/hook-form-semantic/commit/39845e9ca0ae11c10a0cb8f452d27299adeeae52)
 
 #### [0.1.5-1](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.5-0...0.1.5-1)
