@@ -25,7 +25,21 @@ const commonPlugins = [
   }),
   commonjsPlugin(),
   jsonPlugin(),
-  nodeResolve(),
+  nodeResolve({
+    preferBuiltins: false,
+    // Only resolve modules that are NOT peer dependencies or external dependencies
+    resolveOnly: (module) => {
+      const allExternals = [
+        ...Object.keys(pkg.dependencies ?? {}),
+        ...Object.keys(pkg.peerDependencies ?? {}),
+        'tslib',
+        'react/jsx-runtime',
+      ];
+      return !allExternals.some(
+        (external) => module === external || module.startsWith(external + '/'),
+      );
+    },
+  }),
   typescriptPlugin({
     outputToFilesystem: false,
   }),
