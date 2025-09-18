@@ -1,3 +1,13 @@
+/**
+ * Requirements addressed:
+ * - RHF-integrated RRStack field component following library patterns.
+ * - Use Semantic UI Form.Field and propagate FormFieldProps.
+ * - Surface RHF validation via Form.Field error and an inline Label.
+ * - Use minimal event-like objects for RHF onChange compatibility.
+ * - Maintain type safety with generics and UseControllerProps.
+ * - Show RRStack-specific validation errors using Semantic UI Message.
+ */
+
 import type { RRStackOptions, RuleJson } from '@karmaniverous/rrstack';
 import { RRStack } from '@karmaniverous/rrstack';
 import { useRRStack, useRRStackSelector } from '@karmaniverous/rrstack/react';

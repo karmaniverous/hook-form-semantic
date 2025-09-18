@@ -1,3 +1,4 @@
+import { omit } from 'radash';
 import { useCallback, useMemo } from 'react';
 import {
   type ControllerProps,
@@ -97,11 +98,10 @@ export const HookFormSort = <T extends FieldValues>({
   return (
     <Form.Field
       {...fieldProps}
-      {...hookFieldProps}
+      {...omit(hookFieldProps as Record<string, unknown>, ['ref'])}
       error={fieldState.error?.message}
     >
       {label && <label>{label}</label>}
-
       <div style={{ display: 'flex' }}>
         <Dropdown
           {...dropdownProps}

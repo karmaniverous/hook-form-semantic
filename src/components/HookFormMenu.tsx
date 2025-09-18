@@ -1,3 +1,4 @@
+import { omit } from 'radash';
 import { useCallback, useMemo } from 'react';
 import {
   type ControllerProps,
@@ -60,11 +61,10 @@ export const HookFormMenu = <T extends FieldValues>({
   return (
     <Form.Field
       {...fieldProps}
-      {...hookFieldProps}
+      {...omit(hookFieldProps as Record<string, unknown>, ['ref'])}
       error={fieldState.error?.message}
     >
       {label && <label>{label}</label>}
-
       <Menu
         {...menuProps}
         activeIndex={(menuProps.items ?? []).findIndex((i) => {

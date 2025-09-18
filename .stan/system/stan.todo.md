@@ -1,17 +1,37 @@
 # Development Plan (STAN TODO)
-When updated: 2025-09-11T00:30:00Z
+When updated: 2025-09-18T00:00:00Z
 
 ## Next up
-- Expand negative-path tests (validation and error label rendering)
-  for HookForm components (e.g., min/max for Numeric, invalid phone).
-- Add small unit tests for utility helpers if desired  (concatClassNames, PrefixedPartial.deprefix).- Cross-browser sanity checks in playground as needed.
+- Decompose HookFormRRStack.tsx (>300 LOC) into cohesive submodules:
+  - components/rrstack/RuleCard.tsx (render + actions)
+  - components/rrstack/RuleEditor.tsx (edit/add form)
+  - components/rrstack/options.ts (frequency/effect/month/position lists)
+  Add co-located tests for each unit.
+- Expand RRStack negative-path tests: invalid timezone selection, invalid
+  by* array entries, move operations edge cases (top/bottom at bounds).
+- Silence test-only warnings by updating semantic-ui-react doubles to
+  forwardRef and filter DOM-unsafe props (low priority).
+- Consider addressing the TypeDoc “Presets … not included” warning by
+  adjusting visibility or explicit exports (low priority).
+- Expand negative-path tests (validation and error label rendering) for
+  other HookForm components (e.g., min/max for Numeric, invalid phone).
+- Add small unit tests for utility helpers if desired (concatClassNames,
+  PrefixedPartial.deprefix).
+- Cross-browser sanity checks in playground as needed.
 
 ## Completed (recent)
 
+- Align HookFormRRStack with house patterns:
+  - Wrap with Form.Field, propagate FormFieldProps, add hook-form-rrstack
+    class; show RHF errors via Label and Form.Field error prop.
+- Fix ref-spread warnings:
+  - HookFormMenu/HookFormSort: omit ref when spreading hookFieldProps
+    into Form.Field.
+- Add repo-specific standards in .stan/system/stan.project.md.
+
 - Fix TypeScript/linting in core components:
   - HookFormField: replace isFunction with typeof check; remove explicit
-    any in onChange bridge.
-  - HookFormMenu: narrow items to MenuItemProps and guard nullables.
+    any in onChange bridge.  - HookFormMenu: narrow items to MenuItemProps and guard nullables.
   - HookFormPhone: use radash omit with array keys; drop unused param.
 - Remove lodash and adopt radash:
   - Replaced lodash usage with radash or native TS/JS across components.
