@@ -1,13 +1,3 @@
-/**
- * Requirements addressed:
- * - RHF-integrated RRStack field component following library patterns.
- * - Use Semantic UI Form.Field and propagate FormFieldProps.
- * - Surface RHF validation via Form.Field error and an inline Label.
- * - Use minimal event-like objects for RHF onChange compatibility.
- * - Maintain type safety with generics and UseControllerProps.
- * - Show RRStack-specific validation errors using Semantic UI Message.
- */
-
 import type { RRStackOptions, RuleJson } from '@karmaniverous/rrstack';
 import { RRStack } from '@karmaniverous/rrstack';
 import { useRRStack, useRRStackSelector } from '@karmaniverous/rrstack/react';
@@ -19,8 +9,8 @@ import {
   type UseControllerProps,
 } from 'react-hook-form';
 import {
+  Accordion,
   Button,
-  Card,
   Dropdown,
   Form,
   type FormFieldProps,
@@ -201,618 +191,9 @@ export const HookFormRRStack = <T extends FieldValues>({
   const rulesCount = useRRStackSelector(rrstack, (s) => s.rules.length);
   const rules = useRRStackSelector(rrstack, (s) => s.rules);
 
-  const renderRuleCard = useCallback(
-    (
-      rule: RuleJson,
-      index: number,
-      rrstack: {
-        describeRule: (index: number) => string;
-        removeRule: (index: number) => void;
-        up: (index: number) => void;
-        down: (index: number) => void;
-        top: (index: number) => void;
-        bottom: (index: number) => void;
-      },
-    ) => {
-      const isActive = activeIndex === index;
-      const ruleDescription = rrstack.describeRule(index);
-
-      const handleToggle = () => {
-        setActiveIndex(isActive ? null : index);
-      };
-
-      const handleEdit = () => {
-        setEditingRule({ ...rule });
-        setEditingIndex(index);
-      };
-
-      const handleDelete = () => {
-        rrstack.removeRule(index);
-      };
-
-      const handleMoveUp = () => {
-        if (index > 0) {
-          rrstack.up(index);
-        }
-      };
-
-      const handleMoveDown = () => {
-        if (index < rulesCount - 1) {
-          rrstack.down(index);
-        }
-      };
-
-      const handleMoveTop = () => {
-        if (index > 0) {
-          rrstack.top(index);
-        }
-      };
-
-      const handleMoveBottom = () => {
-        if (index < rulesCount - 1) {
-          rrstack.bottom(index);
-        }
-      };
-
-      return (
-        <Card key={index} fluid>
-          <Card.Content>
-            <Card.Header>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <Label
-                    color={rule.effect === 'active' ? 'green' : 'red'}
-                    size="small"
-                  >
-                    {rule.effect.toUpperCase()}
-                  </Label>
-                  <span>{rule.label || `Rule ${index + 1}`}</span>
-                </div>
-                <div style={{ display: 'flex', gap: 4 }}>
-                  <Button.Group size="mini">
-                    <Button
-                      type="button"
-                      icon="angle double up"
-                      onClick={handleMoveTop}
-                      disabled={index === 0}
-                      title="Move to top"
-                    />
-                    <Button
-                      type="button"
-                      icon="angle up"
-                      onClick={handleMoveUp}
-                      disabled={index === 0}
-                      title="Move up"
-                    />
-                    <Button
-                      type="button"
-                      icon="angle down"
-                      onClick={handleMoveDown}
-                      disabled={index === rulesCount - 1}
-                      title="Move down"
-                    />
-                    <Button
-                      type="button"
-                      icon="angle double down"
-                      onClick={handleMoveBottom}
-                      disabled={index === rulesCount - 1}
-                      title="Move to bottom"
-                    />
-                  </Button.Group>
-                  <Button.Group size="mini">
-                    <Button
-                      type="button"
-                      icon="edit"
-                      onClick={handleEdit}
-                      title="Edit rule"
-                    />
-                    <Button
-                      type="button"
-                      icon="delete"
-                      onClick={handleDelete}
-                      title="Delete rule"
-                      color="red"
-                    />
-                  </Button.Group>
-                  <Button
-                    type="button"
-                    icon={isActive ? 'chevron up' : 'chevron down'}
-                    onClick={handleToggle}
-                    title={isActive ? 'Collapse' : 'Expand'}
-                  />
-                </div>
-              </div>
-            </Card.Header>
-            <Card.Meta>{ruleDescription}</Card.Meta>
-          </Card.Content>
-          {isActive && (
-            <Card.Content>
-              <Segment basic>
-                <Header size="small">Rule Details</Header>
-                <div style={{ marginBottom: 8 }}>
-                  <strong>Effect:</strong> {rule.effect}
-                </div>
-                <div style={{ marginBottom: 8 }}>
-                  <strong>Duration:</strong>{' '}
-                  {Object.entries(rule.duration)
-                    .map(([key, value]) => `${value} ${key}`)
-                    .join(', ')}
-                </div>
-                <div style={{ marginBottom: 8 }}>
-                  <strong>Frequency:</strong> {rule.options.freq}
-                </div>
-                {rule.options.byhour && (
-                  <div style={{ marginBottom: 8 }}>
-                    <strong>Hours:</strong>{' '}
-                    {Array.isArray(rule.options.byhour)
-                      ? rule.options.byhour.join(', ')
-                      : rule.options.byhour}
-                  </div>
-                )}
-                {rule.options.byminute && (
-                  <div style={{ marginBottom: 8 }}>
-                    <strong>Minutes:</strong>{' '}
-                    {Array.isArray(rule.options.byminute)
-                      ? rule.options.byminute.join(', ')
-                      : rule.options.byminute}
-                  </div>
-                )}
-                {rule.options.bysecond && (
-                  <div style={{ marginBottom: 8 }}>
-                    <strong>Seconds:</strong>{' '}
-                    {Array.isArray(rule.options.bysecond)
-                      ? rule.options.bysecond.join(', ')
-                      : rule.options.bysecond}
-                  </div>
-                )}
-                {rule.options.count && (
-                  <div style={{ marginBottom: 8 }}>
-                    <strong>Count:</strong> {rule.options.count}
-                  </div>
-                )}
-                {rule.options.interval && (
-                  <div style={{ marginBottom: 8 }}>
-                    <strong>Interval:</strong> {rule.options.interval}
-                  </div>
-                )}
-              </Segment>
-            </Card.Content>
-          )}
-        </Card>
-      );
-    },
-    [activeIndex],
-  );
-
-  const renderRuleEditor = useCallback(
-    (onSave: (rule: RuleJson) => void, onCancel: () => void) => {
-      if (!editingRule) return null;
-
-      const handleSave = () => {
-        // Validate rule before attempting to save
-        const ruleError = validateRule(editingRule);
-        if (ruleError) {
-          setValidationErrors({ editingRule: ruleError });
-          return; // Keep form open to show validation error
-        }
-
-        // Only proceed with save and close if validation passes
-        onSave(editingRule);
-        setEditingRule(null);
-        setEditingIndex(null);
-      };
-
-      const handleCancel = () => {
-        onCancel();
-        setEditingRule(null);
-        setEditingIndex(null);
-      };
-
-      const updateRule = (updates: Partial<RuleJson>) => {
-        setEditingRule((prev) => (prev ? { ...prev, ...updates } : null));
-      };
-
-      return (
-        <Segment>
-          <Header size="small">
-            {editingIndex !== null ? 'Edit Rule' : 'Add New Rule'}
-          </Header>
-          <div>
-            <Form.Group widths="equal">
-              <Form.Field>
-                <label>Label</label>
-                <Input
-                  value={editingRule.label || ''}
-                  onChange={(e) => updateRule({ label: e.target.value })}
-                  placeholder="Rule label"
-                />
-              </Form.Field>
-              <Form.Field>
-                <label>Effect</label>
-                <Dropdown
-                  selection
-                  options={EFFECT_OPTIONS}
-                  value={editingRule.effect}
-                  onChange={(e, { value }) =>
-                    updateRule({ effect: value as 'active' | 'blackout' })
-                  }
-                />
-              </Form.Field>
-            </Form.Group>
-
-            <Form.Group widths="equal">
-              <Form.Field>
-                <label>Frequency</label>
-                <Dropdown
-                  selection
-                  options={FREQUENCY_OPTIONS}
-                  value={editingRule.options.freq}
-                  onChange={(e, { value }) =>
-                    updateRule({
-                      options: {
-                        ...editingRule.options,
-                        freq: value as
-                          | 'yearly'
-                          | 'monthly'
-                          | 'weekly'
-                          | 'daily'
-                          | 'hourly'
-                          | 'minutely'
-                          | 'secondly',
-                      },
-                    })
-                  }
-                />
-              </Form.Field>
-              <Form.Field>
-                <label>Interval</label>
-                <Input
-                  type="number"
-                  value={editingRule.options.interval || 1}
-                  onChange={(e) =>
-                    updateRule({
-                      options: {
-                        ...editingRule.options,
-                        interval: parseInt(e.target.value) || 1,
-                      },
-                    })
-                  }
-                  min={1}
-                />
-              </Form.Field>
-            </Form.Group>
-
-            <Header size="tiny">Duration</Header>
-            <Form.Group widths="equal">
-              <Form.Field>
-                <label>Years</label>
-                <Input
-                  type="number"
-                  value={editingRule.duration.years || ''}
-                  onChange={(e) =>
-                    updateRule({
-                      duration: {
-                        ...editingRule.duration,
-                        years: parseInt(e.target.value) || undefined,
-                      },
-                    })
-                  }
-                  min={0}
-                />
-              </Form.Field>
-              <Form.Field>
-                <label>Months</label>
-                <Input
-                  type="number"
-                  value={editingRule.duration.months || ''}
-                  onChange={(e) =>
-                    updateRule({
-                      duration: {
-                        ...editingRule.duration,
-                        months: parseInt(e.target.value) || undefined,
-                      },
-                    })
-                  }
-                  min={0}
-                />
-              </Form.Field>
-              <Form.Field>
-                <label>Days</label>
-                <Input
-                  type="number"
-                  value={editingRule.duration.days || ''}
-                  onChange={(e) =>
-                    updateRule({
-                      duration: {
-                        ...editingRule.duration,
-                        days: parseInt(e.target.value) || undefined,
-                      },
-                    })
-                  }
-                  min={0}
-                />
-              </Form.Field>
-            </Form.Group>
-
-            <Form.Group widths="equal">
-              <Form.Field>
-                <label>Hours</label>
-                <Input
-                  type="number"
-                  value={editingRule.duration.hours || ''}
-                  onChange={(e) =>
-                    updateRule({
-                      duration: {
-                        ...editingRule.duration,
-                        hours: parseInt(e.target.value) || undefined,
-                      },
-                    })
-                  }
-                  min={0}
-                />
-              </Form.Field>
-              <Form.Field>
-                <label>Minutes</label>
-                <Input
-                  type="number"
-                  value={editingRule.duration.minutes || ''}
-                  onChange={(e) =>
-                    updateRule({
-                      duration: {
-                        ...editingRule.duration,
-                        minutes: parseInt(e.target.value) || undefined,
-                      },
-                    })
-                  }
-                  min={0}
-                />
-              </Form.Field>
-              <Form.Field>
-                <label>Seconds</label>
-                <Input
-                  type="number"
-                  value={editingRule.duration.seconds || ''}
-                  onChange={(e) =>
-                    updateRule({
-                      duration: {
-                        ...editingRule.duration,
-                        seconds: parseInt(e.target.value) || undefined,
-                      },
-                    })
-                  }
-                  min={0}
-                />
-              </Form.Field>
-            </Form.Group>
-
-            <Header size="tiny">Time of Day</Header>
-            <Form.Group widths="equal">
-              <Form.Field>
-                <label>Hours (0-23, comma-separated)</label>
-                <Input
-                  value={
-                    editingRule.options.byhour
-                      ? Array.isArray(editingRule.options.byhour)
-                        ? editingRule.options.byhour.join(', ')
-                        : editingRule.options.byhour.toString()
-                      : ''
-                  }
-                  onChange={(e) => {
-                    const hours = e.target.value
-                      .split(',')
-                      .map((h) => parseInt(h.trim()))
-                      .filter((h) => !isNaN(h) && h >= 0 && h <= 23);
-                    updateRule({
-                      options: {
-                        ...editingRule.options,
-                        byhour: hours.length > 0 ? hours : undefined,
-                      },
-                    });
-                  }}
-                  placeholder="e.g., 9, 13, 17"
-                />
-              </Form.Field>
-              <Form.Field>
-                <label>Minutes (0-59, comma-separated)</label>
-                <Input
-                  value={
-                    editingRule.options.byminute
-                      ? Array.isArray(editingRule.options.byminute)
-                        ? editingRule.options.byminute.join(', ')
-                        : editingRule.options.byminute.toString()
-                      : ''
-                  }
-                  onChange={(e) => {
-                    const minutes = e.target.value
-                      .split(',')
-                      .map((m) => parseInt(m.trim()))
-                      .filter((m) => !isNaN(m) && m >= 0 && m <= 59);
-                    updateRule({
-                      options: {
-                        ...editingRule.options,
-                        byminute: minutes.length > 0 ? minutes : undefined,
-                      },
-                    });
-                  }}
-                  placeholder="e.g., 0, 30"
-                />
-              </Form.Field>
-            </Form.Group>
-
-            <Form.Group widths="equal">
-              <Form.Field>
-                <label>Weekdays (for weekly/monthly rules)</label>
-                <Dropdown
-                  selection
-                  multiple
-                  search
-                  options={WEEKDAY_OPTIONS}
-                  value={
-                    Array.isArray(editingRule.options.byweekday)
-                      ? editingRule.options.byweekday.filter(
-                          (day): day is number => typeof day === 'number',
-                        )
-                      : typeof editingRule.options.byweekday === 'number'
-                        ? [editingRule.options.byweekday]
-                        : []
-                  }
-                  onChange={(e, { value }) =>
-                    updateRule({
-                      options: {
-                        ...editingRule.options,
-                        byweekday:
-                          (value as number[]).length > 0
-                            ? (value as number[])
-                            : undefined,
-                      },
-                    })
-                  }
-                  placeholder="Select weekdays"
-                />
-              </Form.Field>
-              <Form.Field>
-                <label>Position (1st, 2nd, etc.)</label>
-                <Dropdown
-                  selection
-                  multiple
-                  options={POSITION_OPTIONS}
-                  value={editingRule.options.bysetpos || []}
-                  onChange={(e, { value }) =>
-                    updateRule({
-                      options: {
-                        ...editingRule.options,
-                        bysetpos:
-                          (value as number[]).length > 0
-                            ? (value as number[])
-                            : undefined,
-                      },
-                    })
-                  }
-                  placeholder="Select positions"
-                />
-              </Form.Field>
-            </Form.Group>
-
-            <Form.Group widths="equal">
-              <Form.Field>
-                <label>Months (for yearly/specific month rules)</label>
-                <Dropdown
-                  selection
-                  multiple
-                  search
-                  options={MONTH_OPTIONS}
-                  value={editingRule.options.bymonth || []}
-                  onChange={(e, { value }) =>
-                    updateRule({
-                      options: {
-                        ...editingRule.options,
-                        bymonth:
-                          (value as number[]).length > 0
-                            ? (value as number[])
-                            : undefined,
-                      },
-                    })
-                  }
-                  placeholder="Select months"
-                />
-              </Form.Field>
-              <Form.Field>
-                <label>Days of Month (1-31)</label>
-                <Input
-                  value={
-                    editingRule.options.bymonthday
-                      ? Array.isArray(editingRule.options.bymonthday)
-                        ? editingRule.options.bymonthday.join(', ')
-                        : editingRule.options.bymonthday.toString()
-                      : ''
-                  }
-                  onChange={(e) => {
-                    const days = e.target.value
-                      .split(',')
-                      .map((d) => parseInt(d.trim()))
-                      .filter((d) => !isNaN(d) && d >= 1 && d <= 31);
-                    updateRule({
-                      options: {
-                        ...editingRule.options,
-                        bymonthday: days.length > 0 ? days : undefined,
-                      },
-                    });
-                  }}
-                  placeholder="e.g., 25 (for 25th) or 1, 15, 31"
-                />
-              </Form.Field>
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Field>
-                <label>Count (optional)</label>
-                <Input
-                  type="number"
-                  value={editingRule.options.count || ''}
-                  onChange={(e) =>
-                    updateRule({
-                      options: {
-                        ...editingRule.options,
-                        count: parseInt(e.target.value) || undefined,
-                      },
-                    })
-                  }
-                  min={1}
-                  placeholder="Number of occurrences"
-                />
-              </Form.Field>
-            </Form.Group>
-
-            <Button.Group>
-              <Button type="button" primary onClick={handleSave}>
-                {editingIndex !== null ? 'Update Rule' : 'Add Rule'}
-              </Button>
-              <Button type="button" onClick={handleCancel}>
-                Cancel
-              </Button>
-            </Button.Group>
-          </div>
-        </Segment>
-      );
-    },
-    [editingRule, editingIndex],
-  );
-
   const handleAddRule = useCallback(() => {
     setEditingRule(createDefaultRule());
     setEditingIndex(null);
-  }, []);
-
-  const handleSaveRule = useCallback(
-    (rule: RuleJson) => {
-      try {
-        if (editingIndex !== null) {
-          // Update existing rule by removing and re-adding at same index
-          rrstack.removeRule(editingIndex);
-          rrstack.addRule(rule, editingIndex);
-        } else {
-          // Add new rule using RRStack method
-          rrstack.addRule(rule);
-        }
-        // Clear validation errors on successful save
-        setValidationErrors({});
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : 'Failed to save rule';
-        setValidationErrors({ editingRule: errorMessage });
-      }
-    },
-    [editingIndex, rrstack],
-  );
-
-  const handleCancelEdit = useCallback(() => {
-    // Just cancel without changes
   }, []);
 
   // Generate timezone options from browser
@@ -912,7 +293,7 @@ export const HookFormRRStack = <T extends FieldValues>({
         </Message>
       )}
 
-      <div style={{ marginBottom: 16 }}>
+      <Segment basic style={{ padding: '0 0 1em 0' }}>
         <Form.Field error={!!validationErrors.timezone}>
           <label>Timezone</label>
           <Dropdown
@@ -930,14 +311,15 @@ export const HookFormRRStack = <T extends FieldValues>({
             </Label>
           )}
         </Form.Field>
-      </div>
+      </Segment>
 
-      <div
+      <Segment
+        basic
         style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: 16,
+          padding: '0 0 1em 0',
         }}
       >
         <Header size="small">Rules ({rulesCount})</Header>
@@ -945,29 +327,1208 @@ export const HookFormRRStack = <T extends FieldValues>({
           <Icon name="plus" />
           Add Rule
         </Button>
-      </div>
+      </Segment>
 
-      {editingRule && renderRuleEditor(handleSaveRule, handleCancelEdit)}
+      {/* Show form for adding new rule */}
+      {editingRule && editingIndex === null && (
+        <Segment style={{ fontSize: '0.9em', marginBottom: '1em' }}>
+          <Header size="tiny">Add New Rule</Header>
+          <Segment basic>
+            <Form.Group widths="equal">
+              <Form.Field>
+                <label style={{ fontSize: '0.9em' }}>Label</label>
+                <Input
+                  size="small"
+                  value={editingRule.label || ''}
+                  onChange={(e) => {
+                    const updates = { label: e.target.value };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                  placeholder="Rule label"
+                />
+              </Form.Field>
+              <Form.Field>
+                <label style={{ fontSize: '0.9em' }}>Effect</label>
+                <Dropdown
+                  selection
+                  compact
+                  options={EFFECT_OPTIONS}
+                  value={editingRule.effect}
+                  onChange={(e, { value }) => {
+                    const updates = { effect: value as 'active' | 'blackout' };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                />
+              </Form.Field>
+            </Form.Group>
 
-      {/* Display rule validation errors below the form, near submit button */}
-      {editingRule && validationErrors.editingRule && (
-        <Message negative size="small" style={{ marginTop: 16 }}>
-          <Message.Header>Rule Validation Error</Message.Header>
-          <p>{validationErrors.editingRule}</p>
-        </Message>
+            <Form.Group widths="equal">
+              <Form.Field>
+                <label style={{ fontSize: '0.9em' }}>Frequency</label>
+                <Dropdown
+                  selection
+                  compact
+                  options={FREQUENCY_OPTIONS}
+                  value={editingRule.options.freq}
+                  onChange={(e, { value }) => {
+                    const updates = {
+                      options: {
+                        ...editingRule.options,
+                        freq: value as
+                          | 'yearly'
+                          | 'monthly'
+                          | 'weekly'
+                          | 'daily'
+                          | 'hourly'
+                          | 'minutely'
+                          | 'secondly',
+                      },
+                    };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                />
+              </Form.Field>
+              <Form.Field>
+                <label style={{ fontSize: '0.9em' }}>Interval</label>
+                <Input
+                  size="small"
+                  type="number"
+                  value={editingRule.options.interval || 1}
+                  onChange={(e) => {
+                    const updates = {
+                      options: {
+                        ...editingRule.options,
+                        interval: parseInt(e.target.value) || 1,
+                      },
+                    };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                  min={1}
+                />
+              </Form.Field>
+            </Form.Group>
+
+            <Header size="tiny">Duration</Header>
+            <Form.Group style={{ alignItems: 'flex-end' }}>
+              <Form.Field width={2}>
+                <label style={{ fontSize: '0.8em' }}>Years</label>
+                <Input
+                  size="mini"
+                  type="number"
+                  value={editingRule.duration.years || ''}
+                  onChange={(e) => {
+                    const updates = {
+                      duration: {
+                        ...editingRule.duration,
+                        years: parseInt(e.target.value) || undefined,
+                      },
+                    };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                  min={0}
+                  placeholder="0"
+                />
+              </Form.Field>
+              <Form.Field width={2}>
+                <label style={{ fontSize: '0.8em' }}>Months</label>
+                <Input
+                  size="mini"
+                  type="number"
+                  value={editingRule.duration.months || ''}
+                  onChange={(e) => {
+                    const updates = {
+                      duration: {
+                        ...editingRule.duration,
+                        months: parseInt(e.target.value) || undefined,
+                      },
+                    };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                  min={0}
+                  placeholder="0"
+                />
+              </Form.Field>
+              <Form.Field width={2}>
+                <label style={{ fontSize: '0.8em' }}>Days</label>
+                <Input
+                  size="mini"
+                  type="number"
+                  value={editingRule.duration.days || ''}
+                  onChange={(e) => {
+                    const updates = {
+                      duration: {
+                        ...editingRule.duration,
+                        days: parseInt(e.target.value) || undefined,
+                      },
+                    };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                  min={0}
+                  placeholder="0"
+                />
+              </Form.Field>
+              <Form.Field width={2}>
+                <label style={{ fontSize: '0.8em' }}>Hours</label>
+                <Input
+                  size="mini"
+                  type="number"
+                  value={editingRule.duration.hours || ''}
+                  onChange={(e) => {
+                    const updates = {
+                      duration: {
+                        ...editingRule.duration,
+                        hours: parseInt(e.target.value) || undefined,
+                      },
+                    };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                  min={0}
+                  placeholder="0"
+                />
+              </Form.Field>
+              <Form.Field width={2}>
+                <label style={{ fontSize: '0.8em' }}>Min</label>
+                <Input
+                  size="mini"
+                  type="number"
+                  value={editingRule.duration.minutes || ''}
+                  onChange={(e) => {
+                    const updates = {
+                      duration: {
+                        ...editingRule.duration,
+                        minutes: parseInt(e.target.value) || undefined,
+                      },
+                    };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                  min={0}
+                  placeholder="0"
+                />
+              </Form.Field>
+              <Form.Field width={2}>
+                <label style={{ fontSize: '0.8em' }}>Sec</label>
+                <Input
+                  size="mini"
+                  type="number"
+                  value={editingRule.duration.seconds || ''}
+                  onChange={(e) => {
+                    const updates = {
+                      duration: {
+                        ...editingRule.duration,
+                        seconds: parseInt(e.target.value) || undefined,
+                      },
+                    };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                  min={0}
+                  placeholder="0"
+                />
+              </Form.Field>
+            </Form.Group>
+
+            <Header size="tiny">Time of Day</Header>
+            <Form.Group style={{ alignItems: 'flex-end' }}>
+              <Form.Field width={8}>
+                <label style={{ fontSize: '0.8em' }}>
+                  Hours (0-23, comma-separated)
+                </label>
+                <Input
+                  size="small"
+                  value={
+                    editingRule.options.byhour
+                      ? Array.isArray(editingRule.options.byhour)
+                        ? editingRule.options.byhour.join(', ')
+                        : editingRule.options.byhour.toString()
+                      : ''
+                  }
+                  onChange={(e) => {
+                    const hours = e.target.value
+                      .split(',')
+                      .map((h) => parseInt(h.trim()))
+                      .filter((h) => !isNaN(h) && h >= 0 && h <= 23);
+                    const updates = {
+                      options: {
+                        ...editingRule.options,
+                        byhour: hours.length > 0 ? hours : undefined,
+                      },
+                    };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                  placeholder="e.g., 9, 13, 17"
+                />
+              </Form.Field>
+              <Form.Field width={8}>
+                <label style={{ fontSize: '0.8em' }}>
+                  Minutes (0-59, comma-separated)
+                </label>
+                <Input
+                  size="small"
+                  value={
+                    editingRule.options.byminute
+                      ? Array.isArray(editingRule.options.byminute)
+                        ? editingRule.options.byminute.join(', ')
+                        : editingRule.options.byminute.toString()
+                      : ''
+                  }
+                  onChange={(e) => {
+                    const minutes = e.target.value
+                      .split(',')
+                      .map((m) => parseInt(m.trim()))
+                      .filter((m) => !isNaN(m) && m >= 0 && m <= 59);
+                    const updates = {
+                      options: {
+                        ...editingRule.options,
+                        byminute: minutes.length > 0 ? minutes : undefined,
+                      },
+                    };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                  placeholder="e.g., 0, 30"
+                />
+              </Form.Field>
+            </Form.Group>
+
+            <Form.Group widths="equal">
+              <Form.Field>
+                <label style={{ fontSize: '0.9em' }}>
+                  Weekdays (for weekly/monthly rules)
+                </label>
+                <Dropdown
+                  selection
+                  multiple
+                  search
+                  compact
+                  options={WEEKDAY_OPTIONS}
+                  value={
+                    Array.isArray(editingRule.options.byweekday)
+                      ? editingRule.options.byweekday.filter(
+                          (day): day is number => typeof day === 'number',
+                        )
+                      : typeof editingRule.options.byweekday === 'number'
+                        ? [editingRule.options.byweekday]
+                        : []
+                  }
+                  onChange={(e, { value }) => {
+                    const updates = {
+                      options: {
+                        ...editingRule.options,
+                        byweekday:
+                          (value as number[]).length > 0
+                            ? (value as number[])
+                            : undefined,
+                      },
+                    };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                  placeholder="Select weekdays"
+                />
+              </Form.Field>
+              <Form.Field>
+                <label style={{ fontSize: '0.9em' }}>
+                  Position (1st, 2nd, etc.)
+                </label>
+                <Dropdown
+                  selection
+                  multiple
+                  compact
+                  options={POSITION_OPTIONS}
+                  value={editingRule.options.bysetpos || []}
+                  onChange={(e, { value }) => {
+                    const updates = {
+                      options: {
+                        ...editingRule.options,
+                        bysetpos:
+                          (value as number[]).length > 0
+                            ? (value as number[])
+                            : undefined,
+                      },
+                    };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                  placeholder="Select positions"
+                />
+              </Form.Field>
+            </Form.Group>
+
+            <Form.Group widths="equal">
+              <Form.Field>
+                <label style={{ fontSize: '0.9em' }}>
+                  Months (for yearly/specific month rules)
+                </label>
+                <Dropdown
+                  selection
+                  multiple
+                  search
+                  compact
+                  options={MONTH_OPTIONS}
+                  value={editingRule.options.bymonth || []}
+                  onChange={(e, { value }) => {
+                    const updates = {
+                      options: {
+                        ...editingRule.options,
+                        bymonth:
+                          (value as number[]).length > 0
+                            ? (value as number[])
+                            : undefined,
+                      },
+                    };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                  placeholder="Select months"
+                />
+              </Form.Field>
+              <Form.Field>
+                <label style={{ fontSize: '0.9em' }}>
+                  Days of Month (1-31)
+                </label>
+                <Input
+                  size="small"
+                  value={
+                    editingRule.options.bymonthday
+                      ? Array.isArray(editingRule.options.bymonthday)
+                        ? editingRule.options.bymonthday.join(', ')
+                        : editingRule.options.bymonthday.toString()
+                      : ''
+                  }
+                  onChange={(e) => {
+                    const days = e.target.value
+                      .split(',')
+                      .map((d) => parseInt(d.trim()))
+                      .filter((d) => !isNaN(d) && d >= 1 && d <= 31);
+                    const updates = {
+                      options: {
+                        ...editingRule.options,
+                        bymonthday: days.length > 0 ? days : undefined,
+                      },
+                    };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                  placeholder="e.g., 25 (for 25th) or 1, 15, 31"
+                />
+              </Form.Field>
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Field width={8}>
+                <label style={{ fontSize: '0.9em' }}>Count (optional)</label>
+                <Input
+                  size="small"
+                  type="number"
+                  value={editingRule.options.count || ''}
+                  onChange={(e) => {
+                    const updates = {
+                      options: {
+                        ...editingRule.options,
+                        count: parseInt(e.target.value) || undefined,
+                      },
+                    };
+                    setEditingRule((prev) =>
+                      prev ? { ...prev, ...updates } : null,
+                    );
+                  }}
+                  min={1}
+                  placeholder="Number of occurrences"
+                />
+              </Form.Field>
+            </Form.Group>
+
+            <Button.Group size="small">
+              <Button
+                type="button"
+                primary
+                onClick={() => {
+                  // Validate rule before attempting to save
+                  const ruleError = validateRule(editingRule);
+                  if (ruleError) {
+                    setValidationErrors({ editingRule: ruleError });
+                    return;
+                  }
+
+                  // Add new rule
+                  try {
+                    rrstack.addRule(editingRule);
+                    setValidationErrors({});
+                    setEditingRule(null);
+                    setEditingIndex(null);
+                  } catch (error) {
+                    const errorMessage =
+                      error instanceof Error
+                        ? error.message
+                        : 'Failed to add rule';
+                    setValidationErrors({ editingRule: errorMessage });
+                  }
+                }}
+              >
+                Add Rule
+              </Button>
+              <Button
+                type="button"
+                onClick={() => {
+                  setEditingRule(null);
+                  setEditingIndex(null);
+                }}
+              >
+                Cancel
+              </Button>
+            </Button.Group>
+
+            {validationErrors.editingRule && (
+              <Message negative size="small" style={{ marginTop: '1em' }}>
+                <Message.Header>Rule Validation Error</Message.Header>
+                <p>{validationErrors.editingRule}</p>
+              </Message>
+            )}
+          </Segment>
+        </Segment>
       )}
 
       {rulesCount === 0 ? (
-        <Message info>
+        <Message info size="small">
           <Message.Header>No rules defined</Message.Header>
           <p>Add your first rule to start building your schedule.</p>
         </Message>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {rules.map((rule: RuleJson, index: number) =>
-            renderRuleCard(rule, index, rrstack),
-          )}
-        </div>
+        <Accordion fluid styled>
+          {rules.map((rule: RuleJson, index: number) => {
+            const isActive = activeIndex === index;
+            const ruleDescription = rrstack.describeRule(index);
+
+            return [
+              <Accordion.Title
+                key={`title-${index}`}
+                active={isActive}
+                index={index}
+                onClick={() => {
+                  if (isActive) {
+                    // Close accordion and clear editing state
+                    setActiveIndex(null);
+                    setEditingRule(null);
+                    setEditingIndex(null);
+                  } else {
+                    // Open accordion and start editing
+                    setActiveIndex(index);
+                    setEditingRule({ ...rule });
+                    setEditingIndex(index);
+                  }
+                }}
+                style={{ fontSize: '0.9em', padding: '0.8em 1em' }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    width: '100%',
+                  }}
+                >
+                  <div
+                    style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+                  >
+                    <Icon name="dropdown" />
+                    <Label
+                      color={rule.effect === 'active' ? 'green' : 'red'}
+                      size="mini"
+                    >
+                      {rule.effect.toUpperCase()}
+                    </Label>
+                    <span style={{ fontSize: '0.9em' }}>
+                      {rule.label || `Rule ${index + 1}`}
+                    </span>
+                  </div>
+                  <div
+                    style={{ display: 'flex', gap: 2 }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Button.Group size="mini">
+                      <Button
+                        type="button"
+                        icon="angle double up"
+                        onClick={() => index > 0 && rrstack.top(index)}
+                        disabled={index === 0}
+                        title="Move to top"
+                        size="mini"
+                      />
+                      <Button
+                        type="button"
+                        icon="angle up"
+                        onClick={() => index > 0 && rrstack.up(index)}
+                        disabled={index === 0}
+                        title="Move up"
+                        size="mini"
+                      />
+                      <Button
+                        type="button"
+                        icon="angle down"
+                        onClick={() =>
+                          index < rulesCount - 1 && rrstack.down(index)
+                        }
+                        disabled={index === rulesCount - 1}
+                        title="Move down"
+                        size="mini"
+                      />
+                      <Button
+                        type="button"
+                        icon="angle double down"
+                        onClick={() =>
+                          index < rulesCount - 1 && rrstack.bottom(index)
+                        }
+                        disabled={index === rulesCount - 1}
+                        title="Move to bottom"
+                        size="mini"
+                      />
+                    </Button.Group>
+                    <Button
+                      type="button"
+                      icon="delete"
+                      onClick={() => rrstack.removeRule(index)}
+                      title="Delete rule"
+                      color="red"
+                      size="mini"
+                    />
+                  </div>
+                </div>
+                <div
+                  style={{
+                    fontSize: '0.8em',
+                    color: '#666',
+                    marginTop: 4,
+                    marginLeft: 16,
+                  }}
+                >
+                  {ruleDescription}
+                </div>
+              </Accordion.Title>,
+              <Accordion.Content key={`content-${index}`} active={isActive}>
+                {editingIndex === index && editingRule ? (
+                  // Show edit form inside accordion
+                  <Segment
+                    basic
+                    style={{ fontSize: '0.9em', padding: '1em 0' }}
+                  >
+                    <Form.Group widths="equal">
+                      <Form.Field>
+                        <label style={{ fontSize: '0.9em' }}>Label</label>
+                        <Input
+                          size="small"
+                          value={editingRule.label || ''}
+                          onChange={(e) => {
+                            const updates = { label: e.target.value };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                          placeholder="Rule label"
+                        />
+                      </Form.Field>
+                      <Form.Field>
+                        <label style={{ fontSize: '0.9em' }}>Effect</label>
+                        <Dropdown
+                          selection
+                          compact
+                          options={EFFECT_OPTIONS}
+                          value={editingRule.effect}
+                          onChange={(e, { value }) => {
+                            const updates = {
+                              effect: value as 'active' | 'blackout',
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                        />
+                      </Form.Field>
+                    </Form.Group>
+
+                    <Form.Group widths="equal">
+                      <Form.Field>
+                        <label style={{ fontSize: '0.9em' }}>Frequency</label>
+                        <Dropdown
+                          selection
+                          compact
+                          options={FREQUENCY_OPTIONS}
+                          value={editingRule.options.freq}
+                          onChange={(e, { value }) => {
+                            const updates = {
+                              options: {
+                                ...editingRule.options,
+                                freq: value as
+                                  | 'yearly'
+                                  | 'monthly'
+                                  | 'weekly'
+                                  | 'daily'
+                                  | 'hourly'
+                                  | 'minutely'
+                                  | 'secondly',
+                              },
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                        />
+                      </Form.Field>
+                      <Form.Field>
+                        <label style={{ fontSize: '0.9em' }}>Interval</label>
+                        <Input
+                          size="small"
+                          type="number"
+                          value={editingRule.options.interval || 1}
+                          onChange={(e) => {
+                            const updates = {
+                              options: {
+                                ...editingRule.options,
+                                interval: parseInt(e.target.value) || 1,
+                              },
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                          min={1}
+                        />
+                      </Form.Field>
+                    </Form.Group>
+
+                    <Header size="tiny">Duration</Header>
+                    <Form.Group style={{ alignItems: 'flex-end' }}>
+                      <Form.Field width={2}>
+                        <label style={{ fontSize: '0.8em' }}>Years</label>
+                        <Input
+                          size="mini"
+                          type="number"
+                          value={editingRule.duration.years || ''}
+                          onChange={(e) => {
+                            const updates = {
+                              duration: {
+                                ...editingRule.duration,
+                                years: parseInt(e.target.value) || undefined,
+                              },
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                          min={0}
+                          placeholder="0"
+                        />
+                      </Form.Field>
+                      <Form.Field width={2}>
+                        <label style={{ fontSize: '0.8em' }}>Months</label>
+                        <Input
+                          size="mini"
+                          type="number"
+                          value={editingRule.duration.months || ''}
+                          onChange={(e) => {
+                            const updates = {
+                              duration: {
+                                ...editingRule.duration,
+                                months: parseInt(e.target.value) || undefined,
+                              },
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                          min={0}
+                          placeholder="0"
+                        />
+                      </Form.Field>
+                      <Form.Field width={2}>
+                        <label style={{ fontSize: '0.8em' }}>Days</label>
+                        <Input
+                          size="mini"
+                          type="number"
+                          value={editingRule.duration.days || ''}
+                          onChange={(e) => {
+                            const updates = {
+                              duration: {
+                                ...editingRule.duration,
+                                days: parseInt(e.target.value) || undefined,
+                              },
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                          min={0}
+                          placeholder="0"
+                        />
+                      </Form.Field>
+                      <Form.Field width={2}>
+                        <label style={{ fontSize: '0.8em' }}>Hours</label>
+                        <Input
+                          size="mini"
+                          type="number"
+                          value={editingRule.duration.hours || ''}
+                          onChange={(e) => {
+                            const updates = {
+                              duration: {
+                                ...editingRule.duration,
+                                hours: parseInt(e.target.value) || undefined,
+                              },
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                          min={0}
+                          placeholder="0"
+                        />
+                      </Form.Field>
+                      <Form.Field width={2}>
+                        <label style={{ fontSize: '0.8em' }}>Min</label>
+                        <Input
+                          size="mini"
+                          type="number"
+                          value={editingRule.duration.minutes || ''}
+                          onChange={(e) => {
+                            const updates = {
+                              duration: {
+                                ...editingRule.duration,
+                                minutes: parseInt(e.target.value) || undefined,
+                              },
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                          min={0}
+                          placeholder="0"
+                        />
+                      </Form.Field>
+                      <Form.Field width={2}>
+                        <label style={{ fontSize: '0.8em' }}>Sec</label>
+                        <Input
+                          size="mini"
+                          type="number"
+                          value={editingRule.duration.seconds || ''}
+                          onChange={(e) => {
+                            const updates = {
+                              duration: {
+                                ...editingRule.duration,
+                                seconds: parseInt(e.target.value) || undefined,
+                              },
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                          min={0}
+                          placeholder="0"
+                        />
+                      </Form.Field>
+                    </Form.Group>
+
+                    <Header size="tiny">Time of Day</Header>
+                    <Form.Group style={{ alignItems: 'flex-end' }}>
+                      <Form.Field width={8}>
+                        <label style={{ fontSize: '0.8em' }}>
+                          Hours (0-23, comma-separated)
+                        </label>
+                        <Input
+                          size="small"
+                          value={
+                            editingRule.options.byhour
+                              ? Array.isArray(editingRule.options.byhour)
+                                ? editingRule.options.byhour.join(', ')
+                                : editingRule.options.byhour.toString()
+                              : ''
+                          }
+                          onChange={(e) => {
+                            const hours = e.target.value
+                              .split(',')
+                              .map((h) => parseInt(h.trim()))
+                              .filter((h) => !isNaN(h) && h >= 0 && h <= 23);
+                            const updates = {
+                              options: {
+                                ...editingRule.options,
+                                byhour: hours.length > 0 ? hours : undefined,
+                              },
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                          placeholder="e.g., 9, 13, 17"
+                        />
+                      </Form.Field>
+                      <Form.Field width={8}>
+                        <label style={{ fontSize: '0.8em' }}>
+                          Minutes (0-59, comma-separated)
+                        </label>
+                        <Input
+                          size="small"
+                          value={
+                            editingRule.options.byminute
+                              ? Array.isArray(editingRule.options.byminute)
+                                ? editingRule.options.byminute.join(', ')
+                                : editingRule.options.byminute.toString()
+                              : ''
+                          }
+                          onChange={(e) => {
+                            const minutes = e.target.value
+                              .split(',')
+                              .map((m) => parseInt(m.trim()))
+                              .filter((m) => !isNaN(m) && m >= 0 && m <= 59);
+                            const updates = {
+                              options: {
+                                ...editingRule.options,
+                                byminute:
+                                  minutes.length > 0 ? minutes : undefined,
+                              },
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                          placeholder="e.g., 0, 30"
+                        />
+                      </Form.Field>
+                    </Form.Group>
+
+                    <Form.Group widths="equal">
+                      <Form.Field>
+                        <label style={{ fontSize: '0.9em' }}>
+                          Weekdays (for weekly/monthly rules)
+                        </label>
+                        <Dropdown
+                          selection
+                          multiple
+                          search
+                          compact
+                          options={WEEKDAY_OPTIONS}
+                          value={
+                            Array.isArray(editingRule.options.byweekday)
+                              ? editingRule.options.byweekday.filter(
+                                  (day): day is number =>
+                                    typeof day === 'number',
+                                )
+                              : typeof editingRule.options.byweekday ===
+                                  'number'
+                                ? [editingRule.options.byweekday]
+                                : []
+                          }
+                          onChange={(e, { value }) => {
+                            const updates = {
+                              options: {
+                                ...editingRule.options,
+                                byweekday:
+                                  (value as number[]).length > 0
+                                    ? (value as number[])
+                                    : undefined,
+                              },
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                          placeholder="Select weekdays"
+                        />
+                      </Form.Field>
+                      <Form.Field>
+                        <label style={{ fontSize: '0.9em' }}>
+                          Position (1st, 2nd, etc.)
+                        </label>
+                        <Dropdown
+                          selection
+                          multiple
+                          compact
+                          options={POSITION_OPTIONS}
+                          value={editingRule.options.bysetpos || []}
+                          onChange={(e, { value }) => {
+                            const updates = {
+                              options: {
+                                ...editingRule.options,
+                                bysetpos:
+                                  (value as number[]).length > 0
+                                    ? (value as number[])
+                                    : undefined,
+                              },
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                          placeholder="Select positions"
+                        />
+                      </Form.Field>
+                    </Form.Group>
+
+                    <Form.Group widths="equal">
+                      <Form.Field>
+                        <label style={{ fontSize: '0.9em' }}>
+                          Months (for yearly/specific month rules)
+                        </label>
+                        <Dropdown
+                          selection
+                          multiple
+                          search
+                          compact
+                          options={MONTH_OPTIONS}
+                          value={editingRule.options.bymonth || []}
+                          onChange={(e, { value }) => {
+                            const updates = {
+                              options: {
+                                ...editingRule.options,
+                                bymonth:
+                                  (value as number[]).length > 0
+                                    ? (value as number[])
+                                    : undefined,
+                              },
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                          placeholder="Select months"
+                        />
+                      </Form.Field>
+                      <Form.Field>
+                        <label style={{ fontSize: '0.9em' }}>
+                          Days of Month (1-31)
+                        </label>
+                        <Input
+                          size="small"
+                          value={
+                            editingRule.options.bymonthday
+                              ? Array.isArray(editingRule.options.bymonthday)
+                                ? editingRule.options.bymonthday.join(', ')
+                                : editingRule.options.bymonthday.toString()
+                              : ''
+                          }
+                          onChange={(e) => {
+                            const days = e.target.value
+                              .split(',')
+                              .map((d) => parseInt(d.trim()))
+                              .filter((d) => !isNaN(d) && d >= 1 && d <= 31);
+                            const updates = {
+                              options: {
+                                ...editingRule.options,
+                                bymonthday: days.length > 0 ? days : undefined,
+                              },
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                          placeholder="e.g., 25 (for 25th) or 1, 15, 31"
+                        />
+                      </Form.Field>
+                    </Form.Group>
+
+                    <Form.Group>
+                      <Form.Field width={8}>
+                        <label style={{ fontSize: '0.9em' }}>
+                          Count (optional)
+                        </label>
+                        <Input
+                          size="small"
+                          type="number"
+                          value={editingRule.options.count || ''}
+                          onChange={(e) => {
+                            const updates = {
+                              options: {
+                                ...editingRule.options,
+                                count: parseInt(e.target.value) || undefined,
+                              },
+                            };
+                            setEditingRule((prev) =>
+                              prev ? { ...prev, ...updates } : null,
+                            );
+                          }}
+                          min={1}
+                          placeholder="Number of occurrences"
+                        />
+                      </Form.Field>
+                    </Form.Group>
+
+                    <Button.Group size="small" style={{ marginTop: '1em' }}>
+                      <Button
+                        type="button"
+                        primary
+                        onClick={() => {
+                          // Validate rule before attempting to save
+                          const ruleError = validateRule(editingRule);
+                          if (ruleError) {
+                            setValidationErrors({ editingRule: ruleError });
+                            return;
+                          }
+
+                          // Save the rule
+                          try {
+                            rrstack.removeRule(editingIndex);
+                            rrstack.addRule(editingRule, editingIndex);
+                            setValidationErrors({});
+                            setEditingRule(null);
+                            setEditingIndex(null);
+                          } catch (error) {
+                            const errorMessage =
+                              error instanceof Error
+                                ? error.message
+                                : 'Failed to save rule';
+                            setValidationErrors({ editingRule: errorMessage });
+                          }
+                        }}
+                      >
+                        Update Rule
+                      </Button>
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          setEditingRule(null);
+                          setEditingIndex(null);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </Button.Group>
+
+                    {validationErrors.editingRule && (
+                      <Message
+                        negative
+                        size="small"
+                        style={{ marginTop: '1em' }}
+                      >
+                        <Message.Header>Rule Validation Error</Message.Header>
+                        <p>{validationErrors.editingRule}</p>
+                      </Message>
+                    )}
+                  </Segment>
+                ) : (
+                  // Show summary when not editing
+                  <Segment
+                    basic
+                    style={{ fontSize: '0.85em', padding: '0.5em 0' }}
+                  >
+                    <Segment basic style={{ marginBottom: 6, padding: 0 }}>
+                      <strong>Effect:</strong> {rule.effect}
+                    </Segment>
+                    <Segment basic style={{ marginBottom: 6, padding: 0 }}>
+                      <strong>Duration:</strong>{' '}
+                      {Object.entries(rule.duration).length > 0
+                        ? Object.entries(rule.duration)
+                            .map(([key, value]) => `${value} ${key}`)
+                            .join(', ')
+                        : 'None'}
+                    </Segment>
+                    <Segment basic style={{ marginBottom: 6, padding: 0 }}>
+                      <strong>Frequency:</strong> {rule.options.freq}
+                    </Segment>
+                    {rule.options.byhour && (
+                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
+                        <strong>Hours:</strong>{' '}
+                        {Array.isArray(rule.options.byhour)
+                          ? rule.options.byhour.join(', ')
+                          : rule.options.byhour}
+                      </Segment>
+                    )}
+                    {rule.options.byminute && (
+                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
+                        <strong>Minutes:</strong>{' '}
+                        {Array.isArray(rule.options.byminute)
+                          ? rule.options.byminute.join(', ')
+                          : rule.options.byminute}
+                      </Segment>
+                    )}
+                    {rule.options.bysecond && (
+                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
+                        <strong>Seconds:</strong>{' '}
+                        {Array.isArray(rule.options.bysecond)
+                          ? rule.options.bysecond.join(', ')
+                          : rule.options.bysecond}
+                      </Segment>
+                    )}
+                    {rule.options.count && (
+                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
+                        <strong>Count:</strong> {rule.options.count}
+                      </Segment>
+                    )}
+                    {rule.options.interval && rule.options.interval > 1 && (
+                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
+                        <strong>Interval:</strong> {rule.options.interval}
+                      </Segment>
+                    )}
+                    {rule.options.byweekday && (
+                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
+                        <strong>Weekdays:</strong>{' '}
+                        {Array.isArray(rule.options.byweekday)
+                          ? rule.options.byweekday
+                              .map((day) =>
+                                typeof day === 'number'
+                                  ? WEEKDAY_OPTIONS.find((w) => w.value === day)
+                                      ?.text || String(day)
+                                  : String(day),
+                              )
+                              .join(', ')
+                          : typeof rule.options.byweekday === 'number'
+                            ? WEEKDAY_OPTIONS.find(
+                                (w) => w.value === rule.options.byweekday,
+                              )?.text || String(rule.options.byweekday)
+                            : String(rule.options.byweekday)}
+                      </Segment>
+                    )}
+                    {rule.options.bymonth && (
+                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
+                        <strong>Months:</strong>{' '}
+                        {Array.isArray(rule.options.bymonth)
+                          ? rule.options.bymonth
+                              .map(
+                                (month) =>
+                                  MONTH_OPTIONS.find((m) => m.value === month)
+                                    ?.text || month,
+                              )
+                              .join(', ')
+                          : MONTH_OPTIONS.find(
+                              (m) => m.value === rule.options.bymonth,
+                            )?.text || rule.options.bymonth}
+                      </Segment>
+                    )}
+                    {rule.options.bymonthday && (
+                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
+                        <strong>Days of Month:</strong>{' '}
+                        {Array.isArray(rule.options.bymonthday)
+                          ? rule.options.bymonthday.join(', ')
+                          : rule.options.bymonthday}
+                      </Segment>
+                    )}
+                  </Segment>
+                )}
+              </Accordion.Content>,
+            ];
+          })}
+        </Accordion>
       )}
     </div>
   );
