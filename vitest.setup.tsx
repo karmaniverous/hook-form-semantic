@@ -319,6 +319,83 @@ vi.mock('semantic-ui-react', () => {
 
   Object.assign(Button, { Group: ButtonGroup });
 
+  interface AccordionTitleProps extends React.HTMLAttributes<HTMLDivElement> {
+    active?: boolean;
+    index?: number;
+    children?: React.ReactNode;
+  }
+
+  const AccordionTitle: React.FC<AccordionTitleProps> = ({
+    children,
+    active,
+    index,
+    onClick,
+    ...props
+  }) =>
+    React.createElement(
+      'div',
+      {
+        ...props,
+        'data-testid': 'accordion-title',
+        'data-active': active,
+        'data-index': index,
+        onClick,
+        role: 'button',
+        tabIndex: 0,
+      },
+      children,
+    );
+
+  interface AccordionContentProps extends React.HTMLAttributes<HTMLDivElement> {
+    active?: boolean;
+    children?: React.ReactNode;
+  }
+
+  const AccordionContent: React.FC<AccordionContentProps> = ({
+    children,
+    active,
+    ...props
+  }) =>
+    active
+      ? React.createElement(
+          'div',
+          {
+            ...props,
+            'data-testid': 'accordion-content',
+            'data-active': active,
+          },
+          children,
+        )
+      : null;
+
+  interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
+    fluid?: boolean;
+    styled?: boolean;
+    children?: React.ReactNode;
+  }
+
+  const Accordion: React.FC<AccordionProps> = ({
+    children,
+    fluid,
+    styled,
+    ...props
+  }) =>
+    React.createElement(
+      'div',
+      {
+        ...props,
+        'data-testid': 'accordion',
+        'data-fluid': fluid,
+        'data-styled': styled,
+      },
+      children,
+    );
+
+  Object.assign(Accordion, {
+    Title: AccordionTitle,
+    Content: AccordionContent,
+  });
+
   return {
     Form,
     Label,
@@ -332,6 +409,7 @@ vi.mock('semantic-ui-react', () => {
     Icon,
     Message,
     Segment,
+    Accordion,
   };
 });
 
