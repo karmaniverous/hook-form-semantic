@@ -2,8 +2,15 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.5-1](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.5-0...0.1.5-1)
+
+- Add missing dependencies [`b693fbb`](https://github.com/karmaniverous/hook-form-semantic/commit/b693fbba1c55d6a1ac6da91da89f5bfe3ded3c99)
+
 #### [0.1.5-0](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.4...0.1.5-0)
 
+> 18 September 2025
+
+- chore: release v0.1.5-0 [`7a2c954`](https://github.com/karmaniverous/hook-form-semantic/commit/7a2c9540202bc85fc52045d7224326fb73a719ab)
 - Add RRStack v0.8.0 and generated docs in docs/rrstack [`4e2efb4`](https://github.com/karmaniverous/hook-form-semantic/commit/4e2efb43929f46a05235e095705c1403a1d80999)
 - More compact RRule form [`e2630e3`](https://github.com/karmaniverous/hook-form-semantic/commit/e2630e3c6771b9b6d6e48b9120839bc55b5d9b5e)
 - Basic HookFormRRStack implementation [`657d360`](https://github.com/karmaniverous/hook-form-semantic/commit/657d36074fb8d22a108b6696efcc60ac37a97516)
