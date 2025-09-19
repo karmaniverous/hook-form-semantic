@@ -1,7 +1,10 @@
 import type { RuleJson } from '@karmaniverous/rrstack';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import DatePicker from 'react-date-picker';
+import DateTimePicker from 'react-datetime-picker';
 import {
   Button,
+  Checkbox,
   Dropdown,
   Form,
   Header,
@@ -75,6 +78,8 @@ export const RRStackRuleForm = ({
   onCancel,
 }: RRStackRuleFormProps) => {
   const [showDateValidation, setShowDateValidation] = useState(false);
+  const [includeStartTime, setIncludeStartTime] = useState(false);
+  const [includeEndTime, setIncludeEndTime] = useState(false);
 
   // Get current dates directly from rule data (assuming milliseconds)
   const getStartDate = (): Date | null => {
@@ -120,71 +125,77 @@ export const RRStackRuleForm = ({
     onSave();
   };
 
-  // Handle start date changes - always defaults to start of day
-  const handleStartDateChange = (date: Date | null) => {
-    if (!date) {
+  // Handle start date changes - let rrstack handle time calculations
+  const handleStartDateChange = useCallback(
+    (value: Date | null | [Date | null, Date | null]) => {
+      // Handle the Value type from date picker (can be Date, null, or array)
+      const date = Array.isArray(value) ? value[0] : value;
+
+      if (!date) {
+        onRuleChange({
+          options: {
+            ...rule.options,
+            starts: undefined,
+          },
+        });
+        return;
+      }
+
+      const startTimestamp = date.getTime();
+
+      // Clear validation error if validation passes after this change
+      if (showDateValidation) {
+        const endDate = getEndDate();
+        if (date && endDate && date < endDate) {
+          setShowDateValidation(false);
+        }
+      }
+
       onRuleChange({
         options: {
           ...rule.options,
-          starts: undefined,
+          starts: startTimestamp,
         },
       });
-      return;
-    }
+    },
+    [onRuleChange, rule.options, showDateValidation, getEndDate],
+  );
 
-    // Always set to start of day (00:00:00)
-    const finalDate = new Date(date);
-    finalDate.setHours(0, 0, 0, 0);
-    const startTimestamp = finalDate.getTime();
+  // Handle end date changes - let rrstack handle time calculations
+  const handleEndDateChange = useCallback(
+    (value: Date | null | [Date | null, Date | null]) => {
+      // Handle the Value type from date picker (can be Date, null, or array)
+      const date = Array.isArray(value) ? value[0] : value;
 
-    // Clear validation error if validation passes after this change
-    if (showDateValidation) {
-      const endDate = getEndDate();
-      if (finalDate && endDate && finalDate < endDate) {
-        setShowDateValidation(false);
+      if (!date) {
+        onRuleChange({
+          options: {
+            ...rule.options,
+            ends: undefined,
+          },
+        });
+        return;
       }
-    }
 
-    onRuleChange({
-      options: {
-        ...rule.options,
-        starts: startTimestamp,
-      },
-    });
-  };
+      const endTimestamp = date.getTime();
 
-  // Handle end date changes - always defaults to end of day
-  const handleEndDateChange = (date: Date | null) => {
-    if (!date) {
+      // Clear validation error if validation passes after this change
+      if (showDateValidation) {
+        const startDate = getStartDate();
+        if (startDate && date && startDate < date) {
+          setShowDateValidation(false);
+        }
+      }
+
       onRuleChange({
         options: {
           ...rule.options,
-          ends: undefined,
+          ends: endTimestamp,
         },
       });
-      return;
-    }
-
-    // Always set to end of day (23:59:59.999)
-    const finalDate = new Date(date);
-    finalDate.setHours(23, 59, 59, 999);
-    const endTimestamp = finalDate.getTime();
-
-    // Clear validation error if validation passes after this change
-    if (showDateValidation) {
-      const startDate = getStartDate();
-      if (startDate && finalDate && startDate < finalDate) {
-        setShowDateValidation(false);
-      }
-    }
-
-    onRuleChange({
-      options: {
-        ...rule.options,
-        ends: endTimestamp,
-      },
-    });
-  };
+    },
+    [onRuleChange, rule.options, showDateValidation, getStartDate],
+  );
 
   const handleFieldChange = (updates: Partial<RuleJson>) => {
     onRuleChange(updates);
@@ -541,51 +552,101 @@ export const RRStackRuleForm = ({
       </Form.Group>
 
       <Form.Group widths="equal">
-        <Form.Field>
-          <label style={{ fontSize: '0.9em' }}>
-            Start Date *
-            <div
-              style={{ fontSize: '0.8em', color: '#666', fontWeight: 'normal' }}
-            >
-              Defaults to start of day (00:00)
-            </div>
-          </label>
-          <Input
-            size="small"
-            type="date"
-            value={
-              getStartDate() ? getStartDate()!.toISOString().slice(0, 10) : ''
-            }
-            onChange={(e) => {
-              const date =
-                e.target.value && e.target.value.trim() !== ''
-                  ? new Date(e.target.value)
-                  : null;
-              handleStartDateChange(date);
-            }}
-          />
+        <Form.Field className="hook-form-date-picker">
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <label style={{ fontSize: '0.9em' }}>Start Date *</label>
+            <Checkbox
+              checked={includeStartTime}
+              label="Include Time"
+              onChange={(event, data) =>
+                setIncludeStartTime(data.checked || false)
+              }
+            />
+          </div>
+          <div className="input">
+            {includeStartTime ? (
+              <DateTimePicker
+                dayPlaceholder="dd"
+                disableClock
+                hourPlaceholder="hh"
+                maxDetail="minute"
+                minutePlaceholder="mm"
+                monthPlaceholder="mm"
+                onChange={handleStartDateChange}
+                secondPlaceholder="ss"
+                showLeadingZeros
+                yearPlaceholder="yyyy"
+                value={getStartDate()}
+                calendarProps={{
+                  showNeighboringMonth: false,
+                  showNavigation: true,
+                  returnValue: 'start',
+                }}
+              />
+            ) : (
+              <DatePicker
+                dayPlaceholder="dd"
+                monthPlaceholder="mm"
+                onChange={handleStartDateChange}
+                showLeadingZeros
+                yearPlaceholder="yyyy"
+                value={getStartDate()}
+                calendarProps={{
+                  showNeighboringMonth: false,
+                  showNavigation: true,
+                  returnValue: 'start',
+                }}
+              />
+            )}
+          </div>
         </Form.Field>
-        <Form.Field>
-          <label style={{ fontSize: '0.9em' }}>
-            End Date *
-            <div
-              style={{ fontSize: '0.8em', color: '#666', fontWeight: 'normal' }}
-            >
-              Defaults to end of day (23:59)
-            </div>
-          </label>
-          <Input
-            size="small"
-            type="date"
-            value={getEndDate() ? getEndDate()!.toISOString().slice(0, 10) : ''}
-            onChange={(e) => {
-              const date =
-                e.target.value && e.target.value.trim() !== ''
-                  ? new Date(e.target.value)
-                  : null;
-              handleEndDateChange(date);
-            }}
-          />
+        <Form.Field className="hook-form-date-picker">
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <label style={{ fontSize: '0.9em' }}>End Date *</label>
+            <Checkbox
+              checked={includeEndTime}
+              label="Include Time"
+              onChange={(event, data) =>
+                setIncludeEndTime(data.checked || false)
+              }
+            />
+          </div>
+          <div className="input">
+            {includeEndTime ? (
+              <DateTimePicker
+                dayPlaceholder="dd"
+                disableClock
+                hourPlaceholder="hh"
+                maxDetail="minute"
+                minutePlaceholder="mm"
+                monthPlaceholder="mm"
+                onChange={handleEndDateChange}
+                secondPlaceholder="ss"
+                showLeadingZeros
+                yearPlaceholder="yyyy"
+                value={getEndDate()}
+                calendarProps={{
+                  showNeighboringMonth: false,
+                  showNavigation: true,
+                  returnValue: 'start',
+                }}
+              />
+            ) : (
+              <DatePicker
+                dayPlaceholder="dd"
+                monthPlaceholder="mm"
+                onChange={handleEndDateChange}
+                showLeadingZeros
+                yearPlaceholder="yyyy"
+                value={getEndDate()}
+                calendarProps={{
+                  showNeighboringMonth: false,
+                  showNavigation: true,
+                  returnValue: 'start',
+                }}
+              />
+            )}
+          </div>
         </Form.Field>
       </Form.Group>
 
