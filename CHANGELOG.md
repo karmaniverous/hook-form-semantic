@@ -2,9 +2,17 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.5](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.5-5...0.1.5)
+
+- Improve starts/ends date/time picker fields [`54193b5`](https://github.com/karmaniverous/hook-form-semantic/commit/54193b5a26e44f5872018ea43b841111f6fe9528)
+- Update tests to reflect simpler time picker logic [`ffb66be`](https://github.com/karmaniverous/hook-form-semantic/commit/ffb66bed2862aa745d3a94d9d9f93d0f850663cb)
+
 #### [0.1.5-5](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.5-4...0.1.5-5)
 
+> 19 September 2025
+
 - Starts/ends fields for HookFormRRStack [`f80bcec`](https://github.com/karmaniverous/hook-form-semantic/commit/f80bcecc1d438fac2505406f31d9a4859273f55f)
+- chore: release v0.1.5-5 [`5f77084`](https://github.com/karmaniverous/hook-form-semantic/commit/5f77084fe126183b7ac1e9f5c589a18a431b7f47)
 
 #### [0.1.5-4](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.5-3...0.1.5-4)
 
