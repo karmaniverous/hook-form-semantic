@@ -90,25 +90,36 @@ export const RRStackRuleForm = ({
     return rule.options.ends ? new Date(rule.options.ends) : null;
   };
 
-  // Simple validation function using rule data directly
+  // Validate date range - only check order when both dates are present
   const validateDateRange = (): string | null => {
     const startDate = getStartDate();
     const endDate = getEndDate();
 
-    // Check date order first if both dates are present
+    // Only validate date order if both dates are present (both are optional)
     if (startDate && endDate && startDate >= endDate) {
       return 'Start date must be before end date';
     }
 
-    // Then check for missing dates
-    if (!startDate && !endDate) {
-      return 'Both start and end dates are required';
-    }
-    if (!startDate) {
-      return 'Start date is required';
-    }
-    if (!endDate) {
-      return 'End date is required';
+    return null;
+  };
+
+  // Validate duration - at least one field must be positive
+  const validateDuration = (): string | null => {
+    const { years, months, weeks, days, hours, minutes, seconds } =
+      rule.duration;
+
+    const hasPositiveDuration = [
+      years,
+      months,
+      weeks,
+      days,
+      hours,
+      minutes,
+      seconds,
+    ].some((value) => value && value > 0);
+
+    if (!hasPositiveDuration) {
+      return 'Duration must have at least one positive value (years, months, weeks, days, hours, minutes, or seconds)';
     }
 
     return null;
@@ -117,7 +128,9 @@ export const RRStackRuleForm = ({
   // Handle save with validation
   const handleSave = () => {
     const dateValidationError = validateDateRange();
-    if (dateValidationError) {
+    const durationValidationError = validateDuration();
+
+    if (dateValidationError || durationValidationError) {
       setShowDateValidation(true);
       return;
     }
@@ -535,7 +548,7 @@ export const RRStackRuleForm = ({
 
       <Form.Group>
         <Form.Field width={8}>
-          <label style={{ fontSize: '0.9em' }}>Count (optional)</label>
+          <label style={{ fontSize: '0.9em' }}>Count</label>
           <Input
             size="small"
             type="number"
@@ -554,7 +567,7 @@ export const RRStackRuleForm = ({
       <Form.Group widths="equal">
         <Form.Field className="hook-form-date-picker">
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <label style={{ fontSize: '0.9em' }}>Start Date *</label>
+            <label style={{ fontSize: '0.9em' }}>Start Date</label>
             <Checkbox
               checked={includeStartTime}
               label="Include Time"
@@ -602,7 +615,7 @@ export const RRStackRuleForm = ({
         </Form.Field>
         <Form.Field className="hook-form-date-picker">
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <label style={{ fontSize: '0.9em' }}>End Date *</label>
+            <label style={{ fontSize: '0.9em' }}>End Date</label>
             <Checkbox
               checked={includeEndTime}
               label="Include Time"
@@ -653,12 +666,19 @@ export const RRStackRuleForm = ({
       {showDateValidation &&
         (() => {
           const dateValidationError = validateDateRange();
-          return dateValidationError ? (
+          const durationValidationError = validateDuration();
+
+          if (!dateValidationError && !durationValidationError) {
+            return null;
+          }
+
+          return (
             <Message negative size="small">
-              <Message.Header>Date Range Error</Message.Header>
-              <p>{dateValidationError}</p>
+              <Message.Header>Validation Error</Message.Header>
+              {dateValidationError && <p>{dateValidationError}</p>}
+              {durationValidationError && <p>{durationValidationError}</p>}
             </Message>
-          ) : null;
+          );
         })()}
 
       <Button.Group size="small" style={{ marginTop: '1em' }}>

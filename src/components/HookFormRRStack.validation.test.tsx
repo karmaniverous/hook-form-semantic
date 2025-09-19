@@ -59,43 +59,35 @@ describe('HookFormRRStack Validation', () => {
     // Should show the rule editor
     expect(screen.getByText('Add New Rule')).toBeInTheDocument();
 
-    // Fill in a valid rule with proper duration and save
+    // Fill in a rule label
     const labelInput = screen.getByPlaceholderText('Rule label');
     fireEvent.change(labelInput, { target: { value: 'Test Rule' } });
 
-    // Add a duration to make it a valid rule - find the Hours input under Duration section
+    // Try to save without any duration - should show validation error
+    const saveButton = screen.getAllByText('Add Rule')[1]; // Get the save button in the form
+    fireEvent.click(saveButton);
+
+    // Should show duration validation error (dates are now optional)
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Duration must have at least one positive value (years, months, weeks, days, hours, minutes, or seconds)',
+        ),
+      ).toBeInTheDocument();
+    });
+
+    // Now add a duration to make it valid
     const hoursInputs = screen.getAllByDisplayValue('');
     const hoursInput = hoursInputs[3]; // The Hours input is the 4th empty input (after Years, Months, Days)
     fireEvent.change(hoursInput, { target: { value: '1' } });
 
-    // Try to save without dates first - should show validation error
-    const saveButton = screen.getAllByText('Add Rule')[1]; // Get the save button in the form
+    // Try to save again - should succeed now (dates are optional)
     fireEvent.click(saveButton);
 
-    // Should show date validation error
+    // The form should close and the rule should be added
     await waitFor(() => {
-      expect(
-        screen.getByText('Both start and end dates are required'),
-      ).toBeInTheDocument();
+      expect(screen.queryByText('Add New Rule')).not.toBeInTheDocument();
     });
-
-    // Now add the required dates
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    // Find date inputs by their data attributes or other reliable selectors
-    // Since the test environment might not render the date pickers exactly as expected,
-    // let's try a simpler approach - just click save again after a brief wait
-    // to simulate the user adding dates
-
-    // Wait a bit and try save again (simulating user adding dates)
-    await new Promise((resolve) => setTimeout(resolve, 100));
-
-    // For now, let's just verify the validation is working by checking the error message exists
-    expect(
-      screen.getByText('Both start and end dates are required'),
-    ).toBeInTheDocument();
   });
 
   it('shows validation errors for invalid rules', async () => {

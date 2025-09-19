@@ -104,8 +104,8 @@ describe('RRStackRuleForm Timestamp Handling', () => {
   it('displays date picker fields with Include Time checkboxes', () => {
     render(<RRStackRuleForm {...mockProps} />);
 
-    expect(screen.getByText('Start Date *')).toBeInTheDocument();
-    expect(screen.getByText('End Date *')).toBeInTheDocument();
+    expect(screen.getByText('Start Date')).toBeInTheDocument();
+    expect(screen.getByText('End Date')).toBeInTheDocument();
 
     // Check for Include Time checkboxes
     const includeTimeCheckboxes = screen.getAllByText('Include Time');
