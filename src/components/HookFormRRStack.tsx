@@ -873,6 +873,21 @@ export const HookFormRRStack = <T extends FieldValues>({
                     style={{ display: 'flex', gap: 2 }}
                     onClick={(e) => e.stopPropagation()}
                   >
+                    {!isActive && (
+                      <Button
+                        type="button"
+                        icon="edit"
+                        onClick={() => {
+                          // Open accordion and start editing
+                          setActiveIndex(index);
+                          setEditingRule({ ...rule });
+                          setEditingIndex(index);
+                        }}
+                        title="Edit rule"
+                        color="blue"
+                        size="mini"
+                      />
+                    )}
                     <Button.Group size="mini">
                       <Button
                         type="button"
@@ -933,7 +948,7 @@ export const HookFormRRStack = <T extends FieldValues>({
                 </div>
               </Accordion.Title>,
               <Accordion.Content key={`content-${index}`} active={isActive}>
-                {editingIndex === index && editingRule ? (
+                {editingIndex === index && editingRule && (
                   // Show edit form inside accordion
                   <Segment
                     basic
@@ -1395,6 +1410,7 @@ export const HookFormRRStack = <T extends FieldValues>({
                             setValidationErrors({});
                             setEditingRule(null);
                             setEditingIndex(null);
+                            setActiveIndex(null);
                           } catch (error) {
                             const errorMessage =
                               error instanceof Error
@@ -1411,6 +1427,7 @@ export const HookFormRRStack = <T extends FieldValues>({
                         onClick={() => {
                           setEditingRule(null);
                           setEditingIndex(null);
+                          setActiveIndex(null);
                         }}
                       >
                         Cancel
@@ -1426,104 +1443,6 @@ export const HookFormRRStack = <T extends FieldValues>({
                         <Message.Header>Rule Validation Error</Message.Header>
                         <p>{validationErrors.editingRule}</p>
                       </Message>
-                    )}
-                  </Segment>
-                ) : (
-                  // Show summary when not editing
-                  <Segment
-                    basic
-                    style={{ fontSize: '0.85em', padding: '0.5em 0' }}
-                  >
-                    <Segment basic style={{ marginBottom: 6, padding: 0 }}>
-                      <strong>Effect:</strong> {rule.effect}
-                    </Segment>
-                    <Segment basic style={{ marginBottom: 6, padding: 0 }}>
-                      <strong>Duration:</strong>{' '}
-                      {Object.entries(rule.duration).length > 0
-                        ? Object.entries(rule.duration)
-                            .map(([key, value]) => `${value} ${key}`)
-                            .join(', ')
-                        : 'None'}
-                    </Segment>
-                    <Segment basic style={{ marginBottom: 6, padding: 0 }}>
-                      <strong>Frequency:</strong> {rule.options.freq}
-                    </Segment>
-                    {rule.options.byhour && (
-                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
-                        <strong>Hours:</strong>{' '}
-                        {Array.isArray(rule.options.byhour)
-                          ? rule.options.byhour.join(', ')
-                          : rule.options.byhour}
-                      </Segment>
-                    )}
-                    {rule.options.byminute && (
-                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
-                        <strong>Minutes:</strong>{' '}
-                        {Array.isArray(rule.options.byminute)
-                          ? rule.options.byminute.join(', ')
-                          : rule.options.byminute}
-                      </Segment>
-                    )}
-                    {rule.options.bysecond && (
-                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
-                        <strong>Seconds:</strong>{' '}
-                        {Array.isArray(rule.options.bysecond)
-                          ? rule.options.bysecond.join(', ')
-                          : rule.options.bysecond}
-                      </Segment>
-                    )}
-                    {rule.options.count && (
-                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
-                        <strong>Count:</strong> {rule.options.count}
-                      </Segment>
-                    )}
-                    {rule.options.interval && rule.options.interval > 1 && (
-                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
-                        <strong>Interval:</strong> {rule.options.interval}
-                      </Segment>
-                    )}
-                    {rule.options.byweekday && (
-                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
-                        <strong>Weekdays:</strong>{' '}
-                        {Array.isArray(rule.options.byweekday)
-                          ? rule.options.byweekday
-                              .map((day) =>
-                                typeof day === 'number'
-                                  ? WEEKDAY_OPTIONS.find((w) => w.value === day)
-                                      ?.text || String(day)
-                                  : String(day),
-                              )
-                              .join(', ')
-                          : typeof rule.options.byweekday === 'number'
-                            ? WEEKDAY_OPTIONS.find(
-                                (w) => w.value === rule.options.byweekday,
-                              )?.text || String(rule.options.byweekday)
-                            : String(rule.options.byweekday)}
-                      </Segment>
-                    )}
-                    {rule.options.bymonth && (
-                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
-                        <strong>Months:</strong>{' '}
-                        {Array.isArray(rule.options.bymonth)
-                          ? rule.options.bymonth
-                              .map(
-                                (month) =>
-                                  MONTH_OPTIONS.find((m) => m.value === month)
-                                    ?.text || month,
-                              )
-                              .join(', ')
-                          : MONTH_OPTIONS.find(
-                              (m) => m.value === rule.options.bymonth,
-                            )?.text || rule.options.bymonth}
-                      </Segment>
-                    )}
-                    {rule.options.bymonthday && (
-                      <Segment basic style={{ marginBottom: 6, padding: 0 }}>
-                        <strong>Days of Month:</strong>{' '}
-                        {Array.isArray(rule.options.bymonthday)
-                          ? rule.options.bymonthday.join(', ')
-                          : rule.options.bymonthday}
-                      </Segment>
                     )}
                   </Segment>
                 )}
