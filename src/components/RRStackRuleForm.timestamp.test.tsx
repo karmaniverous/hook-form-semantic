@@ -26,21 +26,18 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     vi.clearAllMocks();
   });
 
-  it('sets start date to beginning of day', () => {
+  it('sets start date without automatic time adjustment', () => {
     render(<RRStackRuleForm {...mockProps} />);
 
-    const dateInputs = screen
-      .getAllByDisplayValue('')
-      .filter((input) => input.getAttribute('type') === 'date');
+    const dateInputs = screen.getAllByTestId('date-picker');
     const startDateInput = dateInputs[0];
 
     // Simulate user selecting a date
     const testDate = '2024-01-15';
     fireEvent.change(startDateInput, { target: { value: testDate } });
 
-    // Create expected date and set to start of day
+    // Create expected date - should preserve the time as entered (no automatic start-of-day)
     const expectedDate = new Date('2024-01-15');
-    expectedDate.setHours(0, 0, 0, 0);
 
     expect(mockProps.onRuleChange).toHaveBeenCalledWith({
       options: {
@@ -50,21 +47,18 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     });
   });
 
-  it('sets end date to end of day', () => {
+  it('sets end date without automatic time adjustment', () => {
     render(<RRStackRuleForm {...mockProps} />);
 
-    const dateInputs = screen
-      .getAllByDisplayValue('')
-      .filter((input) => input.getAttribute('type') === 'date');
+    const dateInputs = screen.getAllByTestId('date-picker');
     const endDateInput = dateInputs[1];
 
     // Simulate user selecting a date
     const testDate = '2024-01-15';
     fireEvent.change(endDateInput, { target: { value: testDate } });
 
-    // Create expected date and set to end of day
+    // Create expected date - should preserve the time as entered (no automatic end-of-day)
     const expectedDate = new Date('2024-01-15');
-    expectedDate.setHours(23, 59, 59, 999);
 
     expect(mockProps.onRuleChange).toHaveBeenCalledWith({
       options: {
@@ -92,12 +86,8 @@ describe('RRStackRuleForm Timestamp Handling', () => {
 
     render(<RRStackRuleForm {...propsWithDate} />);
 
-    // Get the expected display value for date input (YYYY-MM-DD format)
-    const expectedDisplayValue = testDate.toISOString().slice(0, 10);
-
-    const dateInputs = screen
-      .getAllByDisplayValue(expectedDisplayValue)
-      .filter((input) => input.getAttribute('type') === 'date');
+    // Get the date picker inputs
+    const dateInputs = screen.getAllByTestId('date-picker');
     const startDateInput = dateInputs[0];
 
     // Clear the date
@@ -111,43 +101,35 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     });
   });
 
-  it('displays helpful labels explaining the default behavior', () => {
+  it('displays date picker fields with Include Time checkboxes', () => {
     render(<RRStackRuleForm {...mockProps} />);
 
     expect(screen.getByText('Start Date *')).toBeInTheDocument();
-    expect(
-      screen.getByText('Defaults to start of day (00:00)'),
-    ).toBeInTheDocument();
-
     expect(screen.getByText('End Date *')).toBeInTheDocument();
-    expect(
-      screen.getByText('Defaults to end of day (23:59)'),
-    ).toBeInTheDocument();
+
+    // Check for Include Time checkboxes
+    const includeTimeCheckboxes = screen.getAllByText('Include Time');
+    expect(includeTimeCheckboxes).toHaveLength(2);
   });
 
   it('creates proper date range when both dates are selected', () => {
     render(<RRStackRuleForm {...mockProps} />);
 
-    const dateInputs = screen
-      .getAllByDisplayValue('')
-      .filter((input) => input.getAttribute('type') === 'date');
+    const dateInputs = screen.getAllByTestId('date-picker');
     const startDateInput = dateInputs[0];
     const endDateInput = dateInputs[1];
 
-    // Set start date (should default to 00:00:00)
+    // Set start date (no automatic time adjustment)
     fireEvent.change(startDateInput, { target: { value: '2024-01-15' } });
 
-    // Set end date (should default to 23:59:59.999)
+    // Set end date (no automatic time adjustment)
     fireEvent.change(endDateInput, { target: { value: '2024-01-16' } });
 
-    // Create expected dates
+    // Create expected dates - preserve time as entered
     const expectedStartDate = new Date('2024-01-15');
-    expectedStartDate.setHours(0, 0, 0, 0);
-
     const expectedEndDate = new Date('2024-01-16');
-    expectedEndDate.setHours(23, 59, 59, 999);
 
-    // Verify start date is beginning of day
+    // Verify start date preserves entered time
     expect(mockProps.onRuleChange).toHaveBeenCalledWith({
       options: {
         ...mockRule.options,
@@ -155,7 +137,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
       },
     });
 
-    // Verify end date is end of day
+    // Verify end date preserves entered time
     expect(mockProps.onRuleChange).toHaveBeenCalledWith({
       options: {
         ...mockRule.options,
