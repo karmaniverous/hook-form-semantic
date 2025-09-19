@@ -681,14 +681,19 @@ export const RRStackRuleForm = ({
           );
         })()}
 
-      <Button.Group size="small" style={{ marginTop: '1em' }}>
-        <Button type="button" primary onClick={handleSave}>
+      <div style={{ marginTop: '1em' }}>
+        <Button type="button" primary size="small" onClick={handleSave}>
           {mode === 'add' ? 'Add Rule' : 'Update Rule'}
         </Button>
-        <Button type="button" onClick={onCancel}>
+        <Button
+          type="button"
+          size="small"
+          onClick={onCancel}
+          style={{ marginLeft: '0.5em' }}
+        >
           Cancel
         </Button>
-      </Button.Group>
+      </div>
 
       {validationError && (
         <Message negative size="small" style={{ marginTop: '1em' }}>
