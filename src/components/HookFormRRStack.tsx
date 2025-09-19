@@ -16,7 +16,6 @@ import {
   type FormFieldProps,
   Header,
   Icon,
-  Input,
   Label,
   Message,
   Segment,
@@ -26,6 +25,7 @@ import {
   deprefix,
   type PrefixedPartial,
 } from '../../lib/utils/PrefixedPartial';
+import { RRStackRuleForm } from './RRStackRuleForm';
 
 export interface HookFormRRStackProps<T extends FieldValues>
   extends Omit<
@@ -45,54 +45,6 @@ export interface HookFormRRStackProps<T extends FieldValues>
   timezone?: string;
   timeUnit?: 'ms' | 's';
 }
-
-const FREQUENCY_OPTIONS = [
-  { key: 'yearly', text: 'Yearly', value: 'yearly' },
-  { key: 'monthly', text: 'Monthly', value: 'monthly' },
-  { key: 'weekly', text: 'Weekly', value: 'weekly' },
-  { key: 'daily', text: 'Daily', value: 'daily' },
-  { key: 'hourly', text: 'Hourly', value: 'hourly' },
-  { key: 'minutely', text: 'Minutely', value: 'minutely' },
-  { key: 'secondly', text: 'Secondly', value: 'secondly' },
-];
-
-const EFFECT_OPTIONS = [
-  { key: 'active', text: 'Active', value: 'active' },
-  { key: 'blackout', text: 'Blackout', value: 'blackout' },
-];
-
-const WEEKDAY_OPTIONS = [
-  { key: 0, text: 'Monday', value: 0 },
-  { key: 1, text: 'Tuesday', value: 1 },
-  { key: 2, text: 'Wednesday', value: 2 },
-  { key: 3, text: 'Thursday', value: 3 },
-  { key: 4, text: 'Friday', value: 4 },
-  { key: 5, text: 'Saturday', value: 5 },
-  { key: 6, text: 'Sunday', value: 6 },
-];
-
-const POSITION_OPTIONS = [
-  { key: 1, text: '1st', value: 1 },
-  { key: 2, text: '2nd', value: 2 },
-  { key: 3, text: '3rd', value: 3 },
-  { key: 4, text: '4th', value: 4 },
-  { key: -1, text: 'Last', value: -1 },
-];
-
-const MONTH_OPTIONS = [
-  { key: 1, text: 'January', value: 1 },
-  { key: 2, text: 'February', value: 2 },
-  { key: 3, text: 'March', value: 3 },
-  { key: 4, text: 'April', value: 4 },
-  { key: 5, text: 'May', value: 5 },
-  { key: 6, text: 'June', value: 6 },
-  { key: 7, text: 'July', value: 7 },
-  { key: 8, text: 'August', value: 8 },
-  { key: 9, text: 'September', value: 9 },
-  { key: 10, text: 'October', value: 10 },
-  { key: 11, text: 'November', value: 11 },
-  { key: 12, text: 'December', value: 12 },
-];
 
 const createDefaultRule = (): RuleJson => ({
   effect: 'active',
@@ -144,6 +96,15 @@ export const HookFormRRStack = <T extends FieldValues>({
   // Validate rule using RRStack's compilation process
   const validateRule = useCallback(
     (rule: RuleJson): string | undefined => {
+      // Validate starts/ends relationship
+      if (
+        typeof rule.options.starts === 'number' &&
+        typeof rule.options.ends === 'number' &&
+        rule.options.starts >= rule.options.ends
+      ) {
+        return 'Start date must be before end date';
+      }
+
       try {
         // Test rule by creating a temporary RRStack with just this rule
         new RRStack({
@@ -275,6 +236,57 @@ export const HookFormRRStack = <T extends FieldValues>({
     [rrstack, validateTimezone],
   );
 
+  // Memoized handlers for rule operations to prevent recreation on every render
+  const handleAccordionClick = useCallback(
+    (index: number, isActive: boolean) => {
+      if (isActive) {
+        // Close accordion and clear editing state
+        setActiveIndex(null);
+        setEditingRule(null);
+        setEditingIndex(null);
+      } else {
+        // Open accordion and start editing
+        setActiveIndex(index);
+        setEditingRule({ ...rules[index] });
+        setEditingIndex(index);
+      }
+    },
+    [rules],
+  );
+
+  const handleEditClick = useCallback((index: number, rule: RuleJson) => {
+    setActiveIndex(index);
+    setEditingRule({ ...rule });
+    setEditingIndex(index);
+  }, []);
+
+  const handleRuleMove = useCallback(
+    (index: number, direction: 'top' | 'up' | 'down' | 'bottom') => {
+      switch (direction) {
+        case 'top':
+          if (index > 0) rrstack.top(index);
+          break;
+        case 'up':
+          if (index > 0) rrstack.up(index);
+          break;
+        case 'down':
+          if (index < rulesCount - 1) rrstack.down(index);
+          break;
+        case 'bottom':
+          if (index < rulesCount - 1) rrstack.bottom(index);
+          break;
+      }
+    },
+    [rrstack, rulesCount],
+  );
+
+  const handleRuleDelete = useCallback(
+    (index: number) => {
+      rrstack.removeRule(index);
+    },
+    [rrstack],
+  );
+
   return (
     <div className="field">
       {fieldProps.label && <label>{fieldProps.label}</label>}
@@ -336,482 +348,42 @@ export const HookFormRRStack = <T extends FieldValues>({
         <Segment style={{ fontSize: '0.9em', marginBottom: '1em' }}>
           <Header size="tiny">Add New Rule</Header>
           <Segment basic>
-            <Form.Group widths="equal">
-              <Form.Field>
-                <label style={{ fontSize: '0.9em' }}>Label</label>
-                <Input
-                  size="small"
-                  value={editingRule.label || ''}
-                  onChange={(e) => {
-                    const updates = { label: e.target.value };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                  placeholder="Rule label"
-                />
-              </Form.Field>
-              <Form.Field>
-                <label style={{ fontSize: '0.9em' }}>Effect</label>
-                <Dropdown
-                  selection
-                  compact
-                  options={EFFECT_OPTIONS}
-                  value={editingRule.effect}
-                  onChange={(e, { value }) => {
-                    const updates = { effect: value as 'active' | 'blackout' };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                />
-              </Form.Field>
-            </Form.Group>
+            <RRStackRuleForm
+              rule={editingRule}
+              mode="add"
+              validationError={validationErrors.editingRule}
+              onRuleChange={(updates) => {
+                setEditingRule((prev) =>
+                  prev ? { ...prev, ...updates } : null,
+                );
+              }}
+              onSave={() => {
+                // Validate rule before attempting to save
+                const ruleError = validateRule(editingRule);
+                if (ruleError) {
+                  setValidationErrors({ editingRule: ruleError });
+                  return;
+                }
 
-            <Form.Group widths="equal">
-              <Form.Field>
-                <label style={{ fontSize: '0.9em' }}>Frequency</label>
-                <Dropdown
-                  selection
-                  compact
-                  options={FREQUENCY_OPTIONS}
-                  value={editingRule.options.freq}
-                  onChange={(e, { value }) => {
-                    const updates = {
-                      options: {
-                        ...editingRule.options,
-                        freq: value as
-                          | 'yearly'
-                          | 'monthly'
-                          | 'weekly'
-                          | 'daily'
-                          | 'hourly'
-                          | 'minutely'
-                          | 'secondly',
-                      },
-                    };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                />
-              </Form.Field>
-              <Form.Field>
-                <label style={{ fontSize: '0.9em' }}>Interval</label>
-                <Input
-                  size="small"
-                  type="number"
-                  value={editingRule.options.interval || 1}
-                  onChange={(e) => {
-                    const updates = {
-                      options: {
-                        ...editingRule.options,
-                        interval: parseInt(e.target.value) || 1,
-                      },
-                    };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                  min={1}
-                />
-              </Form.Field>
-            </Form.Group>
-
-            <Header size="tiny">Duration</Header>
-            <Form.Group style={{ alignItems: 'flex-end' }}>
-              <Form.Field width={2}>
-                <label style={{ fontSize: '0.8em' }}>Years</label>
-                <Input
-                  size="mini"
-                  type="number"
-                  value={editingRule.duration.years || ''}
-                  onChange={(e) => {
-                    const updates = {
-                      duration: {
-                        ...editingRule.duration,
-                        years: parseInt(e.target.value) || undefined,
-                      },
-                    };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                  min={0}
-                  placeholder="0"
-                />
-              </Form.Field>
-              <Form.Field width={2}>
-                <label style={{ fontSize: '0.8em' }}>Months</label>
-                <Input
-                  size="mini"
-                  type="number"
-                  value={editingRule.duration.months || ''}
-                  onChange={(e) => {
-                    const updates = {
-                      duration: {
-                        ...editingRule.duration,
-                        months: parseInt(e.target.value) || undefined,
-                      },
-                    };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                  min={0}
-                  placeholder="0"
-                />
-              </Form.Field>
-              <Form.Field width={2}>
-                <label style={{ fontSize: '0.8em' }}>Days</label>
-                <Input
-                  size="mini"
-                  type="number"
-                  value={editingRule.duration.days || ''}
-                  onChange={(e) => {
-                    const updates = {
-                      duration: {
-                        ...editingRule.duration,
-                        days: parseInt(e.target.value) || undefined,
-                      },
-                    };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                  min={0}
-                  placeholder="0"
-                />
-              </Form.Field>
-              <Form.Field width={2}>
-                <label style={{ fontSize: '0.8em' }}>Hours</label>
-                <Input
-                  size="mini"
-                  type="number"
-                  value={editingRule.duration.hours || ''}
-                  onChange={(e) => {
-                    const updates = {
-                      duration: {
-                        ...editingRule.duration,
-                        hours: parseInt(e.target.value) || undefined,
-                      },
-                    };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                  min={0}
-                  placeholder="0"
-                />
-              </Form.Field>
-              <Form.Field width={2}>
-                <label style={{ fontSize: '0.8em' }}>Min</label>
-                <Input
-                  size="mini"
-                  type="number"
-                  value={editingRule.duration.minutes || ''}
-                  onChange={(e) => {
-                    const updates = {
-                      duration: {
-                        ...editingRule.duration,
-                        minutes: parseInt(e.target.value) || undefined,
-                      },
-                    };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                  min={0}
-                  placeholder="0"
-                />
-              </Form.Field>
-              <Form.Field width={2}>
-                <label style={{ fontSize: '0.8em' }}>Sec</label>
-                <Input
-                  size="mini"
-                  type="number"
-                  value={editingRule.duration.seconds || ''}
-                  onChange={(e) => {
-                    const updates = {
-                      duration: {
-                        ...editingRule.duration,
-                        seconds: parseInt(e.target.value) || undefined,
-                      },
-                    };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                  min={0}
-                  placeholder="0"
-                />
-              </Form.Field>
-            </Form.Group>
-
-            <Header size="tiny">Time of Day</Header>
-            <Form.Group style={{ alignItems: 'flex-end' }}>
-              <Form.Field width={8}>
-                <label style={{ fontSize: '0.8em' }}>
-                  Hours (0-23, comma-separated)
-                </label>
-                <Input
-                  size="small"
-                  value={
-                    editingRule.options.byhour
-                      ? Array.isArray(editingRule.options.byhour)
-                        ? editingRule.options.byhour.join(', ')
-                        : editingRule.options.byhour.toString()
-                      : ''
-                  }
-                  onChange={(e) => {
-                    const hours = e.target.value
-                      .split(',')
-                      .map((h) => parseInt(h.trim()))
-                      .filter((h) => !isNaN(h) && h >= 0 && h <= 23);
-                    const updates = {
-                      options: {
-                        ...editingRule.options,
-                        byhour: hours.length > 0 ? hours : undefined,
-                      },
-                    };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                  placeholder="e.g., 9, 13, 17"
-                />
-              </Form.Field>
-              <Form.Field width={8}>
-                <label style={{ fontSize: '0.8em' }}>
-                  Minutes (0-59, comma-separated)
-                </label>
-                <Input
-                  size="small"
-                  value={
-                    editingRule.options.byminute
-                      ? Array.isArray(editingRule.options.byminute)
-                        ? editingRule.options.byminute.join(', ')
-                        : editingRule.options.byminute.toString()
-                      : ''
-                  }
-                  onChange={(e) => {
-                    const minutes = e.target.value
-                      .split(',')
-                      .map((m) => parseInt(m.trim()))
-                      .filter((m) => !isNaN(m) && m >= 0 && m <= 59);
-                    const updates = {
-                      options: {
-                        ...editingRule.options,
-                        byminute: minutes.length > 0 ? minutes : undefined,
-                      },
-                    };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                  placeholder="e.g., 0, 30"
-                />
-              </Form.Field>
-            </Form.Group>
-
-            <Form.Group widths="equal">
-              <Form.Field>
-                <label style={{ fontSize: '0.9em' }}>
-                  Weekdays (for weekly/monthly rules)
-                </label>
-                <Dropdown
-                  selection
-                  multiple
-                  search
-                  compact
-                  options={WEEKDAY_OPTIONS}
-                  value={
-                    Array.isArray(editingRule.options.byweekday)
-                      ? editingRule.options.byweekday.filter(
-                          (day): day is number => typeof day === 'number',
-                        )
-                      : typeof editingRule.options.byweekday === 'number'
-                        ? [editingRule.options.byweekday]
-                        : []
-                  }
-                  onChange={(e, { value }) => {
-                    const updates = {
-                      options: {
-                        ...editingRule.options,
-                        byweekday:
-                          (value as number[]).length > 0
-                            ? (value as number[])
-                            : undefined,
-                      },
-                    };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                  placeholder="Select weekdays"
-                />
-              </Form.Field>
-              <Form.Field>
-                <label style={{ fontSize: '0.9em' }}>
-                  Position (1st, 2nd, etc.)
-                </label>
-                <Dropdown
-                  selection
-                  multiple
-                  compact
-                  options={POSITION_OPTIONS}
-                  value={editingRule.options.bysetpos || []}
-                  onChange={(e, { value }) => {
-                    const updates = {
-                      options: {
-                        ...editingRule.options,
-                        bysetpos:
-                          (value as number[]).length > 0
-                            ? (value as number[])
-                            : undefined,
-                      },
-                    };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                  placeholder="Select positions"
-                />
-              </Form.Field>
-            </Form.Group>
-
-            <Form.Group widths="equal">
-              <Form.Field>
-                <label style={{ fontSize: '0.9em' }}>
-                  Months (for yearly/specific month rules)
-                </label>
-                <Dropdown
-                  selection
-                  multiple
-                  search
-                  compact
-                  options={MONTH_OPTIONS}
-                  value={editingRule.options.bymonth || []}
-                  onChange={(e, { value }) => {
-                    const updates = {
-                      options: {
-                        ...editingRule.options,
-                        bymonth:
-                          (value as number[]).length > 0
-                            ? (value as number[])
-                            : undefined,
-                      },
-                    };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                  placeholder="Select months"
-                />
-              </Form.Field>
-              <Form.Field>
-                <label style={{ fontSize: '0.9em' }}>
-                  Days of Month (1-31)
-                </label>
-                <Input
-                  size="small"
-                  value={
-                    editingRule.options.bymonthday
-                      ? Array.isArray(editingRule.options.bymonthday)
-                        ? editingRule.options.bymonthday.join(', ')
-                        : editingRule.options.bymonthday.toString()
-                      : ''
-                  }
-                  onChange={(e) => {
-                    const days = e.target.value
-                      .split(',')
-                      .map((d) => parseInt(d.trim()))
-                      .filter((d) => !isNaN(d) && d >= 1 && d <= 31);
-                    const updates = {
-                      options: {
-                        ...editingRule.options,
-                        bymonthday: days.length > 0 ? days : undefined,
-                      },
-                    };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                  placeholder="e.g., 25 (for 25th) or 1, 15, 31"
-                />
-              </Form.Field>
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Field width={8}>
-                <label style={{ fontSize: '0.9em' }}>Count (optional)</label>
-                <Input
-                  size="small"
-                  type="number"
-                  value={editingRule.options.count || ''}
-                  onChange={(e) => {
-                    const updates = {
-                      options: {
-                        ...editingRule.options,
-                        count: parseInt(e.target.value) || undefined,
-                      },
-                    };
-                    setEditingRule((prev) =>
-                      prev ? { ...prev, ...updates } : null,
-                    );
-                  }}
-                  min={1}
-                  placeholder="Number of occurrences"
-                />
-              </Form.Field>
-            </Form.Group>
-
-            <Button.Group size="small">
-              <Button
-                type="button"
-                primary
-                onClick={() => {
-                  // Validate rule before attempting to save
-                  const ruleError = validateRule(editingRule);
-                  if (ruleError) {
-                    setValidationErrors({ editingRule: ruleError });
-                    return;
-                  }
-
-                  // Add new rule
-                  try {
-                    rrstack.addRule(editingRule);
-                    setValidationErrors({});
-                    setEditingRule(null);
-                    setEditingIndex(null);
-                  } catch (error) {
-                    const errorMessage =
-                      error instanceof Error
-                        ? error.message
-                        : 'Failed to add rule';
-                    setValidationErrors({ editingRule: errorMessage });
-                  }
-                }}
-              >
-                Add Rule
-              </Button>
-              <Button
-                type="button"
-                onClick={() => {
+                // Add new rule
+                try {
+                  rrstack.addRule(editingRule);
+                  setValidationErrors({});
                   setEditingRule(null);
                   setEditingIndex(null);
-                }}
-              >
-                Cancel
-              </Button>
-            </Button.Group>
-
-            {validationErrors.editingRule && (
-              <Message negative size="small" style={{ marginTop: '1em' }}>
-                <Message.Header>Rule Validation Error</Message.Header>
-                <p>{validationErrors.editingRule}</p>
-              </Message>
-            )}
+                } catch (error) {
+                  const errorMessage =
+                    error instanceof Error
+                      ? error.message
+                      : 'Failed to add rule';
+                  setValidationErrors({ editingRule: errorMessage });
+                }
+              }}
+              onCancel={() => {
+                setEditingRule(null);
+                setEditingIndex(null);
+              }}
+            />
           </Segment>
         </Segment>
       )}
@@ -832,19 +404,7 @@ export const HookFormRRStack = <T extends FieldValues>({
                 key={`title-${index}`}
                 active={isActive}
                 index={index}
-                onClick={() => {
-                  if (isActive) {
-                    // Close accordion and clear editing state
-                    setActiveIndex(null);
-                    setEditingRule(null);
-                    setEditingIndex(null);
-                  } else {
-                    // Open accordion and start editing
-                    setActiveIndex(index);
-                    setEditingRule({ ...rule });
-                    setEditingIndex(index);
-                  }
-                }}
+                onClick={() => handleAccordionClick(index, isActive)}
                 style={{ fontSize: '0.9em', padding: '0.8em 1em' }}
               >
                 <div
@@ -877,12 +437,7 @@ export const HookFormRRStack = <T extends FieldValues>({
                       <Button
                         type="button"
                         icon="edit"
-                        onClick={() => {
-                          // Open accordion and start editing
-                          setActiveIndex(index);
-                          setEditingRule({ ...rule });
-                          setEditingIndex(index);
-                        }}
+                        onClick={() => handleEditClick(index, rule)}
                         title="Edit rule"
                         color="blue"
                         size="mini"
@@ -892,7 +447,7 @@ export const HookFormRRStack = <T extends FieldValues>({
                       <Button
                         type="button"
                         icon="angle double up"
-                        onClick={() => index > 0 && rrstack.top(index)}
+                        onClick={() => handleRuleMove(index, 'top')}
                         disabled={index === 0}
                         title="Move to top"
                         size="mini"
@@ -900,7 +455,7 @@ export const HookFormRRStack = <T extends FieldValues>({
                       <Button
                         type="button"
                         icon="angle up"
-                        onClick={() => index > 0 && rrstack.up(index)}
+                        onClick={() => handleRuleMove(index, 'up')}
                         disabled={index === 0}
                         title="Move up"
                         size="mini"
@@ -908,9 +463,7 @@ export const HookFormRRStack = <T extends FieldValues>({
                       <Button
                         type="button"
                         icon="angle down"
-                        onClick={() =>
-                          index < rulesCount - 1 && rrstack.down(index)
-                        }
+                        onClick={() => handleRuleMove(index, 'down')}
                         disabled={index === rulesCount - 1}
                         title="Move down"
                         size="mini"
@@ -918,9 +471,7 @@ export const HookFormRRStack = <T extends FieldValues>({
                       <Button
                         type="button"
                         icon="angle double down"
-                        onClick={() =>
-                          index < rulesCount - 1 && rrstack.bottom(index)
-                        }
+                        onClick={() => handleRuleMove(index, 'bottom')}
                         disabled={index === rulesCount - 1}
                         title="Move to bottom"
                         size="mini"
@@ -929,7 +480,7 @@ export const HookFormRRStack = <T extends FieldValues>({
                     <Button
                       type="button"
                       icon="delete"
-                      onClick={() => rrstack.removeRule(index)}
+                      onClick={() => handleRuleDelete(index)}
                       title="Delete rule"
                       color="red"
                       size="mini"
@@ -954,496 +505,45 @@ export const HookFormRRStack = <T extends FieldValues>({
                     basic
                     style={{ fontSize: '0.9em', padding: '1em 0' }}
                   >
-                    <Form.Group widths="equal">
-                      <Form.Field>
-                        <label style={{ fontSize: '0.9em' }}>Label</label>
-                        <Input
-                          size="small"
-                          value={editingRule.label || ''}
-                          onChange={(e) => {
-                            const updates = { label: e.target.value };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                          placeholder="Rule label"
-                        />
-                      </Form.Field>
-                      <Form.Field>
-                        <label style={{ fontSize: '0.9em' }}>Effect</label>
-                        <Dropdown
-                          selection
-                          compact
-                          options={EFFECT_OPTIONS}
-                          value={editingRule.effect}
-                          onChange={(e, { value }) => {
-                            const updates = {
-                              effect: value as 'active' | 'blackout',
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                        />
-                      </Form.Field>
-                    </Form.Group>
+                    <RRStackRuleForm
+                      rule={editingRule}
+                      mode="edit"
+                      validationError={validationErrors.editingRule}
+                      onRuleChange={(updates) => {
+                        setEditingRule((prev) =>
+                          prev ? { ...prev, ...updates } : null,
+                        );
+                      }}
+                      onSave={() => {
+                        // Validate rule before attempting to save
+                        const ruleError = validateRule(editingRule);
+                        if (ruleError) {
+                          setValidationErrors({ editingRule: ruleError });
+                          return;
+                        }
 
-                    <Form.Group widths="equal">
-                      <Form.Field>
-                        <label style={{ fontSize: '0.9em' }}>Frequency</label>
-                        <Dropdown
-                          selection
-                          compact
-                          options={FREQUENCY_OPTIONS}
-                          value={editingRule.options.freq}
-                          onChange={(e, { value }) => {
-                            const updates = {
-                              options: {
-                                ...editingRule.options,
-                                freq: value as
-                                  | 'yearly'
-                                  | 'monthly'
-                                  | 'weekly'
-                                  | 'daily'
-                                  | 'hourly'
-                                  | 'minutely'
-                                  | 'secondly',
-                              },
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                        />
-                      </Form.Field>
-                      <Form.Field>
-                        <label style={{ fontSize: '0.9em' }}>Interval</label>
-                        <Input
-                          size="small"
-                          type="number"
-                          value={editingRule.options.interval || 1}
-                          onChange={(e) => {
-                            const updates = {
-                              options: {
-                                ...editingRule.options,
-                                interval: parseInt(e.target.value) || 1,
-                              },
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                          min={1}
-                        />
-                      </Form.Field>
-                    </Form.Group>
-
-                    <Header size="tiny">Duration</Header>
-                    <Form.Group style={{ alignItems: 'flex-end' }}>
-                      <Form.Field width={2}>
-                        <label style={{ fontSize: '0.8em' }}>Years</label>
-                        <Input
-                          size="mini"
-                          type="number"
-                          value={editingRule.duration.years || ''}
-                          onChange={(e) => {
-                            const updates = {
-                              duration: {
-                                ...editingRule.duration,
-                                years: parseInt(e.target.value) || undefined,
-                              },
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                          min={0}
-                          placeholder="0"
-                        />
-                      </Form.Field>
-                      <Form.Field width={2}>
-                        <label style={{ fontSize: '0.8em' }}>Months</label>
-                        <Input
-                          size="mini"
-                          type="number"
-                          value={editingRule.duration.months || ''}
-                          onChange={(e) => {
-                            const updates = {
-                              duration: {
-                                ...editingRule.duration,
-                                months: parseInt(e.target.value) || undefined,
-                              },
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                          min={0}
-                          placeholder="0"
-                        />
-                      </Form.Field>
-                      <Form.Field width={2}>
-                        <label style={{ fontSize: '0.8em' }}>Days</label>
-                        <Input
-                          size="mini"
-                          type="number"
-                          value={editingRule.duration.days || ''}
-                          onChange={(e) => {
-                            const updates = {
-                              duration: {
-                                ...editingRule.duration,
-                                days: parseInt(e.target.value) || undefined,
-                              },
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                          min={0}
-                          placeholder="0"
-                        />
-                      </Form.Field>
-                      <Form.Field width={2}>
-                        <label style={{ fontSize: '0.8em' }}>Hours</label>
-                        <Input
-                          size="mini"
-                          type="number"
-                          value={editingRule.duration.hours || ''}
-                          onChange={(e) => {
-                            const updates = {
-                              duration: {
-                                ...editingRule.duration,
-                                hours: parseInt(e.target.value) || undefined,
-                              },
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                          min={0}
-                          placeholder="0"
-                        />
-                      </Form.Field>
-                      <Form.Field width={2}>
-                        <label style={{ fontSize: '0.8em' }}>Min</label>
-                        <Input
-                          size="mini"
-                          type="number"
-                          value={editingRule.duration.minutes || ''}
-                          onChange={(e) => {
-                            const updates = {
-                              duration: {
-                                ...editingRule.duration,
-                                minutes: parseInt(e.target.value) || undefined,
-                              },
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                          min={0}
-                          placeholder="0"
-                        />
-                      </Form.Field>
-                      <Form.Field width={2}>
-                        <label style={{ fontSize: '0.8em' }}>Sec</label>
-                        <Input
-                          size="mini"
-                          type="number"
-                          value={editingRule.duration.seconds || ''}
-                          onChange={(e) => {
-                            const updates = {
-                              duration: {
-                                ...editingRule.duration,
-                                seconds: parseInt(e.target.value) || undefined,
-                              },
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                          min={0}
-                          placeholder="0"
-                        />
-                      </Form.Field>
-                    </Form.Group>
-
-                    <Header size="tiny">Time of Day</Header>
-                    <Form.Group style={{ alignItems: 'flex-end' }}>
-                      <Form.Field width={8}>
-                        <label style={{ fontSize: '0.8em' }}>
-                          Hours (0-23, comma-separated)
-                        </label>
-                        <Input
-                          size="small"
-                          value={
-                            editingRule.options.byhour
-                              ? Array.isArray(editingRule.options.byhour)
-                                ? editingRule.options.byhour.join(', ')
-                                : editingRule.options.byhour.toString()
-                              : ''
-                          }
-                          onChange={(e) => {
-                            const hours = e.target.value
-                              .split(',')
-                              .map((h) => parseInt(h.trim()))
-                              .filter((h) => !isNaN(h) && h >= 0 && h <= 23);
-                            const updates = {
-                              options: {
-                                ...editingRule.options,
-                                byhour: hours.length > 0 ? hours : undefined,
-                              },
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                          placeholder="e.g., 9, 13, 17"
-                        />
-                      </Form.Field>
-                      <Form.Field width={8}>
-                        <label style={{ fontSize: '0.8em' }}>
-                          Minutes (0-59, comma-separated)
-                        </label>
-                        <Input
-                          size="small"
-                          value={
-                            editingRule.options.byminute
-                              ? Array.isArray(editingRule.options.byminute)
-                                ? editingRule.options.byminute.join(', ')
-                                : editingRule.options.byminute.toString()
-                              : ''
-                          }
-                          onChange={(e) => {
-                            const minutes = e.target.value
-                              .split(',')
-                              .map((m) => parseInt(m.trim()))
-                              .filter((m) => !isNaN(m) && m >= 0 && m <= 59);
-                            const updates = {
-                              options: {
-                                ...editingRule.options,
-                                byminute:
-                                  minutes.length > 0 ? minutes : undefined,
-                              },
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                          placeholder="e.g., 0, 30"
-                        />
-                      </Form.Field>
-                    </Form.Group>
-
-                    <Form.Group widths="equal">
-                      <Form.Field>
-                        <label style={{ fontSize: '0.9em' }}>
-                          Weekdays (for weekly/monthly rules)
-                        </label>
-                        <Dropdown
-                          selection
-                          multiple
-                          search
-                          compact
-                          options={WEEKDAY_OPTIONS}
-                          value={
-                            Array.isArray(editingRule.options.byweekday)
-                              ? editingRule.options.byweekday.filter(
-                                  (day): day is number =>
-                                    typeof day === 'number',
-                                )
-                              : typeof editingRule.options.byweekday ===
-                                  'number'
-                                ? [editingRule.options.byweekday]
-                                : []
-                          }
-                          onChange={(e, { value }) => {
-                            const updates = {
-                              options: {
-                                ...editingRule.options,
-                                byweekday:
-                                  (value as number[]).length > 0
-                                    ? (value as number[])
-                                    : undefined,
-                              },
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                          placeholder="Select weekdays"
-                        />
-                      </Form.Field>
-                      <Form.Field>
-                        <label style={{ fontSize: '0.9em' }}>
-                          Position (1st, 2nd, etc.)
-                        </label>
-                        <Dropdown
-                          selection
-                          multiple
-                          compact
-                          options={POSITION_OPTIONS}
-                          value={editingRule.options.bysetpos || []}
-                          onChange={(e, { value }) => {
-                            const updates = {
-                              options: {
-                                ...editingRule.options,
-                                bysetpos:
-                                  (value as number[]).length > 0
-                                    ? (value as number[])
-                                    : undefined,
-                              },
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                          placeholder="Select positions"
-                        />
-                      </Form.Field>
-                    </Form.Group>
-
-                    <Form.Group widths="equal">
-                      <Form.Field>
-                        <label style={{ fontSize: '0.9em' }}>
-                          Months (for yearly/specific month rules)
-                        </label>
-                        <Dropdown
-                          selection
-                          multiple
-                          search
-                          compact
-                          options={MONTH_OPTIONS}
-                          value={editingRule.options.bymonth || []}
-                          onChange={(e, { value }) => {
-                            const updates = {
-                              options: {
-                                ...editingRule.options,
-                                bymonth:
-                                  (value as number[]).length > 0
-                                    ? (value as number[])
-                                    : undefined,
-                              },
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                          placeholder="Select months"
-                        />
-                      </Form.Field>
-                      <Form.Field>
-                        <label style={{ fontSize: '0.9em' }}>
-                          Days of Month (1-31)
-                        </label>
-                        <Input
-                          size="small"
-                          value={
-                            editingRule.options.bymonthday
-                              ? Array.isArray(editingRule.options.bymonthday)
-                                ? editingRule.options.bymonthday.join(', ')
-                                : editingRule.options.bymonthday.toString()
-                              : ''
-                          }
-                          onChange={(e) => {
-                            const days = e.target.value
-                              .split(',')
-                              .map((d) => parseInt(d.trim()))
-                              .filter((d) => !isNaN(d) && d >= 1 && d <= 31);
-                            const updates = {
-                              options: {
-                                ...editingRule.options,
-                                bymonthday: days.length > 0 ? days : undefined,
-                              },
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                          placeholder="e.g., 25 (for 25th) or 1, 15, 31"
-                        />
-                      </Form.Field>
-                    </Form.Group>
-
-                    <Form.Group>
-                      <Form.Field width={8}>
-                        <label style={{ fontSize: '0.9em' }}>
-                          Count (optional)
-                        </label>
-                        <Input
-                          size="small"
-                          type="number"
-                          value={editingRule.options.count || ''}
-                          onChange={(e) => {
-                            const updates = {
-                              options: {
-                                ...editingRule.options,
-                                count: parseInt(e.target.value) || undefined,
-                              },
-                            };
-                            setEditingRule((prev) =>
-                              prev ? { ...prev, ...updates } : null,
-                            );
-                          }}
-                          min={1}
-                          placeholder="Number of occurrences"
-                        />
-                      </Form.Field>
-                    </Form.Group>
-
-                    <Button.Group size="small" style={{ marginTop: '1em' }}>
-                      <Button
-                        type="button"
-                        primary
-                        onClick={() => {
-                          // Validate rule before attempting to save
-                          const ruleError = validateRule(editingRule);
-                          if (ruleError) {
-                            setValidationErrors({ editingRule: ruleError });
-                            return;
-                          }
-
-                          // Save the rule
-                          try {
-                            rrstack.removeRule(editingIndex);
-                            rrstack.addRule(editingRule, editingIndex);
-                            setValidationErrors({});
-                            setEditingRule(null);
-                            setEditingIndex(null);
-                            setActiveIndex(null);
-                          } catch (error) {
-                            const errorMessage =
-                              error instanceof Error
-                                ? error.message
-                                : 'Failed to save rule';
-                            setValidationErrors({ editingRule: errorMessage });
-                          }
-                        }}
-                      >
-                        Update Rule
-                      </Button>
-                      <Button
-                        type="button"
-                        onClick={() => {
+                        // Save the rule
+                        try {
+                          rrstack.removeRule(editingIndex);
+                          rrstack.addRule(editingRule, editingIndex);
+                          setValidationErrors({});
                           setEditingRule(null);
                           setEditingIndex(null);
                           setActiveIndex(null);
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                    </Button.Group>
-
-                    {validationErrors.editingRule && (
-                      <Message
-                        negative
-                        size="small"
-                        style={{ marginTop: '1em' }}
-                      >
-                        <Message.Header>Rule Validation Error</Message.Header>
-                        <p>{validationErrors.editingRule}</p>
-                      </Message>
-                    )}
+                        } catch (error) {
+                          const errorMessage =
+                            error instanceof Error
+                              ? error.message
+                              : 'Failed to save rule';
+                          setValidationErrors({ editingRule: errorMessage });
+                        }
+                      }}
+                      onCancel={() => {
+                        setEditingRule(null);
+                        setEditingIndex(null);
+                        setActiveIndex(null);
+                      }}
+                    />
                   </Segment>
                 )}
               </Accordion.Content>,
