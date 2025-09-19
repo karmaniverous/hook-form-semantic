@@ -333,7 +333,6 @@ export const HookFormRRStack = <T extends FieldValues>({
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: '0 0 1em 0',
         }}
       >
         <Header size="small">Rules ({rulesCount})</Header>
@@ -388,12 +387,14 @@ export const HookFormRRStack = <T extends FieldValues>({
         </Segment>
       )}
 
-      {rulesCount === 0 ? (
+      {rulesCount === 0 &&
+      activeIndex === null &&
+      !(editingRule && editingIndex === null) ? (
         <Message info size="small">
           <Message.Header>No rules defined</Message.Header>
           <p>Add your first rule to start building your schedule.</p>
         </Message>
-      ) : (
+      ) : rulesCount > 0 ? (
         <Accordion fluid styled>
           {rules.map((rule: RuleJson, index: number) => {
             const isActive = activeIndex === index;
@@ -550,7 +551,7 @@ export const HookFormRRStack = <T extends FieldValues>({
             ];
           })}
         </Accordion>
-      )}
+      ) : null}
     </div>
   );
 };
