@@ -71,7 +71,6 @@ export default function App() {
       terms: false,
       rrstack: {
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        timeUnit: 'ms',
         rules: [],
       },
     },
@@ -266,7 +265,6 @@ export default function App() {
           hookControl={control}
           label="Schedule Rules"
           timezone="America/New_York"
-          timeUnit="ms"
         />
 
         <Divider />
