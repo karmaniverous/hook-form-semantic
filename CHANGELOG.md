@@ -2,8 +2,15 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.5-5](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.5-4...0.1.5-5)
+
+- Starts/ends fields for HookFormRRStack [`f80bcec`](https://github.com/karmaniverous/hook-form-semantic/commit/f80bcecc1d438fac2505406f31d9a4859273f55f)
+
 #### [0.1.5-4](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.5-3...0.1.5-4)
 
+> 19 September 2025
+
+- chore: release v0.1.5-4 [`b386d89`](https://github.com/karmaniverous/hook-form-semantic/commit/b386d894283031ec2e9a9193b0de419ad7748898)
 - Remove unnecessary timeUnit specification [`e2ac17e`](https://github.com/karmaniverous/hook-form-semantic/commit/e2ac17e2a4362fbd1022f97de7a9817ce163c647)
 - Improve RRStack accordion functionality [`b043e20`](https://github.com/karmaniverous/hook-form-semantic/commit/b043e2050d5f13833edf9f6be301255c8756f948)
 - Bump rrstack version to v0.8.1 [`75d21b7`](https://github.com/karmaniverous/hook-form-semantic/commit/75d21b7d983c3e4d15ae436e92eb0a44507c1981)
