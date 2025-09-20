@@ -2,9 +2,19 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.6](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.5...0.1.6)
+
+- Compact RRStackRuleForm layout; standardize small sizing [`147fd10`](https://github.com/karmaniverous/hook-form-semantic/commit/147fd10cf85fbd3096ce85f84856a4b1143f470a)
+- Removed incorrect requirement for start/end dates [`b7e9255`](https://github.com/karmaniverous/hook-form-semantic/commit/b7e92558dc523682e33544f85bc8516f071041c5)
+- Separate buttons instead of button bar [`e771554`](https://github.com/karmaniverous/hook-form-semantic/commit/e771554a40165aff800da803df453217f37c6857)
+- Don't show "No rules defined" message if we're adding a rule [`b99f422`](https://github.com/karmaniverous/hook-form-semantic/commit/b99f42277cdc1565b0c4d23a13c3eb2f5e347ef0)
+
 #### [0.1.5](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.5-5...0.1.5)
 
+> 19 September 2025
+
 - Improve starts/ends date/time picker fields [`54193b5`](https://github.com/karmaniverous/hook-form-semantic/commit/54193b5a26e44f5872018ea43b841111f6fe9528)
+- chore: release v0.1.5 [`6e396c4`](https://github.com/karmaniverous/hook-form-semantic/commit/6e396c48758feca4c94517000bb4ef3b8592f3e9)
 - Update tests to reflect simpler time picker logic [`ffb66be`](https://github.com/karmaniverous/hook-form-semantic/commit/ffb66bed2862aa745d3a94d9d9f93d0f850663cb)
 
 #### [0.1.5-5](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.5-4...0.1.5-5)
