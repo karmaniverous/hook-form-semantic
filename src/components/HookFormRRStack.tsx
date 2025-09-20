@@ -11,7 +11,6 @@ import {
 import {
   Accordion,
   Button,
-  Confirm,
   Dropdown,
   Form,
   type FormFieldProps,
@@ -74,9 +73,6 @@ export const HookFormRRStack = <T extends FieldValues>({
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [editingRule, setEditingRule] = useState<RuleJson | null>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [deleteConfirmIndex, setDeleteConfirmIndex] = useState<number | null>(
-    null,
-  );
   const [validationErrors, setValidationErrors] = useState<{
     timezone?: string;
     rules?: string;
@@ -286,21 +282,10 @@ export const HookFormRRStack = <T extends FieldValues>({
 
   const handleRuleDelete = useCallback(
     (index: number) => {
-      setDeleteConfirmIndex(index);
+      rrstack.removeRule(index);
     },
-    [setDeleteConfirmIndex],
+    [rrstack],
   );
-
-  const handleConfirmDelete = useCallback(() => {
-    if (deleteConfirmIndex !== null) {
-      rrstack.removeRule(deleteConfirmIndex);
-      setDeleteConfirmIndex(null);
-    }
-  }, [rrstack, deleteConfirmIndex]);
-
-  const handleCancelDelete = useCallback(() => {
-    setDeleteConfirmIndex(null);
-  }, []);
 
   return (
     <Form.Field>
@@ -569,25 +554,6 @@ export const HookFormRRStack = <T extends FieldValues>({
           })}
         </Accordion>
       ) : null}
-
-      {/* Delete confirmation dialog */}
-      <Confirm
-        open={deleteConfirmIndex !== null}
-        onCancel={handleCancelDelete}
-        onConfirm={handleConfirmDelete}
-        header="Delete Rule"
-        content={
-          deleteConfirmIndex !== null
-            ? `Are you sure you want to delete "${
-                rules[deleteConfirmIndex]?.label ||
-                `Rule ${deleteConfirmIndex + 1}`
-              }"? This action cannot be undone.`
-            : ''
-        }
-        cancelButton="Cancel"
-        confirmButton="Delete"
-        size="small"
-      />
     </Form.Field>
   );
 };
