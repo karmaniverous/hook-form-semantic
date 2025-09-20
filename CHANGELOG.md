@@ -2,9 +2,16 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.7](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.6...0.1.7)
+
+- Confirmation dialog safeguard for delete button in HookFormRRStack [`13511a1`](https://github.com/karmaniverous/hook-form-semantic/commit/13511a1e89b51e598610e5a8892d746d7ebcf6cc)
+
 #### [0.1.6](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.5...0.1.6)
 
+> 20 September 2025
+
 - Compact RRStackRuleForm layout; standardize small sizing [`147fd10`](https://github.com/karmaniverous/hook-form-semantic/commit/147fd10cf85fbd3096ce85f84856a4b1143f470a)
+- chore: release v0.1.6 [`7e374ab`](https://github.com/karmaniverous/hook-form-semantic/commit/7e374abfc0c5b5598173412ef664b650982f3623)
 - Removed incorrect requirement for start/end dates [`b7e9255`](https://github.com/karmaniverous/hook-form-semantic/commit/b7e92558dc523682e33544f85bc8516f071041c5)
 - Separate buttons instead of button bar [`e771554`](https://github.com/karmaniverous/hook-form-semantic/commit/e771554a40165aff800da803df453217f37c6857)
 - Don't show "No rules defined" message if we're adding a rule [`b99f422`](https://github.com/karmaniverous/hook-form-semantic/commit/b99f42277cdc1565b0c4d23a13c3eb2f5e347ef0)
