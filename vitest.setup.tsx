@@ -414,6 +414,67 @@ vi.mock('semantic-ui-react', () => {
       children,
     );
 
+  interface ConfirmProps {
+    open?: boolean;
+    onCancel?: () => void;
+    onConfirm?: () => void;
+    header?: string;
+    content?: string;
+    cancelButton?: string;
+    confirmButton?: string;
+    size?: string;
+  }
+
+  const Confirm: React.FC<ConfirmProps> = ({
+    open,
+    onCancel,
+    onConfirm,
+    header,
+    content,
+    cancelButton,
+    confirmButton,
+    size,
+  }) =>
+    open
+      ? React.createElement(
+          'div',
+          {
+            'data-testid': 'confirm-dialog',
+            'data-size': size,
+          },
+          React.createElement(
+            'div',
+            { 'data-testid': 'confirm-header' },
+            header,
+          ),
+          React.createElement(
+            'div',
+            { 'data-testid': 'confirm-content' },
+            content,
+          ),
+          React.createElement(
+            'div',
+            { 'data-testid': 'confirm-actions' },
+            React.createElement(
+              'button',
+              {
+                'data-testid': 'confirm-cancel',
+                onClick: onCancel,
+              },
+              cancelButton || 'Cancel',
+            ),
+            React.createElement(
+              'button',
+              {
+                'data-testid': 'confirm-confirm',
+                onClick: onConfirm,
+              },
+              confirmButton || 'OK',
+            ),
+          ),
+        )
+      : null;
+
   return {
     Form,
     Label,
@@ -429,6 +490,7 @@ vi.mock('semantic-ui-react', () => {
     Segment,
     Accordion,
     Container,
+    Confirm,
   };
 });
 
