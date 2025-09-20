@@ -2,9 +2,16 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.8](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.7...0.1.8)
+
+- Revert "Confirmation dialog safeguard for delete button in HookFormRRStack" [`6f4b993`](https://github.com/karmaniverous/hook-form-semantic/commit/6f4b993975eeaa3dcb5f41fde075e41b1f951b9a)
+
 #### [0.1.7](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.6...0.1.7)
 
+> 20 September 2025
+
 - Confirmation dialog safeguard for delete button in HookFormRRStack [`13511a1`](https://github.com/karmaniverous/hook-form-semantic/commit/13511a1e89b51e598610e5a8892d746d7ebcf6cc)
+- chore: release v0.1.7 [`c8443ae`](https://github.com/karmaniverous/hook-form-semantic/commit/c8443ae37faffb0a7c9bb551e0910f96f83f8363)
 
 #### [0.1.6](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.5...0.1.6)
 
