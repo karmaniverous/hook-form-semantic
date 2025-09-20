@@ -293,7 +293,16 @@ vi.mock('semantic-ui-react', () => {
       children,
     );
 
-  Object.assign(Message, { Header: MessageHeader });
+  const MessageContent: React.FC<
+    React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
+  > = ({ children, ...props }) =>
+    React.createElement(
+      'div',
+      { ...props, 'data-testid': 'message-content' },
+      children,
+    );
+
+  Object.assign(Message, { Header: MessageHeader, Content: MessageContent });
 
   const Segment: React.FC<
     React.PropsWithChildren<
@@ -396,6 +405,15 @@ vi.mock('semantic-ui-react', () => {
     Content: AccordionContent,
   });
 
+  const Container: React.FC<
+    React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
+  > = ({ children, ...props }) =>
+    React.createElement(
+      'div',
+      { ...props, 'data-testid': 'container' },
+      children,
+    );
+
   return {
     Form,
     Label,
@@ -410,6 +428,7 @@ vi.mock('semantic-ui-react', () => {
     Message,
     Segment,
     Accordion,
+    Container,
   };
 });
 

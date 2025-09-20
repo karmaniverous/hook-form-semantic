@@ -5,6 +5,7 @@ import DateTimePicker from 'react-datetime-picker';
 import {
   Button,
   Checkbox,
+  Container,
   Dropdown,
   Form,
   Header,
@@ -30,7 +31,6 @@ const FREQUENCY_OPTIONS = [
   { key: 'minutely', text: 'Minutely', value: 'minutely' },
   { key: 'secondly', text: 'Secondly', value: 'secondly' },
 ];
-
 const EFFECT_OPTIONS = [
   { key: 'active', text: 'Active', value: 'active' },
   { key: 'blackout', text: 'Blackout', value: 'blackout' },
@@ -235,10 +235,10 @@ export const RRStackRuleForm = ({
   };
 
   return (
-    <>
+    <Form size="small">
       <Form.Group widths="equal">
         <Form.Field>
-          <label style={{ fontSize: '0.9em' }}>Label</label>
+          <label>Label</label>
           <Input
             size="small"
             value={rule.label || ''}
@@ -247,7 +247,7 @@ export const RRStackRuleForm = ({
           />
         </Form.Field>
         <Form.Field>
-          <label style={{ fontSize: '0.9em' }}>Effect</label>
+          <label>Effect</label>
           <Dropdown
             selection
             compact
@@ -258,11 +258,8 @@ export const RRStackRuleForm = ({
             }
           />
         </Form.Field>
-      </Form.Group>
-
-      <Form.Group widths="equal">
         <Form.Field>
-          <label style={{ fontSize: '0.9em' }}>Frequency</label>
+          <label>Frequency</label>
           <Dropdown
             selection
             compact
@@ -283,7 +280,7 @@ export const RRStackRuleForm = ({
           />
         </Form.Field>
         <Form.Field>
-          <label style={{ fontSize: '0.9em' }}>Interval</label>
+          <label>Interval</label>
           <Input
             size="small"
             type="number"
@@ -299,11 +296,11 @@ export const RRStackRuleForm = ({
       </Form.Group>
 
       <Header size="tiny">Duration</Header>
-      <Form.Group style={{ alignItems: 'flex-end' }}>
+      <Form.Group>
         <Form.Field width={2}>
-          <label style={{ fontSize: '0.8em' }}>Years</label>
+          <label>Years</label>
           <Input
-            size="mini"
+            size="small"
             type="number"
             value={rule.duration.years || ''}
             onChange={(e) =>
@@ -316,9 +313,9 @@ export const RRStackRuleForm = ({
           />
         </Form.Field>
         <Form.Field width={2}>
-          <label style={{ fontSize: '0.8em' }}>Months</label>
+          <label>Months</label>
           <Input
-            size="mini"
+            size="small"
             type="number"
             value={rule.duration.months || ''}
             onChange={(e) =>
@@ -331,9 +328,9 @@ export const RRStackRuleForm = ({
           />
         </Form.Field>
         <Form.Field width={2}>
-          <label style={{ fontSize: '0.8em' }}>Days</label>
+          <label>Days</label>
           <Input
-            size="mini"
+            size="small"
             type="number"
             value={rule.duration.days || ''}
             onChange={(e) =>
@@ -346,9 +343,9 @@ export const RRStackRuleForm = ({
           />
         </Form.Field>
         <Form.Field width={2}>
-          <label style={{ fontSize: '0.8em' }}>Hours</label>
+          <label>Hours</label>
           <Input
-            size="mini"
+            size="small"
             type="number"
             value={rule.duration.hours || ''}
             onChange={(e) =>
@@ -361,9 +358,9 @@ export const RRStackRuleForm = ({
           />
         </Form.Field>
         <Form.Field width={2}>
-          <label style={{ fontSize: '0.8em' }}>Min</label>
+          <label>Min</label>
           <Input
-            size="mini"
+            size="small"
             type="number"
             value={rule.duration.minutes || ''}
             onChange={(e) =>
@@ -376,9 +373,9 @@ export const RRStackRuleForm = ({
           />
         </Form.Field>
         <Form.Field width={2}>
-          <label style={{ fontSize: '0.8em' }}>Sec</label>
+          <label>Sec</label>
           <Input
-            size="mini"
+            size="small"
             type="number"
             value={rule.duration.seconds || ''}
             onChange={(e) =>
@@ -393,11 +390,9 @@ export const RRStackRuleForm = ({
       </Form.Group>
 
       <Header size="tiny">Time of Day</Header>
-      <Form.Group style={{ alignItems: 'flex-end' }}>
-        <Form.Field width={8}>
-          <label style={{ fontSize: '0.8em' }}>
-            Hours (0-23, comma-separated)
-          </label>
+      <Form.Group widths="equal">
+        <Form.Field>
+          <label>Hours</label>
           <Input
             size="small"
             value={
@@ -419,10 +414,8 @@ export const RRStackRuleForm = ({
             placeholder="e.g., 9, 13, 17"
           />
         </Form.Field>
-        <Form.Field width={8}>
-          <label style={{ fontSize: '0.8em' }}>
-            Minutes (0-59, comma-separated)
-          </label>
+        <Form.Field>
+          <label>Minutes</label>
           <Input
             size="small"
             value={
@@ -444,13 +437,8 @@ export const RRStackRuleForm = ({
             placeholder="e.g., 0, 30"
           />
         </Form.Field>
-      </Form.Group>
-
-      <Form.Group widths="equal">
         <Form.Field>
-          <label style={{ fontSize: '0.9em' }}>
-            Weekdays (for weekly/monthly rules)
-          </label>
+          <label>Weekdays</label>
           <Dropdown
             selection
             multiple
@@ -474,11 +462,10 @@ export const RRStackRuleForm = ({
                     : undefined,
               });
             }}
-            placeholder="Select weekdays"
           />
         </Form.Field>
         <Form.Field>
-          <label style={{ fontSize: '0.9em' }}>Position (1st, 2nd, etc.)</label>
+          <label>Position</label>
           <Dropdown
             selection
             multiple
@@ -493,16 +480,13 @@ export const RRStackRuleForm = ({
                     : undefined,
               });
             }}
-            placeholder="Select positions"
           />
         </Form.Field>
       </Form.Group>
 
       <Form.Group widths="equal">
         <Form.Field>
-          <label style={{ fontSize: '0.9em' }}>
-            Months (for yearly/specific month rules)
-          </label>
+          <label>Months</label>
           <Dropdown
             selection
             multiple
@@ -522,7 +506,7 @@ export const RRStackRuleForm = ({
           />
         </Form.Field>
         <Form.Field>
-          <label style={{ fontSize: '0.9em' }}>Days of Month (1-31)</label>
+          <label>Days of Month (1-31)</label>
           <Input
             size="small"
             value={
@@ -544,11 +528,8 @@ export const RRStackRuleForm = ({
             placeholder="e.g., 25 (for 25th) or 1, 15, 31"
           />
         </Form.Field>
-      </Form.Group>
-
-      <Form.Group>
-        <Form.Field width={8}>
-          <label style={{ fontSize: '0.9em' }}>Count</label>
+        <Form.Field>
+          <label>Count</label>
           <Input
             size="small"
             type="number"
@@ -567,7 +548,7 @@ export const RRStackRuleForm = ({
       <Form.Group widths="equal">
         <Form.Field className="hook-form-date-picker">
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <label style={{ fontSize: '0.9em' }}>Start Date</label>
+            <label>Start Date</label>
             <Checkbox
               checked={includeStartTime}
               label="Include Time"
@@ -615,7 +596,7 @@ export const RRStackRuleForm = ({
         </Form.Field>
         <Form.Field className="hook-form-date-picker">
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <label style={{ fontSize: '0.9em' }}>End Date</label>
+            <label>End Date</label>
             <Checkbox
               checked={includeEndTime}
               label="Include Time"
@@ -675,13 +656,17 @@ export const RRStackRuleForm = ({
           return (
             <Message negative size="small">
               <Message.Header>Validation Error</Message.Header>
-              {dateValidationError && <p>{dateValidationError}</p>}
-              {durationValidationError && <p>{durationValidationError}</p>}
+              {dateValidationError && (
+                <Message.Content>{dateValidationError}</Message.Content>
+              )}
+              {durationValidationError && (
+                <Message.Content>{durationValidationError}</Message.Content>
+              )}
             </Message>
           );
         })()}
 
-      <div style={{ marginTop: '1em' }}>
+      <Container style={{ marginTop: '1em' }}>
         <Button type="button" primary size="small" onClick={handleSave}>
           {mode === 'add' ? 'Add Rule' : 'Update Rule'}
         </Button>
@@ -693,14 +678,14 @@ export const RRStackRuleForm = ({
         >
           Cancel
         </Button>
-      </div>
+      </Container>
 
       {validationError && (
         <Message negative size="small" style={{ marginTop: '1em' }}>
           <Message.Header>Rule Validation Error</Message.Header>
-          <p>{validationError}</p>
+          <Message.Content>{validationError}</Message.Content>
         </Message>
       )}
-    </>
+    </Form>
   );
 };

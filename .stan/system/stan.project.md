@@ -5,7 +5,6 @@ implementation and maintenance. System-wide rules remain in
 `.stan/system/stan.system.md`.
 
 ## HookForm component patterns (Semantic UI React + RHF)
-
 - Always wrap fields with `Form.Field` and propagate incoming
   `FormFieldProps`. Set `error={error?.message}` to surface RHF errors.
 - Display RHF validation messages with a `Label` (basic, red, pointing).
@@ -14,11 +13,24 @@ implementation and maintenance. System-wide rules remain in
 - Use a stable CSS class on the wrapper: `hook-form-<component>` to allow
   theme overrides (see playground CSS).
 
+## RRStack Rule Form (layout + sizing)
+
+- Use a compact layout with Semantic UI “small” sizing for inputs and
+  compact dropdowns:
+  - Top row: Label, Effect, Frequency, Interval (single Form.Group).
+  - Time-related row: Hours, Minutes, Weekdays, Position (single group).
+  - Calendar-related row: Months, Days of Month, Count (single group).
+- Keep placeholders concise and stable (tests depend on “e.g., 9, 13, 17”
+  and “e.g., 0, 30”).
+- Prefer `Input size="small"` consistently in this form. For Dropdowns,
+  use `selection` + `compact` and multiple/search where appropriate.
+- Preserve “Start Date” and “End Date” labels and Include Time checkboxes.
+- Do not regress test-visible text or placeholders when refining layout.
+
 ## RHF wiring
 
 - Use `useController` with generics `T extends FieldValues` and
-  `UseControllerProps` for type safety.
-- Bridge change handlers by passing a minimal, event-like payload to RHF:
+  `UseControllerProps` for type safety.- Bridge change handlers by passing a minimal, event-like payload to RHF:
   `hookFieldOnChange({ target: { value } })`. For toggles, pass booleans;
   for numeric controls, pass numbers; for dates, `Date | null` (or ranges).
 - When spreading RHF `hookFieldProps` onto function components (e.g.,

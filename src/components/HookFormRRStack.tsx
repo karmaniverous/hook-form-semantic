@@ -288,14 +288,14 @@ export const HookFormRRStack = <T extends FieldValues>({
   );
 
   return (
-    <div className="field">
+    <Form.Field>
       {fieldProps.label && <label>{fieldProps.label}</label>}
 
       {/* Display React Hook Form errors */}
       {error?.message && (
         <Message negative size="small" style={{ marginBottom: 16 }}>
           <Message.Header>Form Validation Error</Message.Header>
-          <p>{error.message}</p>
+          <Message.Content>{error.message}</Message.Content>
         </Message>
       )}
 
@@ -303,7 +303,7 @@ export const HookFormRRStack = <T extends FieldValues>({
       {validationErrors.rules && (
         <Message negative size="small" style={{ marginBottom: 16 }}>
           <Message.Header>RRStack Validation Error</Message.Header>
-          <p>{validationErrors.rules}</p>
+          <Message.Content>{validationErrors.rules}</Message.Content>
         </Message>
       )}
 
@@ -344,9 +344,9 @@ export const HookFormRRStack = <T extends FieldValues>({
 
       {/* Show form for adding new rule */}
       {editingRule && editingIndex === null && (
-        <Segment style={{ fontSize: '0.9em', marginBottom: '1em' }}>
+        <Segment style={{ fontSize: '0.9em' }}>
           <Header size="tiny">Add New Rule</Header>
-          <Segment basic>
+          <Segment basic style={{ marginTop: '-10px' }}>
             <RRStackRuleForm
               rule={editingRule}
               mode="add"
@@ -392,7 +392,9 @@ export const HookFormRRStack = <T extends FieldValues>({
       !(editingRule && editingIndex === null) ? (
         <Message info size="small">
           <Message.Header>No rules defined</Message.Header>
-          <p>Add your first rule to start building your schedule.</p>
+          <Message.Content>
+            Add your first rule to start building your schedule.
+          </Message.Content>
         </Message>
       ) : rulesCount > 0 ? (
         <Accordion fluid styled>
@@ -552,6 +554,6 @@ export const HookFormRRStack = <T extends FieldValues>({
           })}
         </Accordion>
       ) : null}
-    </div>
+    </Form.Field>
   );
 };
