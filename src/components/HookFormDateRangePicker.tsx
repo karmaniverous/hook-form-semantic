@@ -39,11 +39,10 @@ export const extractTimestamps = (dateRange: DateRange) =>
     ? dateRange.map((d) => (d ? d.getTime() : undefined))
     : [undefined, undefined];
 
-type Presets = Record<
+export type Presets = Record<
   string,
   {
-    text: string;
-    value: DateRange | (() => DateRange);
+    text: string;    value: DateRange | (() => DateRange);
     epoch: 'past' | 'present' | 'future';
   }
 >;

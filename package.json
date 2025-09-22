@@ -100,11 +100,11 @@
     "@karmaniverous/rrstack": "^0.9.0",
     "@types/react": ">=18.0.0",
     "@types/react-dom": ">=18.0.0",
-    "@wojtekmaj/react-daterange-picker": "^6.0.0",    "@wojtekmaj/react-datetimerange-picker": "^6.0.0",
+    "@wojtekmaj/react-daterange-picker": "^6.0.0",
+    "@wojtekmaj/react-datetimerange-picker": "^6.0.0",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
-    "google-libphonenumber": "^3.2.40",
-    "html-to-draftjs": "^1.5.0",
+    "google-libphonenumber": "^3.2.40",    "html-to-draftjs": "^1.5.0",
     "react": ">=18",
     "react-calendar": "^5.0.0",
     "react-clock": "^5.0.0",
@@ -126,12 +126,62 @@
     },
     "@types/react-dom": {
       "optional": true
+    },
+    "@karmaniverous/rrstack": {
+      "optional": true
+    },
+    "@wojtekmaj/react-daterange-picker": {
+      "optional": true
+    },
+    "@wojtekmaj/react-datetimerange-picker": {
+      "optional": true
+    },
+    "draft-js": {
+      "optional": true
+    },
+    "draftjs-to-html": {
+      "optional": true
+    },
+    "google-libphonenumber": {
+      "optional": true
+    },
+    "html-to-draftjs": {
+      "optional": true
+    },
+    "react-calendar": {
+      "optional": true
+    },
+    "react-clock": {
+      "optional": true
+    },
+    "react-date-picker": {
+      "optional": true
+    },
+    "react-datetime-picker": {
+      "optional": true
+    },
+    "react-draft-wysiwyg": {
+      "optional": true
+    },
+    "react-international-phone": {
+      "optional": true
+    },
+    "react-number-format": {
+      "optional": true
+    },
+    "react-responsive": {
+      "optional": true
+    },
+    "semantic-ui-css": {
+      "optional": true
+    },
+    "vanilla-jsoneditor": {
+      "optional": true
     }
   },
   "publishConfig": {
     "access": "public"
-  },
-  "release-it": {
+  },  "release-it": {
     "git": {
       "changelog": "npx auto-changelog --stdout --template https://raw.githubusercontent.com/release-it/release-it/main/templates/changelog-compact.hbs",
       "commitMessage": "chore: release v${version}",
