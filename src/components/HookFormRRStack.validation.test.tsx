@@ -61,52 +61,49 @@ describe('HookFormRRStack Validation', () => {
 
     // Fill in a rule label
     const labelInput = screen.getByPlaceholderText('Rule label');
-    fireEvent.change(labelInput, { target: { value: 'Test Rule' } });
+    fireEvent.change(labelInput, { target: { value: 'Test Span Rule' } });
 
-    // Try to save without any duration - should show validation error
+    // Default rule is now a span rule (freq: undefined) so it should be valid without duration
     const saveButton = screen.getAllByText('Add Rule')[1]; // Get the save button in the form
     fireEvent.click(saveButton);
 
-    // Should show duration validation error (dates are now optional)
-    await waitFor(() => {
-      expect(
-        screen.getByText(
-          'Duration must have at least one positive value (years, months, weeks, days, hours, minutes, or seconds)',
-        ),
-      ).toBeInTheDocument();
-    });
-
-    // Now add a duration to make it valid
-    const hoursInputs = screen.getAllByDisplayValue('');
-    const hoursInput = hoursInputs[3]; // The Hours input is the 4th empty input (after Years, Months, Days)
-    fireEvent.change(hoursInput, { target: { value: '1' } });
-
-    // Try to save again - should succeed now (dates are optional)
-    fireEvent.click(saveButton);
-
-    // The form should close and the rule should be added
+    // The form should close and the rule should be added (span rules don't need duration)
     await waitFor(() => {
       expect(screen.queryByText('Add New Rule')).not.toBeInTheDocument();
     });
+
+    // Verify that the rule was added to the list
+    await waitFor(() => {
+      expect(screen.getByText('Rules (1)')).toBeInTheDocument();
+    });
   });
 
-  it('shows validation errors for invalid rules', async () => {
+  it('allows saving span rules without validation errors', async () => {
     render(<TestForm />);
 
     // Click "Add Rule" button
     const addRuleButton = screen.getByText('Add Rule');
     fireEvent.click(addRuleButton);
 
-    // Create an invalid rule by setting invalid hour values
-    const hoursInput = screen.getByPlaceholderText('e.g., 9, 13, 17');
-    fireEvent.change(hoursInput, { target: { value: '25, 30' } }); // Invalid hours
+    // Should show the rule editor
+    expect(screen.getByText('Add New Rule')).toBeInTheDocument();
 
+    // Fill in a label
+    const labelInput = screen.getByPlaceholderText('Rule label');
+    fireEvent.change(labelInput, { target: { value: 'Test Rule' } });
+
+    // Try to save a span rule - this should work since span rules are valid without duration
     const saveButton = screen.getAllByText('Add Rule')[1]; // Get the save button in the form
     fireEvent.click(saveButton);
 
-    // Should show validation error - the form should stay open and show error
+    // The rule should be saved successfully (no validation errors for span rules)
     await waitFor(() => {
-      expect(screen.getByText('Add New Rule')).toBeInTheDocument(); // Form should still be open
+      expect(screen.queryByText('Add New Rule')).not.toBeInTheDocument();
+    });
+
+    // Verify that the rule was added to the list
+    await waitFor(() => {
+      expect(screen.getByText('Rules (1)')).toBeInTheDocument();
     });
   });
 

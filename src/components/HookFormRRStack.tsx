@@ -48,10 +48,8 @@ export interface HookFormRRStackProps<T extends FieldValues>
 
 const createDefaultRule = (): RuleJson => ({
   effect: 'active',
-  duration: {},
-  options: {
-    freq: 'daily',
-  },
+  duration: undefined,
+  options: {},
   label: '',
 });
 

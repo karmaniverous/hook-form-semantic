@@ -12,3 +12,6 @@ node_modules/
 .stan/dist/
 .stan/patch/
 .DS_Store
+CLAUDE.md
+docs/rrstack/
+
