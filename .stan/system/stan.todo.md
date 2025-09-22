@@ -1,11 +1,10 @@
 # Development Plan (STAN TODO)
 
-When updated: 2025-09-22T00:00:00Z
+When updated: 2025-09-22T12:00:00Z
 
 ## Next up
 
-- Decompose HookFormRRStack.tsx (>300 LOC) into cohesive submodules: - components/rrstack/RuleCard.tsx (render + actions)
-  - components/rrstack/RuleEditor.tsx (edit/add form)
+- Decompose HookFormRRStack.tsx (>300 LOC) into cohesive submodules: - components/rrstack/RuleCard.tsx (render + actions)  - components/rrstack/RuleEditor.tsx (edit/add form)
   - components/rrstack/options.ts (frequency/effect/month/position lists) Add co-located tests for each unit.- Expand RRStack negative-path tests: invalid timezone selection, invalid by\* array entries, move operations edge cases (top/bottom at bounds).- Silence test-only warnings by updating semantic-ui-react doubles to forwardRef and filter DOM-unsafe props (low priority).
 - Consider addressing the TypeDoc “Presets … not included” warning by adjusting visibility or explicit exports (low priority).
 - Expand negative-path tests (validation and error label rendering) for other HookForm components (e.g., min/max for Numeric, invalid phone).
@@ -14,10 +13,14 @@ When updated: 2025-09-22T00:00:00Z
 
 ## Completed (recent)
 
+- Docs link cleanup
+  - README: link React Hook Form, Semantic UI React, Vite, Vitest, Testing Library, jest‑dom.
+  - Component guides: add SUIR Form/Menu links; link RRStack docs page.
+  - Verified no naked links remain in prose across docs (badges excluded by policy; code blocks left intact).
+
 - Components documentation
   - Added external docs under assets/content with one guide per exported component:
-    HookFormField, HookFormCheckbox, HookFormDatePicker, HookFormDateRangePicker,
-    HookFormJsonEditor, HookFormMenu, HookFormMenuDisplayMode, HookFormNumeric,
+    HookFormField, HookFormCheckbox, HookFormDatePicker, HookFormDateRangePicker,    HookFormJsonEditor, HookFormMenu, HookFormMenuDisplayMode, HookFormNumeric,
     HookFormPhone, HookFormRRStack, HookFormSort, HookFormWysiwygEditor.
   - Created a Components index (assets/content/components.md) with front matter
     children for sidebar nesting and a bullet list of guides.

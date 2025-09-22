@@ -53,4 +53,4 @@ Notes
 
 - Timezone is validated; provide a sensible default (e.g., browser timezone).
 - Span rules (no recurrence) and recurring rules are supported by the built-in editor UI.
-- See the RRStack docs for advanced rule semantics.
+- See the [RRStack docs](https://github.com/karmaniverous/rrstack) for advanced rule semantics.

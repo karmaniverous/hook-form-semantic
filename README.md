@@ -2,18 +2,16 @@
 
 [![npm version](https://img.shields.io/npm/v/@karmaniverous/hook-form-semantic.svg)](https://www.npmjs.com/package/@karmaniverous/hook-form-semantic) ![Node Current](https://img.shields.io/node/v/@karmaniverous/hook-form-semantic) <!-- TYPEDOC_EXCLUDE --> [![docs](https://img.shields.io/badge/docs-website-blue)](https://docs.karmanivero.us/hook-form-semantic) [![changelog](https://img.shields.io/badge/changelog-latest-blue.svg)](./CHANGELOG.md)<!-- /TYPEDOC_EXCLUDE --> [![license](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](./LICENSE)
 
-Production‑ready React Hook Form (RHF) field components built on Semantic UI React. Quickly wire up common inputs — phone, date/time, date ranges, numeric, JSON editor, WYSIWYG, sort, menus — with consistent error handling and semantics that match RHF and Semantic UI.
+Production‑ready [React Hook Form](https://react-hook-form.com) (RHF) field components built on [Semantic UI React](https://react.semantic-ui.com). Quickly wire up common inputs — phone, date/time, date ranges, numeric, JSON editor, WYSIWYG, sort, menus — with consistent error handling and semantics that match RHF and Semantic UI.
 
 Highlights
-
 - React 18 + TypeScript, ESM‑only build
 - First‑class RHF integration (Controller‑based wiring)
 - Semantic UI React props passthrough for familiar DX
 - Batteries included: date/time, ranges, numeric, phone, JSON editor, WYSIWYG, sort/menu utilities
-- Vite playground for live testing; Vitest + Testing Library for unit tests
+- [Vite](https://vitejs.dev) playground for live testing; [Vitest](https://vitest.dev) + [Testing Library](https://testing-library.com/docs/react-testing-library/intro/) for unit tests
 
 Contents
-
 - [Installation](#installation)
 - [CSS](#css-import-what-you-use) (what to import)
 - [Quick start](#quick-start)
@@ -286,11 +284,10 @@ The playground imports components directly from `src/` (no publish needed). See 
 
 ## Tests
 
-Vitest + Testing Library + jest‑dom in a happy‑dom environment.
+[Vitest](https://vitest.dev) + [Testing Library](https://testing-library.com/docs/react-testing-library/intro/) + [jest-dom](https://github.com/testing-library/jest-dom) in a happy‑dom environment.
 
 ```bash
-npm run test        # run once with coverage (v8)
-npm run test:watch  # watch mode
+npm run test        # run once with coverage (v8)npm run test:watch  # watch mode
 npm run test:ui     # Vitest UI
 ```
 

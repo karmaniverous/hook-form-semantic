@@ -4,10 +4,9 @@ title: HookFormField
 
 # HookFormField
 
-Generic bridge between React Hook Form (RHF) and Semantic UI React controls. It wires a field via RHF’s Controller and renders a Semantic UI `Form.Field`, surfacing validation errors in the usual Semantic way.
+Generic bridge between [React Hook Form](https://react-hook-form.com) (RHF) and [Semantic UI React](https://react.semantic-ui.com) controls. It wires a field via RHF’s Controller and renders a Semantic UI [`Form.Field`](https://react.semantic-ui.com/collections/form/), surfacing validation errors in the usual Semantic way.
 
 Highlights
-
 - Works with any Semantic UI control (Input, Checkbox, Dropdown, etc.).
 - Function-as-child mode for custom data mapping (e.g., `{ checked }` vs `{ value }`).
 - Errors from RHF appear on the field and can be labeled.

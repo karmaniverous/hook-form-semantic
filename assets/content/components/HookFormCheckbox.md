@@ -8,10 +8,9 @@ Controlled checkbox wired to RHF with extra niceties:
 
 - Optional left/right labels around the control.
 - Optional “control” labels that toggle the value (e.g., Enable/Disable).
-- Semantic UI error wiring via `Form.Field`.
+- Semantic UI error wiring via [`Form.Field`](https://react.semantic-ui.com/collections/form/).
 
 Value type: `boolean`.
-
 ## Example
 
 ```tsx

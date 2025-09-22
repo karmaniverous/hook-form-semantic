@@ -4,10 +4,9 @@ title: HookFormMenu
 
 # HookFormMenu
 
-Semantic UI `Menu` used as a selector. Items are defined via `menuItems`, and the selected item name becomes the field value.
+[Semantic UI React Menu](https://react.semantic-ui.com/collections/menu/) used as a selector. Items are defined via `menuItems`, and the selected item name becomes the field value.
 
 Value type: `string`.
-
 ## Example
 
 ```tsx
