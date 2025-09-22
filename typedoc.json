@@ -18,7 +18,8 @@
     "GitHub": "https://github.com/karmaniverous/hook-form-semantic"
   },
   "out": "./docs/",
-  "plugin": ["typedoc-plugin-mdn-links", "typedoc-plugin-replace-text"],  "projectDocuments": ["./CHANGELOG.md"],
+  "plugin": ["typedoc-plugin-mdn-links", "typedoc-plugin-replace-text"],
+  "projectDocuments": ["./assets/content/components.md", "./CHANGELOG.md"],
   "replaceText": {
     "replacements": [
       {
