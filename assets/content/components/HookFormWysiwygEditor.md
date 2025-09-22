@@ -4,7 +4,7 @@ title: HookFormWysiwygEditor
 
 # HookFormWysiwygEditor
 
-Rich text editor (react-draft-wysiwyg). The component returns an HTML string suitable for rendering or storage.
+Rich text editor ([react-draft-wysiwyg](https://www.npmjs.com/package/react-draft-wysiwyg)). The component returns an HTML string suitable for rendering or storage.
 
 Value type: `string | null`.
 

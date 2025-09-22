@@ -4,7 +4,7 @@ title: HookFormJsonEditor
 
 # HookFormJsonEditor
 
-Integrates the Vanilla JSON Editor with RHF. Accepts and returns either:
+Integrates the [vanilla-jsoneditor](https://www.npmjs.com/package/vanilla-jsoneditor) with RHF. Accepts and returns either:
 
 - a JSON object (stored as `{ json: object }`), or
 - a text string (`{ text: string }`)

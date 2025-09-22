@@ -14,15 +14,15 @@ Highlights
 
 Contents
 
-- Installation
-- CSS (what to import)
-- Quick start
-- Components overview (mini examples)
-- Playground
-- Tests
-- Build & publish
-- API docs (TypeDoc)
-- FAQ
+- [Installation](#installation)
+- [CSS](#css-import-what-you-use) (what to import)
+- [Quick start](#quick-start)
+- [Components overview](#components-overview-mini-examples) (mini examples)
+- [Playground](#playground)
+- [Tests](#tests)
+- [Build & publish](#build--publish)
+- [API docs](#api-docs-typedoc) (TypeDoc)
+- [FAQ](#faq)
 
 ---
 
@@ -37,17 +37,17 @@ npm i @karmaniverous/hook-form-semantic react react-dom react-hook-form semantic
 Install peers per component you use
 
 - Numeric input (HookFormNumeric)
-  - react-number-format
+  - [react-number-format](https://www.npmjs.com/package/react-number-format)
 - Phone input (HookFormPhone)
-  - react-international-phone google-libphonenumber
+  - [react-international-phone](https://www.npmjs.com/package/react-international-phone) [google-libphonenumber](https://www.npmjs.com/package/google-libphonenumber)
 - Date & DateTime (HookFormDatePicker)
-  - react-date-picker react-datetime-picker react-calendar react-clock
+  - [react-date-picker](https://www.npmjs.com/package/react-date-picker) [react-datetime-picker](https://www.npmjs.com/package/react-datetime-picker) [react-calendar](https://www.npmjs.com/package/react-calendar) [react-clock](https://www.npmjs.com/package/react-clock)
 - Date range & DateTime range (HookFormDateRangePicker)
-  - @wojtekmaj/react-daterange-picker @wojtekmaj/react-datetimerange-picker react-calendar react-clock
+  - [@wojtekmaj/react-daterange-picker](https://www.npmjs.com/package/@wojtekmaj/react-daterange-picker) [@wojtekmaj/react-datetimerange-picker](https://www.npmjs.com/package/@wojtekmaj/react-datetimerange-picker) [react-calendar](https://www.npmjs.com/package/react-calendar) [react-clock](https://www.npmjs.com/package/react-clock)
 - WYSIWYG (HookFormWysiwygEditor)
-  - react-draft-wysiwyg draft-js html-to-draftjs draftjs-to-html
+  - [react-draft-wysiwyg](https://www.npmjs.com/package/react-draft-wysiwyg) [draft-js](https://www.npmjs.com/package/draft-js) [html-to-draftjs](https://www.npmjs.com/package/html-to-draftjs) [draftjs-to-html](https://www.npmjs.com/package/draftjs-to-html)
 - JSON editor (HookFormJsonEditor)
-  - vanilla-jsoneditor
+  - [vanilla-jsoneditor](https://www.npmjs.com/package/vanilla-jsoneditor)
 
 Examples
 
@@ -242,7 +242,7 @@ import {
   label="Sort"
   dropdownOptions={[
     { key: 'name', text: 'Name', value: 'name' },
-    { key: 'date', text: 'Date', value: 'date' },
+    { key: 'date', text: 'Date Created', value: 'date' },
   ]}
 />
 ```
@@ -314,7 +314,7 @@ Optional release automation (release‑it) is configured. See scripts in package
 npm run docs
 ```
 
-Outputs static docs in `docs/` (config in `typedoc.json`). Hosted docs link: https://docs.karmanivero.us/hook-form-semantic
+Outputs static docs in `docs/` (config in `typedoc.json`). Hosted docs: [docs.karmanivero.us/hook-form-semantic](https://docs.karmanivero.us/hook-form-semantic)
 
 ---
 

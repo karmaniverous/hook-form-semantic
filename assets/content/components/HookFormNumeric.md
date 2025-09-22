@@ -4,7 +4,7 @@ title: HookFormNumeric
 
 # HookFormNumeric
 
-Numeric input powered by `react-number-format` and Semantic UI’s `Input`. Great for currency and bounded numbers.
+Numeric input powered by [react-number-format](https://www.npmjs.com/package/react-number-format) and Semantic UI’s `Input`. Great for currency and bounded numbers.
 
 Value type: `number | undefined`.
 

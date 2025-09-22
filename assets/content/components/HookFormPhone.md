@@ -4,7 +4,7 @@ title: HookFormPhone
 
 # HookFormPhone
 
-International phone input built on `react-international-phone` with validation using `google-libphonenumber`. Produces a formatted E.164-like string (e.g., `+12025550123`).
+International phone input built on [react-international-phone](https://www.npmjs.com/package/react-international-phone) with validation using [google-libphonenumber](https://www.npmjs.com/package/google-libphonenumber). Produces a formatted E.164-like string (e.g., `+12025550123`).
 
 Value type: `string`.
 

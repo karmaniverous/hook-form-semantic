@@ -6,8 +6,8 @@ title: HookFormDatePicker
 
 Single date input with an optional “Include Time” toggle. Under the hood it uses:
 
-- `react-date-picker` for date-only
-- `react-datetime-picker` for date+time
+- [react-date-picker](https://www.npmjs.com/package/react-date-picker) for date-only
+- [react-datetime-picker](https://www.npmjs.com/package/react-datetime-picker) for date+time
 
 Value type: `Date | null`.
 
