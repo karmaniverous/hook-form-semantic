@@ -1,9 +1,8 @@
 # Development Plan (STAN TODO)
 
-When updated: 2025-09-22T14:20:00Z
+When updated: 2025-09-22T15:40:00Z
 
 ## Next up
-
 - Decompose HookFormRRStack.tsx (>300 LOC) into cohesive submodules: - components/rrstack/RuleCard.tsx (render + actions) - components/rrstack/RuleEditor.tsx (edit/add form)
   - components/rrstack/options.ts (frequency/effect/month/position lists) Add co-located tests for each unit.- Expand RRStack negative-path tests: invalid timezone selection, invalid by\* array entries, move operations edge cases (top/bottom at bounds).- Silence test-only warnings by updating semantic-ui-react doubles to forwardRef and filter DOM-unsafe props (low priority).
 - Consider addressing the TypeDoc “Presets … not included” warning by adjusting visibility or explicit exports (low priority).
@@ -51,9 +50,12 @@ When updated: 2025-09-22T14:20:00Z
   - Updated README install instructions to remove lodash mention.
 
 - Lint and dependency hygiene
+  - Fix ESLint flat-config parse error after switching to @vitest/eslint-plugin
+    (braces were on comment lines and got commented out).
+
+- Lint and dependency hygiene
   - Replace deprecated eslint-plugin-vitest with @vitest/eslint-plugin (ESLint 9 flat config).
-  - Move @karmaniverous/rrstack back to peerDependency for consumers and keep as devDependency here for build/tests. Tree-shaking reduces bundle size, not install-time; keeping rrstack as a peer avoids forcing installs for consumers who don’t use HookFormRRStack.
-- Docs refresh for release readiness:
+  - Move @karmaniverous/rrstack back to peerDependency for consumers and keep as devDependency here for build/tests. Tree-shaking reduces bundle size, not install-time; keeping rrstack as a peer avoids forcing installs for consumers who don’t use HookFormRRStack.- Docs refresh for release readiness:
   - Rewrite README to reflect Hook Form Semantic purpose, components, install matrix, CSS, quick start, tests, playground, and ESM notes.
   - Update typedoc.json hostedBaseUrl and GitHub links to this repo. - Keep CHANGELOG and scripts as-is; no code changes required.
 

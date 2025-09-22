@@ -8,7 +8,8 @@ import tsDocPlugin from 'eslint-plugin-tsdoc';
 import vitest from '@vitest/eslint-plugin';
 import tseslint from 'typescript-eslint';
 export default tseslint.config(
-  // Global ignores to keep lint focus on source.  {
+  // Global ignores to keep lint focus on source.
+  {
     ignores: [
       '.rollup.cache/**/*',
       '.stan/**/*',
@@ -40,7 +41,8 @@ export default tseslint.config(
     },
   },
 
-  // Shared formatting and import sorting across JS/TS.  {
+  // Shared formatting and import sorting across JS/TS.
+  {
     files: ['**/*.{js,cjs,mjs,jsx,ts,tsx}'],
     plugins: {
       prettier: prettierPlugin,
