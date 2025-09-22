@@ -2,10 +2,23 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [Unreleased](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.10...HEAD)
+
+- docs: add Components guides and TypeDoc integration [`bf4171e`](https://github.com/karmaniverous/hook-form-semantic/commit/bf4171effd65d1407fc545e757ae65fb1e3507c3)
+- chore(lint,deps): switch to @vitest/eslint-plugin; make rrstack peer+dev [`79089b1`](https://github.com/karmaniverous/hook-form-semantic/commit/79089b128869884e07a1bfdb752e27b045c5e957)
+- docs: link peer deps and external libs; remove naked URLs [`f8a6fb0`](https://github.com/karmaniverous/hook-form-semantic/commit/f8a6fb0c2628d3e0d0e897724c218d4df2c844d5)
+- docs: final link sweep + README tests block fix [`e204d6e`](https://github.com/karmaniverous/hook-form-semantic/commit/e204d6ee6ea04096368a6ce36165361132b2689a)
+- docs: link external refs; remove naked links in prose [`d17411d`](https://github.com/karmaniverous/hook-form-semantic/commit/d17411dd869d5d8c3642bfb4932b17a50af73e5e)
+- Updated dependencies [`25fa0d7`](https://github.com/karmaniverous/hook-form-semantic/commit/25fa0d765949dbbea1e37025c14fede693e76bf8)
+- fix(eslint): repair flat-config braces; keep vitest plugin migration [`6481f32`](https://github.com/karmaniverous/hook-form-semantic/commit/6481f32059521e08a5e622c4225fba47c1115de8)
+
 #### [0.1.10](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.9...0.1.10)
+
+> 22 September 2025
 
 - Update rrstack to v0.9.0 [`e569bfe`](https://github.com/karmaniverous/hook-form-semantic/commit/e569bfe040b2bf3ae656b911d7d611fd79886b60)
 - Add span rule support for continuous time ranges without recurrence [`b7b2228`](https://github.com/karmaniverous/hook-form-semantic/commit/b7b222817a7cc2395a456884066c22d3f3bd78cf)
+- chore: release v0.1.10 [`78db42f`](https://github.com/karmaniverous/hook-form-semantic/commit/78db42ff3d1e98e72341a58dffa2f278c9647d81)
 
 #### [0.1.9](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.8...0.1.9)
 
