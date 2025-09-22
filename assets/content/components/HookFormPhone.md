@@ -9,9 +9,11 @@ International phone input built on [react-international-phone](https://www.npmjs
 Value type: `string`.
 
 Peer dependencies: `react-international-phone`, `google-libphonenumber`, `react-responsive`.
+
 ## Example
 
-```tsximport { useForm } from 'react-hook-form';
+```tsx
+import { useForm } from 'react-hook-form';
 import { Form } from 'semantic-ui-react';
 import { HookFormPhone, isPhoneValid } from '@karmaniverous/hook-form-semantic';
 

@@ -12,7 +12,8 @@ Peer dependency: `@karmaniverous/rrstack` (install in your app when using this c
 
 ## Minimal embed
 
-```tsximport { useForm } from 'react-hook-form';
+```tsx
+import { useForm } from 'react-hook-form';
 import { Form } from 'semantic-ui-react';
 import { HookFormRRStack } from '@karmaniverous/hook-form-semantic';
 

@@ -36,7 +36,8 @@ npm i @karmaniverous/hook-form-semantic react react-dom react-hook-form semantic
 
 Install peers per component you use
 
-- Numeric input (HookFormNumeric)  - [react-number-format](https://www.npmjs.com/package/react-number-format)
+- Numeric input (HookFormNumeric)
+  - [react-number-format](https://www.npmjs.com/package/react-number-format)
 - Phone input (HookFormPhone)
   - [react-international-phone](https://www.npmjs.com/package/react-international-phone) [google-libphonenumber](https://www.npmjs.com/package/google-libphonenumber) [react-responsive](https://www.npmjs.com/package/react-responsive)
 - Date & DateTime (HookFormDatePicker)
@@ -48,8 +49,7 @@ Install peers per component you use
 - WYSIWYG (HookFormWysiwygEditor)
   - [react-draft-wysiwyg](https://www.npmjs.com/package/react-draft-wysiwyg) [draft-js](https://www.npmjs.com/package/draft-js) [html-to-draftjs](https://www.npmjs.com/package/html-to-draftjs) [draftjs-to-html](https://www.npmjs.com/package/draftjs-to-html)
 - JSON editor (HookFormJsonEditor)
-  - [vanilla-jsoneditor](https://www.npmjs.com/package/vanilla-jsoneditor)
-Examples
+  - [vanilla-jsoneditor](https://www.npmjs.com/package/vanilla-jsoneditor) Examples
 
 ```bash
 # Phone + Numeric + Date
@@ -69,6 +69,7 @@ npm i @karmaniverous/rrstack
 ```
 
 ESM only
+
 - This package ships ESM only. Most modern toolchains (Vite, Next, CRA v5+, Rollup, Webpack 5) work out of the box.
 
 ## CSS (import what you use)

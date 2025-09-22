@@ -34,5 +34,5 @@ children:
 
 Notes
 
-- Examples are intentionally small and focused. They illustrate common real-world patterns without copying any existing example verbatim.
+- Examples are intentionally small and focused. They illustrate common real-world patterns without any extra fluff.
 - Import only the pieces you need in your app (see README “Install peers per component”).
