@@ -49,7 +49,9 @@ Install peers per component you use
 - WYSIWYG (HookFormWysiwygEditor)
   - [react-draft-wysiwyg](https://www.npmjs.com/package/react-draft-wysiwyg) [draft-js](https://www.npmjs.com/package/draft-js) [html-to-draftjs](https://www.npmjs.com/package/html-to-draftjs) [draftjs-to-html](https://www.npmjs.com/package/draftjs-to-html)
 - JSON editor (HookFormJsonEditor)
-  - [vanilla-jsoneditor](https://www.npmjs.com/package/vanilla-jsoneditor) Examples
+  - [vanilla-jsoneditor](https://www.npmjs.com/package/vanilla-jsoneditor)
+
+## Examples
 
 ```bash
 # Phone + Numeric + Date
