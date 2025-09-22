@@ -5,6 +5,7 @@
 Production‑ready [React Hook Form](https://react-hook-form.com) (RHF) field components built on [Semantic UI React](https://react.semantic-ui.com). Quickly wire up common inputs — phone, date/time, date ranges, numeric, JSON editor, WYSIWYG, sort, menus — with consistent error handling and semantics that match RHF and Semantic UI.
 
 Highlights
+
 - React 18 + TypeScript, ESM‑only build
 - First‑class RHF integration (Controller‑based wiring)
 - Semantic UI React props passthrough for familiar DX
@@ -12,6 +13,7 @@ Highlights
 - [Vite](https://vitejs.dev) playground for live testing; [Vitest](https://vitest.dev) + [Testing Library](https://testing-library.com/docs/react-testing-library/intro/) for unit tests
 
 Contents
+
 - [Installation](#installation)
 - [CSS](#css-import-what-you-use) (what to import)
 - [Quick start](#quick-start)
@@ -284,10 +286,11 @@ The playground imports components directly from `src/` (no publish needed). See 
 
 ## Tests
 
-[Vitest](https://vitest.dev) + [Testing Library](https://testing-library.com/docs/react-testing-library/intro/) + [jest-dom](https://github.com/testing-library/jest-dom) in a happy‑dom environment.
+[Vitest](https://vitest.dev) + [Testing Library](https://testing-library.com/docs/react-testing-library/intro/) + [jest-dom](https://github.com/testing-library/jest-dom) in a [happy-dom](https://www.npmjs.com/package/happy-dom) environment.
 
 ```bash
-npm run test        # run once with coverage (v8)npm run test:watch  # watch mode
+npm run test        # run once with coverage (v8)
+npm run test:watch  # watch mode
 npm run test:ui     # Vitest UI
 ```
 

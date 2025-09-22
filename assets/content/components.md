@@ -17,7 +17,7 @@ children:
 
 # Components
 
-React Hook Form field components built on Semantic UI React. Each guide shows a focused, real-world usage snippet inside a react-hook-form context.
+[React Hook Form](https://react-hook-form.com) field components built on [Semantic UI React](https://react.semantic-ui.com). Each guide shows a focused, real-world usage snippet inside a react-hook-form context.
 
 - [HookFormField](./components/HookFormField.md) - Generic RHF + Semantic UI wrapper for any input.
 - [HookFormCheckbox](./components/HookFormCheckbox.md) - Controlled checkbox with optional control labels.

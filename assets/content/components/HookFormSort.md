@@ -10,7 +10,7 @@ Dropdown + direction button for managing a two-part sort value:
 type Sort<T extends string | undefined> = [NonNullable<T> | 'auto', boolean];
 ```
 
-The tuple is `[field, ascending]`. Use the dropdown to select a field and the button to toggle ascending/descending.
+The tuple is `[field, ascending]`. Use the [Semantic UI React Dropdown](https://react.semantic-ui.com/modules/dropdown/) to select a field and the [Button](https://react.semantic-ui.com/elements/button/) to toggle ascending/descending.
 
 ## Example
 

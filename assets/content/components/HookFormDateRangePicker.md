@@ -12,6 +12,11 @@ Pick a start and end date (or datetime). Includes:
   - `extractTimestamps(range)` → `[startMs | undefined, endMs | undefined]`
   - `defaultPresets`, `filterPresets([...])`
 
+Under the hood it uses:
+
+- [@wojtekmaj/react-daterange-picker](https://www.npmjs.com/package/@wojtekmaj/react-daterange-picker) (dates)
+- [@wojtekmaj/react-datetimerange-picker](https://www.npmjs.com/package/@wojtekmaj/react-datetimerange-picker) (datetimes)
+
 Value type: `[Date | null, Date | null]`.
 
 ## Example with presets
