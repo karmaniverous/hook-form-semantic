@@ -2,9 +2,17 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.10](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.9...0.1.10)
+
+- Update rrstack to v0.9.0 [`e569bfe`](https://github.com/karmaniverous/hook-form-semantic/commit/e569bfe040b2bf3ae656b911d7d611fd79886b60)
+- Add span rule support for continuous time ranges without recurrence [`b7b2228`](https://github.com/karmaniverous/hook-form-semantic/commit/b7b222817a7cc2395a456884066c22d3f3bd78cf)
+
 #### [0.1.9](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.8...0.1.9)
 
+> 20 September 2025
+
 - Bump rrstack version [`eec285f`](https://github.com/karmaniverous/hook-form-semantic/commit/eec285f2aaaf24cd17427cf023a87bb7d937fc52)
+- chore: release v0.1.9 [`cdedcd2`](https://github.com/karmaniverous/hook-form-semantic/commit/cdedcd2762d211c6b3a460d8d076ee03c9e8b33c)
 
 #### [0.1.8](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.7...0.1.8)
 
