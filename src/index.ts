@@ -20,6 +20,7 @@ export {
   filterPresets,
   HookFormDateRangePicker,
   type HookFormDateRangePickerProps,
+  type Presets,
 } from './components/HookFormDateRangePicker';
 export {
   HookFormField,

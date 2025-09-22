@@ -42,7 +42,8 @@ export const extractTimestamps = (dateRange: DateRange) =>
 export type Presets = Record<
   string,
   {
-    text: string;    value: DateRange | (() => DateRange);
+    text: string;
+    value: DateRange | (() => DateRange);
     epoch: 'past' | 'present' | 'future';
   }
 >;

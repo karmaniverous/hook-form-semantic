@@ -1,10 +1,10 @@
 # Development Plan (STAN TODO)
 
-When updated: 2025-09-22T16:05:00Z
+When updated: 2025-09-22T16:25:00Z
 
 ## Next up
-- Decompose HookFormRRStack.tsx (>300 LOC) into cohesive submodules: - components/rrstack/RuleCard.tsx (render + actions) - components/rrstack/RuleEditor.tsx (edit/add form)  - components/rrstack/options.ts (frequency/effect/month/position lists) Add co-located tests for each unit.- Expand RRStack negative-path tests: invalid timezone selection, invalid by\* array entries, move operations edge cases (top/bottom at bounds).- Silence test-only warnings by updating semantic-ui-react doubles to forwardRef and filter DOM-unsafe props (low priority).
-- Consider addressing the TypeDoc “Presets … not included” warning by adjusting visibility or explicit exports (low priority).
+
+- Decompose HookFormRRStack.tsx (>300 LOC) into cohesive submodules: - components/rrstack/RuleCard.tsx (render + actions) - components/rrstack/RuleEditor.tsx (edit/add form) - components/rrstack/options.ts (frequency/effect/month/position lists) Add co-located tests for each unit.- Expand RRStack negative-path tests: invalid timezone selection, invalid by\* array entries, move operations edge cases (top/bottom at bounds).- Silence test-only warnings by updating semantic-ui-react doubles to forwardRef and filter DOM-unsafe props (low priority).- Consider addressing the TypeDoc “Presets … not included” warning by adjusting visibility or explicit exports (low priority).
 - Expand negative-path tests (validation and error label rendering) for other HookForm components (e.g., min/max for Numeric, invalid phone).
 - Add small unit tests for utility helpers if desired (concatClassNames, PrefixedPartial.deprefix).
 - Cross-browser sanity checks in playground as needed.
@@ -49,22 +49,18 @@ When updated: 2025-09-22T16:05:00Z
   - Updated README install instructions to remove lodash mention.
 
 - Lint and dependency hygiene
-  - Fix ESLint flat-config parse error after switching to @vitest/eslint-plugin
-    (braces were on comment lines and got commented out).
+  - Fix ESLint flat-config parse error after switching to @vitest/eslint-plugin (braces were on comment lines and got commented out).
 
 - Dependency policy and docs
-  - Make component-specific integrations optional peerDependencies:
-    rrstack, date/time pickers, react-number-format, phone libs,
-    WYSIWYG stack, vanilla-jsoneditor, react-responsive, semantic-ui-css.
-    Keep core host singletons (react, react-dom, react-hook-form,
-    semantic-ui-react) as required peers. Keep rrstack as devDependency
-    to support local tests/docs.
+  - Make component-specific integrations optional peerDependencies: rrstack, date/time pickers, react-number-format, phone libs, WYSIWYG stack, vanilla-jsoneditor, react-responsive, semantic-ui-css. Keep core host singletons (react, react-dom, react-hook-form, semantic-ui-react) as required peers. Keep rrstack as devDependency to support local tests/docs.
   - Export Presets type to include it in TypeDoc and silence the warning.
 
+- Formatting & TypeDoc cleanup
+  - Fix Prettier error in HookFormDateRangePicker (newline between object properties).
+  - Re-export Presets from src/index.ts so TypeDoc includes it (removes the “Presets … not included” warning).
 - Lint and dependency hygiene
   - Replace deprecated eslint-plugin-vitest with @vitest/eslint-plugin (ESLint 9 flat config).
-  - Move @karmaniverous/rrstack back to peerDependency for consumers and keep as devDependency here for build/tests. Tree-shaking reduces bundle size, not install-time; keeping rrstack as a peer avoids forcing installs for consumers who don’t use HookFormRRStack.- Docs refresh for release readiness:  - Rewrite README to reflect Hook Form Semantic purpose, components, install matrix, CSS, quick start, tests, playground, and ESM notes.
-  - Update typedoc.json hostedBaseUrl and GitHub links to this repo. - Keep CHANGELOG and scripts as-is; no code changes required.
+  - Move @karmaniverous/rrstack back to peerDependency for consumers and keep as devDependency here for build/tests. Tree-shaking reduces bundle size, not install-time; keeping rrstack as a peer avoids forcing installs for consumers who don’t use HookFormRRStack.- Docs refresh for release readiness: - Rewrite README to reflect Hook Form Semantic purpose, components, install matrix, CSS, quick start, tests, playground, and ESM notes. - Update typedoc.json hostedBaseUrl and GitHub links to this repo. - Keep CHANGELOG and scripts as-is; no code changes required.
 
 - Fix failing tests:
   - HookFormField: function-child calls `field.onChange` with both event and `{ value }` data (Semantic UI signature) to avoid undefined value. - HookFormPhone: await RHF state update with `waitFor` before asserting.
