@@ -2,15 +2,24 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
-#### [Unreleased](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.10...HEAD)
+#### [0.1.11](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.10...0.1.11)
 
 - docs: add Components guides and TypeDoc integration [`bf4171e`](https://github.com/karmaniverous/hook-form-semantic/commit/bf4171effd65d1407fc545e757ae65fb1e3507c3)
+- updated docs [`913f95d`](https://github.com/karmaniverous/hook-form-semantic/commit/913f95da247d8ab60a5547759147571c0a66ffd8)
 - chore(lint,deps): switch to @vitest/eslint-plugin; make rrstack peer+dev [`79089b1`](https://github.com/karmaniverous/hook-form-semantic/commit/79089b128869884e07a1bfdb752e27b045c5e957)
+- chore(deps,docs): make component peers optional; export Presets for TypeDoc [`fff7434`](https://github.com/karmaniverous/hook-form-semantic/commit/fff7434ed776907fc5acf93ce44983968d43970f)
 - docs: link peer deps and external libs; remove naked URLs [`f8a6fb0`](https://github.com/karmaniverous/hook-form-semantic/commit/f8a6fb0c2628d3e0d0e897724c218d4df2c844d5)
+- docs: correct peer dependency guidance [`e9add4d`](https://github.com/karmaniverous/hook-form-semantic/commit/e9add4db30742984e3a9dec087efa67729742398)
+- chore(knip): ignore optional peers to unblock release [`fd4fe2d`](https://github.com/karmaniverous/hook-form-semantic/commit/fd4fe2dbb0c51edd4959a448b7a71c11b9e9a6af)
 - docs: final link sweep + README tests block fix [`e204d6e`](https://github.com/karmaniverous/hook-form-semantic/commit/e204d6ee6ea04096368a6ce36165361132b2689a)
 - docs: link external refs; remove naked links in prose [`d17411d`](https://github.com/karmaniverous/hook-form-semantic/commit/d17411dd869d5d8c3642bfb4932b17a50af73e5e)
+- chore(docs,format): export Presets via index; fix Prettier newline [`536b5d8`](https://github.com/karmaniverous/hook-form-semantic/commit/536b5d8983774f5b92ff9a1b6e4dca51d58dbc24)
+- formatting fixes [`06c3cf6`](https://github.com/karmaniverous/hook-form-semantic/commit/06c3cf66acf121aafb9f5e54d7a8fc3d04f4dfc0)
 - Updated dependencies [`25fa0d7`](https://github.com/karmaniverous/hook-form-semantic/commit/25fa0d765949dbbea1e37025c14fede693e76bf8)
 - fix(eslint): repair flat-config braces; keep vitest plugin migration [`6481f32`](https://github.com/karmaniverous/hook-form-semantic/commit/6481f32059521e08a5e622c4225fba47c1115de8)
+- updated changelog [`bfc1fc1`](https://github.com/karmaniverous/hook-form-semantic/commit/bfc1fc1b9972da9287d5ae2727df7bc649fa4c0f)
+- lintfix [`2de2284`](https://github.com/karmaniverous/hook-form-semantic/commit/2de2284409c357dcc0b8ada8eee29cded2284963)
+- updated readme [`3b1dd28`](https://github.com/karmaniverous/hook-form-semantic/commit/3b1dd288c5adf74048bf24e9c35dfd5eed5eb431)
 
 #### [0.1.10](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.9...0.1.10)
 
