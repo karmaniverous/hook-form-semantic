@@ -1,24 +1,24 @@
 <!DOCTYPE html><html class="default" lang="en" data-base="./"><head><meta charset="utf-8"/><link rel="canonical" href="https://docs.karmanivero.us/hook-form-semantic/"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>@karmaniverous/hook-form-semantic</title><meta name="description" content="Documentation for @karmaniverous/hook-form-semantic"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><a href="index.html" class="title">@karmaniverous/hook-form-semantic</a><div id="tsd-toolbar-links"><a href="https://github.com/karmaniverous/hook-form-semantic">GitHub</a></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/><ul role="listbox" id="tsd-search-results"></ul><div id="tsd-search-status" aria-live="polite" aria-atomic="true"><div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h1>@karmaniverous/hook-form-semantic</h1></div><div class="tsd-panel tsd-typography"><h1 id="hook-form-semantic--react-hook-form--semantic-ui-react-components" class="tsd-anchor-link">Hook Form Semantic — React Hook Form + Semantic UI React components<a href="#hook-form-semantic--react-hook-form--semantic-ui-react-components" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p><a href="https://www.npmjs.com/package/@karmaniverous/hook-form-semantic" target="_blank" class="external"><img src="https://img.shields.io/npm/v/@karmaniverous/hook-form-semantic.svg" alt="npm version"></a> <img src="https://img.shields.io/node/v/@karmaniverous/hook-form-semantic" alt="Node Current">  <a href="./LICENSE"><img src="https://img.shields.io/badge/license-BSD--3--Clause-blue.svg" alt="license"></a></p>
-<p>Production‑ready React Hook Form (RHF) field components built on Semantic UI React. Quickly wire up common inputs — phone, date/time, date ranges, numeric, JSON editor, WYSIWYG, sort, menus — with consistent error handling and semantics that match RHF and Semantic UI.</p>
+<p>Production‑ready <a href="https://react-hook-form.com" target="_blank" class="external">React Hook Form</a> (RHF) field components built on <a href="https://react.semantic-ui.com" target="_blank" class="external">Semantic UI React</a>. Quickly wire up common inputs — phone, date/time, date ranges, numeric, JSON editor, WYSIWYG, sort, menus — with consistent error handling and semantics that match RHF and Semantic UI.</p>
 <p>Highlights</p>
 <ul>
 <li>React 18 + TypeScript, ESM‑only build</li>
 <li>First‑class RHF integration (Controller‑based wiring)</li>
 <li>Semantic UI React props passthrough for familiar DX</li>
 <li>Batteries included: date/time, ranges, numeric, phone, JSON editor, WYSIWYG, sort/menu utilities</li>
-<li>Vite playground for live testing; Vitest + Testing Library for unit tests</li>
+<li><a href="https://vitejs.dev" target="_blank" class="external">Vite</a> playground for live testing; <a href="https://vitest.dev" target="_blank" class="external">Vitest</a> + <a href="https://testing-library.com/docs/react-testing-library/intro/" target="_blank" class="external">Testing Library</a> for unit tests</li>
 </ul>
 <p>Contents</p>
 <ul>
-<li>Installation</li>
-<li>CSS (what to import)</li>
-<li>Quick start</li>
-<li>Components overview (mini examples)</li>
-<li>Playground</li>
-<li>Tests</li>
-<li>Build &amp; publish</li>
-<li>API docs (TypeDoc)</li>
-<li>FAQ</li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#css-import-what-you-use">CSS</a> (what to import)</li>
+<li><a href="#quick-start">Quick start</a></li>
+<li><a href="#components-overview-mini-examples">Components overview</a> (mini examples)</li>
+<li><a href="#playground">Playground</a></li>
+<li><a href="#tests">Tests</a></li>
+<li><a href="#build--publish">Build &amp; publish</a></li>
+<li><a href="#api-docs-typedoc">API docs</a> (TypeDoc)</li>
+<li><a href="#faq">FAQ</a></li>
 </ul>
 <hr>
 <h2 id="installation" class="tsd-anchor-link">Installation<a href="#installation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Core peer dependencies (always install in your app)</p>
@@ -29,32 +29,32 @@
 <ul>
 <li>Numeric input (HookFormNumeric)
 <ul>
-<li>react-number-format</li>
+<li><a href="https://www.npmjs.com/package/react-number-format" target="_blank" class="external">react-number-format</a></li>
 </ul>
 </li>
 <li>Phone input (HookFormPhone)
 <ul>
-<li>react-international-phone google-libphonenumber</li>
+<li><a href="https://www.npmjs.com/package/react-international-phone" target="_blank" class="external">react-international-phone</a> <a href="https://www.npmjs.com/package/google-libphonenumber" target="_blank" class="external">google-libphonenumber</a></li>
 </ul>
 </li>
 <li>Date &amp; DateTime (HookFormDatePicker)
 <ul>
-<li>react-date-picker react-datetime-picker react-calendar react-clock</li>
+<li><a href="https://www.npmjs.com/package/react-date-picker" target="_blank" class="external">react-date-picker</a> <a href="https://www.npmjs.com/package/react-datetime-picker" target="_blank" class="external">react-datetime-picker</a> <a href="https://www.npmjs.com/package/react-calendar" target="_blank" class="external">react-calendar</a> <a href="https://www.npmjs.com/package/react-clock" target="_blank" class="external">react-clock</a></li>
 </ul>
 </li>
 <li>Date range &amp; DateTime range (HookFormDateRangePicker)
 <ul>
-<li>@wojtekmaj/react-daterange-picker @wojtekmaj/react-datetimerange-picker react-calendar react-clock</li>
+<li><a href="https://www.npmjs.com/package/@wojtekmaj/react-daterange-picker" target="_blank" class="external">@wojtekmaj/react-daterange-picker</a> <a href="https://www.npmjs.com/package/@wojtekmaj/react-datetimerange-picker" target="_blank" class="external">@wojtekmaj/react-datetimerange-picker</a> <a href="https://www.npmjs.com/package/react-calendar" target="_blank" class="external">react-calendar</a> <a href="https://www.npmjs.com/package/react-clock" target="_blank" class="external">react-clock</a></li>
 </ul>
 </li>
 <li>WYSIWYG (HookFormWysiwygEditor)
 <ul>
-<li>react-draft-wysiwyg draft-js html-to-draftjs draftjs-to-html</li>
+<li><a href="https://www.npmjs.com/package/react-draft-wysiwyg" target="_blank" class="external">react-draft-wysiwyg</a> <a href="https://www.npmjs.com/package/draft-js" target="_blank" class="external">draft-js</a> <a href="https://www.npmjs.com/package/html-to-draftjs" target="_blank" class="external">html-to-draftjs</a> <a href="https://www.npmjs.com/package/draftjs-to-html" target="_blank" class="external">draftjs-to-html</a></li>
 </ul>
 </li>
 <li>JSON editor (HookFormJsonEditor)
 <ul>
-<li>vanilla-jsoneditor</li>
+<li><a href="https://www.npmjs.com/package/vanilla-jsoneditor" target="_blank" class="external">vanilla-jsoneditor</a></li>
 </ul>
 </li>
 </ul>
@@ -150,7 +150,7 @@
 </ul>
 </li>
 </ul>
-<pre><code class="tsx"><span class="hl-9">&lt;</span><span class="hl-7">HookFormSort</span><span class="hl-1">&lt;</span><span class="hl-7">MyForm</span><span class="hl-1">&gt;</span><br/><span class="hl-1">  </span><span class="hl-11">hookControl</span><span class="hl-1">=</span><span class="hl-6">{</span><span class="hl-5">control</span><span class="hl-6">}</span><br/><span class="hl-1">  </span><span class="hl-11">hookName</span><span class="hl-1">=</span><span class="hl-2">&quot;sort&quot;</span><br/><span class="hl-1">  </span><span class="hl-11">label</span><span class="hl-1">=</span><span class="hl-2">&quot;Sort&quot;</span><br/><span class="hl-1">  </span><span class="hl-11">dropdownOptions</span><span class="hl-1">=</span><span class="hl-6">{</span><span class="hl-12">[</span><br/><span class="hl-12">    { </span><span class="hl-5">key:</span><span class="hl-12"> </span><span class="hl-2">&#39;name&#39;</span><span class="hl-12">, </span><span class="hl-5">text:</span><span class="hl-12"> </span><span class="hl-2">&#39;Name&#39;</span><span class="hl-12">, </span><span class="hl-5">value:</span><span class="hl-12"> </span><span class="hl-2">&#39;name&#39;</span><span class="hl-12"> },</span><br/><span class="hl-12">    { </span><span class="hl-5">key:</span><span class="hl-12"> </span><span class="hl-2">&#39;date&#39;</span><span class="hl-12">, </span><span class="hl-5">text:</span><span class="hl-12"> </span><span class="hl-2">&#39;Date&#39;</span><span class="hl-12">, </span><span class="hl-5">value:</span><span class="hl-12"> </span><span class="hl-2">&#39;date&#39;</span><span class="hl-12"> },</span><br/><span class="hl-12">  ]</span><span class="hl-6">}</span><br/><span class="hl-9">/&gt;</span>
+<pre><code class="tsx"><span class="hl-9">&lt;</span><span class="hl-7">HookFormSort</span><span class="hl-1">&lt;</span><span class="hl-7">MyForm</span><span class="hl-1">&gt;</span><br/><span class="hl-1">  </span><span class="hl-11">hookControl</span><span class="hl-1">=</span><span class="hl-6">{</span><span class="hl-5">control</span><span class="hl-6">}</span><br/><span class="hl-1">  </span><span class="hl-11">hookName</span><span class="hl-1">=</span><span class="hl-2">&quot;sort&quot;</span><br/><span class="hl-1">  </span><span class="hl-11">label</span><span class="hl-1">=</span><span class="hl-2">&quot;Sort&quot;</span><br/><span class="hl-1">  </span><span class="hl-11">dropdownOptions</span><span class="hl-1">=</span><span class="hl-6">{</span><span class="hl-12">[</span><br/><span class="hl-12">    { </span><span class="hl-5">key:</span><span class="hl-12"> </span><span class="hl-2">&#39;name&#39;</span><span class="hl-12">, </span><span class="hl-5">text:</span><span class="hl-12"> </span><span class="hl-2">&#39;Name&#39;</span><span class="hl-12">, </span><span class="hl-5">value:</span><span class="hl-12"> </span><span class="hl-2">&#39;name&#39;</span><span class="hl-12"> },</span><br/><span class="hl-12">    { </span><span class="hl-5">key:</span><span class="hl-12"> </span><span class="hl-2">&#39;date&#39;</span><span class="hl-12">, </span><span class="hl-5">text:</span><span class="hl-12"> </span><span class="hl-2">&#39;Date Created&#39;</span><span class="hl-12">, </span><span class="hl-5">value:</span><span class="hl-12"> </span><span class="hl-2">&#39;date&#39;</span><span class="hl-12"> },</span><br/><span class="hl-12">  ]</span><span class="hl-6">}</span><br/><span class="hl-9">/&gt;</span>
 </code><button type="button">Copy</button></pre>
 
 <ul>
@@ -180,7 +180,7 @@
 
 <p>The playground imports components directly from <code>src/</code> (no publish needed). See <code>playground/src/App.tsx</code>.</p>
 <hr>
-<h2 id="tests" class="tsd-anchor-link">Tests<a href="#tests" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Vitest + Testing Library + jest‑dom in a happy‑dom environment.</p>
+<h2 id="tests" class="tsd-anchor-link">Tests<a href="#tests" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p><a href="https://vitest.dev" target="_blank" class="external">Vitest</a> + <a href="https://testing-library.com/docs/react-testing-library/intro/" target="_blank" class="external">Testing Library</a> + <a href="https://github.com/testing-library/jest-dom" target="_blank" class="external">jest-dom</a> in a <a href="https://www.npmjs.com/package/happy-dom" target="_blank" class="external">happy-dom</a> environment.</p>
 <pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">test</span><span class="hl-1">        </span><span class="hl-3"># run once with coverage (v8)</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">test:watch</span><span class="hl-1">  </span><span class="hl-3"># watch mode</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">test:ui</span><span class="hl-1">     </span><span class="hl-3"># Vitest UI</span>
 </code><button type="button">Copy</button></pre>
 
@@ -194,7 +194,7 @@
 <h2 id="api-docs-typedoc" class="tsd-anchor-link">API docs (TypeDoc)<a href="#api-docs-typedoc" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">docs</span>
 </code><button type="button">Copy</button></pre>
 
-<p>Outputs static docs in <code>docs/</code> (config in <code>typedoc.json</code>). Hosted docs link: <a href="https://docs.karmanivero.us/hook-form-semantic">https://docs.karmanivero.us/hook-form-semantic</a></p>
+<p>Outputs static docs in <code>docs/</code> (config in <code>typedoc.json</code>). Hosted docs: <a href="https://docs.karmanivero.us/hook-form-semantic">docs.karmanivero.us/hook-form-semantic</a></p>
 <hr>
 <h2 id="faq" class="tsd-anchor-link">FAQ<a href="#faq" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
 <li>Why ESM only?
