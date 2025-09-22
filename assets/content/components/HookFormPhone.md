@@ -8,10 +8,10 @@ International phone input built on [react-international-phone](https://www.npmjs
 
 Value type: `string`.
 
+Peer dependencies: `react-international-phone`, `google-libphonenumber`, `react-responsive`.
 ## Example
 
-```tsx
-import { useForm } from 'react-hook-form';
+```tsximport { useForm } from 'react-hook-form';
 import { Form } from 'semantic-ui-react';
 import { HookFormPhone, isPhoneValid } from '@karmaniverous/hook-form-semantic';
 
@@ -45,3 +45,4 @@ Notes
 
 - Use `phoneCountries` and `phoneDefaultCountry` to constrain selection to your target markets.
 - The placeholder mask follows the selected country format; validation accepts only well-formed numbers.
+- Requires `react-responsive` for mobile detection (dropdown behavior on small screens).

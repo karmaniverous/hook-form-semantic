@@ -8,10 +8,11 @@ Rich scheduling/rules editor powered by [`@karmaniverous/rrstack`](https://www.n
 
 Value type: `RRStackOptions` (timezone, timeUnit, rules).
 
+Peer dependency: `@karmaniverous/rrstack` (install in your app when using this component).
+
 ## Minimal embed
 
-```tsx
-import { useForm } from 'react-hook-form';
+```tsximport { useForm } from 'react-hook-form';
 import { Form } from 'semantic-ui-react';
 import { HookFormRRStack } from '@karmaniverous/hook-form-semantic';
 
@@ -52,5 +53,6 @@ export function ScheduleEditor() {
 Notes
 
 - Timezone is validated; provide a sensible default (e.g., browser timezone).
+- Requires `@karmaniverous/rrstack` as a peer dependency.
 - Span rules (no recurrence) and recurring rules are supported by the built-in editor UI.
 - See the [RRStack docs](https://github.com/karmaniverous/rrstack) for advanced rule semantics.

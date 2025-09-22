@@ -31,29 +31,29 @@ Contents
 Core peer dependencies (always install in your app)
 
 ```bash
-npm i @karmaniverous/hook-form-semantic react react-dom react-hook-form semantic-ui-react semantic-ui-css radash
+npm i @karmaniverous/hook-form-semantic react react-dom react-hook-form semantic-ui-react semantic-ui-css
 ```
 
 Install peers per component you use
 
-- Numeric input (HookFormNumeric)
-  - [react-number-format](https://www.npmjs.com/package/react-number-format)
+- Numeric input (HookFormNumeric)  - [react-number-format](https://www.npmjs.com/package/react-number-format)
 - Phone input (HookFormPhone)
-  - [react-international-phone](https://www.npmjs.com/package/react-international-phone) [google-libphonenumber](https://www.npmjs.com/package/google-libphonenumber)
+  - [react-international-phone](https://www.npmjs.com/package/react-international-phone) [google-libphonenumber](https://www.npmjs.com/package/google-libphonenumber) [react-responsive](https://www.npmjs.com/package/react-responsive)
 - Date & DateTime (HookFormDatePicker)
   - [react-date-picker](https://www.npmjs.com/package/react-date-picker) [react-datetime-picker](https://www.npmjs.com/package/react-datetime-picker) [react-calendar](https://www.npmjs.com/package/react-calendar) [react-clock](https://www.npmjs.com/package/react-clock)
 - Date range & DateTime range (HookFormDateRangePicker)
   - [@wojtekmaj/react-daterange-picker](https://www.npmjs.com/package/@wojtekmaj/react-daterange-picker) [@wojtekmaj/react-datetimerange-picker](https://www.npmjs.com/package/@wojtekmaj/react-datetimerange-picker) [react-calendar](https://www.npmjs.com/package/react-calendar) [react-clock](https://www.npmjs.com/package/react-clock)
+- RRStack (HookFormRRStack)
+  - [@karmaniverous/rrstack](https://www.npmjs.com/package/@karmaniverous/rrstack)
 - WYSIWYG (HookFormWysiwygEditor)
   - [react-draft-wysiwyg](https://www.npmjs.com/package/react-draft-wysiwyg) [draft-js](https://www.npmjs.com/package/draft-js) [html-to-draftjs](https://www.npmjs.com/package/html-to-draftjs) [draftjs-to-html](https://www.npmjs.com/package/draftjs-to-html)
 - JSON editor (HookFormJsonEditor)
   - [vanilla-jsoneditor](https://www.npmjs.com/package/vanilla-jsoneditor)
-
 Examples
 
 ```bash
 # Phone + Numeric + Date
-npm i react-international-phone google-libphonenumber react-number-format react-date-picker react-datetime-picker react-calendar react-clock
+npm i react-international-phone google-libphonenumber react-responsive react-number-format react-date-picker react-datetime-picker react-calendar react-clock
 
 # Date range
 npm i @wojtekmaj/react-daterange-picker @wojtekmaj/react-datetimerange-picker react-calendar react-clock
@@ -63,10 +63,12 @@ npm i react-draft-wysiwyg draft-js html-to-draftjs draftjs-to-html
 
 # JSON editor
 npm i vanilla-jsoneditor
+
+# RRStack
+npm i @karmaniverous/rrstack
 ```
 
 ESM only
-
 - This package ships ESM only. Most modern toolchains (Vite, Next, CRA v5+, Rollup, Webpack 5) work out of the box.
 
 ## CSS (import what you use)
