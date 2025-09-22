@@ -50,6 +50,9 @@ When updated: 2025-09-22T14:20:00Z
   - Updated package.json (drop peer lodash, remove @types/lodash, add radash dependency).
   - Updated README install instructions to remove lodash mention.
 
+- Lint and dependency hygiene
+  - Replace deprecated eslint-plugin-vitest with @vitest/eslint-plugin (ESLint 9 flat config).
+  - Move @karmaniverous/rrstack back to peerDependency for consumers and keep as devDependency here for build/tests. Tree-shaking reduces bundle size, not install-time; keeping rrstack as a peer avoids forcing installs for consumers who don’t use HookFormRRStack.
 - Docs refresh for release readiness:
   - Rewrite README to reflect Hook Form Semantic purpose, components, install matrix, CSS, quick start, tests, playground, and ESM notes.
   - Update typedoc.json hostedBaseUrl and GitHub links to this repo. - Keep CHANGELOG and scripts as-is; no code changes required.
