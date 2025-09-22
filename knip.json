@@ -5,7 +5,27 @@
     "src/**/index.ts"
   ],
   "ignoreBinaries": ["plantuml"],
-  "ignoreDependencies": ["@types/react", "@types/react-dom"],
+  "ignoreDependencies": [
+    "@types/react",
+    "@types/react-dom",
+    "@karmaniverous/rrstack",
+    "@wojtekmaj/react-daterange-picker",
+    "@wojtekmaj/react-datetimerange-picker",
+    "draft-js",
+    "draftjs-to-html",
+    "google-libphonenumber",
+    "html-to-draftjs",
+    "react-calendar",
+    "react-clock",
+    "react-date-picker",
+    "react-datetime-picker",
+    "react-draft-wysiwyg",
+    "react-international-phone",
+    "react-number-format",
+    "react-responsive",
+    "semantic-ui-css",
+    "vanilla-jsoneditor"
+  ],
   "project": ["*/**", "!docs/**"],
   "rules": {
     "exports": "off",

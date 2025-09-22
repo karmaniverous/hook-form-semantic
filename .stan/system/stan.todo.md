@@ -1,19 +1,21 @@
 # Development Plan (STAN TODO)
 
-When updated: 2025-09-22T17:10:00Z
+When updated: 2025-09-22T17:24:00Z
 
 ## Next up
-- Decompose HookFormRRStack.tsx (>300 LOC) into cohesive submodules: - components/rrstack/RuleCard.tsx (render + actions) - components/rrstack/RuleEditor.tsx (edit/add form) - components/rrstack/options.ts (frequency/effect/month/position lists) Add co-located tests for each unit.- Expand RRStack negative-path tests: invalid timezone selection, invalid by\* array entries, move operations edge cases (top/bottom at bounds).- Silence test-only warnings by updating semantic-ui-react doubles to forwardRef and filter DOM-unsafe props (low priority).- Consider addressing the TypeDoc “Presets … not included” warning by adjusting visibility or explicit exports (low priority).
-- Expand negative-path tests (validation and error label rendering) for other HookForm components (e.g., min/max for Numeric, invalid phone).
+- Decompose HookFormRRStack.tsx (>300 LOC) into cohesive submodules: - components/rrstack/RuleCard.tsx (render + actions) - components/rrstack/RuleEditor.tsx (edit/add form) - components/rrstack/options.ts (frequency/effect/month/position lists) Add co-located tests for each unit.- Expand RRStack negative-path tests: invalid timezone selection, invalid by\* array entries, move operations edge cases (top/bottom at bounds).- Silence test-only warnings by updating semantic-ui-react doubles to forwardRef and filter DOM-unsafe props (low priority).- Consider addressing the TypeDoc “Presets … not included” warning by adjusting visibility or explicit exports (low priority).- Expand negative-path tests (validation and error label rendering) for other HookForm components (e.g., min/max for Numeric, invalid phone).
 - Add small unit tests for utility helpers if desired (concatClassNames, PrefixedPartial.deprefix).
 - Cross-browser sanity checks in playground as needed.
 
 ## Completed (recent)
 
+- Tooling: silence knip optional peers
+  - Add all optional peerDependencies to knip.json ignoreDependencies so knip
+    doesn’t report them and CI/release isn’t blocked.
+
 - Docs: clarify peer dependencies
   - README: remove `radash` from core peers (it’s a normal dependency).
-  - README: add `@karmaniverous/rrstack` under per-component peers (RRStack).
-  - README: add `react-responsive` to Phone peers; update example install.
+  - README: add `@karmaniverous/rrstack` under per-component peers (RRStack).  - README: add `react-responsive` to Phone peers; update example install.
   - README: add RRStack example install snippet.
   - Components: mention `@karmaniverous/rrstack` peer in HookFormRRStack doc.
   - Components: note `react-responsive` requirement in HookFormPhone doc.
