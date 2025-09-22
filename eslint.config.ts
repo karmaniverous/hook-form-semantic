@@ -1,11 +1,11 @@
 import path from 'node:path';
 
 import eslint from '@eslint/js';
+import vitest from '@vitest/eslint-plugin';
 import prettierConfig from 'eslint-config-prettier';
 import prettierPlugin from 'eslint-plugin-prettier';
 import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort';
 import tsDocPlugin from 'eslint-plugin-tsdoc';
-import vitest from '@vitest/eslint-plugin';
 import tseslint from 'typescript-eslint';
 export default tseslint.config(
   // Global ignores to keep lint focus on source.
