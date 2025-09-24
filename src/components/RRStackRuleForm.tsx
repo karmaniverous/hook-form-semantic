@@ -1,10 +1,7 @@
 import type { RuleJson } from '@karmaniverous/rrstack';
 import { useCallback, useMemo, useState } from 'react';
-import DatePicker from 'react-date-picker';
-import DateTimePicker from 'react-datetime-picker';
 import {
   Button,
-  Checkbox,
   Container,
   Dropdown,
   Form,
@@ -12,6 +9,8 @@ import {
   Input,
   Message,
 } from 'semantic-ui-react';
+
+import { type DateRange, DateRangePickerComponent } from './DateRangePicker';
 
 interface RRStackRuleFormProps {
   rule: RuleJson;
@@ -79,27 +78,26 @@ export const RRStackRuleForm = ({
   onCancel,
 }: RRStackRuleFormProps) => {
   const [showDateValidation, setShowDateValidation] = useState(false);
-  const [includeStartTime, setIncludeStartTime] = useState(false);
-  const [includeEndTime, setIncludeEndTime] = useState(false);
 
-  // Get current dates directly from rule data (assuming milliseconds)
-  const getStartDate = useMemo((): Date | null => {
-    return rule.options.starts ? new Date(rule.options.starts) : null;
-  }, [rule.options.starts]);
-
-  const getEndDate = useMemo((): Date | null => {
-    return rule.options.ends ? new Date(rule.options.ends) : null;
-  }, [rule.options.ends]);
+  // Get current date range from rule data
+  const getDateRange = useMemo((): DateRange => {
+    const startDate = rule.options.starts
+      ? new Date(rule.options.starts)
+      : null;
+    const endDate = rule.options.ends ? new Date(rule.options.ends) : null;
+    return [startDate, endDate];
+  }, [rule.options.starts, rule.options.ends]);
 
   // Validate date range - only check order when both dates are present
   const validateDateRange = useMemo((): string | null => {
+    const [startDate, endDate] = getDateRange;
     // Only validate date order if both dates are present (both are optional)
-    if (getStartDate && getEndDate && getStartDate >= getEndDate) {
+    if (startDate && endDate && startDate >= endDate) {
       return 'Start date must be before end date';
     }
 
     return null;
-  }, [getStartDate, getEndDate]);
+  }, [getDateRange]);
 
   // Validate duration - at least one field must be positive for recurring rules
   const validateDuration = (): string | null => {
@@ -140,27 +138,17 @@ export const RRStackRuleForm = ({
     onSave();
   };
 
-  // Handle start date changes - let rrstack handle time calculations
-  const handleStartDateChange = useCallback(
-    (value: Date | null | [Date | null, Date | null]) => {
-      // Handle the Value type from date picker (can be Date, null, or array)
-      const date = Array.isArray(value) ? value[0] : value;
-
-      if (!date) {
-        onRuleChange({
-          options: {
-            ...rule.options,
-            starts: undefined,
-          },
-        });
-        return;
-      }
-
-      const startTimestamp = date.getTime();
+  // Handle date range changes
+  const handleDateRangeChange = useCallback(
+    (dateRange: DateRange) => {
+      const [startDate, endDate] = dateRange;
 
       // Clear validation error if validation passes after this change
       if (showDateValidation) {
-        if (date && getEndDate && date < getEndDate) {
+        if (
+          (!startDate && !endDate) ||
+          (startDate && endDate && startDate < endDate)
+        ) {
           setShowDateValidation(false);
         }
       }
@@ -168,46 +156,12 @@ export const RRStackRuleForm = ({
       onRuleChange({
         options: {
           ...rule.options,
-          starts: startTimestamp,
+          starts: startDate ? startDate.getTime() : undefined,
+          ends: endDate ? endDate.getTime() : undefined,
         },
       });
     },
-    [onRuleChange, rule.options, showDateValidation, getEndDate],
-  );
-
-  // Handle end date changes - let rrstack handle time calculations
-  const handleEndDateChange = useCallback(
-    (value: Date | null | [Date | null, Date | null]) => {
-      // Handle the Value type from date picker (can be Date, null, or array)
-      const date = Array.isArray(value) ? value[0] : value;
-
-      if (!date) {
-        onRuleChange({
-          options: {
-            ...rule.options,
-            ends: undefined,
-          },
-        });
-        return;
-      }
-
-      const endTimestamp = date.getTime();
-
-      // Clear validation error if validation passes after this change
-      if (showDateValidation) {
-        if (getStartDate && date && getStartDate < date) {
-          setShowDateValidation(false);
-        }
-      }
-
-      onRuleChange({
-        options: {
-          ...rule.options,
-          ends: endTimestamp,
-        },
-      });
-    },
-    [onRuleChange, rule.options, showDateValidation, getStartDate],
+    [onRuleChange, rule.options, showDateValidation],
   );
 
   const handleFieldChange = (updates: Partial<RuleJson>) => {
@@ -574,104 +528,16 @@ export const RRStackRuleForm = ({
         </Form.Field>
       </Form.Group>
 
-      <Form.Group widths="equal">
-        <Form.Field className="hook-form-date-picker">
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <label>Start Date</label>
-            <Checkbox
-              checked={includeStartTime}
-              label="Include Time"
-              onChange={(event, data) =>
-                setIncludeStartTime(data.checked || false)
-              }
-            />
-          </div>
-          <div className="input">
-            {includeStartTime ? (
-              <DateTimePicker
-                dayPlaceholder="dd"
-                disableClock
-                hourPlaceholder="hh"
-                maxDetail="minute"
-                minutePlaceholder="mm"
-                monthPlaceholder="mm"
-                onChange={handleStartDateChange}
-                secondPlaceholder="ss"
-                showLeadingZeros
-                yearPlaceholder="yyyy"
-                value={getStartDate}
-                calendarProps={{
-                  showNeighboringMonth: false,
-                  showNavigation: true,
-                  returnValue: 'start',
-                }}
-              />
-            ) : (
-              <DatePicker
-                dayPlaceholder="dd"
-                monthPlaceholder="mm"
-                onChange={handleStartDateChange}
-                showLeadingZeros
-                yearPlaceholder="yyyy"
-                value={getStartDate}
-                calendarProps={{
-                  showNeighboringMonth: false,
-                  showNavigation: true,
-                  returnValue: 'start',
-                }}
-              />
-            )}
-          </div>
-        </Form.Field>
-        <Form.Field className="hook-form-date-picker">
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <label>End Date</label>
-            <Checkbox
-              checked={includeEndTime}
-              label="Include Time"
-              onChange={(event, data) =>
-                setIncludeEndTime(data.checked || false)
-              }
-            />
-          </div>
-          <div className="input">
-            {includeEndTime ? (
-              <DateTimePicker
-                dayPlaceholder="dd"
-                disableClock
-                hourPlaceholder="hh"
-                maxDetail="minute"
-                minutePlaceholder="mm"
-                monthPlaceholder="mm"
-                onChange={handleEndDateChange}
-                secondPlaceholder="ss"
-                showLeadingZeros
-                yearPlaceholder="yyyy"
-                value={getEndDate}
-                calendarProps={{
-                  showNeighboringMonth: false,
-                  showNavigation: true,
-                  returnValue: 'start',
-                }}
-              />
-            ) : (
-              <DatePicker
-                dayPlaceholder="dd"
-                monthPlaceholder="mm"
-                onChange={handleEndDateChange}
-                showLeadingZeros
-                yearPlaceholder="yyyy"
-                value={getEndDate}
-                calendarProps={{
-                  showNeighboringMonth: false,
-                  showNavigation: true,
-                  returnValue: 'start',
-                }}
-              />
-            )}
-          </div>
-        </Form.Field>
-      </Form.Group>
+      <DateRangePickerComponent
+        label="Date Range"
+        value={getDateRange}
+        onChange={handleDateRangeChange}
+        error={
+          showDateValidation && validateDateRange
+            ? validateDateRange
+            : undefined
+        }
+      />
 
       {showDateValidation &&
         (() => {
