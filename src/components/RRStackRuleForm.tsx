@@ -270,8 +270,15 @@ export const RRStackRuleForm = ({
         }
       }
 
+      // Handle weekdays with positions more naturally
       if (byweekday) {
         const weekdayArray = Array.isArray(byweekday) ? byweekday : [byweekday];
+        const positions = bysetpos
+          ? Array.isArray(bysetpos)
+            ? bysetpos
+            : [bysetpos]
+          : [];
+
         if (weekdayArray.length > 0) {
           const weekdayNames = weekdayArray
             .map((d) => {
@@ -298,7 +305,37 @@ export const RRStackRuleForm = ({
                 ?.text;
             })
             .filter(Boolean);
-          timeConstraints.push(`on ${weekdayNames.join(', ')}`);
+
+          // Combine positions with weekdays for more natural reading
+          if (positions.length > 0) {
+            const positionNames = positions
+              .map((p) => POSITION_OPTIONS.find((opt) => opt.value === p)?.text)
+              .filter(Boolean);
+
+            if (positionNames.length === 1 && weekdayNames.length === 1) {
+              // Single position + single weekday: "on 2nd Tuesday"
+              timeConstraints.push(`on ${positionNames[0]} ${weekdayNames[0]}`);
+            } else {
+              // Multiple positions or weekdays: fall back to separate description
+              timeConstraints.push(`on ${weekdayNames.join(', ')}`);
+              timeConstraints.push(
+                `${positionNames.join(', ')} occurrence${positionNames.length > 1 ? 's' : ''}`,
+              );
+            }
+          } else {
+            timeConstraints.push(`on ${weekdayNames.join(', ')}`);
+          }
+        }
+      } else if (bysetpos) {
+        // Position without weekday
+        const positions = Array.isArray(bysetpos) ? bysetpos : [bysetpos];
+        if (positions.length > 0) {
+          const positionNames = positions
+            .map((p) => POSITION_OPTIONS.find((opt) => opt.value === p)?.text)
+            .filter(Boolean);
+          timeConstraints.push(
+            `${positionNames.join(', ')} occurrence${positionNames.length > 1 ? 's' : ''}`,
+          );
         }
       }
 
@@ -311,35 +348,32 @@ export const RRStackRuleForm = ({
         }
       }
 
-      if (byhour) {
+      if (byhour && byminute) {
+        // When both hours and minutes are specified, show as time combinations
         const hours = Array.isArray(byhour) ? byhour : [byhour];
-        if (hours.length > 0) {
-          const hourStrings = hours.map(
-            (h) => `${h.toString().padStart(2, '0')}:00`,
-          );
-          timeConstraints.push(`at ${hourStrings.join(', ')}`);
-        }
-      }
-
-      if (byminute) {
         const minutes = Array.isArray(byminute) ? byminute : [byminute];
-        if (minutes.length > 0) {
-          timeConstraints.push(
-            `at minute${minutes.length > 1 ? 's' : ''} ${minutes.join(', ')}`,
-          );
+        const times = [];
+        for (const hour of hours) {
+          for (const minute of minutes) {
+            times.push(
+              `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`,
+            );
+          }
         }
-      }
-
-      if (bysetpos) {
-        const positions = Array.isArray(bysetpos) ? bysetpos : [bysetpos];
-        if (positions.length > 0) {
-          const positionNames = positions
-            .map((p) => POSITION_OPTIONS.find((opt) => opt.value === p)?.text)
-            .filter(Boolean);
-          timeConstraints.push(
-            `${positionNames.join(', ')} occurrence${positionNames.length > 1 ? 's' : ''}`,
-          );
-        }
+        timeConstraints.push(`at ${times.join(', ')}`);
+      } else if (byhour) {
+        // Only hours specified, assume :00 minutes
+        const hours = Array.isArray(byhour) ? byhour : [byhour];
+        const hourStrings = hours.map(
+          (h) => `${h.toString().padStart(2, '0')}:00`,
+        );
+        timeConstraints.push(`at ${hourStrings.join(', ')}`);
+      } else if (byminute) {
+        // Only minutes specified
+        const minutes = Array.isArray(byminute) ? byminute : [byminute];
+        timeConstraints.push(
+          `at minute${minutes.length > 1 ? 's' : ''} ${minutes.join(', ')}`,
+        );
       }
 
       if (timeConstraints.length > 0) {
@@ -373,15 +407,18 @@ export const RRStackRuleForm = ({
     <Container>
       <Form.Group widths="equal">
         <Form.Field>
-          <label>Label</label>
+          {labelWithInfo(
+            'Label',
+            'Optional descriptive name for this rule to help identify its purpose.',
+          )}
           <Input
             size="small"
             value={rule.label || ''}
             onChange={(e) => handleFieldChange({ label: e.target.value })}
-            placeholder="Rule label"
+            placeholder="Rule label (optional)"
           />
         </Form.Field>
-        <Form.Field>
+        <Form.Field required>
           {labelWithInfo(
             'Effect',
             'Active enables windows; Blackout blocks them. Use Blackout to exclude periods.',
@@ -584,7 +621,7 @@ export const RRStackRuleForm = ({
             <Form.Field>
               {labelWithInfo(
                 'Hours',
-                'Comma-separated hours (0–23). Example: 9, 13, 17',
+                'Comma-separated hours (0–23) when events should occur. Example: 9, 13, 17 for 9 AM, 1 PM, 5 PM',
               )}
               <Input
                 size="small"
@@ -610,7 +647,7 @@ export const RRStackRuleForm = ({
             <Form.Field>
               {labelWithInfo(
                 'Minutes',
-                'Comma-separated minutes (0–59). Example: 0, 30',
+                'Comma-separated minutes (0–59) within each hour. Example: 0, 30 for on-the-hour and half-past',
               )}
               <Input
                 size="small"
