@@ -9,6 +9,7 @@ import {
   Icon,
   Input,
   Message,
+  Popup,
 } from 'semantic-ui-react';
 
 import { type DateRange, DateRangePickerComponent } from './DateRangePicker';
@@ -84,10 +85,17 @@ export const RRStackRuleForm = ({
     (text: string, help: string) => (
       <label>
         {text}{' '}
-        <Icon
-          name="info circle"
-          title={help}
-          style={{ marginLeft: 4, opacity: 0.6 }}
+        <Popup
+          content={help}
+          trigger={
+            <Icon
+              name="info circle"
+              style={{ marginLeft: 4, opacity: 0.6, cursor: 'help' }}
+            />
+          }
+          position="top center"
+          size="small"
+          inverted
         />
       </label>
     ),
@@ -583,7 +591,7 @@ export const RRStackRuleForm = ({
       <DateRangePickerComponent
         label={labelWithInfo(
           'Date Range',
-          'Optional start/end timestamps that bound the rule’s validity window.',
+          "Optional start/end timestamps that bound the rule's validity window.",
         )}
         value={getDateRange}
         onChange={handleDateRangeChange}
