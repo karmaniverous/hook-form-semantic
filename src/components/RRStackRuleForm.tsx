@@ -309,8 +309,8 @@ export const RRStackRuleForm = ({
       {rule.options.freq !== undefined && (
         <>
           <Header size="tiny">Duration</Header>
-          <Form.Group>
-            <Form.Field width={2}>
+          <Form.Group widths={6}>
+            <Form.Field>
               {labelWithInfo('Years', 'Duration years component (0+).')}
               <Input
                 size="small"
@@ -325,7 +325,7 @@ export const RRStackRuleForm = ({
                 placeholder="0"
               />
             </Form.Field>
-            <Form.Field width={2}>
+            <Form.Field>
               {labelWithInfo('Months', 'Duration months component (0+).')}
               <Input
                 size="small"
@@ -340,7 +340,7 @@ export const RRStackRuleForm = ({
                 placeholder="0"
               />
             </Form.Field>
-            <Form.Field width={2}>
+            <Form.Field>
               {labelWithInfo('Days', 'Duration days component (0+).')}
               <Input
                 size="small"
@@ -355,7 +355,7 @@ export const RRStackRuleForm = ({
                 placeholder="0"
               />
             </Form.Field>
-            <Form.Field width={2}>
+            <Form.Field>
               {labelWithInfo('Hours', 'Duration hours component (0+).')}
               <Input
                 size="small"
@@ -370,7 +370,7 @@ export const RRStackRuleForm = ({
                 placeholder="0"
               />
             </Form.Field>
-            <Form.Field width={2}>
+            <Form.Field>
               {labelWithInfo('Min', 'Duration minutes component (0+).')}
               <Input
                 size="small"
@@ -385,7 +385,7 @@ export const RRStackRuleForm = ({
                 placeholder="0"
               />
             </Form.Field>
-            <Form.Field width={2}>
+            <Form.Field>
               {labelWithInfo('Sec', 'Duration seconds component (0+).')}
               <Input
                 size="small"

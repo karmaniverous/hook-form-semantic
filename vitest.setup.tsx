@@ -414,6 +414,16 @@ vi.mock('semantic-ui-react', () => {
       children,
     );
 
+  const Popup: React.FC<
+    React.PropsWithChildren<{
+      content?: React.ReactNode;
+      trigger?: React.ReactNode;
+      position?: string;
+      size?: string;
+      inverted?: boolean;
+    }>
+  > = ({ trigger }) => React.createElement(React.Fragment, {}, trigger);
+
   return {
     Form,
     Label,
@@ -429,6 +439,7 @@ vi.mock('semantic-ui-react', () => {
     Segment,
     Accordion,
     Container,
+    Popup,
   };
 });
 
