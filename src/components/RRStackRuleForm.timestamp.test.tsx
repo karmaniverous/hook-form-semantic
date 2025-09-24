@@ -3,7 +3,6 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { RRStackRuleForm } from './RRStackRuleForm';
-
 describe('RRStackRuleForm Timestamp Handling', () => {
   const mockRule: RuleJson = {
     effect: 'active',
@@ -28,9 +27,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
 
   it('sets start date without automatic time adjustment', () => {
     render(<RRStackRuleForm {...mockProps} />);
-
-    const dateInputs = screen.getAllByTestId('date-picker');
-    const startDateInput = dateInputs[0];
+    const startDateInput = screen.getByTestId('daterange-start') as HTMLInputElement;
 
     // Simulate user selecting a date
     const testDate = '2024-01-15';
@@ -40,8 +37,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     const expectedDate = new Date('2024-01-15');
 
     expect(mockProps.onRuleChange).toHaveBeenCalledWith({
-      options: {
-        ...mockRule.options,
+      options: {        ...mockRule.options,
         starts: expectedDate.getTime(),
       },
     });
@@ -49,9 +45,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
 
   it('sets end date without automatic time adjustment', () => {
     render(<RRStackRuleForm {...mockProps} />);
-
-    const dateInputs = screen.getAllByTestId('date-picker');
-    const endDateInput = dateInputs[1];
+    const endDateInput = screen.getByTestId('daterange-end') as HTMLInputElement;
 
     // Simulate user selecting a date
     const testDate = '2024-01-15';
@@ -61,8 +55,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     const expectedDate = new Date('2024-01-15');
 
     expect(mockProps.onRuleChange).toHaveBeenCalledWith({
-      options: {
-        ...mockRule.options,
+      options: {        ...mockRule.options,
         ends: expectedDate.getTime(),
       },
     });
@@ -85,10 +78,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     };
 
     render(<RRStackRuleForm {...propsWithDate} />);
-
-    // Get the date picker inputs
-    const dateInputs = screen.getAllByTestId('date-picker');
-    const startDateInput = dateInputs[0];
+    const startDateInput = screen.getByTestId('daterange-start') as HTMLInputElement;
 
     // Clear the date
     fireEvent.change(startDateInput, { target: { value: '' } });
@@ -104,24 +94,20 @@ describe('RRStackRuleForm Timestamp Handling', () => {
   it('displays date picker fields with Include Time checkboxes', () => {
     render(<RRStackRuleForm {...mockProps} />);
 
-    expect(screen.getByText('Start Date')).toBeInTheDocument();
-    expect(screen.getByText('End Date')).toBeInTheDocument();
+    expect(screen.getByText('Date Range')).toBeInTheDocument();
 
-    // Check for Include Time checkboxes
-    const includeTimeCheckboxes = screen.getAllByText('Include Time');
-    expect(includeTimeCheckboxes).toHaveLength(2);
+    // Check for a single Include Time checkbox
+    expect(screen.getByText('Include Time')).toBeInTheDocument();
   });
 
   it('creates proper date range when both dates are selected', () => {
     render(<RRStackRuleForm {...mockProps} />);
 
-    const dateInputs = screen.getAllByTestId('date-picker');
-    const startDateInput = dateInputs[0];
-    const endDateInput = dateInputs[1];
+    const startDateInput = screen.getByTestId('daterange-start') as HTMLInputElement;
+    const endDateInput = screen.getByTestId('daterange-end') as HTMLInputElement;
 
     // Set start date (no automatic time adjustment)
     fireEvent.change(startDateInput, { target: { value: '2024-01-15' } });
-
     // Set end date (no automatic time adjustment)
     fireEvent.change(endDateInput, { target: { value: '2024-01-16' } });
 

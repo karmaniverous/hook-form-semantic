@@ -1,14 +1,21 @@
 # Development Plan (STAN TODO)
 
-When updated: 2025-09-22T17:24:00Z
+When updated: 2025-09-24T00:00:00Z
 
 ## Next up
 - Decompose HookFormRRStack.tsx (>300 LOC) into cohesive submodules: - components/rrstack/RuleCard.tsx (render + actions) - components/rrstack/RuleEditor.tsx (edit/add form) - components/rrstack/options.ts (frequency/effect/month/position lists) Add co-located tests for each unit.- Expand RRStack negative-path tests: invalid timezone selection, invalid by\* array entries, move operations edge cases (top/bottom at bounds).- Silence test-only warnings by updating semantic-ui-react doubles to forwardRef and filter DOM-unsafe props (low priority).- Consider addressing the TypeDoc “Presets … not included” warning by adjusting visibility or explicit exports (low priority).- Expand negative-path tests (validation and error label rendering) for other HookForm components (e.g., min/max for Numeric, invalid phone).
 - Add small unit tests for utility helpers if desired (concatClassNames, PrefixedPartial.deprefix).
 - Cross-browser sanity checks in playground as needed.
+- RRStackRuleForm improvements (phase 2):
+  - Replace Hours/Minutes integers with a single “Times (HH:MM)” field that
+    parses comma-separated clock times into byhour/byminute arrays.
+  - Remove Save/Cancel in rule editor; apply changes live to rrstack with
+    debounced updates; adjust tests accordingly (no “Add Rule” submit).
+  - Live rule description preview while editing (compute from editingRule).
+  - Refine 12-column layout to match provided diagram precisely; ensure that
+    “yellow” sections are hidden for Span (freq undefined).
 
 ## Completed (recent)
-
 - Tooling: silence knip optional peers
   - Add all optional peerDependencies to knip.json ignoreDependencies so knip
     doesn’t report them and CI/release isn’t blocked.
@@ -56,9 +63,18 @@ When updated: 2025-09-22T17:24:00Z
   - Updated package.json (drop peer lodash, remove @types/lodash, add radash dependency).
   - Updated README install instructions to remove lodash mention.
 
+- Tests & tooling quick wins:
+  - Fix RRStackRuleForm timestamp tests to reflect current DateRange UI
+    (daterange-start/daterange-end; single Include Time; “Date Range” label).
+  - Make diagrams script resilient: if PlantUML is not installed, skip with an
+    informative message rather than failing the script.
+  - RRStackRuleForm: add info tooltips for key labels (Span/Frequency, Interval,
+    Months, Days of Month, Weekdays, Position, Time of Day, Count, Date Range).
+  - Hide recurrence-only controls (Time of Day, Weekdays/Position, Months/Days/Count)
+    when Frequency is Span (freq undefined).
+
 - Lint and dependency hygiene
   - Fix ESLint flat-config parse error after switching to @vitest/eslint-plugin (braces were on comment lines and got commented out).
-
 - Dependency policy and docs
   - Make component-specific integrations optional peerDependencies: rrstack, date/time pickers, react-number-format, phone libs, WYSIWYG stack, vanilla-jsoneditor, react-responsive, semantic-ui-css. Keep core host singletons (react, react-dom, react-hook-form, semantic-ui-react) as required peers. Keep rrstack as devDependency to support local tests/docs.
   - Export Presets type to include it in TypeDoc and silence the warning.

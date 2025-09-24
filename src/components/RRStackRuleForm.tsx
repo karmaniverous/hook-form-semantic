@@ -4,12 +4,12 @@ import {
   Button,
   Container,
   Dropdown,
+  Icon,
   Form,
   Header,
   Input,
   Message,
 } from 'semantic-ui-react';
-
 import { type DateRange, DateRangePickerComponent } from './DateRangePicker';
 
 interface RRStackRuleFormProps {
@@ -79,9 +79,18 @@ export const RRStackRuleForm = ({
 }: RRStackRuleFormProps) => {
   const [showDateValidation, setShowDateValidation] = useState(false);
 
+  const labelWithInfo = useCallback(
+    (text: string, help: string) => (
+      <label>
+        {text}{' '}
+        <Icon name="info circle" title={help} style={{ marginLeft: 4, opacity: 0.6 }} />
+      </label>
+    ),
+    [],
+  );
+
   // Get current date range from rule data
-  const getDateRange = useMemo((): DateRange => {
-    const startDate = rule.options.starts
+  const getDateRange = useMemo((): DateRange => {    const startDate = rule.options.starts
       ? new Date(rule.options.starts)
       : null;
     const endDate = rule.options.ends ? new Date(rule.options.ends) : null;
@@ -201,11 +210,13 @@ export const RRStackRuleForm = ({
           />
         </Form.Field>
         <Form.Field>
-          <label>Effect</label>
+          {labelWithInfo(
+            'Effect',
+            'Active enables windows; Blackout blocks them. Use Blackout to exclude periods.',
+          )}
           <Dropdown
             selection
-            compact
-            options={EFFECT_OPTIONS}
+            compact            options={EFFECT_OPTIONS}
             value={rule.effect}
             onChange={(e, { value }) =>
               handleFieldChange({ effect: value as 'active' | 'blackout' })
@@ -213,14 +224,16 @@ export const RRStackRuleForm = ({
           />
         </Form.Field>
         <Form.Field>
-          <label>Frequency</label>
+          {labelWithInfo(
+            'Frequency',
+            'Span = a continuous time range (no recurrence). Yearly/Monthly/etc. define recurring schedules.',
+          )}
           <Dropdown
             selection
             compact
             options={FREQUENCY_OPTIONS}
             value={rule.options.freq === undefined ? 'span' : rule.options.freq}
-            onChange={(e, { value }) => {
-              const freq =
+            onChange={(e, { value }) => {              const freq =
                 value === 'span'
                   ? undefined
                   : (value as
@@ -257,7 +270,10 @@ export const RRStackRuleForm = ({
         {/* Only show interval for recurring rules */}
         {rule.options.freq !== undefined && (
           <Form.Field>
-            <label>Interval</label>
+            {labelWithInfo(
+              'Interval',
+              'Number of frequency units to skip between occurrences. Example: every 2 weeks.',
+            )}
             <Input
               size="small"
               type="number"
@@ -279,7 +295,7 @@ export const RRStackRuleForm = ({
           <Header size="tiny">Duration</Header>
           <Form.Group>
             <Form.Field width={2}>
-              <label>Years</label>
+              {labelWithInfo('Years', 'Duration years component (0+).')}
               <Input
                 size="small"
                 type="number"
@@ -294,7 +310,7 @@ export const RRStackRuleForm = ({
               />
             </Form.Field>
             <Form.Field width={2}>
-              <label>Months</label>
+              {labelWithInfo('Months', 'Duration months component (0+).')}
               <Input
                 size="small"
                 type="number"
@@ -309,7 +325,7 @@ export const RRStackRuleForm = ({
               />
             </Form.Field>
             <Form.Field width={2}>
-              <label>Days</label>
+              {labelWithInfo('Days', 'Duration days component (0+).')}
               <Input
                 size="small"
                 type="number"
@@ -324,7 +340,7 @@ export const RRStackRuleForm = ({
               />
             </Form.Field>
             <Form.Field width={2}>
-              <label>Hours</label>
+              {labelWithInfo('Hours', 'Duration hours component (0+).')}
               <Input
                 size="small"
                 type="number"
@@ -339,7 +355,7 @@ export const RRStackRuleForm = ({
               />
             </Form.Field>
             <Form.Field width={2}>
-              <label>Min</label>
+              {labelWithInfo('Min', 'Duration minutes component (0+).')}
               <Input
                 size="small"
                 type="number"
@@ -354,7 +370,7 @@ export const RRStackRuleForm = ({
               />
             </Form.Field>
             <Form.Field width={2}>
-              <label>Sec</label>
+              {labelWithInfo('Sec', 'Duration seconds component (0+).')}
               <Input
                 size="small"
                 type="number"
@@ -372,164 +388,195 @@ export const RRStackRuleForm = ({
         </>
       )}
 
-      <Header size="tiny">Time of Day</Header>
-      <Form.Group widths="equal">
-        <Form.Field>
-          <label>Hours</label>
-          <Input
-            size="small"
-            value={
-              rule.options.byhour
-                ? Array.isArray(rule.options.byhour)
-                  ? rule.options.byhour.join(', ')
-                  : rule.options.byhour.toString()
-                : ''
-            }
-            onChange={(e) => {
-              const hours = e.target.value
-                .split(',')
-                .map((h) => parseInt(h.trim()))
-                .filter((h) => !isNaN(h) && h >= 0 && h <= 23);
-              handleOptionsChange({
-                byhour: hours.length > 0 ? hours : undefined,
-              });
-            }}
-            placeholder="e.g., 9, 13, 17"
-          />
-        </Form.Field>
-        <Form.Field>
-          <label>Minutes</label>
-          <Input
-            size="small"
-            value={
-              rule.options.byminute
-                ? Array.isArray(rule.options.byminute)
-                  ? rule.options.byminute.join(', ')
-                  : rule.options.byminute.toString()
-                : ''
-            }
-            onChange={(e) => {
-              const minutes = e.target.value
-                .split(',')
-                .map((m) => parseInt(m.trim()))
-                .filter((m) => !isNaN(m) && m >= 0 && m <= 59);
-              handleOptionsChange({
-                byminute: minutes.length > 0 ? minutes : undefined,
-              });
-            }}
-            placeholder="e.g., 0, 30"
-          />
-        </Form.Field>
-        <Form.Field>
-          <label>Weekdays</label>
-          <Dropdown
-            selection
-            multiple
-            search
-            compact
-            options={WEEKDAY_OPTIONS}
-            value={
-              Array.isArray(rule.options.byweekday)
-                ? rule.options.byweekday.filter(
-                    (day): day is number => typeof day === 'number',
-                  )
-                : typeof rule.options.byweekday === 'number'
-                  ? [rule.options.byweekday]
-                  : []
-            }
-            onChange={(e, { value }) => {
-              handleOptionsChange({
-                byweekday:
-                  (value as number[]).length > 0
-                    ? (value as number[])
-                    : undefined,
-              });
-            }}
-          />
-        </Form.Field>
-        <Form.Field>
-          <label>Position</label>
-          <Dropdown
-            selection
-            multiple
-            compact
-            options={POSITION_OPTIONS}
-            value={rule.options.bysetpos || []}
-            onChange={(e, { value }) => {
-              handleOptionsChange({
-                bysetpos:
-                  (value as number[]).length > 0
-                    ? (value as number[])
-                    : undefined,
-              });
-            }}
-          />
-        </Form.Field>
-      </Form.Group>
+      {/* Recurrence-only constraints: hide when Span (no freq) */}
+      {rule.options.freq !== undefined && (
+        <>
+          <Header size="tiny">Time of Day</Header>
+          <Form.Group widths="equal">
+            <Form.Field>
+              {labelWithInfo(
+                'Hours',
+                'Comma-separated hours (0–23). Example: 9, 13, 17',
+              )}
+              <Input
+                size="small"
+                value={
+                  rule.options.byhour
+                    ? Array.isArray(rule.options.byhour)
+                      ? rule.options.byhour.join(', ')
+                      : rule.options.byhour.toString()
+                    : ''
+                }
+                onChange={(e) => {
+                  const hours = e.target.value
+                    .split(',')
+                    .map((h) => parseInt(h.trim()))
+                    .filter((h) => !isNaN(h) && h >= 0 && h <= 23);
+                  handleOptionsChange({
+                    byhour: hours.length > 0 ? hours : undefined,
+                  });
+                }}
+                placeholder="e.g., 9, 13, 17"
+              />
+            </Form.Field>
+            <Form.Field>
+              {labelWithInfo(
+                'Minutes',
+                'Comma-separated minutes (0–59). Example: 0, 30',
+              )}
+              <Input
+                size="small"
+                value={
+                  rule.options.byminute
+                    ? Array.isArray(rule.options.byminute)
+                      ? rule.options.byminute.join(', ')
+                      : rule.options.byminute.toString()
+                    : ''
+                }
+                onChange={(e) => {
+                  const minutes = e.target.value
+                    .split(',')
+                    .map((m) => parseInt(m.trim()))
+                    .filter((m) => !isNaN(m) && m >= 0 && m <= 59);
+                  handleOptionsChange({
+                    byminute: minutes.length > 0 ? minutes : undefined,
+                  });
+                }}
+                placeholder="e.g., 0, 30"
+              />
+            </Form.Field>
+            <Form.Field>
+              {labelWithInfo(
+                'Weekdays',
+                'Select days of the week for recurrences within periods.',
+              )}
+              <Dropdown
+                selection
+                multiple
+                search
+                compact
+                options={WEEKDAY_OPTIONS}
+                value={
+                  Array.isArray(rule.options.byweekday)
+                    ? rule.options.byweekday.filter(
+                        (day): day is number => typeof day === 'number',
+                      )
+                    : typeof rule.options.byweekday === 'number'
+                      ? [rule.options.byweekday]
+                      : []
+                }
+                onChange={(e, { value }) => {
+                  handleOptionsChange({
+                    byweekday:
+                      (value as number[]).length > 0
+                        ? (value as number[])
+                        : undefined,
+                  });
+                }}
+              />
+            </Form.Field>
+            <Form.Field>
+              {labelWithInfo(
+                'Position',
+                'Select nth occurrence within the period (e.g., 1st, 2nd, Last).',
+              )}
+              <Dropdown
+                selection
+                multiple
+                compact
+                options={POSITION_OPTIONS}
+                value={rule.options.bysetpos || []}
+                onChange={(e, { value }) => {
+                  handleOptionsChange({
+                    bysetpos:
+                      (value as number[]).length > 0
+                        ? (value as number[])
+                        : undefined,
+                  });
+                }}
+              />
+            </Form.Field>
+          </Form.Group>
+        </>
+      )}
 
-      <Form.Group widths="equal">
-        <Form.Field>
-          <label>Months</label>
-          <Dropdown
-            selection
-            multiple
-            search
-            compact
-            options={MONTH_OPTIONS}
-            value={rule.options.bymonth || []}
-            onChange={(e, { value }) => {
-              handleOptionsChange({
-                bymonth:
-                  (value as number[]).length > 0
-                    ? (value as number[])
-                    : undefined,
-              });
-            }}
-            placeholder="Select months"
-          />
-        </Form.Field>
-        <Form.Field>
-          <label>Days of Month (1-31)</label>
-          <Input
-            size="small"
-            value={
-              rule.options.bymonthday
-                ? Array.isArray(rule.options.bymonthday)
-                  ? rule.options.bymonthday.join(', ')
-                  : rule.options.bymonthday.toString()
-                : ''
-            }
-            onChange={(e) => {
-              const days = e.target.value
-                .split(',')
-                .map((d) => parseInt(d.trim()))
-                .filter((d) => !isNaN(d) && d >= 1 && d <= 31);
-              handleOptionsChange({
-                bymonthday: days.length > 0 ? days : undefined,
-              });
-            }}
-            placeholder="e.g., 25 (for 25th) or 1, 15, 31"
-          />
-        </Form.Field>
-        <Form.Field>
-          <label>Count</label>
-          <Input
-            size="small"
-            type="number"
-            value={rule.options.count || ''}
-            onChange={(e) => {
-              handleOptionsChange({
-                count: parseInt(e.target.value) || undefined,
-              });
-            }}
-            min={1}
-            placeholder="Number of occurrences"
-          />
-        </Form.Field>
-      </Form.Group>
+      {rule.options.freq !== undefined && (
+        <Form.Group widths="equal">
+          <Form.Field>
+            {labelWithInfo(
+              'Months',
+              'Restrict recurrences to specific months.',
+            )}
+            <Dropdown
+              selection
+              multiple
+              search
+              compact
+              options={MONTH_OPTIONS}
+              value={rule.options.bymonth || []}
+              onChange={(e, { value }) => {
+                handleOptionsChange({
+                  bymonth:
+                    (value as number[]).length > 0
+                      ? (value as number[])
+                      : undefined,
+                });
+              }}
+              placeholder="Select months"
+            />
+          </Form.Field>
+          <Form.Field>
+            {labelWithInfo(
+              'Days of Month (1-31)',
+              'Comma-separated days within the month for recurrences (e.g., 1, 15, 31).',
+            )}
+            <Input
+              size="small"
+              value={
+                rule.options.bymonthday
+                  ? Array.isArray(rule.options.bymonthday)
+                    ? rule.options.bymonthday.join(', ')
+                    : rule.options.bymonthday.toString()
+                  : ''
+              }
+              onChange={(e) => {
+                const days = e.target.value
+                  .split(',')
+                  .map((d) => parseInt(d.trim()))
+                  .filter((d) => !isNaN(d) && d >= 1 && d <= 31);
+                handleOptionsChange({
+                  bymonthday: days.length > 0 ? days : undefined,
+                });
+              }}
+              placeholder="e.g., 25 (for 25th) or 1, 15, 31"
+            />
+          </Form.Field>
+          <Form.Field>
+            {labelWithInfo(
+              'Count',
+              'Maximum number of occurrences to generate for this rule.',
+            )}
+            <Input
+              size="small"
+              type="number"
+              value={rule.options.count || ''}
+              onChange={(e) => {
+                handleOptionsChange({
+                  count: parseInt(e.target.value) || undefined,
+                });
+              }}
+              min={1}
+              placeholder="Number of occurrences"
+            />
+          </Form.Field>
+        </Form.Group>
+      )}
 
       <DateRangePickerComponent
-        label="Date Range"
+        label={labelWithInfo(
+          'Date Range',
+          'Optional start/end timestamps that bound the rule’s validity window.',
+        )}
         value={getDateRange}
         onChange={handleDateRangeChange}
         error={
@@ -538,7 +585,6 @@ export const RRStackRuleForm = ({
             : undefined
         }
       />
-
       {showDateValidation &&
         (() => {
           const durationValidationError = validateDuration();
