@@ -10,7 +10,6 @@
     "url": "https://github.com/karmaniverous/hook-form-semantic/issues"
   },
   "dependencies": {
-    "npm-check-updates": "^18.3.0",
     "radash": "^12.1.1"
   },
   "description": "React Hook Form components with Semantic UI React integration - date pickers, WYSIWYG editor, phone input, JSON editor, and more.",
