@@ -235,7 +235,7 @@ export const RRStackRuleForm = ({
   };
 
   return (
-    <Form size="small">
+    <Container>
       <Form.Group widths="equal">
         <Form.Field>
           <label>Label</label>
@@ -714,6 +714,6 @@ export const RRStackRuleForm = ({
           <Message.Content>{validationError}</Message.Content>
         </Message>
       )}
-    </Form>
+    </Container>
   );
 };
