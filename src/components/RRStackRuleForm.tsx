@@ -4,12 +4,13 @@ import {
   Button,
   Container,
   Dropdown,
-  Icon,
   Form,
   Header,
+  Icon,
   Input,
   Message,
 } from 'semantic-ui-react';
+
 import { type DateRange, DateRangePickerComponent } from './DateRangePicker';
 
 interface RRStackRuleFormProps {
@@ -83,14 +84,19 @@ export const RRStackRuleForm = ({
     (text: string, help: string) => (
       <label>
         {text}{' '}
-        <Icon name="info circle" title={help} style={{ marginLeft: 4, opacity: 0.6 }} />
+        <Icon
+          name="info circle"
+          title={help}
+          style={{ marginLeft: 4, opacity: 0.6 }}
+        />
       </label>
     ),
     [],
   );
 
   // Get current date range from rule data
-  const getDateRange = useMemo((): DateRange => {    const startDate = rule.options.starts
+  const getDateRange = useMemo((): DateRange => {
+    const startDate = rule.options.starts
       ? new Date(rule.options.starts)
       : null;
     const endDate = rule.options.ends ? new Date(rule.options.ends) : null;
@@ -216,7 +222,8 @@ export const RRStackRuleForm = ({
           )}
           <Dropdown
             selection
-            compact            options={EFFECT_OPTIONS}
+            compact
+            options={EFFECT_OPTIONS}
             value={rule.effect}
             onChange={(e, { value }) =>
               handleFieldChange({ effect: value as 'active' | 'blackout' })
@@ -233,7 +240,8 @@ export const RRStackRuleForm = ({
             compact
             options={FREQUENCY_OPTIONS}
             value={rule.options.freq === undefined ? 'span' : rule.options.freq}
-            onChange={(e, { value }) => {              const freq =
+            onChange={(e, { value }) => {
+              const freq =
                 value === 'span'
                   ? undefined
                   : (value as
