@@ -1,8 +1,10 @@
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import {
-  JSONEditor,
+  type Content,
+  createJSONEditor,
   type JSONEditorPropsOptional,
   Mode,
+  type OnChangeStatus,
 } from 'vanilla-jsoneditor';
 
 type JSONEditorReactProps = JSONEditorPropsOptional;
@@ -10,7 +12,7 @@ type JSONEditorReactProps = JSONEditorPropsOptional;
 const JSONEditorReact = forwardRef<HTMLDivElement, JSONEditorReactProps>(
   (props, ref) => {
     const refContainer = useRef<HTMLDivElement>(null);
-    const refEditor = useRef<JSONEditor | null>(null);
+    const refEditor = useRef<ReturnType<typeof createJSONEditor> | null>(null);
     const [fallback, setFallback] = useState(true); // Force fallback for now
     const [content, setContent] = useState(
       '{\n  "example": "data",\n  "editable": true\n}',
@@ -19,7 +21,7 @@ const JSONEditorReact = forwardRef<HTMLDivElement, JSONEditorReactProps>(
     useEffect(() => {
       if (refContainer.current && !fallback) {
         try {
-          refEditor.current = new JSONEditor({
+          refEditor.current = createJSONEditor({
             target: refContainer.current,
             props: {
               content: { text: content },
@@ -28,13 +30,17 @@ const JSONEditorReact = forwardRef<HTMLDivElement, JSONEditorReactProps>(
               statusBar: false,
               askToFormat: false,
               readOnly: false,
-              onChange: (updatedContent) => {
+              onChange: (
+                updatedContent: Content,
+                _previousContent: Content,
+                _status: OnChangeStatus,
+              ) => {
                 if ('text' in updatedContent) {
                   setContent(updatedContent.text);
                   props.onChange?.(
                     updatedContent,
                     { text: content },
-                    { contentErrors: null, patchResult: null },
+                    { contentErrors: undefined, patchResult: undefined },
                   );
                 }
               },
@@ -71,7 +77,7 @@ const JSONEditorReact = forwardRef<HTMLDivElement, JSONEditorReactProps>(
         props.onChange(
           { text: e.target.value },
           { text: content },
-          { contentErrors: null, patchResult: null },
+          { contentErrors: undefined, patchResult: undefined },
         );
       }
     };
