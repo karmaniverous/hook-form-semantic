@@ -415,7 +415,7 @@ export const RRStackRuleForm = ({
             size="small"
             value={rule.label || ''}
             onChange={(e) => handleFieldChange({ label: e.target.value })}
-            placeholder="Rule label (optional)"
+            placeholder="Rule label"
           />
         </Form.Field>
         <Form.Field required>

@@ -59,15 +59,11 @@ describe('HookFormRRStack Validation', () => {
     // Should show the rule editor
     expect(screen.getByText('Add New Rule')).toBeInTheDocument();
 
-    // Fill in a rule label
+    // Fill in a rule label - this should auto-save the span rule
     const labelInput = screen.getByPlaceholderText('Rule label');
     fireEvent.change(labelInput, { target: { value: 'Test Span Rule' } });
 
-    // Default rule is now a span rule (freq: undefined) so it should be valid without duration
-    const saveButton = screen.getAllByText('Add Rule')[1]; // Get the save button in the form
-    fireEvent.click(saveButton);
-
-    // The form should close and the rule should be added (span rules don't need duration)
+    // With auto-save, the form should close and the rule should be added automatically
     await waitFor(() => {
       expect(screen.queryByText('Add New Rule')).not.toBeInTheDocument();
     });
@@ -88,15 +84,11 @@ describe('HookFormRRStack Validation', () => {
     // Should show the rule editor
     expect(screen.getByText('Add New Rule')).toBeInTheDocument();
 
-    // Fill in a label
+    // Fill in a label - this should auto-save the span rule since span rules are valid without duration
     const labelInput = screen.getByPlaceholderText('Rule label');
     fireEvent.change(labelInput, { target: { value: 'Test Rule' } });
 
-    // Try to save a span rule - this should work since span rules are valid without duration
-    const saveButton = screen.getAllByText('Add Rule')[1]; // Get the save button in the form
-    fireEvent.click(saveButton);
-
-    // The rule should be saved successfully (no validation errors for span rules)
+    // The rule should be saved automatically (no validation errors for span rules)
     await waitFor(() => {
       expect(screen.queryByText('Add New Rule')).not.toBeInTheDocument();
     });

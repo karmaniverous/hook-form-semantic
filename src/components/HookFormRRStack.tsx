@@ -347,38 +347,29 @@ export const HookFormRRStack = <T extends FieldValues>({
           <Segment basic style={{ marginTop: '-10px' }}>
             <RRStackRuleForm
               rule={editingRule}
-              mode="add"
               validationError={validationErrors.editingRule}
               onRuleChange={(updates) => {
-                setEditingRule((prev) =>
-                  prev ? { ...prev, ...updates } : null,
-                );
-              }}
-              onSave={() => {
-                // Validate rule before attempting to save
-                const ruleError = validateRule(editingRule);
-                if (ruleError) {
-                  setValidationErrors({ editingRule: ruleError });
-                  return;
-                }
+                const updatedRule = { ...editingRule, ...updates };
+                setEditingRule(updatedRule);
 
-                // Add new rule
-                try {
-                  rrstack.addRule(editingRule);
-                  setValidationErrors({});
-                  setEditingRule(null);
-                  setEditingIndex(null);
-                } catch (error) {
-                  const errorMessage =
-                    error instanceof Error
-                      ? error.message
-                      : 'Failed to add rule';
-                  setValidationErrors({ editingRule: errorMessage });
+                // Auto-save: validate and add rule immediately
+                const ruleError = validateRule(updatedRule);
+                if (!ruleError) {
+                  try {
+                    rrstack.addRule(updatedRule);
+                    setValidationErrors({});
+                    setEditingRule(null);
+                    setEditingIndex(null);
+                  } catch (error) {
+                    const errorMessage =
+                      error instanceof Error
+                        ? error.message
+                        : 'Failed to add rule';
+                    setValidationErrors({ editingRule: errorMessage });
+                  }
+                } else {
+                  setValidationErrors({ editingRule: ruleError });
                 }
-              }}
-              onCancel={() => {
-                setEditingRule(null);
-                setEditingIndex(null);
               }}
             />
           </Segment>
@@ -508,41 +499,31 @@ export const HookFormRRStack = <T extends FieldValues>({
                   >
                     <RRStackRuleForm
                       rule={editingRule}
-                      mode="edit"
                       validationError={validationErrors.editingRule}
                       onRuleChange={(updates) => {
-                        setEditingRule((prev) =>
-                          prev ? { ...prev, ...updates } : null,
-                        );
-                      }}
-                      onSave={() => {
-                        // Validate rule before attempting to save
-                        const ruleError = validateRule(editingRule);
-                        if (ruleError) {
-                          setValidationErrors({ editingRule: ruleError });
-                          return;
-                        }
+                        const updatedRule = { ...editingRule, ...updates };
+                        setEditingRule(updatedRule);
 
-                        // Save the rule
-                        try {
-                          rrstack.removeRule(editingIndex);
-                          rrstack.addRule(editingRule, editingIndex);
-                          setValidationErrors({});
-                          setEditingRule(null);
-                          setEditingIndex(null);
-                          setActiveIndex(null);
-                        } catch (error) {
-                          const errorMessage =
-                            error instanceof Error
-                              ? error.message
-                              : 'Failed to save rule';
-                          setValidationErrors({ editingRule: errorMessage });
+                        // Auto-save: validate and update rule immediately
+                        const ruleError = validateRule(updatedRule);
+                        if (!ruleError) {
+                          try {
+                            rrstack.removeRule(editingIndex);
+                            rrstack.addRule(updatedRule, editingIndex);
+                            setValidationErrors({});
+                            setEditingRule(null);
+                            setEditingIndex(null);
+                            setActiveIndex(null);
+                          } catch (error) {
+                            const errorMessage =
+                              error instanceof Error
+                                ? error.message
+                                : 'Failed to save rule';
+                            setValidationErrors({ editingRule: errorMessage });
+                          }
+                        } else {
+                          setValidationErrors({ editingRule: ruleError });
                         }
-                      }}
-                      onCancel={() => {
-                        setEditingRule(null);
-                        setEditingIndex(null);
-                        setActiveIndex(null);
                       }}
                     />
                   </Segment>
