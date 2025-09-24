@@ -1,7 +1,6 @@
 import type { RuleJson } from '@karmaniverous/rrstack';
 import { useCallback, useMemo, useState } from 'react';
 import {
-  Button,
   Container,
   Dropdown,
   Form,
@@ -16,11 +15,8 @@ import { type DateRange, DateRangePickerComponent } from './DateRangePicker';
 
 interface RRStackRuleFormProps {
   rule: RuleJson;
-  mode: 'add' | 'edit';
   validationError?: string;
   onRuleChange: (updates: Partial<RuleJson>) => void;
-  onSave: () => void;
-  onCancel: () => void;
 }
 
 const FREQUENCY_OPTIONS = [
@@ -73,11 +69,8 @@ const MONTH_OPTIONS = [
 
 export const RRStackRuleForm = ({
   rule,
-  mode,
   validationError,
   onRuleChange,
-  onSave,
-  onCancel,
 }: RRStackRuleFormProps) => {
   const [showDateValidation, setShowDateValidation] = useState(false);
 
@@ -149,18 +142,6 @@ export const RRStackRuleForm = ({
     return null;
   };
 
-  // Handle save with validation
-  const handleSave = () => {
-    const durationValidationError = validateDuration();
-
-    if (validateDateRange || durationValidationError) {
-      setShowDateValidation(true);
-      return;
-    }
-    setShowDateValidation(false);
-    onSave();
-  };
-
   // Handle date range changes
   const handleDateRangeChange = useCallback(
     (dateRange: DateRange) => {
@@ -210,6 +191,183 @@ export const RRStackRuleForm = ({
       },
     });
   };
+
+  // Generate live rule description
+  const ruleDescription = useMemo(() => {
+    const {
+      freq,
+      interval = 1,
+      count,
+      bymonth,
+      byweekday,
+      bymonthday,
+      byhour,
+      byminute,
+      bysetpos,
+    } = rule.options;
+    const { starts, ends } = rule.options;
+    const duration = rule.duration;
+
+    // Header (effect type)
+    const header = rule.effect === 'active' ? 'Active Rule' : 'Blackout Rule';
+
+    // Description content (without the "Active rule:" or "Blackout rule:" prefix)
+    let description = '';
+
+    // Frequency and interval
+    if (freq === undefined) {
+      description += 'Continuous time span';
+    } else {
+      if (interval > 1) {
+        description += `Every ${interval} ${freq === 'daily' ? 'days' : freq === 'weekly' ? 'weeks' : freq === 'monthly' ? 'months' : freq === 'yearly' ? 'years' : freq === 'hourly' ? 'hours' : freq === 'minutely' ? 'minutes' : 'seconds'}`;
+      } else {
+        description += freq.charAt(0).toUpperCase() + freq.slice(1);
+      }
+
+      // Duration
+      if (duration) {
+        const durationParts = [];
+        if (duration.years)
+          durationParts.push(
+            `${duration.years} year${duration.years > 1 ? 's' : ''}`,
+          );
+        if (duration.months)
+          durationParts.push(
+            `${duration.months} month${duration.months > 1 ? 's' : ''}`,
+          );
+        if (duration.days)
+          durationParts.push(
+            `${duration.days} day${duration.days > 1 ? 's' : ''}`,
+          );
+        if (duration.hours)
+          durationParts.push(
+            `${duration.hours} hour${duration.hours > 1 ? 's' : ''}`,
+          );
+        if (duration.minutes)
+          durationParts.push(
+            `${duration.minutes} minute${duration.minutes > 1 ? 's' : ''}`,
+          );
+        if (duration.seconds)
+          durationParts.push(
+            `${duration.seconds} second${duration.seconds > 1 ? 's' : ''}`,
+          );
+
+        if (durationParts.length > 0) {
+          description += ` for ${durationParts.join(', ')}`;
+        }
+      }
+
+      // Time constraints
+      const timeConstraints = [];
+
+      if (bymonth) {
+        const monthArray = Array.isArray(bymonth) ? bymonth : [bymonth];
+        if (monthArray.length > 0) {
+          const monthNames = monthArray
+            .map((m) => MONTH_OPTIONS.find((opt) => opt.value === m)?.text)
+            .filter(Boolean);
+          timeConstraints.push(`in ${monthNames.join(', ')}`);
+        }
+      }
+
+      if (byweekday) {
+        const weekdayArray = Array.isArray(byweekday) ? byweekday : [byweekday];
+        if (weekdayArray.length > 0) {
+          const weekdayNames = weekdayArray
+            .map((d) => {
+              // Handle different weekday formats
+              let weekdayValue: number;
+              if (typeof d === 'number') {
+                weekdayValue = d;
+              } else if (typeof d === 'object' && 'weekday' in d) {
+                weekdayValue = d.weekday;
+              } else {
+                // Handle string weekday formats like "MO", "TU", etc.
+                const weekdayMap: Record<string, number> = {
+                  MO: 0,
+                  TU: 1,
+                  WE: 2,
+                  TH: 3,
+                  FR: 4,
+                  SA: 5,
+                  SU: 6,
+                };
+                weekdayValue = weekdayMap[d as string] ?? 0;
+              }
+              return WEEKDAY_OPTIONS.find((opt) => opt.value === weekdayValue)
+                ?.text;
+            })
+            .filter(Boolean);
+          timeConstraints.push(`on ${weekdayNames.join(', ')}`);
+        }
+      }
+
+      if (bymonthday) {
+        const days = Array.isArray(bymonthday) ? bymonthday : [bymonthday];
+        if (days.length > 0) {
+          timeConstraints.push(
+            `on day${days.length > 1 ? 's' : ''} ${days.join(', ')} of month`,
+          );
+        }
+      }
+
+      if (byhour) {
+        const hours = Array.isArray(byhour) ? byhour : [byhour];
+        if (hours.length > 0) {
+          const hourStrings = hours.map(
+            (h) => `${h.toString().padStart(2, '0')}:00`,
+          );
+          timeConstraints.push(`at ${hourStrings.join(', ')}`);
+        }
+      }
+
+      if (byminute) {
+        const minutes = Array.isArray(byminute) ? byminute : [byminute];
+        if (minutes.length > 0) {
+          timeConstraints.push(
+            `at minute${minutes.length > 1 ? 's' : ''} ${minutes.join(', ')}`,
+          );
+        }
+      }
+
+      if (bysetpos) {
+        const positions = Array.isArray(bysetpos) ? bysetpos : [bysetpos];
+        if (positions.length > 0) {
+          const positionNames = positions
+            .map((p) => POSITION_OPTIONS.find((opt) => opt.value === p)?.text)
+            .filter(Boolean);
+          timeConstraints.push(
+            `${positionNames.join(', ')} occurrence${positionNames.length > 1 ? 's' : ''}`,
+          );
+        }
+      }
+
+      if (timeConstraints.length > 0) {
+        description += ` ${timeConstraints.join(', ')}`;
+      }
+
+      // Count
+      if (count) {
+        description += `, limited to ${count} occurrence${count > 1 ? 's' : ''}`;
+      }
+    }
+
+    // Date range
+    if (starts || ends) {
+      const startDate = starts ? new Date(starts).toLocaleDateString() : null;
+      const endDate = ends ? new Date(ends).toLocaleDateString() : null;
+
+      if (startDate && endDate) {
+        description += ` from ${startDate} to ${endDate}`;
+      } else if (startDate) {
+        description += ` starting ${startDate}`;
+      } else if (endDate) {
+        description += ` until ${endDate}`;
+      }
+    }
+
+    return { header, description };
+  }, [rule]);
 
   return (
     <Container>
@@ -304,6 +462,20 @@ export const RRStackRuleForm = ({
           </Form.Field>
         )}
       </Form.Group>
+
+      <DateRangePickerComponent
+        label={labelWithInfo(
+          'Date Range',
+          "Optional start/end timestamps that bound the rule's validity window.",
+        )}
+        value={getDateRange}
+        onChange={handleDateRangeChange}
+        error={
+          showDateValidation && validateDateRange
+            ? validateDateRange
+            : undefined
+        }
+      />
 
       {/* Only show duration section for recurring rules */}
       {rule.options.freq !== undefined && (
@@ -588,19 +760,12 @@ export const RRStackRuleForm = ({
         </Form.Group>
       )}
 
-      <DateRangePickerComponent
-        label={labelWithInfo(
-          'Date Range',
-          "Optional start/end timestamps that bound the rule's validity window.",
-        )}
-        value={getDateRange}
-        onChange={handleDateRangeChange}
-        error={
-          showDateValidation && validateDateRange
-            ? validateDateRange
-            : undefined
-        }
-      />
+      {/* Live Rule Description */}
+      <Message info size="small" style={{ marginTop: '1em' }}>
+        <Message.Header>{ruleDescription.header}</Message.Header>
+        <Message.Content>{ruleDescription.description}</Message.Content>
+      </Message>
+
       {showDateValidation &&
         (() => {
           const durationValidationError = validateDuration();
@@ -621,20 +786,6 @@ export const RRStackRuleForm = ({
             </Message>
           );
         })()}
-
-      <Container style={{ marginTop: '1em' }}>
-        <Button type="button" primary size="small" onClick={handleSave}>
-          {mode === 'add' ? 'Add Rule' : 'Update Rule'}
-        </Button>
-        <Button
-          type="button"
-          size="small"
-          onClick={onCancel}
-          style={{ marginLeft: '0.5em' }}
-        >
-          Cancel
-        </Button>
-      </Container>
 
       {validationError && (
         <Message negative size="small" style={{ marginTop: '1em' }}>
