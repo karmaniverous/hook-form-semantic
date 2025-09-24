@@ -4,7 +4,6 @@ import {
   createJSONEditor,
   type JSONEditorPropsOptional,
   Mode,
-  type OnChangeStatus,
 } from 'vanilla-jsoneditor';
 
 type JSONEditorReactProps = JSONEditorPropsOptional;
@@ -30,11 +29,7 @@ const JSONEditorReact = forwardRef<HTMLDivElement, JSONEditorReactProps>(
               statusBar: false,
               askToFormat: false,
               readOnly: false,
-              onChange: (
-                updatedContent: Content,
-                _previousContent: Content,
-                _status: OnChangeStatus,
-              ) => {
+              onChange: (updatedContent: Content) => {
                 if ('text' in updatedContent) {
                   setContent(updatedContent.text);
                   props.onChange?.(
