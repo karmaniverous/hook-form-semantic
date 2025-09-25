@@ -16,7 +16,7 @@
   "devDependencies": {
     "@dotenvx/dotenvx": "^1.51.0",
     "@eslint/js": "^9.36.0",
-    "@karmaniverous/rrstack": "^0.11.0",
+    "@karmaniverous/rrstack": "^0.11.1",
     "@rollup/plugin-alias": "^5.1.1",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-json": "^6.1.0",
@@ -115,7 +115,7 @@
   "module": "dist/mjs/src/index.js",
   "name": "@karmaniverous/hook-form-semantic",
   "peerDependencies": {
-    "@karmaniverous/rrstack": "^0.11.0",
+    "@karmaniverous/rrstack": "^0.11.1",
     "@types/react": ">=18.0.0",
     "@types/react-dom": ">=18.0.0",
     "@wojtekmaj/react-daterange-picker": "^7.0.0",
