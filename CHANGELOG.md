@@ -2,12 +2,42 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.12](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.11...0.1.12)
+
+- HookFormRRStack working, but not using useRRStack hooks correctly [`39a9c1a`](https://github.com/karmaniverous/hook-form-semantic/commit/39a9c1adf3739d6a2a212d46c182990d52e68beb)
+- Restore docs folder [`5fefb5c`](https://github.com/karmaniverous/hook-form-semantic/commit/5fefb5c694e1cc0f98a073d5bccf63d7473462c5)
+- Update dependencies and fix ts errors [`f64fb10`](https://github.com/karmaniverous/hook-form-semantic/commit/f64fb1091c43c7eaf855088395a738b1c779dd61)
+- Update packages and resolve TypeScript errors in JsonEditor for docs generation [`cdd14a9`](https://github.com/karmaniverous/hook-form-semantic/commit/cdd14a94d4c073625367bc6b8dde4c93fc3fcd15)
+- fix: tests for DateRange UI; safe diagrams; tooltips + hide on span [`6822916`](https://github.com/karmaniverous/hook-form-semantic/commit/682291653546b437a211ee644d5534a3139dc3bb)
+- HookFormRRStack implements rrstack hooks and debouncing [`bc3c3b6`](https://github.com/karmaniverous/hook-form-semantic/commit/bc3c3b6945ca43f08265a1c65f0c6ab7ace9cfb5)
+- Update HookFormRRStack component to use rrstack v0.11.0 [`5c398c1`](https://github.com/karmaniverous/hook-form-semantic/commit/5c398c1783e49e082fce95e5d04f64922a60cf1d)
+- Date range instead of separate start date and end date pickers [`b1d1183`](https://github.com/karmaniverous/hook-form-semantic/commit/b1d11838fa1bbea5c7a52f68d0fd895a389ebaa7)
+- Use HookFormDateRangePicker in RRStackRuleForm [`2920a71`](https://github.com/karmaniverous/hook-form-semantic/commit/2920a7173d2f081f43a1a1c128257ff9cc4f579f)
+- Dynamic rule description [`654b9d0`](https://github.com/karmaniverous/hook-form-semantic/commit/654b9d084950ffd9f8e4d4d0d05713304150be61)
+- Fix failing test [`532e7af`](https://github.com/karmaniverous/hook-form-semantic/commit/532e7afd2461c1e5a9cb5c3304b10f8805e37715)
+- Fix failing tests [`c94d665`](https://github.com/karmaniverous/hook-form-semantic/commit/c94d665ff7e2ae6029df8c3620c3928e9cd5b1ae)
+- Dynamic rule description improvements [`f4f6943`](https://github.com/karmaniverous/hook-form-semantic/commit/f4f694344478af97468d0bdb1735818a5ada3533)
+- Update rrstack to v0.11.0 [`fc398f0`](https://github.com/karmaniverous/hook-form-semantic/commit/fc398f04219f8a42e1104d34c169acfceb91a102)
+- Equal widths for duration fields [`d1a8c12`](https://github.com/karmaniverous/hook-form-semantic/commit/d1a8c120d7eb77fe3b368d83b9bb8545be908978)
+- Proper TypeScript declarations for CSS imports [`6fe4951`](https://github.com/karmaniverous/hook-form-semantic/commit/6fe4951634eeb0858f780a9e139e92a47cb4fe8c)
+- Fix tooltips [`7847b93`](https://github.com/karmaniverous/hook-form-semantic/commit/7847b93202eb2969e014ea7708dc24c55f44320a)
+- Remove unused dependency and update stan [`59b1f3b`](https://github.com/karmaniverous/hook-form-semantic/commit/59b1f3b15b951dc604accf5b9c95ad65baccdbdc)
+- Specific CSS type declarations for third-party packages [`78ba793`](https://github.com/karmaniverous/hook-form-semantic/commit/78ba7937e0e151d3672164e682219e5fdd949028)
+- Simplify types [`688851c`](https://github.com/karmaniverous/hook-form-semantic/commit/688851c1274bffb7635d77956f8e9a31cacf40cc)
+- Fix failing test [`0d25b9a`](https://github.com/karmaniverous/hook-form-semantic/commit/0d25b9a2a9b4f1bec76fa69a87d54856fa48dbec)
+- Remove unused variables [`10afb1a`](https://github.com/karmaniverous/hook-form-semantic/commit/10afb1a4006189374f84660280a63acfc31912e0)
+- Fix knip issues [`b6a49c3`](https://github.com/karmaniverous/hook-form-semantic/commit/b6a49c3d64c0b886c6a20db14d8f356d73c3e07b)
+- Fix nested form issue [`4375a7a`](https://github.com/karmaniverous/hook-form-semantic/commit/4375a7a9698d28e0830663353042994320c0b85b)
+
 #### [0.1.11](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.10...0.1.11)
+
+> 22 September 2025
 
 - docs: add Components guides and TypeDoc integration [`bf4171e`](https://github.com/karmaniverous/hook-form-semantic/commit/bf4171effd65d1407fc545e757ae65fb1e3507c3)
 - updated docs [`913f95d`](https://github.com/karmaniverous/hook-form-semantic/commit/913f95da247d8ab60a5547759147571c0a66ffd8)
 - chore(lint,deps): switch to @vitest/eslint-plugin; make rrstack peer+dev [`79089b1`](https://github.com/karmaniverous/hook-form-semantic/commit/79089b128869884e07a1bfdb752e27b045c5e957)
 - chore(deps,docs): make component peers optional; export Presets for TypeDoc [`fff7434`](https://github.com/karmaniverous/hook-form-semantic/commit/fff7434ed776907fc5acf93ce44983968d43970f)
+- chore: release v0.1.11 [`10a9b5c`](https://github.com/karmaniverous/hook-form-semantic/commit/10a9b5c5cd2df6a342f65b4253f311f6f1c8a56a)
 - docs: link peer deps and external libs; remove naked URLs [`f8a6fb0`](https://github.com/karmaniverous/hook-form-semantic/commit/f8a6fb0c2628d3e0d0e897724c218d4df2c844d5)
 - docs: correct peer dependency guidance [`e9add4d`](https://github.com/karmaniverous/hook-form-semantic/commit/e9add4db30742984e3a9dec087efa67729742398)
 - chore(knip): ignore optional peers to unblock release [`fd4fe2d`](https://github.com/karmaniverous/hook-form-semantic/commit/fd4fe2dbb0c51edd4959a448b7a71c11b9e9a6af)
