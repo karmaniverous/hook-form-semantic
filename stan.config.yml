@@ -2,10 +2,9 @@ cliDefaults:
   run:
     sequential: true
 excludes:
-  - "**/*.ico"
-  - "**/*.png"
-  - "**/*.svg"
-  - docs
+  - '**/*.ico'
+  - '**/*.png'
+  - '**/*.svg'
   - package-lock.json
 includes: []
 patchOpenCommand: code -g {file}

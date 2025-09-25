@@ -147,14 +147,12 @@ export const RRStackRuleForm = ({
     (dateRange: DateRange) => {
       const [startDate, endDate] = dateRange;
 
-      // Clear validation error if validation passes after this change
-      if (showDateValidation) {
-        if (
-          (!startDate && !endDate) ||
-          (startDate && endDate && startDate < endDate)
-        ) {
-          setShowDateValidation(false);
-        }
+      // Show validation error if dates are in wrong order
+      if (startDate && endDate && startDate >= endDate) {
+        setShowDateValidation(true);
+      } else {
+        // Clear validation error if validation passes
+        setShowDateValidation(false);
       }
 
       onRuleChange({
@@ -165,7 +163,7 @@ export const RRStackRuleForm = ({
         },
       });
     },
-    [onRuleChange, rule.options, showDateValidation],
+    [onRuleChange, rule.options],
   );
 
   const handleFieldChange = (updates: Partial<RuleJson>) => {
