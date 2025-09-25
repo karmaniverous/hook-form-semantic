@@ -56,17 +56,15 @@ describe('HookFormRRStack Validation', () => {
     const addRuleButton = screen.getByText('Add Rule');
     fireEvent.click(addRuleButton);
 
-    // Should show the rule editor
-    expect(screen.getByText('Add New Rule')).toBeInTheDocument();
+    // Should show the rule editor form (accordion should be open)
+    expect(screen.getByPlaceholderText('Rule label')).toBeInTheDocument();
 
-    // Fill in a rule label - this should auto-save the span rule
+    // Fill in a rule label
     const labelInput = screen.getByPlaceholderText('Rule label');
     fireEvent.change(labelInput, { target: { value: 'Test Span Rule' } });
 
-    // With auto-save, the form should close and the rule should be added automatically
-    await waitFor(() => {
-      expect(screen.queryByText('Add New Rule')).not.toBeInTheDocument();
-    });
+    // Verify the label was updated
+    expect(labelInput).toHaveValue('Test Span Rule');
 
     // Verify that the rule was added to the list
     await waitFor(() => {
@@ -81,17 +79,15 @@ describe('HookFormRRStack Validation', () => {
     const addRuleButton = screen.getByText('Add Rule');
     fireEvent.click(addRuleButton);
 
-    // Should show the rule editor
-    expect(screen.getByText('Add New Rule')).toBeInTheDocument();
+    // Should show the rule editor form (accordion should be open)
+    expect(screen.getByPlaceholderText('Rule label')).toBeInTheDocument();
 
-    // Fill in a label - this should auto-save the span rule since span rules are valid without duration
+    // Fill in a label
     const labelInput = screen.getByPlaceholderText('Rule label');
     fireEvent.change(labelInput, { target: { value: 'Test Rule' } });
 
-    // The rule should be saved automatically (no validation errors for span rules)
-    await waitFor(() => {
-      expect(screen.queryByText('Add New Rule')).not.toBeInTheDocument();
-    });
+    // Verify the label was updated
+    expect(labelInput).toHaveValue('Test Rule');
 
     // Verify that the rule was added to the list
     await waitFor(() => {

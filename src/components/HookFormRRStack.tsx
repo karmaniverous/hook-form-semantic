@@ -1,7 +1,6 @@
 import type { RRStackOptions, RuleJson } from '@karmaniverous/rrstack';
 import { RRStack } from '@karmaniverous/rrstack';
-import { useRRStack, useRRStackSelector } from '@karmaniverous/rrstack/react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { FieldValues } from 'react-hook-form';
 import {
   type ControllerProps,
@@ -69,13 +68,10 @@ export const HookFormRRStack = <T extends FieldValues>({
   } = useController(hookProps as UseControllerProps);
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [editingRule, setEditingRule] = useState<RuleJson | null>(null);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [validationErrors, setValidationErrors] = useState<{
     timezone?: string;
-    rules?: string;
-    editingRule?: string;
   }>({});
+  const [rrstack, setRRStack] = useState<RRStack | null>(null);
 
   const currentValue: RRStackOptions = value || {
     timezone,
@@ -91,71 +87,45 @@ export const HookFormRRStack = <T extends FieldValues>({
     return undefined;
   }, []);
 
-  // Validate rule using RRStack's compilation process
-  const validateRule = useCallback(
-    (rule: RuleJson): string | undefined => {
-      // Validate starts/ends relationship
-      if (
-        typeof rule.options.starts === 'number' &&
-        typeof rule.options.ends === 'number' &&
-        rule.options.starts >= rule.options.ends
-      ) {
-        return 'Start date must be before end date';
-      }
-
-      try {
-        // Test rule by creating a temporary RRStack with just this rule
-        new RRStack({
-          timezone: currentValue.timezone,
-          timeUnit: currentValue.timeUnit || 'ms',
-          rules: [rule],
-        });
-        return undefined;
-      } catch (error) {
-        return error instanceof Error
-          ? error.message
-          : 'Invalid rule configuration';
-      }
-    },
-    [currentValue.timezone, currentValue.timeUnit],
-  );
-
-  // Use RRStack React hooks for optimized state management with error handling
-  const handleRRStackChange = useCallback(
-    (stack: { toJson: () => RRStackOptions }) => {
-      try {
-        const rawValue = stack.toJson();
-        // Clean the data using JSON serialization to remove any comments or non-serializable properties
-        const newValue = JSON.parse(JSON.stringify(rawValue));
-        // Clear validation errors on successful change
-        setValidationErrors({});
-        hookFieldOnChange({ target: { value: newValue } } as {
-          target: { value: RRStackOptions };
-        });
-      } catch (error) {
-        // Handle RRStack validation errors
-        const errorMessage =
-          error instanceof Error ? error.message : 'RRStack validation failed';
-        setValidationErrors({ rules: errorMessage });
-      }
-    },
-    [hookFieldOnChange],
-  );
-
-  // Use RRStack React hooks properly
-  const { rrstack } = useRRStack(currentValue, handleRRStackChange, {
-    debounce: { delay: 300, trailing: true },
-    resetKey: `${currentValue.timezone}-${currentValue.timeUnit}`,
-  });
-
-  // Use selectors for optimized access to frequently used data
-  const rulesCount = useRRStackSelector(rrstack, (s) => s.rules.length);
-  const rules = useRRStackSelector(rrstack, (s) => s.rules);
-
-  const handleAddRule = useCallback(() => {
-    setEditingRule(createDefaultRule());
-    setEditingIndex(null);
+  // Initialize RRStack instance from form value
+  useEffect(() => {
+    try {
+      const stack = new RRStack(currentValue);
+      setRRStack(stack);
+    } catch (error) {
+      console.error('Failed to create RRStack:', error);
+      setRRStack(null);
+    }
   }, []);
+
+  // Update form when rrstack changes (controlled component pattern)
+  const updateFormFromRRStack = useCallback(() => {
+    if (rrstack) {
+      const newValue = rrstack.toJson();
+      setValidationErrors({});
+      hookFieldOnChange({ target: { value: newValue } } as {
+        target: { value: RRStackOptions };
+      });
+    }
+  }, [rrstack, hookFieldOnChange]);
+
+  // Update rrstack when form value changes from external source
+  useEffect(() => {
+    if (rrstack && currentValue) {
+      try {
+        rrstack.updateOptions({
+          timezone: currentValue.timezone,
+          rules: currentValue.rules || [],
+        });
+      } catch (error) {
+        console.error('Failed to update RRStack:', error);
+      }
+    }
+  }, [currentValue.timezone, currentValue.rules]);
+
+  // Get rules and count directly from form state (single source of truth)
+  const rules = currentValue.rules || [];
+  const rulesCount = rules.length;
 
   // Generate timezone options from browser
   const timezoneOptions = useMemo(() => {
@@ -221,45 +191,85 @@ export const HookFormRRStack = <T extends FieldValues>({
         return;
       }
 
-      try {
+      if (rrstack) {
         rrstack.timezone = value;
-        // Clear timezone validation errors on successful change
         setValidationErrors((prev) => ({ ...prev, timezone: undefined }));
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : 'Failed to set timezone';
-        setValidationErrors({ timezone: errorMessage });
+        updateFormFromRRStack();
       }
     },
-    [rrstack, validateTimezone],
+    [rrstack, validateTimezone, updateFormFromRRStack],
   );
 
-  // Memoized handlers for rule operations to prevent recreation on every render
+  // Handle immediate rule updates - all changes flow through the form
+  const handleRuleUpdate = useCallback(
+    (index: number, updates: Partial<RuleJson>) => {
+      if (!rrstack) return;
+
+      const newRules = [...rules];
+      const updatedRule = { ...newRules[index], ...updates };
+      newRules[index] = updatedRule;
+
+      // Always update form state first (single source of truth)
+      const newValue = {
+        ...currentValue,
+        rules: newRules,
+      };
+      hookFieldOnChange({ target: { value: newValue } } as {
+        target: { value: RRStackOptions };
+      });
+
+      // Try to sync with RRStack, but don't let compilation errors block the UI update
+      try {
+        rrstack.rules = newRules;
+      } catch (error) {
+        console.warn(
+          'RRStack compilation error during edit (UI updated anyway):',
+          error,
+        );
+        // RRStack is out of sync, but form state is correct - this is fine for interactive editing
+      }
+    },
+    [rrstack, rules, currentValue, hookFieldOnChange],
+  );
+
+  const handleAddRule = useCallback(() => {
+    if (!rrstack) return;
+
+    const newRule = createDefaultRule();
+    const newRules = [...rules, newRule];
+
+    // Always update form state first (single source of truth)
+    const newValue = {
+      ...currentValue,
+      rules: newRules,
+    };
+    hookFieldOnChange({ target: { value: newValue } } as {
+      target: { value: RRStackOptions };
+    });
+
+    // Try to sync with RRStack, but don't let compilation errors block the UI update
+    try {
+      rrstack.addRule(newRule);
+    } catch (error) {
+      console.warn('Error adding rule to RRStack (UI updated anyway):', error);
+      // RRStack is out of sync, but form state is correct - this is fine for interactive editing
+    }
+
+    // Open the newly added rule for editing
+    setActiveIndex(newRules.length - 1);
+  }, [rrstack, rules, currentValue, hookFieldOnChange]);
+
   const handleAccordionClick = useCallback(
     (index: number, isActive: boolean) => {
-      if (isActive) {
-        // Close accordion and clear editing state
-        setActiveIndex(null);
-        setEditingRule(null);
-        setEditingIndex(null);
-      } else {
-        // Open accordion and start editing
-        setActiveIndex(index);
-        setEditingRule({ ...rules[index] });
-        setEditingIndex(index);
-      }
+      setActiveIndex(isActive ? null : index);
     },
-    [rules],
+    [],
   );
-
-  const handleEditClick = useCallback((index: number, rule: RuleJson) => {
-    setActiveIndex(index);
-    setEditingRule({ ...rule });
-    setEditingIndex(index);
-  }, []);
 
   const handleRuleMove = useCallback(
     (index: number, direction: 'top' | 'up' | 'down' | 'bottom') => {
+      if (!rrstack) return;
+
       switch (direction) {
         case 'top':
           if (index > 0) rrstack.top(index);
@@ -274,34 +284,49 @@ export const HookFormRRStack = <T extends FieldValues>({
           if (index < rulesCount - 1) rrstack.bottom(index);
           break;
       }
+      updateFormFromRRStack();
     },
-    [rrstack, rulesCount],
+    [rrstack, rulesCount, updateFormFromRRStack],
   );
 
   const handleRuleDelete = useCallback(
     (index: number) => {
+      if (!rrstack) return;
       rrstack.removeRule(index);
+      updateFormFromRRStack();
+      // Close accordion if we deleted the active rule
+      if (activeIndex === index) {
+        setActiveIndex(null);
+      } else if (activeIndex !== null && activeIndex > index) {
+        // Adjust active index if we deleted a rule above it
+        setActiveIndex(activeIndex - 1);
+      }
     },
-    [rrstack],
+    [rrstack, updateFormFromRRStack, activeIndex],
   );
+
+  // Show loading state while RRStack is initializing
+  if (!rrstack) {
+    return (
+      <Form.Field>
+        {fieldProps.label && <label>{fieldProps.label}</label>}
+        <Message info size="small">
+          <Message.Header>Loading</Message.Header>
+          <Message.Content>Initializing RRStack...</Message.Content>
+        </Message>
+      </Form.Field>
+    );
+  }
 
   return (
     <Form.Field>
       {fieldProps.label && <label>{fieldProps.label}</label>}
 
-      {/* Display React Hook Form errors */}
+      {/* Display validation errors */}
       {error?.message && (
         <Message negative size="small" style={{ marginBottom: 16 }}>
-          <Message.Header>Form Validation Error</Message.Header>
+          <Message.Header>Validation Error</Message.Header>
           <Message.Content>{error.message}</Message.Content>
-        </Message>
-      )}
-
-      {/* Display RRStack validation errors */}
-      {validationErrors.rules && (
-        <Message negative size="small" style={{ marginBottom: 16 }}>
-          <Message.Header>RRStack Validation Error</Message.Header>
-          <Message.Content>{validationErrors.rules}</Message.Content>
         </Message>
       )}
 
@@ -340,56 +365,19 @@ export const HookFormRRStack = <T extends FieldValues>({
         </Button>
       </Segment>
 
-      {/* Show form for adding new rule */}
-      {editingRule && editingIndex === null && (
-        <Segment style={{ fontSize: '0.9em' }}>
-          <Header size="tiny">Add New Rule</Header>
-          <Segment basic style={{ marginTop: '-10px' }}>
-            <RRStackRuleForm
-              rule={editingRule}
-              validationError={validationErrors.editingRule}
-              onRuleChange={(updates) => {
-                const updatedRule = { ...editingRule, ...updates };
-                setEditingRule(updatedRule);
-
-                // Auto-save: validate and add rule immediately
-                const ruleError = validateRule(updatedRule);
-                if (!ruleError) {
-                  try {
-                    rrstack.addRule(updatedRule);
-                    setValidationErrors({});
-                    setEditingRule(null);
-                    setEditingIndex(null);
-                  } catch (error) {
-                    const errorMessage =
-                      error instanceof Error
-                        ? error.message
-                        : 'Failed to add rule';
-                    setValidationErrors({ editingRule: errorMessage });
-                  }
-                } else {
-                  setValidationErrors({ editingRule: ruleError });
-                }
-              }}
-            />
-          </Segment>
-        </Segment>
-      )}
-
-      {rulesCount === 0 &&
-      activeIndex === null &&
-      !(editingRule && editingIndex === null) ? (
+      {rulesCount === 0 ? (
         <Message info size="small">
           <Message.Header>No rules defined</Message.Header>
           <Message.Content>
             Add your first rule to start building your schedule.
           </Message.Content>
         </Message>
-      ) : rulesCount > 0 ? (
+      ) : (
         <Accordion fluid styled>
           {rules.map((rule: RuleJson, index: number) => {
             const isActive = activeIndex === index;
-            const ruleDescription = rrstack.describeRule(index);
+            const ruleDescription =
+              rrstack?.describeRule?.(index) || 'Invalid rule';
 
             return [
               <Accordion.Title
@@ -425,16 +413,6 @@ export const HookFormRRStack = <T extends FieldValues>({
                     style={{ display: 'flex', gap: 2 }}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    {!isActive && (
-                      <Button
-                        type="button"
-                        icon="edit"
-                        onClick={() => handleEditClick(index, rule)}
-                        title="Edit rule"
-                        color="blue"
-                        size="mini"
-                      />
-                    )}
                     <Button.Group size="mini">
                       <Button
                         type="button"
@@ -491,48 +469,17 @@ export const HookFormRRStack = <T extends FieldValues>({
                 </div>
               </Accordion.Title>,
               <Accordion.Content key={`content-${index}`} active={isActive}>
-                {editingIndex === index && editingRule && (
-                  // Show edit form inside accordion
-                  <Segment
-                    basic
-                    style={{ fontSize: '0.9em', padding: '1em 0' }}
-                  >
-                    <RRStackRuleForm
-                      rule={editingRule}
-                      validationError={validationErrors.editingRule}
-                      onRuleChange={(updates) => {
-                        const updatedRule = { ...editingRule, ...updates };
-                        setEditingRule(updatedRule);
-
-                        // Auto-save: validate and update rule immediately
-                        const ruleError = validateRule(updatedRule);
-                        if (!ruleError) {
-                          try {
-                            rrstack.removeRule(editingIndex);
-                            rrstack.addRule(updatedRule, editingIndex);
-                            setValidationErrors({});
-                            setEditingRule(null);
-                            setEditingIndex(null);
-                            setActiveIndex(null);
-                          } catch (error) {
-                            const errorMessage =
-                              error instanceof Error
-                                ? error.message
-                                : 'Failed to save rule';
-                            setValidationErrors({ editingRule: errorMessage });
-                          }
-                        } else {
-                          setValidationErrors({ editingRule: ruleError });
-                        }
-                      }}
-                    />
-                  </Segment>
-                )}
+                <Segment basic style={{ fontSize: '0.9em', padding: '1em 0' }}>
+                  <RRStackRuleForm
+                    rule={rule}
+                    onRuleChange={(updates) => handleRuleUpdate(index, updates)}
+                  />
+                </Segment>
               </Accordion.Content>,
             ];
           })}
         </Accordion>
-      ) : null}
+      )}
     </Form.Field>
   );
 };
