@@ -80,8 +80,8 @@ export const RRStackRuleForm = ({
   const [showDateValidation, setShowDateValidation] = useState(false);
 
   const labelWithInfo = useCallback(
-    (text: string, help: string) => (
-      <label>
+    (text: string, help: string, style?: React.CSSProperties) => (
+      <label style={style}>
         {text}{' '}
         <Popup
           content={help}
@@ -283,7 +283,7 @@ export const RRStackRuleForm = ({
               size="small"
               type="number"
               value={rule.options.interval || 1}
-              onChange={(e) =>
+              onChange={(e: { target: { value: string } }) =>
                 handleOptionsChange({
                   interval: parseInt(e.target.value) || 1,
                 })
@@ -299,6 +299,7 @@ export const RRStackRuleForm = ({
         label={labelWithInfo(
           'Date Range',
           "Optional start/end timestamps that bound the rule's validity window.",
+          { fontSize: '12px' },
         )}
         value={getDateRange}
         onChange={handleDateRangeChange}
