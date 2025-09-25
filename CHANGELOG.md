@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.13](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.12...0.1.13)
+
+- Compatibility with React 18+ applications [`02f3ecd`](https://github.com/karmaniverous/hook-form-semantic/commit/02f3ecdec5c6b798b330a60644bd8dc641404d78)
+
 #### [0.1.12](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.11...0.1.12)
+
+> 25 September 2025
 
 - HookFormRRStack working, but not using useRRStack hooks correctly [`39a9c1a`](https://github.com/karmaniverous/hook-form-semantic/commit/39a9c1adf3739d6a2a212d46c182990d52e68beb)
 - Restore docs folder [`5fefb5c`](https://github.com/karmaniverous/hook-form-semantic/commit/5fefb5c694e1cc0f98a073d5bccf63d7473462c5)
@@ -12,6 +18,7 @@ All notable changes to this project will be documented in this file. Dates are d
 - HookFormRRStack implements rrstack hooks and debouncing [`bc3c3b6`](https://github.com/karmaniverous/hook-form-semantic/commit/bc3c3b6945ca43f08265a1c65f0c6ab7ace9cfb5)
 - Update HookFormRRStack component to use rrstack v0.11.0 [`5c398c1`](https://github.com/karmaniverous/hook-form-semantic/commit/5c398c1783e49e082fce95e5d04f64922a60cf1d)
 - Date range instead of separate start date and end date pickers [`b1d1183`](https://github.com/karmaniverous/hook-form-semantic/commit/b1d11838fa1bbea5c7a52f68d0fd895a389ebaa7)
+- chore: release v0.1.12 [`0fce17b`](https://github.com/karmaniverous/hook-form-semantic/commit/0fce17b50b88838cf514291b392d900542508a0d)
 - Use HookFormDateRangePicker in RRStackRuleForm [`2920a71`](https://github.com/karmaniverous/hook-form-semantic/commit/2920a7173d2f081f43a1a1c128257ff9cc4f579f)
 - Dynamic rule description [`654b9d0`](https://github.com/karmaniverous/hook-form-semantic/commit/654b9d084950ffd9f8e4d4d0d05713304150be61)
 - Fix failing test [`532e7af`](https://github.com/karmaniverous/hook-form-semantic/commit/532e7afd2461c1e5a9cb5c3304b10f8805e37715)
