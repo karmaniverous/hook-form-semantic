@@ -18,7 +18,6 @@ const TestForm = () => {
     defaultValues: {
       schedule: {
         timezone: 'UTC',
-        timeUnit: 'ms' as const,
         rules: [],
       },
     },
@@ -123,7 +122,6 @@ describe('HookFormRRStack Validation', () => {
     expect(() => {
       new RRStack({
         timezone: 'UTC',
-        timeUnit: 'ms',
         rules: [validRule],
       });
     }).not.toThrow();
@@ -148,15 +146,14 @@ describe('HookFormRRStack Validation', () => {
     expect(() => {
       new RRStack({
         timezone: 'UTC',
-        timeUnit: 'ms',
         rules: [validRuleWithDates],
       });
     }).not.toThrow();
   });
 
-  it('validates rules with starts/ends in seconds timeUnit', () => {
-    const now = Math.floor(Date.now() / 1000);
-    const futureTime = now + 24 * 60 * 60; // 24 hours later in seconds
+  it('validates rules with starts/ends timestamps using default timeUnit', () => {
+    const now = Date.now();
+    const futureTime = now + 24 * 60 * 60 * 1000; // 24 hours later
 
     const validRuleWithDates = {
       effect: 'active' as const,
@@ -166,14 +163,13 @@ describe('HookFormRRStack Validation', () => {
         starts: now,
         ends: futureTime,
       },
-      label: 'Rule with Date Range in Seconds',
+      label: 'Rule with Date Range using Default TimeUnit',
     };
 
     // This should not throw an error
     expect(() => {
       new RRStack({
         timezone: 'UTC',
-        timeUnit: 's',
         rules: [validRuleWithDates],
       });
     }).not.toThrow();
@@ -196,7 +192,6 @@ describe('HookFormRRStack Validation', () => {
     expect(() => {
       new RRStack({
         timezone: 'UTC',
-        timeUnit: 'ms',
         rules: [ruleWithOnlyStarts],
       });
     }).not.toThrow();
@@ -219,7 +214,6 @@ describe('HookFormRRStack Validation', () => {
     expect(() => {
       new RRStack({
         timezone: 'UTC',
-        timeUnit: 'ms',
         rules: [ruleWithOnlyEnds],
       });
     }).not.toThrow();

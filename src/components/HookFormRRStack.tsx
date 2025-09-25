@@ -43,7 +43,6 @@ export interface HookFormRRStackProps<T extends FieldValues>
     >,
     PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'> {
   timezone?: string;
-  timeUnit?: 'ms' | 's';
 }
 
 const createDefaultRule = (): RuleJson => ({
@@ -55,7 +54,6 @@ const createDefaultRule = (): RuleJson => ({
 
 export const HookFormRRStack = <T extends FieldValues>({
   timezone = Intl.DateTimeFormat().resolvedOptions().timeZone,
-  timeUnit = 'ms',
   ...props
 }: HookFormRRStackProps<T>) => {
   const { hook: hookProps, rest: fieldProps } = useMemo(
@@ -70,7 +68,6 @@ export const HookFormRRStack = <T extends FieldValues>({
 
   const currentValue: RRStackOptions = value || {
     timezone,
-    timeUnit,
     rules: [],
   };
 
