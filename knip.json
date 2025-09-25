@@ -4,7 +4,6 @@
     "playground/vite.config.ts",
     "src/**/index.ts"
   ],
-  "ignoreBinaries": ["plantuml"],
   "ignoreDependencies": [
     "@types/react",
     "@types/react-dom",
@@ -26,6 +25,7 @@
     "semantic-ui-css",
     "vanilla-jsoneditor"
   ],
+  "ignore": ["playground/src/vite-env.d.ts"],
   "project": ["*/**", "!docs/**"],
   "rules": {
     "exports": "off",
