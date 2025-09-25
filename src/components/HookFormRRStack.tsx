@@ -1,6 +1,7 @@
 import type { RRStackOptions, RuleJson } from '@karmaniverous/rrstack';
 import { RRStack } from '@karmaniverous/rrstack';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useRRStack, useRRStackSelector } from '@karmaniverous/rrstack/react';
+import { useCallback, useMemo, useState } from 'react';
 import type { FieldValues } from 'react-hook-form';
 import {
   type ControllerProps,
@@ -67,17 +68,41 @@ export const HookFormRRStack = <T extends FieldValues>({
     fieldState: { error },
   } = useController(hookProps as UseControllerProps);
 
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [validationErrors, setValidationErrors] = useState<{
-    timezone?: string;
-  }>({});
-  const [rrstack, setRRStack] = useState<RRStack | null>(null);
-
   const currentValue: RRStackOptions = value || {
     timezone,
     timeUnit,
     rules: [],
   };
+
+  // rrstack hook with proper debouncing
+  const { rrstack } = useRRStack(
+    currentValue,
+    (s) => {
+      // Debounced autosave to react-hook-form
+      hookFieldOnChange({ target: { value: s.toJson() } } as {
+        target: { value: RRStackOptions };
+      });
+    },
+    {
+      // Use resetKey to recreate instance when form value changes externally
+      resetKey: JSON.stringify(currentValue),
+      // Autosave: coalesce onChange calls to react-hook-form (faster updates)
+      changeDebounce: { delay: 400 },
+      // UI → rrstack: stage frequent input changes and commit once per window (faster staging)
+      mutateDebounce: { delay: 100, leading: true },
+      // rrstack → UI: coalesce paints to reduce repaint churn (~60fps updates)
+      renderDebounce: { delay: 16, leading: true },
+    },
+  );
+
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [validationErrors, setValidationErrors] = useState<{
+    timezone?: string;
+  }>({});
+
+  // Use selector for derived values to optimize re-renders
+  const rulesCount = useRRStackSelector(rrstack, (s) => s.rules.length);
+  const rules = useRRStackSelector(rrstack, (s) => s.rules);
 
   // Validate timezone using RRStack's built-in validation
   const validateTimezone = useCallback((tz: string): string | undefined => {
@@ -86,46 +111,6 @@ export const HookFormRRStack = <T extends FieldValues>({
     }
     return undefined;
   }, []);
-
-  // Initialize RRStack instance from form value
-  useEffect(() => {
-    try {
-      const stack = new RRStack(currentValue);
-      setRRStack(stack);
-    } catch (error) {
-      console.error('Failed to create RRStack:', error);
-      setRRStack(null);
-    }
-  }, []);
-
-  // Update form when rrstack changes (controlled component pattern)
-  const updateFormFromRRStack = useCallback(() => {
-    if (rrstack) {
-      const newValue = rrstack.toJson();
-      setValidationErrors({});
-      hookFieldOnChange({ target: { value: newValue } } as {
-        target: { value: RRStackOptions };
-      });
-    }
-  }, [rrstack, hookFieldOnChange]);
-
-  // Update rrstack when form value changes from external source
-  useEffect(() => {
-    if (rrstack && currentValue) {
-      try {
-        rrstack.updateOptions({
-          timezone: currentValue.timezone,
-          rules: currentValue.rules || [],
-        });
-      } catch (error) {
-        console.error('Failed to update RRStack:', error);
-      }
-    }
-  }, [currentValue.timezone, currentValue.rules]);
-
-  // Get rules and count directly from form state (single source of truth)
-  const rules = currentValue.rules || [];
-  const rulesCount = rules.length;
 
   // Generate timezone options from browser
   const timezoneOptions = useMemo(() => {
@@ -191,73 +176,32 @@ export const HookFormRRStack = <T extends FieldValues>({
         return;
       }
 
-      if (rrstack) {
-        rrstack.timezone = value;
-        setValidationErrors((prev) => ({ ...prev, timezone: undefined }));
-        updateFormFromRRStack();
-      }
+      // Direct assignment to rrstack - staged via mutateDebounce
+      rrstack.timezone = value;
+      setValidationErrors((prev) => ({ ...prev, timezone: undefined }));
     },
-    [rrstack, validateTimezone, updateFormFromRRStack],
+    [rrstack, validateTimezone],
   );
 
-  // Handle immediate rule updates - all changes flow through the form
+  // Handle rule updates using rrstack as single source of truth
   const handleRuleUpdate = useCallback(
     (index: number, updates: Partial<RuleJson>) => {
-      if (!rrstack) return;
-
-      const newRules = [...rules];
-      const updatedRule = { ...newRules[index], ...updates };
-      newRules[index] = updatedRule;
-
-      // Always update form state first (single source of truth)
-      const newValue = {
-        ...currentValue,
-        rules: newRules,
-      };
-      hookFieldOnChange({ target: { value: newValue } } as {
-        target: { value: RRStackOptions };
-      });
-
-      // Try to sync with RRStack, but don't let compilation errors block the UI update
-      try {
-        rrstack.rules = newRules;
-      } catch (error) {
-        console.warn(
-          'RRStack compilation error during edit (UI updated anyway):',
-          error,
-        );
-        // RRStack is out of sync, but form state is correct - this is fine for interactive editing
-      }
+      // Update the rule directly in rrstack - staged via mutateDebounce
+      const currentRules = [...rrstack.rules];
+      const updatedRule = { ...currentRules[index], ...updates };
+      currentRules[index] = updatedRule;
+      rrstack.rules = currentRules;
     },
-    [rrstack, rules, currentValue, hookFieldOnChange],
+    [rrstack],
   );
 
   const handleAddRule = useCallback(() => {
-    if (!rrstack) return;
-
     const newRule = createDefaultRule();
-    const newRules = [...rules, newRule];
-
-    // Always update form state first (single source of truth)
-    const newValue = {
-      ...currentValue,
-      rules: newRules,
-    };
-    hookFieldOnChange({ target: { value: newValue } } as {
-      target: { value: RRStackOptions };
-    });
-
-    // Try to sync with RRStack, but don't let compilation errors block the UI update
-    try {
-      rrstack.addRule(newRule);
-    } catch (error) {
-      console.warn('Error adding rule to RRStack (UI updated anyway):', error);
-      // RRStack is out of sync, but form state is correct - this is fine for interactive editing
-    }
+    rrstack.addRule(newRule);
 
     // Open the newly added rule for editing
-    setActiveIndex(newRules.length - 1);
-  }, [rrstack, rules, currentValue, hookFieldOnChange]);
+    setActiveIndex(rrstack.rules.length - 1);
+  }, [rrstack]);
 
   const handleAccordionClick = useCallback(
     (index: number, isActive: boolean) => {
@@ -268,8 +212,6 @@ export const HookFormRRStack = <T extends FieldValues>({
 
   const handleRuleMove = useCallback(
     (index: number, direction: 'top' | 'up' | 'down' | 'bottom') => {
-      if (!rrstack) return;
-
       switch (direction) {
         case 'top':
           if (index > 0) rrstack.top(index);
@@ -284,16 +226,14 @@ export const HookFormRRStack = <T extends FieldValues>({
           if (index < rulesCount - 1) rrstack.bottom(index);
           break;
       }
-      updateFormFromRRStack();
     },
-    [rrstack, rulesCount, updateFormFromRRStack],
+    [rrstack, rulesCount],
   );
 
   const handleRuleDelete = useCallback(
     (index: number) => {
-      if (!rrstack) return;
       rrstack.removeRule(index);
-      updateFormFromRRStack();
+
       // Close accordion if we deleted the active rule
       if (activeIndex === index) {
         setActiveIndex(null);
@@ -302,7 +242,7 @@ export const HookFormRRStack = <T extends FieldValues>({
         setActiveIndex(activeIndex - 1);
       }
     },
-    [rrstack, updateFormFromRRStack, activeIndex],
+    [rrstack, activeIndex],
   );
 
   // Show loading state while RRStack is initializing
@@ -339,7 +279,7 @@ export const HookFormRRStack = <T extends FieldValues>({
             search
             selection
             options={timezoneOptions}
-            value={currentValue.timezone}
+            value={rrstack.timezone}
             onChange={(e, { value }) => handleTimezoneChange(value as string)}
           />
           {validationErrors.timezone && (
