@@ -2,9 +2,17 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.14](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.13...0.1.14)
+
+- Remove timeUnit references since it's optional and we're using the default [`bedc134`](https://github.com/karmaniverous/hook-form-semantic/commit/bedc134918e053eaa6346431b7c395e5f087d3f4)
+- Update rrstack to v0.11.1 [`69532cc`](https://github.com/karmaniverous/hook-form-semantic/commit/69532ccca4c521e5778615dd0223d2c6a63f339e)
+
 #### [0.1.13](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.12...0.1.13)
 
+> 25 September 2025
+
 - Compatibility with React 18+ applications [`02f3ecd`](https://github.com/karmaniverous/hook-form-semantic/commit/02f3ecdec5c6b798b330a60644bd8dc641404d78)
+- chore: release v0.1.13 [`98bf0f5`](https://github.com/karmaniverous/hook-form-semantic/commit/98bf0f5effd46660d92426b6808748b145892db3)
 
 #### [0.1.12](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.11...0.1.12)
 
