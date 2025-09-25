@@ -6,7 +6,7 @@ Production‑ready [React Hook Form](https://react-hook-form.com) (RHF) field co
 
 Highlights
 
-- React 18 + TypeScript, ESM‑only build
+- React 18+ + TypeScript, ESM‑only build
 - First‑class RHF integration (Controller‑based wiring)
 - Semantic UI React props passthrough for familiar DX
 - Batteries included: date/time, ranges, numeric, phone, JSON editor, WYSIWYG, sort/menu utilities
