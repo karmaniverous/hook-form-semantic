@@ -307,7 +307,7 @@ export const RRStackRuleForm = ({
             ? validateDateRange
             : undefined
         }
-        presets={filterPresets(['past', 'present', 'future'], defaultPresets)}
+        presets={filterPresets(['present', 'future'], defaultPresets)}
       />
 
       {/* Only show duration section for recurring rules */}

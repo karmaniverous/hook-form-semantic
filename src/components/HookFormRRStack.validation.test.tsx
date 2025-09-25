@@ -63,8 +63,10 @@ describe('HookFormRRStack Validation', () => {
     const labelInput = screen.getByPlaceholderText('Rule label');
     fireEvent.change(labelInput, { target: { value: 'Test Span Rule' } });
 
-    // Verify the label was updated
-    expect(labelInput).toHaveValue('Test Span Rule');
+    // Wait for the label to be updated (due to debouncing)
+    await waitFor(() => {
+      expect(labelInput).toHaveValue('Test Span Rule');
+    });
 
     // Verify that the rule was added to the list
     await waitFor(() => {
@@ -86,8 +88,10 @@ describe('HookFormRRStack Validation', () => {
     const labelInput = screen.getByPlaceholderText('Rule label');
     fireEvent.change(labelInput, { target: { value: 'Test Rule' } });
 
-    // Verify the label was updated
-    expect(labelInput).toHaveValue('Test Rule');
+    // Wait for the label to be updated (due to debouncing)
+    await waitFor(() => {
+      expect(labelInput).toHaveValue('Test Rule');
+    });
 
     // Verify that the rule was added to the list
     await waitFor(() => {
