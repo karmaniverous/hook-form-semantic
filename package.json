@@ -16,7 +16,7 @@
   "devDependencies": {
     "@dotenvx/dotenvx": "^1.51.0",
     "@eslint/js": "^9.36.0",
-    "@karmaniverous/rrstack": "^0.10.0",
+    "@karmaniverous/rrstack": "^0.11.0",
     "@rollup/plugin-alias": "^5.1.1",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-json": "^6.1.0",
@@ -115,7 +115,7 @@
   "module": "dist/mjs/src/index.js",
   "name": "@karmaniverous/hook-form-semantic",
   "peerDependencies": {
-    "@karmaniverous/rrstack": "^0.10.0",
+    "@karmaniverous/rrstack": "^0.11.0",
     "@types/react": ">=19.1.13",
     "@types/react-dom": ">=19.1.9",
     "@wojtekmaj/react-daterange-picker": "^7.0.0",
@@ -245,7 +245,8 @@
     "diagrams": "cd diagrams/src && (plantuml -tpng -o ../out -r . || echo \"PlantUML not found; skipping diagram generation\")",
     "docs": "typedoc",
     "knip": "knip",
-    "lint": "node --import tsx ./node_modules/eslint/bin/eslint.js .",    "lint:fix": "node --import tsx ./node_modules/eslint/bin/eslint.js --fix .",
+    "lint": "node --import tsx ./node_modules/eslint/bin/eslint.js .",
+    "lint:fix": "node --import tsx ./node_modules/eslint/bin/eslint.js --fix .",
     "preview": "vite preview --config playground/vite.config.ts",
     "release": "dotenvx run -f .env.local -- release-it",
     "release:pre": "dotenvx run -f .env.local -- release-it --no-git.requireBranch --github.prerelease --preRelease",
