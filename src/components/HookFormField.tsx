@@ -1,4 +1,4 @@
-import { type PropsWithChildren, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import type { ControllerFieldState } from 'react-hook-form';
 import {
   type ControllerProps,
@@ -32,10 +32,7 @@ export interface HookFormFieldProps<T extends FieldValues, C>
   children?:
     | FormFieldProps['children']
     | ((
-        field: ControllerRenderProps<
-          PropsWithChildren<T>,
-          Path<PropsWithChildren<T>>
-        >,
+        field: ControllerRenderProps<T, Path<T>>,
         fieldState: ControllerFieldState,
       ) => FormFieldProps['children']);
   onChange?: (event: React.SyntheticEvent<HTMLElement>, data: C) => void;
@@ -89,13 +86,7 @@ export const HookFormField = <T extends FieldValues, C>({
       error={fieldState.error?.message}
     >
       {typeof children === 'function'
-        ? children(
-            hookField as ControllerRenderProps<
-              PropsWithChildren<PropsWithChildren<T>>,
-              Path<PropsWithChildren<PropsWithChildren<T>>>
-            >,
-            fieldState,
-          )
+        ? children(hookField as ControllerRenderProps<T, Path<T>>, fieldState)
         : children}
     </Form.Field>
   );
