@@ -11,7 +11,12 @@ import {
   Popup,
 } from 'semantic-ui-react';
 
-import { type DateRange, DateRangePickerComponent } from './DateRangePicker';
+import {
+  type DateRange,
+  defaultPresets,
+  filterPresets,
+  HookFormDateRangePicker,
+} from './HookFormDateRangePicker';
 
 interface RRStackRuleFormProps {
   rule: RuleJson;
@@ -289,7 +294,8 @@ export const RRStackRuleForm = ({
         )}
       </Form.Group>
 
-      <DateRangePickerComponent
+      <HookFormDateRangePicker
+        standalone
         label={labelWithInfo(
           'Date Range',
           "Optional start/end timestamps that bound the rule's validity window.",
@@ -301,6 +307,7 @@ export const RRStackRuleForm = ({
             ? validateDateRange
             : undefined
         }
+        presets={filterPresets(['past', 'present', 'future'], defaultPresets)}
       />
 
       {/* Only show duration section for recurring rules */}

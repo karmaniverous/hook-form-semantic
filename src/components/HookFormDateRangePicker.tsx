@@ -4,7 +4,6 @@ import DateRangePicker, {
 import DateTimeRangePicker, {
   type DateTimeRangePickerProps,
 } from '@wojtekmaj/react-datetimerange-picker';
-import { omit } from 'radash';
 import {
   type SyntheticEvent,
   useCallback,
@@ -226,10 +225,13 @@ export interface HookFormDateRangePickerProps<T extends FieldValues>
       | 'ref'
       | 'value'
     >,
-    PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'>,
+    Partial<PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'>>,
     PrefixedPartial<DateRangePickerProps, 'datePicker'>,
     PrefixedPartial<DateTimeRangePickerProps, 'timePicker'> {
   presets?: Presets;
+  standalone?: boolean;
+  value?: DateRange;
+  onChange?: (value: DateRange) => void;
 }
 
 const eqDate = (a: Date | null | undefined, b: Date | null | undefined) =>
@@ -240,6 +242,9 @@ const eqRange = (
 ) => !!a && !!b && eqDate(a[0], b[0]) && eqDate(a[1], b[1]);
 
 export const HookFormDateRangePicker = <T extends FieldValues>({
+  standalone = false,
+  value: standaloneValue,
+  onChange: standaloneOnChange,
   presets,
   ...props
 }: HookFormDateRangePickerProps<T>) => {
@@ -247,7 +252,7 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
     hook: hookProps,
     datePicker: { onChange: onDateChange, ...datePickerProps },
     timePicker: { onChange: onTimeChange, ...timePickerProps },
-    rest: { className, label, ...fieldProps },
+    rest: { className, label, error: standaloneError, ...fieldProps },
   } = useMemo(
     () => deprefix(props, ['hook', 'datePicker', 'timePicker']),
     [props],
@@ -255,10 +260,23 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
 
   const [includeTime, setIncludeTime] = useState<boolean | undefined>(false);
 
-  const {
-    field: { onChange: hookFieldOnChange, ...hookFieldProps },
-    fieldState: { error },
-  } = useController(hookProps as UseControllerProps);
+  const controllerResult = standalone
+    ? undefined
+    : useController(hookProps as UseControllerProps);
+
+  const hookFieldOnChange = standalone
+    ? undefined
+    : controllerResult?.field?.onChange;
+
+  const hookFieldProps = standalone
+    ? { value: standaloneValue }
+    : controllerResult?.field;
+
+  const error = standalone
+    ? standaloneError
+      ? { message: standaloneError }
+      : undefined
+    : controllerResult?.fieldState?.error;
 
   const [preset, setPreset] = useState<string | false>(false);
 
@@ -266,9 +284,20 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
     (...[value]: Parameters<NonNullable<DateRangePickerProps['onChange']>>) => {
       (includeTime ? onTimeChange : onDateChange)?.(value);
 
-      hookFieldOnChange({ target: { type: 'date', value } });
+      if (standalone) {
+        standaloneOnChange?.(value as DateRange);
+      } else {
+        hookFieldOnChange?.({ target: { type: 'date', value } });
+      }
     },
-    [hookFieldOnChange, includeTime, onDateChange, onTimeChange],
+    [
+      hookFieldOnChange,
+      includeTime,
+      onDateChange,
+      onTimeChange,
+      standalone,
+      standaloneOnChange,
+    ],
   );
 
   const presetOptions = useMemo(
@@ -287,15 +316,24 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
       if (!presets) return;
 
       const { value } = presets[data.value as string] ?? {};
+      const resolvedValue = value
+        ? isFn(value)
+          ? value()
+          : value
+        : [null, null];
 
-      hookFieldOnChange({
-        target: {
-          type: 'date',
-          value: value ? (isFn(value) ? value() : value) : [null, null],
-        },
-      });
+      if (standalone) {
+        standaloneOnChange?.(resolvedValue as DateRange);
+      } else {
+        hookFieldOnChange?.({
+          target: {
+            type: 'date',
+            value: resolvedValue,
+          },
+        });
+      }
     },
-    [hookFieldOnChange, presets],
+    [hookFieldOnChange, presets, standalone, standaloneOnChange],
   );
 
   useEffect(() => {
@@ -303,7 +341,7 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
       setPreset(false);
       return;
     }
-    const current = hookFieldProps.value as DateRange | undefined;
+    const current = hookFieldProps?.value as DateRange | undefined;
     const key =
       Object.keys(presets).find((k) => {
         const pv = presets[k]?.value;
@@ -311,7 +349,7 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
         return eqRange(current, resolved as DateRange);
       }) ?? false;
     setPreset(key);
-  }, [hookFieldProps.value, presets]);
+  }, [hookFieldProps?.value, presets]);
 
   return (
     <Form.Field
@@ -362,7 +400,17 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
               returnValue: 'range',
             }}
             {...timePickerProps}
-            {...omit(hookFieldProps, ['onBlur', 'ref'])}
+            {...(hookFieldProps && !standalone
+              ? {
+                  value: hookFieldProps.value,
+                  name:
+                    'name' in hookFieldProps ? hookFieldProps.name : undefined,
+                  disabled:
+                    'disabled' in hookFieldProps
+                      ? hookFieldProps.disabled
+                      : undefined,
+                }
+              : { value: standaloneValue })}
           />
         ) : (
           <DateRangePicker
@@ -378,7 +426,17 @@ export const HookFormDateRangePicker = <T extends FieldValues>({
               returnValue: 'range',
             }}
             {...datePickerProps}
-            {...omit(hookFieldProps, ['onBlur', 'ref'])}
+            {...(hookFieldProps && !standalone
+              ? {
+                  value: hookFieldProps.value,
+                  name:
+                    'name' in hookFieldProps ? hookFieldProps.name : undefined,
+                  disabled:
+                    'disabled' in hookFieldProps
+                      ? hookFieldProps.disabled
+                      : undefined,
+                }
+              : { value: standaloneValue })}
           />
         )}
       </div>
