@@ -2,9 +2,16 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.20](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.19...0.1.20)
+
+- Improve performance and memoize [`82f3f9d`](https://github.com/karmaniverous/hook-form-semantic/commit/82f3f9d3507fae5f1aa8a93f99c1e1676ad418db)
+
 #### [0.1.19](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.18...0.1.19)
 
+> 26 September 2025
+
 - Live start/end date calculation via rrstack.getEffectiveBounds [`ff7e2cf`](https://github.com/karmaniverous/hook-form-semantic/commit/ff7e2cfed53c3a40d85cd1d58bd7f240af8a998d)
+- chore: release v0.1.19 [`a15e450`](https://github.com/karmaniverous/hook-form-semantic/commit/a15e45000b29a3a28ef06cbc23efe6e291f2deff)
 
 #### [0.1.18](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.17...0.1.18)
 
