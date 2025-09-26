@@ -242,28 +242,19 @@ export const RRStackRuleForm = ({
       <Header size="tiny">Valid Range</Header>
       <Form.Group style={{ alignItems: 'flex-end' }}>
         <Form.Field width={5}>
-          {labelWithInfo(
-            'Start Date',
-            "Optional start timestamp that bounds the rule's validity window.",
-          )}
           <HookFormDatePicker
             standalone
-            label={undefined}
+            label="Start Date"
             value={startDate}
             onChange={handleStartChange}
           />
         </Form.Field>
         <Form.Field width={5}>
-          {labelWithInfo(
-            'End Date',
-            "Optional end timestamp that bounds the rule's validity window.",
-          )}
           <HookFormDatePicker
             standalone
-            label={undefined}
+            label="End Date"
             value={endDate}
             onChange={handleEndChange}
-            timePicker={{ includeTime: true }}
           />
         </Form.Field>
         <Form.Field width={2}>
