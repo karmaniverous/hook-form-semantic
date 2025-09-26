@@ -180,6 +180,11 @@ export const HookFormRRStack = <T extends FieldValues>({
     [rrstack, validateTimezone],
   );
 
+  // State to track validation errors for each rule
+  const [ruleValidationErrors, setRuleValidationErrors] = useState<{
+    [index: number]: string;
+  }>({});
+
   // Handle rule updates using rrstack as single source of truth
   const handleRuleUpdate = useCallback(
     (index: number, updates: Partial<RuleJson>) => {
@@ -195,8 +200,23 @@ export const HookFormRRStack = <T extends FieldValues>({
         const updatedRule = { ...currentRules[index], ...updates };
         currentRules[index] = updatedRule;
         rrstack.rules = currentRules;
+
+        // Clear any previous validation error for this rule
+        setRuleValidationErrors((prev) => {
+          const next = { ...prev };
+          delete next[index];
+          return next;
+        });
       } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
         console.error(`Error updating rule at index ${index}:`, error);
+
+        // Set validation error for this rule
+        setRuleValidationErrors((prev) => ({
+          ...prev,
+          [index]: errorMessage,
+        }));
       }
     },
     [rrstack],
@@ -451,6 +471,7 @@ export const HookFormRRStack = <T extends FieldValues>({
                 <Segment basic style={{ fontSize: '0.9em', padding: '1em 0' }}>
                   <RRStackRuleForm
                     rule={rule}
+                    validationError={ruleValidationErrors[index]}
                     onRuleChange={(updates) => handleRuleUpdate(index, updates)}
                   />
                 </Segment>

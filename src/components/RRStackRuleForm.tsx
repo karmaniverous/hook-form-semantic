@@ -11,12 +11,7 @@ import {
   Popup,
 } from 'semantic-ui-react';
 
-import {
-  type DateRange,
-  defaultPresets,
-  filterPresets,
-  HookFormDateRangePicker,
-} from './HookFormDateRangePicker';
+import { HookFormDatePicker } from './HookFormDatePicker';
 
 interface RRStackRuleFormProps {
   rule: RuleJson;
@@ -100,29 +95,28 @@ export const RRStackRuleForm = ({
     [],
   );
 
-  // Get current date range from rule data
-  const getDateRange = useMemo((): DateRange => {
-    const startDate = rule.options.starts
-      ? new Date(rule.options.starts)
-      : null;
-    const endDate = rule.options.ends ? new Date(rule.options.ends) : null;
-    return [startDate, endDate];
-  }, [rule.options.starts, rule.options.ends]);
+  // Extract current start/end dates from rule options
+  const startDate = useMemo(
+    () => (rule.options.starts ? new Date(rule.options.starts) : null),
+    [rule.options.starts],
+  );
+  const endDate = useMemo(
+    () => (rule.options.ends ? new Date(rule.options.ends) : null),
+    [rule.options.ends],
+  );
 
   // Validate date range - only check order when both dates are present
   const validateDateRange = useMemo((): string | null => {
-    const [startDate, endDate] = getDateRange;
-    // Only validate date order if both dates are present (both are optional)
     if (startDate && endDate && startDate >= endDate) {
       return 'Start date must be before end date';
     }
 
     return null;
-  }, [getDateRange]);
+  }, [startDate, endDate]);
 
   // Validate duration - at least one field must be positive for recurring rules
   const validateDuration = (): string | null => {
-    // Skip duration validation for span rules (freq is undefined)
+    // Only recurring rules require a positive duration
     if (rule.options.freq === undefined) {
       return null;
     }
@@ -147,28 +141,42 @@ export const RRStackRuleForm = ({
     return null;
   };
 
-  // Handle date range changes
-  const handleDateRangeChange = useCallback(
-    (dateRange: DateRange) => {
-      const [startDate, endDate] = dateRange;
-
-      // Show validation error if dates are in wrong order
-      if (startDate && endDate && startDate >= endDate) {
+  const handleStartChange = useCallback(
+    (d: Date | null) => {
+      const nextStart = d ?? null;
+      // Validate order if both present
+      if (nextStart && endDate && nextStart >= endDate) {
         setShowDateValidation(true);
       } else {
-        // Clear validation error if validation passes
         setShowDateValidation(false);
       }
-
       onRuleChange({
         options: {
           ...rule.options,
-          starts: startDate ? startDate.getTime() : undefined,
-          ends: endDate ? endDate.getTime() : undefined,
+          starts: nextStart ? nextStart.getTime() : undefined,
         },
       });
     },
-    [onRuleChange, rule.options],
+    [endDate, onRuleChange, rule.options],
+  );
+
+  const handleEndChange = useCallback(
+    (d: Date | null) => {
+      const nextEnd = d ?? null;
+      // Validate order if both present
+      if (startDate && nextEnd && startDate >= nextEnd) {
+        setShowDateValidation(true);
+      } else {
+        setShowDateValidation(false);
+      }
+      onRuleChange({
+        options: {
+          ...rule.options,
+          ends: nextEnd ? nextEnd.getTime() : undefined,
+        },
+      });
+    },
+    [onRuleChange, rule.options, startDate],
   );
 
   const handleFieldChange = (updates: Partial<RuleJson>) => {
@@ -197,8 +205,9 @@ export const RRStackRuleForm = ({
 
   return (
     <Container>
-      <Form.Group widths="equal">
-        <Form.Field>
+      {/* Top row: Label, Effect */}
+      <Form.Group>
+        <Form.Field width={10}>
           {labelWithInfo(
             'Label',
             'Optional descriptive name for this rule to help identify its purpose.',
@@ -212,7 +221,7 @@ export const RRStackRuleForm = ({
             placeholder="Rule label"
           />
         </Form.Field>
-        <Form.Field>
+        <Form.Field width={6}>
           {labelWithInfo(
             'Effect',
             'Active enables windows; Blackout blocks them. Use Blackout to exclude periods.',
@@ -227,7 +236,37 @@ export const RRStackRuleForm = ({
             }
           />
         </Form.Field>
-        <Form.Field>
+      </Form.Group>
+
+      {/* Valid Range */}
+      <Header size="tiny">Valid Range</Header>
+      <Form.Group style={{ alignItems: 'flex-end' }}>
+        <Form.Field width={5}>
+          {labelWithInfo(
+            'Start Date',
+            "Optional start timestamp that bounds the rule's validity window.",
+          )}
+          <HookFormDatePicker
+            standalone
+            label={undefined}
+            value={startDate}
+            onChange={handleStartChange}
+          />
+        </Form.Field>
+        <Form.Field width={5}>
+          {labelWithInfo(
+            'End Date',
+            "Optional end timestamp that bounds the rule's validity window.",
+          )}
+          <HookFormDatePicker
+            standalone
+            label={undefined}
+            value={endDate}
+            onChange={handleEndChange}
+            timePicker={{ includeTime: true }}
+          />
+        </Form.Field>
+        <Form.Field width={2}>
           {labelWithInfo(
             'Frequency',
             'Span = a continuous time range (no recurrence). Yearly/Monthly/etc. define recurring schedules.',
@@ -250,31 +289,25 @@ export const RRStackRuleForm = ({
                       | 'minutely'
                       | 'secondly');
 
-              // When switching to span rule, clear duration
               if (freq === undefined) {
+                // Switch to span: clear duration as span rules must omit it
                 handleFieldChange({
-                  options: {
-                    ...rule.options,
-                    freq: undefined,
-                  },
+                  options: { ...rule.options, freq: undefined },
                   duration: undefined,
                 });
               } else {
-                // When switching from span to recurring rule, ensure duration exists with positive value
+                // Switch to recurring: ensure a default positive duration if missing
                 handleFieldChange({
-                  options: {
-                    ...rule.options,
-                    freq,
-                  },
-                  duration: rule.duration || { days: 1 }, // Default to 1 day duration
+                  options: { ...rule.options, freq },
+                  duration: rule.duration || { days: 1 },
                 });
               }
             }}
+            style={{ width: '100%', height: '39px' }}
           />
         </Form.Field>
-        {/* Only show interval for recurring rules */}
         {rule.options.freq !== undefined && (
-          <Form.Field>
+          <Form.Field width={2}>
             {labelWithInfo(
               'Interval',
               'Number of frequency units to skip between occurrences. Example: every 2 weeks.',
@@ -289,182 +322,179 @@ export const RRStackRuleForm = ({
                 })
               }
               min={1}
+              style={{ width: '100%', height: '39px' }}
+            />
+          </Form.Field>
+        )}
+        {rule.options.freq !== undefined && (
+          <Form.Field width={2}>
+            {labelWithInfo(
+              'Count',
+              'Maximum number of occurrences to generate for this rule.',
+            )}
+            <Input
+              size="small"
+              type="number"
+              value={rule.options.count || ''}
+              onChange={(e) => {
+                handleOptionsChange({
+                  count: parseInt(e.target.value) || undefined,
+                });
+              }}
+              min={1}
+              style={{ width: '100%', height: '39px' }}
             />
           </Form.Field>
         )}
       </Form.Group>
 
-      <HookFormDateRangePicker
-        standalone
-        label={labelWithInfo(
-          'Date Range',
-          "Optional start/end timestamps that bound the rule's validity window.",
-          { fontSize: '12px' },
-        )}
-        value={getDateRange}
-        onChange={handleDateRangeChange}
-        error={
-          showDateValidation && validateDateRange
-            ? validateDateRange
-            : undefined
-        }
-        presets={filterPresets(['present', 'future'], defaultPresets)}
-      />
-
       {/* Only show duration section for recurring rules */}
+      <Header size="tiny">Duration</Header>
+      <Form.Group widths={6}>
+        <Form.Field>
+          {labelWithInfo('Years', 'Duration years component (0+).')}
+          <Input
+            size="small"
+            type="number"
+            value={rule.duration?.years || ''}
+            onChange={(e) =>
+              handleDurationChange({
+                years: parseInt(e.target.value) || undefined,
+              })
+            }
+            min={0}
+            placeholder="0"
+          />
+        </Form.Field>
+        <Form.Field>
+          {labelWithInfo('Months', 'Duration months component (0+).')}
+          <Input
+            size="small"
+            type="number"
+            value={rule.duration?.months || ''}
+            onChange={(e) =>
+              handleDurationChange({
+                months: parseInt(e.target.value) || undefined,
+              })
+            }
+            min={0}
+            placeholder="0"
+          />
+        </Form.Field>
+        <Form.Field>
+          {labelWithInfo('Days', 'Duration days component (0+).')}
+          <Input
+            size="small"
+            type="number"
+            value={rule.duration?.days || ''}
+            onChange={(e) =>
+              handleDurationChange({
+                days: parseInt(e.target.value) || undefined,
+              })
+            }
+            min={0}
+            placeholder="0"
+          />
+        </Form.Field>
+        <Form.Field>
+          {labelWithInfo('Hours', 'Duration hours component (0+).')}
+          <Input
+            size="small"
+            type="number"
+            value={rule.duration?.hours || ''}
+            onChange={(e) =>
+              handleDurationChange({
+                hours: parseInt(e.target.value) || undefined,
+              })
+            }
+            min={0}
+            placeholder="0"
+          />
+        </Form.Field>
+        <Form.Field>
+          {labelWithInfo('Min', 'Duration minutes component (0+).')}
+          <Input
+            size="small"
+            type="number"
+            value={rule.duration?.minutes || ''}
+            onChange={(e) =>
+              handleDurationChange({
+                minutes: parseInt(e.target.value) || undefined,
+              })
+            }
+            min={0}
+            placeholder="0"
+          />
+        </Form.Field>
+        <Form.Field>
+          {labelWithInfo('Sec', 'Duration seconds component (0+).')}
+          <Input
+            size="small"
+            type="number"
+            value={rule.duration?.seconds || ''}
+            onChange={(e) =>
+              handleDurationChange({
+                seconds: parseInt(e.target.value) || undefined,
+              })
+            }
+            min={0}
+            placeholder="0"
+          />
+        </Form.Field>
+      </Form.Group>
+
+      {/* Recurrence-only constraints (hidden for Span): Months / Weekdays / Time */}
       {rule.options.freq !== undefined && (
         <>
-          <Header size="tiny">Duration</Header>
+          <Header size="tiny">Months / Weekdays / Time</Header>
           <Form.Group widths={6}>
             <Form.Field>
-              {labelWithInfo('Years', 'Duration years component (0+).')}
-              <Input
-                size="small"
-                type="number"
-                value={rule.duration?.years || ''}
-                onChange={(e) =>
-                  handleDurationChange({
-                    years: parseInt(e.target.value) || undefined,
-                  })
-                }
-                min={0}
-                placeholder="0"
-              />
-            </Form.Field>
-            <Form.Field>
-              {labelWithInfo('Months', 'Duration months component (0+).')}
-              <Input
-                size="small"
-                type="number"
-                value={rule.duration?.months || ''}
-                onChange={(e) =>
-                  handleDurationChange({
-                    months: parseInt(e.target.value) || undefined,
-                  })
-                }
-                min={0}
-                placeholder="0"
-              />
-            </Form.Field>
-            <Form.Field>
-              {labelWithInfo('Days', 'Duration days component (0+).')}
-              <Input
-                size="small"
-                type="number"
-                value={rule.duration?.days || ''}
-                onChange={(e) =>
-                  handleDurationChange({
-                    days: parseInt(e.target.value) || undefined,
-                  })
-                }
-                min={0}
-                placeholder="0"
-              />
-            </Form.Field>
-            <Form.Field>
-              {labelWithInfo('Hours', 'Duration hours component (0+).')}
-              <Input
-                size="small"
-                type="number"
-                value={rule.duration?.hours || ''}
-                onChange={(e) =>
-                  handleDurationChange({
-                    hours: parseInt(e.target.value) || undefined,
-                  })
-                }
-                min={0}
-                placeholder="0"
-              />
-            </Form.Field>
-            <Form.Field>
-              {labelWithInfo('Min', 'Duration minutes component (0+).')}
-              <Input
-                size="small"
-                type="number"
-                value={rule.duration?.minutes || ''}
-                onChange={(e) =>
-                  handleDurationChange({
-                    minutes: parseInt(e.target.value) || undefined,
-                  })
-                }
-                min={0}
-                placeholder="0"
-              />
-            </Form.Field>
-            <Form.Field>
-              {labelWithInfo('Sec', 'Duration seconds component (0+).')}
-              <Input
-                size="small"
-                type="number"
-                value={rule.duration?.seconds || ''}
-                onChange={(e) =>
-                  handleDurationChange({
-                    seconds: parseInt(e.target.value) || undefined,
-                  })
-                }
-                min={0}
-                placeholder="0"
-              />
-            </Form.Field>
-          </Form.Group>
-        </>
-      )}
-
-      {/* Recurrence-only constraints: hide when Span (no freq) */}
-      {rule.options.freq !== undefined && (
-        <>
-          <Header size="tiny">Time of Day</Header>
-          <Form.Group widths="equal">
-            <Form.Field>
               {labelWithInfo(
-                'Hours',
-                'Comma-separated hours (0–23) when events should occur. Example: 9, 13, 17 for 9 AM, 1 PM, 5 PM',
+                'Months',
+                'Restrict recurrences to specific months.',
               )}
-              <Input
-                size="small"
-                value={
-                  rule.options.byhour
-                    ? Array.isArray(rule.options.byhour)
-                      ? rule.options.byhour.join(', ')
-                      : rule.options.byhour.toString()
-                    : ''
-                }
-                onChange={(e) => {
-                  const hours = e.target.value
-                    .split(',')
-                    .map((h) => parseInt(h.trim()))
-                    .filter((h) => !isNaN(h) && h >= 0 && h <= 23);
+              <Dropdown
+                selection
+                multiple
+                search
+                compact
+                options={MONTH_OPTIONS}
+                value={rule.options.bymonth || []}
+                onChange={(e, { value }) => {
                   handleOptionsChange({
-                    byhour: hours.length > 0 ? hours : undefined,
+                    bymonth:
+                      (value as number[]).length > 0
+                        ? (value as number[])
+                        : undefined,
                   });
                 }}
-                placeholder="e.g., 9, 13, 17"
+                placeholder="Select"
               />
             </Form.Field>
             <Form.Field>
               {labelWithInfo(
-                'Minutes',
-                'Comma-separated minutes (0–59) within each hour. Example: 0, 30 for on-the-hour and half-past',
+                'Days (1-31)',
+                'Comma-separated days within the month for recurrences (e.g., 1, 15, 31).',
               )}
               <Input
                 size="small"
                 value={
-                  rule.options.byminute
-                    ? Array.isArray(rule.options.byminute)
-                      ? rule.options.byminute.join(', ')
-                      : rule.options.byminute.toString()
+                  rule.options.bymonthday
+                    ? Array.isArray(rule.options.bymonthday)
+                      ? rule.options.bymonthday.join(', ')
+                      : rule.options.bymonthday.toString()
                     : ''
                 }
                 onChange={(e) => {
-                  const minutes = e.target.value
+                  const days = e.target.value
                     .split(',')
-                    .map((m) => parseInt(m.trim()))
-                    .filter((m) => !isNaN(m) && m >= 0 && m <= 59);
+                    .map((d) => parseInt(d.trim()))
+                    .filter((d) => !isNaN(d) && d >= 1 && d <= 31);
                   handleOptionsChange({
-                    byminute: minutes.length > 0 ? minutes : undefined,
+                    bymonthday: days.length > 0 ? days : undefined,
                   });
                 }}
-                placeholder="e.g., 0, 30"
+                placeholder="e.g., 25 (for 25th) or 1, 15, 31"
               />
             </Form.Field>
             <Form.Field>
@@ -518,80 +548,60 @@ export const RRStackRuleForm = ({
                 }}
               />
             </Form.Field>
+            <Form.Field>
+              {labelWithInfo(
+                'Hours',
+                'Comma-separated hours (0–23) when events should occur. Example: 9, 13, 17',
+              )}
+              <Input
+                size="small"
+                value={
+                  rule.options.byhour
+                    ? Array.isArray(rule.options.byhour)
+                      ? rule.options.byhour.join(', ')
+                      : rule.options.byhour.toString()
+                    : ''
+                }
+                onChange={(e) => {
+                  const hours = e.target.value
+                    .split(',')
+                    .map((h) => parseInt(h.trim()))
+                    .filter((h) => !isNaN(h) && h >= 0 && h <= 23);
+                  handleOptionsChange({
+                    byhour: hours.length > 0 ? hours : undefined,
+                  });
+                }}
+                placeholder="e.g., 9, 13, 17"
+              />
+            </Form.Field>
+            <Form.Field>
+              {labelWithInfo(
+                'Minutes',
+                'Comma-separated minutes (0–59). Example: 0, 30',
+              )}
+              <Input
+                size="small"
+                value={
+                  rule.options.byminute
+                    ? Array.isArray(rule.options.byminute)
+                      ? rule.options.byminute.join(', ')
+                      : rule.options.byminute.toString()
+                    : ''
+                }
+                onChange={(e) => {
+                  const minutes = e.target.value
+                    .split(',')
+                    .map((m) => parseInt(m.trim()))
+                    .filter((m) => !isNaN(m) && m >= 0 && m <= 59);
+                  handleOptionsChange({
+                    byminute: minutes.length > 0 ? minutes : undefined,
+                  });
+                }}
+                placeholder="e.g., 0, 30"
+              />
+            </Form.Field>
           </Form.Group>
         </>
-      )}
-
-      {rule.options.freq !== undefined && (
-        <Form.Group widths="equal">
-          <Form.Field>
-            {labelWithInfo(
-              'Months',
-              'Restrict recurrences to specific months.',
-            )}
-            <Dropdown
-              selection
-              multiple
-              search
-              compact
-              options={MONTH_OPTIONS}
-              value={rule.options.bymonth || []}
-              onChange={(e, { value }) => {
-                handleOptionsChange({
-                  bymonth:
-                    (value as number[]).length > 0
-                      ? (value as number[])
-                      : undefined,
-                });
-              }}
-              placeholder="Select months"
-            />
-          </Form.Field>
-          <Form.Field>
-            {labelWithInfo(
-              'Days of Month (1-31)',
-              'Comma-separated days within the month for recurrences (e.g., 1, 15, 31).',
-            )}
-            <Input
-              size="small"
-              value={
-                rule.options.bymonthday
-                  ? Array.isArray(rule.options.bymonthday)
-                    ? rule.options.bymonthday.join(', ')
-                    : rule.options.bymonthday.toString()
-                  : ''
-              }
-              onChange={(e) => {
-                const days = e.target.value
-                  .split(',')
-                  .map((d) => parseInt(d.trim()))
-                  .filter((d) => !isNaN(d) && d >= 1 && d <= 31);
-                handleOptionsChange({
-                  bymonthday: days.length > 0 ? days : undefined,
-                });
-              }}
-              placeholder="e.g., 25 (for 25th) or 1, 15, 31"
-            />
-          </Form.Field>
-          <Form.Field>
-            {labelWithInfo(
-              'Count',
-              'Maximum number of occurrences to generate for this rule.',
-            )}
-            <Input
-              size="small"
-              type="number"
-              value={rule.options.count || ''}
-              onChange={(e) => {
-                handleOptionsChange({
-                  count: parseInt(e.target.value) || undefined,
-                });
-              }}
-              min={1}
-              placeholder="Number of occurrences"
-            />
-          </Form.Field>
-        </Form.Group>
       )}
 
       {showDateValidation &&

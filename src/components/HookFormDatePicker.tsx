@@ -32,13 +32,23 @@ export interface HookFormDatePickerProps<T extends FieldValues>
       | 'ref'
       | 'value'
     >,
-    PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'>,
+    Partial<PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'>>,
     PrefixedPartial<DatePickerProps, 'datePicker'>,
-    PrefixedPartial<DateTimePickerProps, 'timePicker'> {}
+    PrefixedPartial<DateTimePickerProps, 'timePicker'> {
+  /**
+   * Standalone mode (no RHF). Provide value and onChange handlers.
+   */
+  standalone?: boolean;
+  value?: Date | null;
+  onChange?: (value: Date | null) => void;
+}
 
-export const HookFormDatePicker = <T extends FieldValues>(
-  props: HookFormDatePickerProps<T>,
-) => {
+export const HookFormDatePicker = <T extends FieldValues>({
+  standalone = false,
+  value: standaloneValue,
+  onChange: standaloneOnChange,
+  ...props
+}: HookFormDatePickerProps<T>) => {
   const {
     hook: hookProps,
     datePicker: { onChange: onDateChange, ...datePickerProps },
@@ -51,18 +61,41 @@ export const HookFormDatePicker = <T extends FieldValues>(
 
   const [includeTime, setIncludeTime] = useState<boolean | undefined>(false);
 
-  const {
-    field: { onChange: hookFieldOnChange, ...hookFieldProps },
-    fieldState: { error },
-  } = useController(hookProps as UseControllerProps);
+  // RHF controller (skipped in standalone mode)
+  const controllerResult = standalone
+    ? undefined
+    : useController(hookProps as UseControllerProps);
+
+  const hookFieldOnChange = standalone
+    ? undefined
+    : controllerResult?.field?.onChange;
+
+  const hookFieldProps = standalone
+    ? undefined
+    : controllerResult?.field
+      ? omit(controllerResult.field, ['onBlur', 'onChange', 'ref'])
+      : undefined;
+
+  const error = standalone ? undefined : controllerResult?.fieldState?.error;
 
   const handleChange = useCallback(
     (...[value]: Parameters<NonNullable<DatePickerProps['onChange']>>) => {
       (includeTime ? onTimeChange : onDateChange)?.(value as Date | null);
 
-      hookFieldOnChange({ target: { type: 'date', value } });
+      if (standalone) {
+        standaloneOnChange?.(value as Date | null);
+      } else {
+        hookFieldOnChange?.({ target: { type: 'date', value } });
+      }
     },
-    [hookFieldOnChange, includeTime, onDateChange, onTimeChange],
+    [
+      hookFieldOnChange,
+      includeTime,
+      onDateChange,
+      onTimeChange,
+      standalone,
+      standaloneOnChange,
+    ],
   );
 
   return (
@@ -102,7 +135,9 @@ export const HookFormDatePicker = <T extends FieldValues>(
               returnValue: 'start',
             }}
             {...timePickerProps}
-            {...omit(hookFieldProps, ['onBlur', 'ref'])}
+            {...(hookFieldProps && !standalone
+              ? hookFieldProps
+              : { value: standaloneValue })}
           />
         ) : (
           <DatePicker
@@ -117,7 +152,9 @@ export const HookFormDatePicker = <T extends FieldValues>(
               returnValue: 'start',
             }}
             {...datePickerProps}
-            {...omit(hookFieldProps, ['onBlur', 'ref'])}
+            {...(hookFieldProps && !standalone
+              ? hookFieldProps
+              : { value: standaloneValue })}
           />
         )}
       </div>

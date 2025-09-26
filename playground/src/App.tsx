@@ -86,7 +86,7 @@ export default function App() {
   return (
     <Segment
       style={{
-        maxWidth: '700px',
+        maxWidth: '800px',
         margin: '24px auto',
         padding: 24,
       }}
