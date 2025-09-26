@@ -2,9 +2,18 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.17](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.16...0.1.17)
+
+- Borders around form sections [`62a531a`](https://github.com/karmaniverous/hook-form-semantic/commit/62a531a3f6f88a86603cd7d8aac7ba96378b1f2d)
+- RRstack form tweaks [`b1f9ec4`](https://github.com/karmaniverous/hook-form-semantic/commit/b1f9ec474401a6a931bc7297aed28b778890e4a3)
+- Resize Label and Effect cells [`c0d80f3`](https://github.com/karmaniverous/hook-form-semantic/commit/c0d80f3eb1606389da15ce04a26ff662ce5644a6)
+
 #### [0.1.16](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.15...0.1.16)
 
+> 26 September 2025
+
 - Improve form stacking in mobile [`fa91b24`](https://github.com/karmaniverous/hook-form-semantic/commit/fa91b240d676890a150b733a77dda52ce00d3e23)
+- chore: release v0.1.16 [`9ddc8c1`](https://github.com/karmaniverous/hook-form-semantic/commit/9ddc8c1fb9c61b31b44a881fbbde2624e992451a)
 - Reorganize RRStack form flow [`50c48ff`](https://github.com/karmaniverous/hook-form-semantic/commit/50c48ff271bfc6320c77eff027d546f4b95a0275)
 - Fix failing test [`bd2d51e`](https://github.com/karmaniverous/hook-form-semantic/commit/bd2d51eaefb0f5a6630276cf339fdc07e00c0a8f)
 
