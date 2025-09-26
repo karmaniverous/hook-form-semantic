@@ -101,6 +101,23 @@ export const HookFormRRStack = <T extends FieldValues>({
   const rulesCount = useRRStackSelector(rrstack, (s) => s.rules.length);
   const rules = useRRStackSelector(rrstack, (s) => s.rules);
 
+  // Use selector for rule descriptions to make them reactive to RRStack changes
+  const ruleDescriptions = useRRStackSelector(rrstack, (s) =>
+    s.rules.map((_, index) => {
+      try {
+        // Ensure the index is within bounds before calling describeRule
+        if (s && index >= 0 && index < s.rules.length) {
+          return s.describeRule(index) || 'Invalid rule';
+        } else {
+          return 'Rule index out of range';
+        }
+      } catch (error) {
+        console.warn(`Error describing rule at index ${index}:`, error);
+        return 'Error describing rule';
+      }
+    }),
+  );
+
   // Validate timezone using RRStack's built-in validation
   const validateTimezone = useCallback((tz: string): string | undefined => {
     if (!RRStack.isValidTimeZone(tz)) {
@@ -364,19 +381,8 @@ export const HookFormRRStack = <T extends FieldValues>({
           {rules.map((rule: RuleJson, index: number) => {
             const isActive = activeIndex === index;
 
-            // Safe rule description with bounds checking and error handling
-            let ruleDescription = 'Invalid rule';
-            try {
-              // Ensure the index is within bounds before calling describeRule
-              if (rrstack && index >= 0 && index < rrstack.rules.length) {
-                ruleDescription = rrstack.describeRule(index) || 'Invalid rule';
-              } else {
-                ruleDescription = 'Rule index out of range';
-              }
-            } catch (error) {
-              console.warn(`Error describing rule at index ${index}:`, error);
-              ruleDescription = 'Error describing rule';
-            }
+            // Get rule description from reactive selector
+            const ruleDescription = ruleDescriptions[index] || 'Invalid rule';
 
             return [
               <Accordion.Title
@@ -470,6 +476,7 @@ export const HookFormRRStack = <T extends FieldValues>({
                 <Segment basic style={{ fontSize: '0.9em', padding: 0 }}>
                   <RRStackRuleForm
                     rule={rule}
+                    rrstack={rrstack as unknown as RRStack}
                     validationError={ruleValidationErrors[index]}
                     onRuleChange={(updates) => handleRuleUpdate(index, updates)}
                   />

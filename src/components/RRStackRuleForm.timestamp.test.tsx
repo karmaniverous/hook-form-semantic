@@ -1,4 +1,4 @@
-import type { RuleJson } from '@karmaniverous/rrstack';
+import type { RRStack, RuleJson } from '@karmaniverous/rrstack';
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -14,8 +14,17 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     label: 'Test Rule',
   };
 
+  // Create a mock RRStack instance
+  const mockRRStack = {
+    getEffectiveBounds: vi.fn(() => ({ empty: true })),
+    timezone: 'UTC',
+    rules: [mockRule],
+    timeUnit: 'ms' as const,
+  } as unknown as RRStack; // Use type assertion for testing
+
   const mockProps = {
     rule: mockRule,
+    rrstack: mockRRStack,
     onRuleChange: vi.fn(),
   };
 

@@ -1,4 +1,5 @@
 import type { RuleJson } from '@karmaniverous/rrstack';
+import type { RRStack } from '@karmaniverous/rrstack';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Container,
@@ -17,6 +18,7 @@ import { HookFormDatePicker } from './HookFormDatePicker';
 
 interface RRStackRuleFormProps {
   rule: RuleJson;
+  rrstack: RRStack;
   validationError?: string;
   onRuleChange: (updates: Partial<RuleJson>) => void;
 }
@@ -71,11 +73,75 @@ const MONTH_OPTIONS = [
 
 export const RRStackRuleForm = ({
   rule,
+  rrstack,
   validationError,
   onRuleChange,
 }: RRStackRuleFormProps) => {
   const [showDateValidation, setShowDateValidation] = useState(false);
   const [isDesktop, setIsDesktop] = useState(true);
+
+  // Local state for Hours and Minutes inputs to allow typing intermediate values
+  const [hoursInputValue, setHoursInputValue] = useState('');
+  const [minutesInputValue, setMinutesInputValue] = useState('');
+
+  // Sync local state with rule state when rule changes externally
+  useEffect(() => {
+    const hoursValue = rule.options.byhour
+      ? Array.isArray(rule.options.byhour)
+        ? rule.options.byhour.join(', ')
+        : rule.options.byhour.toString()
+      : '';
+    // Only update local state if it would result in a different parsed value
+    // This prevents overriding user input during typing
+    const currentParsedHours = hoursInputValue
+      .split(',')
+      .map((h) => h.trim())
+      .filter((h) => h !== '')
+      .map((h) => parseInt(h))
+      .filter((h) => !isNaN(h) && h >= 0 && h <= 23);
+
+    const ruleParsedHours = Array.isArray(rule.options.byhour)
+      ? rule.options.byhour
+      : rule.options.byhour
+        ? [rule.options.byhour]
+        : [];
+    const arraysEqual =
+      JSON.stringify(currentParsedHours.sort()) ===
+      JSON.stringify(ruleParsedHours.sort());
+
+    if (!arraysEqual) {
+      setHoursInputValue(hoursValue);
+    }
+  }, [rule.options.byhour, hoursInputValue]);
+
+  useEffect(() => {
+    const minutesValue = rule.options.byminute
+      ? Array.isArray(rule.options.byminute)
+        ? rule.options.byminute.join(', ')
+        : rule.options.byminute.toString()
+      : '';
+    // Only update local state if it would result in a different parsed value
+    // This prevents overriding user input during typing
+    const currentParsedMinutes = minutesInputValue
+      .split(',')
+      .map((m) => m.trim())
+      .filter((m) => m !== '')
+      .map((m) => parseInt(m))
+      .filter((m) => !isNaN(m) && m >= 0 && m <= 59);
+
+    const ruleParsedMinutes = Array.isArray(rule.options.byminute)
+      ? rule.options.byminute
+      : rule.options.byminute
+        ? [rule.options.byminute]
+        : [];
+    const arraysEqual =
+      JSON.stringify(currentParsedMinutes.sort()) ===
+      JSON.stringify(ruleParsedMinutes.sort());
+
+    if (!arraysEqual) {
+      setMinutesInputValue(minutesValue);
+    }
+  }, [rule.options.byminute, minutesInputValue]);
 
   // Check if screen is desktop size (768px+) - Semantic UI breakpoint
   useEffect(() => {
@@ -131,15 +197,42 @@ export const RRStackRuleForm = ({
     [],
   );
 
-  // Extract current start/end dates from rule options
-  const startDate = useMemo(
+  // Calculate effective bounds from rrstack (live updates when rules change)
+  const effectiveBounds = useMemo(() => {
+    try {
+      return rrstack.getEffectiveBounds();
+    } catch (error) {
+      console.warn('Error getting effective bounds:', error);
+      return { empty: true };
+    }
+  }, [rrstack]);
+
+  // Extract current start/end dates from rule options (for manual overrides)
+  const manualStartDate = useMemo(
     () => (rule.options.starts ? new Date(rule.options.starts) : null),
     [rule.options.starts],
   );
-  const endDate = useMemo(
+  const manualEndDate = useMemo(
     () => (rule.options.ends ? new Date(rule.options.ends) : null),
     [rule.options.ends],
   );
+
+  // Use effective bounds when available, fallback to manual dates
+  const startDate = useMemo(() => {
+    if (manualStartDate) return manualStartDate;
+    if (!effectiveBounds.empty && effectiveBounds.start) {
+      return new Date(effectiveBounds.start);
+    }
+    return null;
+  }, [manualStartDate, effectiveBounds]);
+
+  const endDate = useMemo(() => {
+    if (manualEndDate) return manualEndDate;
+    if (!effectiveBounds.empty && effectiveBounds.end) {
+      return new Date(effectiveBounds.end);
+    }
+    return null;
+  }, [manualEndDate, effectiveBounds]);
 
   // Validate date range - only check order when both dates are present
   const validateDateRange = useMemo((): string | null => {
@@ -524,21 +617,33 @@ export const RRStackRuleForm = ({
                   )}
                   <Input
                     size="small"
-                    value={
-                      rule.options.byhour
-                        ? Array.isArray(rule.options.byhour)
-                          ? rule.options.byhour.join(', ')
-                          : rule.options.byhour.toString()
-                        : ''
-                    }
+                    value={hoursInputValue}
                     onChange={(e) => {
-                      const hours = e.target.value
-                        .split(',')
-                        .map((h) => parseInt(h.trim()))
+                      const inputValue = e.target.value;
+                      setHoursInputValue(inputValue);
+
+                      // Parse and validate hours
+                      const parts = inputValue.split(',').map((h) => h.trim());
+                      const validHours = parts
+                        .filter((h) => h !== '') // Only process non-empty parts
+                        .map((h) => parseInt(h))
                         .filter((h) => !isNaN(h) && h >= 0 && h <= 23);
-                      handleOptionsChange({
-                        byhour: hours.length > 0 ? hours : undefined,
-                      });
+
+                      // Only update rule if input is empty or all non-empty parts are valid
+                      const nonEmptyParts = parts.filter((h) => h !== '');
+                      const allNonEmptyPartsValid =
+                        nonEmptyParts.length === 0 ||
+                        nonEmptyParts.every((h) => {
+                          const num = parseInt(h);
+                          return !isNaN(num) && num >= 0 && num <= 23;
+                        });
+
+                      if (allNonEmptyPartsValid) {
+                        handleOptionsChange({
+                          byhour:
+                            validHours.length > 0 ? validHours : undefined,
+                        });
+                      }
                     }}
                     placeholder="9, 13, 17"
                     style={responsiveMaxWidthStyle}
@@ -551,21 +656,33 @@ export const RRStackRuleForm = ({
                   )}
                   <Input
                     size="small"
-                    value={
-                      rule.options.byminute
-                        ? Array.isArray(rule.options.byminute)
-                          ? rule.options.byminute.join(', ')
-                          : rule.options.byminute.toString()
-                        : ''
-                    }
+                    value={minutesInputValue}
                     onChange={(e) => {
-                      const minutes = e.target.value
-                        .split(',')
-                        .map((m) => parseInt(m.trim()))
+                      const inputValue = e.target.value;
+                      setMinutesInputValue(inputValue);
+
+                      // Parse and validate minutes
+                      const parts = inputValue.split(',').map((m) => m.trim());
+                      const validMinutes = parts
+                        .filter((m) => m !== '') // Only process non-empty parts
+                        .map((m) => parseInt(m))
                         .filter((m) => !isNaN(m) && m >= 0 && m <= 59);
-                      handleOptionsChange({
-                        byminute: minutes.length > 0 ? minutes : undefined,
-                      });
+
+                      // Only update rule if input is empty or all non-empty parts are valid
+                      const nonEmptyParts = parts.filter((m) => m !== '');
+                      const allNonEmptyPartsValid =
+                        nonEmptyParts.length === 0 ||
+                        nonEmptyParts.every((m) => {
+                          const num = parseInt(m);
+                          return !isNaN(num) && num >= 0 && num <= 59;
+                        });
+
+                      if (allNonEmptyPartsValid) {
+                        handleOptionsChange({
+                          byminute:
+                            validMinutes.length > 0 ? validMinutes : undefined,
+                        });
+                      }
                     }}
                     placeholder="0, 30"
                     style={responsiveMaxWidthStyle}
