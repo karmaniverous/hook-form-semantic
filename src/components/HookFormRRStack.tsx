@@ -183,11 +183,21 @@ export const HookFormRRStack = <T extends FieldValues>({
   // Handle rule updates using rrstack as single source of truth
   const handleRuleUpdate = useCallback(
     (index: number, updates: Partial<RuleJson>) => {
-      // Update the rule directly in rrstack - staged via mutateDebounce
-      const currentRules = [...rrstack.rules];
-      const updatedRule = { ...currentRules[index], ...updates };
-      currentRules[index] = updatedRule;
-      rrstack.rules = currentRules;
+      try {
+        // Bounds check before updating
+        if (index < 0 || index >= rrstack.rules.length) {
+          console.warn(`Cannot update rule at index ${index}: out of bounds`);
+          return;
+        }
+
+        // Update the rule directly in rrstack - staged via mutateDebounce
+        const currentRules = [...rrstack.rules];
+        const updatedRule = { ...currentRules[index], ...updates };
+        currentRules[index] = updatedRule;
+        rrstack.rules = currentRules;
+      } catch (error) {
+        console.error(`Error updating rule at index ${index}:`, error);
+      }
     },
     [rrstack],
   );
@@ -209,19 +219,29 @@ export const HookFormRRStack = <T extends FieldValues>({
 
   const handleRuleMove = useCallback(
     (index: number, direction: 'top' | 'up' | 'down' | 'bottom') => {
-      switch (direction) {
-        case 'top':
-          if (index > 0) rrstack.top(index);
-          break;
-        case 'up':
-          if (index > 0) rrstack.up(index);
-          break;
-        case 'down':
-          if (index < rulesCount - 1) rrstack.down(index);
-          break;
-        case 'bottom':
-          if (index < rulesCount - 1) rrstack.bottom(index);
-          break;
+      try {
+        // Bounds check before moving
+        if (index < 0 || index >= rrstack.rules.length) {
+          console.warn(`Cannot move rule at index ${index}: out of bounds`);
+          return;
+        }
+
+        switch (direction) {
+          case 'top':
+            if (index > 0) rrstack.top(index);
+            break;
+          case 'up':
+            if (index > 0) rrstack.up(index);
+            break;
+          case 'down':
+            if (index < rulesCount - 1) rrstack.down(index);
+            break;
+          case 'bottom':
+            if (index < rulesCount - 1) rrstack.bottom(index);
+            break;
+        }
+      } catch (error) {
+        console.error(`Error moving rule at index ${index}:`, error);
       }
     },
     [rrstack, rulesCount],
@@ -229,14 +249,24 @@ export const HookFormRRStack = <T extends FieldValues>({
 
   const handleRuleDelete = useCallback(
     (index: number) => {
-      rrstack.removeRule(index);
+      try {
+        // Bounds check before deleting
+        if (index < 0 || index >= rrstack.rules.length) {
+          console.warn(`Cannot delete rule at index ${index}: out of bounds`);
+          return;
+        }
 
-      // Close accordion if we deleted the active rule
-      if (activeIndex === index) {
-        setActiveIndex(null);
-      } else if (activeIndex !== null && activeIndex > index) {
-        // Adjust active index if we deleted a rule above it
-        setActiveIndex(activeIndex - 1);
+        rrstack.removeRule(index);
+
+        // Close accordion if we deleted the active rule
+        if (activeIndex === index) {
+          setActiveIndex(null);
+        } else if (activeIndex !== null && activeIndex > index) {
+          // Adjust active index if we deleted a rule above it
+          setActiveIndex(activeIndex - 1);
+        }
+      } catch (error) {
+        console.error(`Error deleting rule at index ${index}:`, error);
       }
     },
     [rrstack, activeIndex],
@@ -313,8 +343,20 @@ export const HookFormRRStack = <T extends FieldValues>({
         <Accordion fluid styled>
           {rules.map((rule: RuleJson, index: number) => {
             const isActive = activeIndex === index;
-            const ruleDescription =
-              rrstack?.describeRule?.(index) || 'Invalid rule';
+
+            // Safe rule description with bounds checking and error handling
+            let ruleDescription = 'Invalid rule';
+            try {
+              // Ensure the index is within bounds before calling describeRule
+              if (rrstack && index >= 0 && index < rrstack.rules.length) {
+                ruleDescription = rrstack.describeRule(index) || 'Invalid rule';
+              } else {
+                ruleDescription = 'Rule index out of range';
+              }
+            } catch (error) {
+              console.warn(`Error describing rule at index ${index}:`, error);
+              ruleDescription = 'Error describing rule';
+            }
 
             return [
               <Accordion.Title

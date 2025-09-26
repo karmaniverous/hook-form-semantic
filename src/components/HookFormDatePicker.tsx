@@ -69,7 +69,7 @@ export const HookFormDatePicker = <T extends FieldValues>(
     <Form.Field
       {...fieldProps}
       className={concatClassNames(className, 'hook-form-date-picker')}
-      error={error?.message}
+      error={!!error}
     >
       {label && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
