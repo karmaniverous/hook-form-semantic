@@ -2,9 +2,18 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.16](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.15...0.1.16)
+
+- Improve form stacking in mobile [`fa91b24`](https://github.com/karmaniverous/hook-form-semantic/commit/fa91b240d676890a150b733a77dda52ce00d3e23)
+- Reorganize RRStack form flow [`50c48ff`](https://github.com/karmaniverous/hook-form-semantic/commit/50c48ff271bfc6320c77eff027d546f4b95a0275)
+- Fix failing test [`bd2d51e`](https://github.com/karmaniverous/hook-form-semantic/commit/bd2d51eaefb0f5a6630276cf339fdc07e00c0a8f)
+
 #### [0.1.15](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.14...0.1.15)
 
+> 26 September 2025
+
 - RRStackRuleForm: new layout; DatePicker standalone; hide span-only bits [`18d3a0d`](https://github.com/karmaniverous/hook-form-semantic/commit/18d3a0dccf8e8b21998c05b5543cd5b17022257c)
+- chore: release v0.1.15 [`22485cc`](https://github.com/karmaniverous/hook-form-semantic/commit/22485cc767409d79ea80910658b73574c969d2ba)
 - Fix failing test [`2db3ffd`](https://github.com/karmaniverous/hook-form-semantic/commit/2db3ffde4bdb7576c578dc2345eb2a3158d578b7)
 - Fix HookFormRRStack "Rule Index Out of Range" error [`61ca4b9`](https://github.com/karmaniverous/hook-form-semantic/commit/61ca4b920a3d435f10ffc19aa98e094bea36da92)
 - Fix date pickers to add include time option [`3057819`](https://github.com/karmaniverous/hook-form-semantic/commit/3057819c29f13007a736caafa8fd31472b4ac719)
