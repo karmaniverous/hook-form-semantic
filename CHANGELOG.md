@@ -2,9 +2,16 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.18](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.17...0.1.18)
+
+- Form tweaks [`61cc76a`](https://github.com/karmaniverous/hook-form-semantic/commit/61cc76a3cdd3cb0f460f651ccd323248040a4d11)
+
 #### [0.1.17](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.16...0.1.17)
 
+> 26 September 2025
+
 - Borders around form sections [`62a531a`](https://github.com/karmaniverous/hook-form-semantic/commit/62a531a3f6f88a86603cd7d8aac7ba96378b1f2d)
+- chore: release v0.1.17 [`f15c95f`](https://github.com/karmaniverous/hook-form-semantic/commit/f15c95f767590ad75d7a2f7b5b3f92a7c9fa6f3b)
 - RRstack form tweaks [`b1f9ec4`](https://github.com/karmaniverous/hook-form-semantic/commit/b1f9ec474401a6a931bc7297aed28b778890e4a3)
 - Resize Label and Effect cells [`c0d80f3`](https://github.com/karmaniverous/hook-form-semantic/commit/c0d80f3eb1606389da15ce04a26ff662ce5644a6)
 
