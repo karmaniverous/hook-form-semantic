@@ -435,6 +435,48 @@ vi.mock('semantic-ui-react', () => {
     }>
   > = ({ trigger }) => React.createElement(React.Fragment, {}, trigger);
 
+  const GridColumn: React.FC<
+    React.PropsWithChildren<
+      React.HTMLAttributes<HTMLDivElement> & { width?: number }
+    >
+  > = ({ children, width, ...props }) =>
+    React.createElement(
+      'div',
+      {
+        ...props,
+        'data-testid': 'grid-column',
+        'data-width': width,
+      },
+      children,
+    );
+
+  interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
+    columns?: number;
+    stackable?: boolean;
+    children?: React.ReactNode;
+  }
+
+  const Grid: React.FC<GridProps> = ({
+    children,
+    columns,
+    stackable,
+    ...props
+  }) =>
+    React.createElement(
+      'div',
+      {
+        ...props,
+        'data-testid': 'grid',
+        'data-columns': columns,
+        'data-stackable': stackable,
+      },
+      children,
+    );
+
+  Object.assign(Grid, {
+    Column: GridColumn,
+  });
+
   return {
     Form,
     Label,
@@ -451,6 +493,7 @@ vi.mock('semantic-ui-react', () => {
     Accordion,
     Container,
     Popup,
+    Grid,
   };
 });
 
