@@ -284,7 +284,7 @@ export const RRStackRuleForm = ({
       </Form.Group>
 
       {/* Valid Range */}
-      <Segment>
+      <Segment style={{ marginBottom: 0, paddingBottom: 0 }}>
         <Header size="tiny">Valid Range</Header>
         <Form.Group style={{ alignItems: 'flex-end' }}>
           <Form.Field width={5}>
@@ -342,7 +342,7 @@ export const RRStackRuleForm = ({
                   });
                 }
               }}
-              style={{ width: '100%', height: '39px' }}
+              style={{ width: '100%', height: '42px' }}
             />
           </Form.Field>
           {rule.options.freq !== undefined && (
@@ -390,12 +390,12 @@ export const RRStackRuleForm = ({
 
       {/* Recurrence-only constraints (hidden for Span): Months / Weekdays / Time */}
       {rule.options.freq !== undefined && (
-        <Grid columns={3} stackable style={{ margin: 0 }}>
+        <Grid columns={3} stackable style={{ margin: 0, padding: 0 }}>
           {/* Months Column */}
           <Grid.Column style={{ paddingLeft: 0 }}>
             <Segment>
               <Header size="tiny">Months</Header>
-              <Form.Group widths="equal">
+              <Form.Group widths="equal" style={{ marginBottom: 0 }}>
                 <Form.Field>
                   {labelWithInfo(
                     'Months',
@@ -422,7 +422,7 @@ export const RRStackRuleForm = ({
                 </Form.Field>
                 <Form.Field>
                   {labelWithInfo(
-                    'Days of Month',
+                    'DoM',
                     'Comma-separated days within the month for recurrences (e.g., 1, 15, 31).',
                   )}
                   <Input
@@ -443,7 +443,7 @@ export const RRStackRuleForm = ({
                         bymonthday: days.length > 0 ? days : undefined,
                       });
                     }}
-                    placeholder="e.g., 25 (for 25th) or 1, 15, 31"
+                    placeholder="25 (for 25th)"
                     style={responsiveMaxWidthStyle}
                   />
                 </Form.Field>
@@ -455,7 +455,7 @@ export const RRStackRuleForm = ({
           <Grid.Column style={{ paddingLeft: 0 }}>
             <Segment>
               <Header size="tiny">Weekdays</Header>
-              <Form.Group widths="equal" style={{ marginBottom: '0.5em' }}>
+              <Form.Group widths="equal" style={{ marginBottom: '-5px' }}>
                 <Form.Field>
                   {labelWithInfo(
                     'Weekdays',
@@ -516,7 +516,7 @@ export const RRStackRuleForm = ({
           <Grid.Column style={{ paddingLeft: 0, paddingRight: 0 }}>
             <Segment>
               <Header size="tiny">Time</Header>
-              <Form.Group widths="equal">
+              <Form.Group widths="equal" style={{ marginBottom: 0 }}>
                 <Form.Field>
                   {labelWithInfo(
                     'Hours',
@@ -540,7 +540,7 @@ export const RRStackRuleForm = ({
                         byhour: hours.length > 0 ? hours : undefined,
                       });
                     }}
-                    placeholder="e.g., 9, 13, 17"
+                    placeholder="9, 13, 17"
                     style={responsiveMaxWidthStyle}
                   />
                 </Form.Field>
@@ -567,7 +567,7 @@ export const RRStackRuleForm = ({
                         byminute: minutes.length > 0 ? minutes : undefined,
                       });
                     }}
-                    placeholder="e.g., 0, 30"
+                    placeholder="0, 30"
                     style={responsiveMaxWidthStyle}
                   />
                 </Form.Field>
@@ -579,7 +579,7 @@ export const RRStackRuleForm = ({
 
       {/* Only show duration section for recurring rules */}
       {rule.options.freq !== undefined && (
-        <Segment>
+        <Segment style={{ marginTop: 0, paddingBottom: 0 }}>
           <Header size="tiny" style={{ marginTop: 0 }}>
             Duration
           </Header>
