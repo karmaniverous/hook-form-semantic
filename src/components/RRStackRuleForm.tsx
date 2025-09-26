@@ -239,7 +239,7 @@ export const RRStackRuleForm = ({
     <Container>
       {/* Top row: Label, Effect */}
       <Form.Group>
-        <Form.Field width={10}>
+        <Form.Field width={12}>
           {labelWithInfo(
             'Label',
             'Optional descriptive name for this rule to help identify its purpose.',
@@ -253,7 +253,7 @@ export const RRStackRuleForm = ({
             placeholder="Rule label"
           />
         </Form.Field>
-        <Form.Field width={6}>
+        <Form.Field width={4}>
           {labelWithInfo(
             'Effect',
             'Active enables windows; Blackout blocks them. Use Blackout to exclude periods.',
