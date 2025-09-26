@@ -339,101 +339,6 @@ export const RRStackRuleForm = ({
         )}
       </Form.Group>
 
-      {/* Only show duration section for recurring rules */}
-      <Header size="tiny">Duration</Header>
-      <Form.Group widths={6}>
-        <Form.Field>
-          {labelWithInfo('Years', 'Duration years component (0+).')}
-          <Input
-            size="small"
-            type="number"
-            value={rule.duration?.years || ''}
-            onChange={(e) =>
-              handleDurationChange({
-                years: parseInt(e.target.value) || undefined,
-              })
-            }
-            min={0}
-            placeholder="0"
-          />
-        </Form.Field>
-        <Form.Field>
-          {labelWithInfo('Months', 'Duration months component (0+).')}
-          <Input
-            size="small"
-            type="number"
-            value={rule.duration?.months || ''}
-            onChange={(e) =>
-              handleDurationChange({
-                months: parseInt(e.target.value) || undefined,
-              })
-            }
-            min={0}
-            placeholder="0"
-          />
-        </Form.Field>
-        <Form.Field>
-          {labelWithInfo('Days', 'Duration days component (0+).')}
-          <Input
-            size="small"
-            type="number"
-            value={rule.duration?.days || ''}
-            onChange={(e) =>
-              handleDurationChange({
-                days: parseInt(e.target.value) || undefined,
-              })
-            }
-            min={0}
-            placeholder="0"
-          />
-        </Form.Field>
-        <Form.Field>
-          {labelWithInfo('Hours', 'Duration hours component (0+).')}
-          <Input
-            size="small"
-            type="number"
-            value={rule.duration?.hours || ''}
-            onChange={(e) =>
-              handleDurationChange({
-                hours: parseInt(e.target.value) || undefined,
-              })
-            }
-            min={0}
-            placeholder="0"
-          />
-        </Form.Field>
-        <Form.Field>
-          {labelWithInfo('Min', 'Duration minutes component (0+).')}
-          <Input
-            size="small"
-            type="number"
-            value={rule.duration?.minutes || ''}
-            onChange={(e) =>
-              handleDurationChange({
-                minutes: parseInt(e.target.value) || undefined,
-              })
-            }
-            min={0}
-            placeholder="0"
-          />
-        </Form.Field>
-        <Form.Field>
-          {labelWithInfo('Sec', 'Duration seconds component (0+).')}
-          <Input
-            size="small"
-            type="number"
-            value={rule.duration?.seconds || ''}
-            onChange={(e) =>
-              handleDurationChange({
-                seconds: parseInt(e.target.value) || undefined,
-              })
-            }
-            min={0}
-            placeholder="0"
-          />
-        </Form.Field>
-      </Form.Group>
-
       {/* Recurrence-only constraints (hidden for Span): Months / Weekdays / Time */}
       {rule.options.freq !== undefined && (
         <>
@@ -589,6 +494,105 @@ export const RRStackRuleForm = ({
                   });
                 }}
                 placeholder="e.g., 0, 30"
+              />
+            </Form.Field>
+          </Form.Group>
+        </>
+      )}
+
+      {/* Only show duration section for recurring rules */}
+      {rule.options.freq !== undefined && (
+        <>
+          <Header size="tiny">Duration</Header>
+          <Form.Group widths={6}>
+            <Form.Field>
+              {labelWithInfo('Years', 'Duration years component (0+).')}
+              <Input
+                size="small"
+                type="number"
+                value={rule.duration?.years || ''}
+                onChange={(e) =>
+                  handleDurationChange({
+                    years: parseInt(e.target.value) || undefined,
+                  })
+                }
+                min={0}
+                placeholder="0"
+              />
+            </Form.Field>
+            <Form.Field>
+              {labelWithInfo('Months', 'Duration months component (0+).')}
+              <Input
+                size="small"
+                type="number"
+                value={rule.duration?.months || ''}
+                onChange={(e) =>
+                  handleDurationChange({
+                    months: parseInt(e.target.value) || undefined,
+                  })
+                }
+                min={0}
+                placeholder="0"
+              />
+            </Form.Field>
+            <Form.Field>
+              {labelWithInfo('Days', 'Duration days component (0+).')}
+              <Input
+                size="small"
+                type="number"
+                value={rule.duration?.days || ''}
+                onChange={(e) =>
+                  handleDurationChange({
+                    days: parseInt(e.target.value) || undefined,
+                  })
+                }
+                min={0}
+                placeholder="0"
+              />
+            </Form.Field>
+            <Form.Field>
+              {labelWithInfo('Hours', 'Duration hours component (0+).')}
+              <Input
+                size="small"
+                type="number"
+                value={rule.duration?.hours || ''}
+                onChange={(e) =>
+                  handleDurationChange({
+                    hours: parseInt(e.target.value) || undefined,
+                  })
+                }
+                min={0}
+                placeholder="0"
+              />
+            </Form.Field>
+            <Form.Field>
+              {labelWithInfo('Min', 'Duration minutes component (0+).')}
+              <Input
+                size="small"
+                type="number"
+                value={rule.duration?.minutes || ''}
+                onChange={(e) =>
+                  handleDurationChange({
+                    minutes: parseInt(e.target.value) || undefined,
+                  })
+                }
+                min={0}
+                placeholder="0"
+              />
+            </Form.Field>
+            <Form.Field>
+              {labelWithInfo('Sec', 'Duration seconds component (0+).')}
+              <Input
+                size="small"
+                type="number"
+                value={rule.duration?.seconds || ''}
+                onChange={(e) =>
+                  handleDurationChange({
+                    seconds: parseInt(e.target.value) || undefined,
+                  })
+                }
+                min={0}
+                placeholder="0"
               />
             </Form.Field>
           </Form.Group>
