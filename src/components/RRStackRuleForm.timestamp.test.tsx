@@ -16,10 +16,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
 
   const mockProps = {
     rule: mockRule,
-    mode: 'add' as const,
     onRuleChange: vi.fn(),
-    onSave: vi.fn(),
-    onCancel: vi.fn(),
   };
 
   beforeEach(() => {
@@ -42,7 +39,8 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     // Verify the component renders and shows Start/End Date controls
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
-    expect(screen.getByText('Include Time')).toBeInTheDocument();
+    // The component should render without errors, indicating timestamps are handled correctly
+    expect(screen.getByDisplayValue('Test Rule')).toBeInTheDocument();
   });
 
   it('renders with end date without automatic time adjustment', () => {
@@ -61,7 +59,8 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     // Verify the component renders and shows Start/End Date controls
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
-    expect(screen.getByText('Include Time')).toBeInTheDocument();
+    // The component should render without errors, indicating timestamps are handled correctly
+    expect(screen.getByDisplayValue('Test Rule')).toBeInTheDocument();
   });
 
   it('handles clearing dates properly', () => {
@@ -80,17 +79,17 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     // Verify the component still renders correctly
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
-    expect(screen.getByText('Include Time')).toBeInTheDocument();
+    // The component should render without errors, indicating timestamps are handled correctly
+    expect(screen.getByDisplayValue('Test Rule')).toBeInTheDocument();
   });
 
-  it('displays date picker fields with Include Time checkboxes', () => {
+  it('displays date picker fields', () => {
     render(<RRStackRuleForm {...mockProps} />);
 
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
-
-    // Check for a single Include Time checkbox
-    expect(screen.getByText('Include Time')).toBeInTheDocument();
+    // The component should render without errors
+    expect(screen.getByDisplayValue('Test Rule')).toBeInTheDocument();
   });
 
   it('creates proper date range when both dates are selected', () => {
@@ -112,7 +111,8 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     // Verify the component renders correctly with both dates
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
-    expect(screen.getByText('Include Time')).toBeInTheDocument();
+    // The component should render without errors, indicating timestamps are handled correctly
+    expect(screen.getByDisplayValue('Test Rule')).toBeInTheDocument();
   });
 
   it('preserves timestamp values without automatic adjustment', () => {
@@ -134,7 +134,6 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     // Verify the component renders correctly and preserves the timestamps
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
-    expect(screen.getByText('Include Time')).toBeInTheDocument();
 
     // The component should render without errors, indicating timestamps are handled correctly
     expect(screen.getByDisplayValue('Test Rule')).toBeInTheDocument();

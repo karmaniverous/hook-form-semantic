@@ -163,8 +163,19 @@ vi.mock('semantic-ui-react', () => {
 
   interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     icon?: unknown;
+    primary?: boolean;
+    color?: string;
+    size?: string;
   }
-  const Button: React.FC<ButtonProps> = ({ onClick, icon, children, ...r }) =>
+  const Button: React.FC<ButtonProps> = ({
+    onClick,
+    icon,
+    primary: _primary, // eslint-disable-line @typescript-eslint/no-unused-vars
+    color: _color, // eslint-disable-line @typescript-eslint/no-unused-vars
+    size: _size, // eslint-disable-line @typescript-eslint/no-unused-vars
+    children,
+    ...r
+  }) =>
     React.createElement(
       'button',
       { ...r, onClick, 'data-icon': String(icon ?? '') },
@@ -447,8 +458,21 @@ vi.mock('semantic-ui-react', () => {
 vi.mock('react-date-picker', () => {
   type Props = {
     onChange?: (value: Date | null) => void;
+    dayPlaceholder?: string;
+    monthPlaceholder?: string;
+    yearPlaceholder?: string;
+    showLeadingZeros?: boolean;
+    calendarProps?: Record<string, unknown>;
   } & React.InputHTMLAttributes<HTMLInputElement>;
-  const Comp: React.FC<Props> = ({ onChange, ...p }) =>
+  const Comp: React.FC<Props> = ({
+    onChange,
+    dayPlaceholder: _dayPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
+    monthPlaceholder: _monthPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
+    yearPlaceholder: _yearPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
+    showLeadingZeros: _showLeadingZeros, // eslint-disable-line @typescript-eslint/no-unused-vars
+    calendarProps: _calendarProps, // eslint-disable-line @typescript-eslint/no-unused-vars
+    ...p
+  }) =>
     React.createElement('input', {
       ...p,
       'data-testid': 'date-picker',
@@ -464,8 +488,31 @@ vi.mock('react-date-picker', () => {
 vi.mock('react-datetime-picker', () => {
   type Props = {
     onChange?: (value: Date | null) => void;
+    dayPlaceholder?: string;
+    monthPlaceholder?: string;
+    yearPlaceholder?: string;
+    hourPlaceholder?: string;
+    minutePlaceholder?: string;
+    secondPlaceholder?: string;
+    showLeadingZeros?: boolean;
+    disableClock?: boolean;
+    maxDetail?: string;
+    calendarProps?: Record<string, unknown>;
   } & React.InputHTMLAttributes<HTMLInputElement>;
-  const Comp: React.FC<Props> = ({ onChange, ...p }) =>
+  const Comp: React.FC<Props> = ({
+    onChange,
+    dayPlaceholder: _dayPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
+    monthPlaceholder: _monthPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
+    yearPlaceholder: _yearPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
+    hourPlaceholder: _hourPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
+    minutePlaceholder: _minutePlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
+    secondPlaceholder: _secondPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
+    showLeadingZeros: _showLeadingZeros, // eslint-disable-line @typescript-eslint/no-unused-vars
+    disableClock: _disableClock, // eslint-disable-line @typescript-eslint/no-unused-vars
+    maxDetail: _maxDetail, // eslint-disable-line @typescript-eslint/no-unused-vars
+    calendarProps: _calendarProps, // eslint-disable-line @typescript-eslint/no-unused-vars
+    ...p
+  }) =>
     React.createElement('input', {
       ...p,
       'data-testid': 'datetime-picker',
@@ -481,8 +528,23 @@ vi.mock('react-datetime-picker', () => {
 vi.mock('@wojtekmaj/react-daterange-picker', () => {
   type Props = {
     onChange?: (value: [Date | null, Date | null]) => void;
+    dayPlaceholder?: string;
+    monthPlaceholder?: string;
+    yearPlaceholder?: string;
+    showLeadingZeros?: boolean;
+    calendarProps?: Record<string, unknown>;
+    rangeDivider?: string;
   } & React.HTMLAttributes<HTMLDivElement>;
-  const Comp: React.FC<Props> = ({ onChange, ...p }) =>
+  const Comp: React.FC<Props> = ({
+    onChange,
+    dayPlaceholder: _dayPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
+    monthPlaceholder: _monthPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
+    yearPlaceholder: _yearPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
+    showLeadingZeros: _showLeadingZeros, // eslint-disable-line @typescript-eslint/no-unused-vars
+    calendarProps: _calendarProps, // eslint-disable-line @typescript-eslint/no-unused-vars
+    rangeDivider: _rangeDivider, // eslint-disable-line @typescript-eslint/no-unused-vars
+    ...p
+  }) =>
     React.createElement(
       'div',
       { ...p, 'data-testid': 'daterange-picker' },
@@ -549,8 +611,19 @@ vi.mock('react-number-format', () => {
       'onChange' | 'type'
     > {
     onValueChange?: (v: ValueChange) => void;
+    allowNegative?: boolean;
+    decimalScale?: number;
+    customInput?: React.ComponentType<
+      React.InputHTMLAttributes<HTMLInputElement>
+    >;
   }
-  const NumericFormat: React.FC<Props> = ({ onValueChange, ...p }) =>
+  const NumericFormat: React.FC<Props> = ({
+    onValueChange,
+    allowNegative: _allowNegative, // eslint-disable-line @typescript-eslint/no-unused-vars
+    decimalScale: _decimalScale, // eslint-disable-line @typescript-eslint/no-unused-vars
+    customInput: _customInput, // eslint-disable-line @typescript-eslint/no-unused-vars
+    ...p
+  }) =>
     React.createElement('input', {
       ...p,
       'data-testid': 'numeric-input',
@@ -666,9 +739,13 @@ vi.mock('draft-js', () => {
 vi.mock('react-draft-wysiwyg', () => ({
   Editor: ({
     onEditorStateChange,
+    editorState: _editorState, // eslint-disable-line @typescript-eslint/no-unused-vars
+    editorStyle: _editorStyle, // eslint-disable-line @typescript-eslint/no-unused-vars
     ...p
   }: {
     onEditorStateChange?: (s: unknown) => void;
+    editorState?: unknown;
+    editorStyle?: React.CSSProperties;
   } & React.HTMLAttributes<HTMLDivElement>) =>
     React.createElement('div', {
       ...p,
