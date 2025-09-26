@@ -91,28 +91,36 @@ export const RRStackRuleForm = ({
         ? rule.options.byhour.join(', ')
         : rule.options.byhour.toString()
       : '';
-    // Only update local state if it would result in a different parsed value
-    // This prevents overriding user input during typing
-    const currentParsedHours = hoursInputValue
-      .split(',')
-      .map((h) => h.trim())
-      .filter((h) => h !== '')
-      .map((h) => parseInt(h))
-      .filter((h) => !isNaN(h) && h >= 0 && h <= 23);
 
-    const ruleParsedHours = Array.isArray(rule.options.byhour)
-      ? rule.options.byhour
-      : rule.options.byhour
-        ? [rule.options.byhour]
-        : [];
-    const arraysEqual =
-      JSON.stringify(currentParsedHours.sort()) ===
-      JSON.stringify(ruleParsedHours.sort());
+    // Only update local state if rule value changed (don't depend on current input)
+    if (hoursInputValue !== hoursValue) {
+      // Parse current input to compare with rule value
+      const currentParsedHours = hoursInputValue
+        .split(',')
+        .map((h) => h.trim())
+        .filter((h) => h !== '')
+        .map((h) => parseInt(h))
+        .filter((h) => !isNaN(h) && h >= 0 && h <= 23)
+        .sort();
 
-    if (!arraysEqual) {
-      setHoursInputValue(hoursValue);
+      const ruleParsedHours = Array.isArray(rule.options.byhour)
+        ? [...rule.options.byhour].sort()
+        : rule.options.byhour
+          ? [rule.options.byhour]
+          : [];
+
+      // Only update if the parsed arrays are actually different
+      const arraysEqual =
+        currentParsedHours.length === ruleParsedHours.length &&
+        currentParsedHours.every(
+          (val, index) => val === ruleParsedHours[index],
+        );
+
+      if (!arraysEqual) {
+        setHoursInputValue(hoursValue);
+      }
     }
-  }, [rule.options.byhour, hoursInputValue]);
+  }, [rule.options.byhour]);
 
   useEffect(() => {
     const minutesValue = rule.options.byminute
@@ -120,28 +128,36 @@ export const RRStackRuleForm = ({
         ? rule.options.byminute.join(', ')
         : rule.options.byminute.toString()
       : '';
-    // Only update local state if it would result in a different parsed value
-    // This prevents overriding user input during typing
-    const currentParsedMinutes = minutesInputValue
-      .split(',')
-      .map((m) => m.trim())
-      .filter((m) => m !== '')
-      .map((m) => parseInt(m))
-      .filter((m) => !isNaN(m) && m >= 0 && m <= 59);
 
-    const ruleParsedMinutes = Array.isArray(rule.options.byminute)
-      ? rule.options.byminute
-      : rule.options.byminute
-        ? [rule.options.byminute]
-        : [];
-    const arraysEqual =
-      JSON.stringify(currentParsedMinutes.sort()) ===
-      JSON.stringify(ruleParsedMinutes.sort());
+    // Only update local state if rule value changed (don't depend on current input)
+    if (minutesInputValue !== minutesValue) {
+      // Parse current input to compare with rule value
+      const currentParsedMinutes = minutesInputValue
+        .split(',')
+        .map((m) => m.trim())
+        .filter((m) => m !== '')
+        .map((m) => parseInt(m))
+        .filter((m) => !isNaN(m) && m >= 0 && m <= 59)
+        .sort();
 
-    if (!arraysEqual) {
-      setMinutesInputValue(minutesValue);
+      const ruleParsedMinutes = Array.isArray(rule.options.byminute)
+        ? [...rule.options.byminute].sort()
+        : rule.options.byminute
+          ? [rule.options.byminute]
+          : [];
+
+      // Only update if the parsed arrays are actually different
+      const arraysEqual =
+        currentParsedMinutes.length === ruleParsedMinutes.length &&
+        currentParsedMinutes.every(
+          (val, index) => val === ruleParsedMinutes[index],
+        );
+
+      if (!arraysEqual) {
+        setMinutesInputValue(minutesValue);
+      }
     }
-  }, [rule.options.byminute, minutesInputValue]);
+  }, [rule.options.byminute]);
 
   // Check if screen is desktop size (768px+) - Semantic UI breakpoint
   useEffect(() => {
@@ -198,6 +214,7 @@ export const RRStackRuleForm = ({
   );
 
   // Calculate effective bounds from rrstack (live updates when rules change)
+  // Use rrstack.rules and rrstack.timezone as dependencies instead of entire rrstack object
   const effectiveBounds = useMemo(() => {
     try {
       return rrstack.getEffectiveBounds();
@@ -205,7 +222,7 @@ export const RRStackRuleForm = ({
       console.warn('Error getting effective bounds:', error);
       return { empty: true };
     }
-  }, [rrstack]);
+  }, [rrstack.rules, rrstack.timezone]);
 
   // Extract current start/end dates from rule options (for manual overrides)
   const manualStartDate = useMemo(
@@ -244,7 +261,7 @@ export const RRStackRuleForm = ({
   }, [startDate, endDate]);
 
   // Validate duration - at least one field must be positive for recurring rules
-  const validateDuration = (): string | null => {
+  const validateDuration = useMemo((): string | null => {
     // Only recurring rules require a positive duration
     if (rule.options.freq === undefined) {
       return null;
@@ -268,7 +285,7 @@ export const RRStackRuleForm = ({
     }
 
     return null;
-  };
+  }, [rule.options.freq, rule.duration]);
 
   const handleStartChange = useCallback(
     (d: Date | null) => {
@@ -797,7 +814,7 @@ export const RRStackRuleForm = ({
 
       {showDateValidation &&
         (() => {
-          const durationValidationError = validateDuration();
+          const durationValidationError = validateDuration;
 
           if (!validateDateRange && !durationValidationError) {
             return null;
