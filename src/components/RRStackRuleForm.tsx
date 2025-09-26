@@ -36,13 +36,13 @@ const EFFECT_OPTIONS = [
 ];
 
 const WEEKDAY_OPTIONS = [
-  { key: 0, text: 'Monday', value: 0 },
-  { key: 1, text: 'Tuesday', value: 1 },
-  { key: 2, text: 'Wednesday', value: 2 },
-  { key: 3, text: 'Thursday', value: 3 },
-  { key: 4, text: 'Friday', value: 4 },
-  { key: 5, text: 'Saturday', value: 5 },
-  { key: 6, text: 'Sunday', value: 6 },
+  { key: 0, text: 'Mon', value: 0 },
+  { key: 1, text: 'Tue', value: 1 },
+  { key: 2, text: 'Wed', value: 2 },
+  { key: 3, text: 'Thu', value: 3 },
+  { key: 4, text: 'Fri', value: 4 },
+  { key: 5, text: 'Sat', value: 5 },
+  { key: 6, text: 'Sun', value: 6 },
 ];
 
 const POSITION_OPTIONS = [
@@ -54,18 +54,18 @@ const POSITION_OPTIONS = [
 ];
 
 const MONTH_OPTIONS = [
-  { key: 1, text: 'January', value: 1 },
-  { key: 2, text: 'February', value: 2 },
-  { key: 3, text: 'March', value: 3 },
-  { key: 4, text: 'April', value: 4 },
+  { key: 1, text: 'Jan', value: 1 },
+  { key: 2, text: 'Feb', value: 2 },
+  { key: 3, text: 'Mar', value: 3 },
+  { key: 4, text: 'Apr', value: 4 },
   { key: 5, text: 'May', value: 5 },
-  { key: 6, text: 'June', value: 6 },
-  { key: 7, text: 'July', value: 7 },
-  { key: 8, text: 'August', value: 8 },
-  { key: 9, text: 'September', value: 9 },
-  { key: 10, text: 'October', value: 10 },
-  { key: 11, text: 'November', value: 11 },
-  { key: 12, text: 'December', value: 12 },
+  { key: 6, text: 'Jun', value: 6 },
+  { key: 7, text: 'Jul', value: 7 },
+  { key: 8, text: 'Aug', value: 8 },
+  { key: 9, text: 'Sep', value: 9 },
+  { key: 10, text: 'Oct', value: 10 },
+  { key: 11, text: 'Nov', value: 11 },
+  { key: 12, text: 'Dec', value: 12 },
 ];
 
 export const RRStackRuleForm = ({
@@ -225,6 +225,15 @@ export const RRStackRuleForm = ({
       },
     });
   };
+
+  // Check if any weekdays are selected to enable/disable Position field
+  const hasWeekdaysSelected = useMemo(() => {
+    const weekdays = rule.options.byweekday;
+    if (Array.isArray(weekdays)) {
+      return weekdays.some((day) => typeof day === 'number');
+    }
+    return typeof weekdays === 'number';
+  }, [rule.options.byweekday]);
 
   return (
     <Container>
@@ -460,12 +469,13 @@ export const RRStackRuleForm = ({
               <Form.Field>
                 {labelWithInfo(
                   'Position',
-                  'Select nth occurrence within the period (e.g., 1st, 2nd, Last).',
+                  'Select nth occurrence within the period (e.g., 1st, 2nd, Last). Requires weekdays to be selected.',
                 )}
                 <Dropdown
                   selection
                   multiple
                   compact
+                  disabled={!hasWeekdaysSelected}
                   options={POSITION_OPTIONS}
                   value={rule.options.bysetpos || []}
                   onChange={(e, { value }) => {

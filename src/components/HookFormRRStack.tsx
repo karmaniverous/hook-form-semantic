@@ -458,8 +458,7 @@ export const HookFormRRStack = <T extends FieldValues>({
                 </div>
                 <div
                   style={{
-                    fontSize: '0.8em',
-                    color: '#666',
+                    fontWeight: 'normal',
                     marginTop: 4,
                     marginLeft: 16,
                   }}
@@ -468,7 +467,7 @@ export const HookFormRRStack = <T extends FieldValues>({
                 </div>
               </Accordion.Title>,
               <Accordion.Content key={`content-${index}`} active={isActive}>
-                <Segment basic style={{ fontSize: '0.9em', padding: '1em 0' }}>
+                <Segment basic style={{ fontSize: '0.9em', padding: 0 }}>
                   <RRStackRuleForm
                     rule={rule}
                     validationError={ruleValidationErrors[index]}
