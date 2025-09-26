@@ -2,8 +2,18 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.15](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.14...0.1.15)
+
+- RRStackRuleForm: new layout; DatePicker standalone; hide span-only bits [`18d3a0d`](https://github.com/karmaniverous/hook-form-semantic/commit/18d3a0dccf8e8b21998c05b5543cd5b17022257c)
+- Fix failing test [`2db3ffd`](https://github.com/karmaniverous/hook-form-semantic/commit/2db3ffde4bdb7576c578dc2345eb2a3158d578b7)
+- Fix HookFormRRStack "Rule Index Out of Range" error [`61ca4b9`](https://github.com/karmaniverous/hook-form-semantic/commit/61ca4b920a3d435f10ffc19aa98e094bea36da92)
+- Fix date pickers to add include time option [`3057819`](https://github.com/karmaniverous/hook-form-semantic/commit/3057819c29f13007a736caafa8fd31472b4ac719)
+
 #### [0.1.14](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.13...0.1.14)
 
+> 25 September 2025
+
+- chore: release v0.1.14 [`5748441`](https://github.com/karmaniverous/hook-form-semantic/commit/5748441b6fa342a6c3980d6063111b78a5a0fa93)
 - Remove timeUnit references since it's optional and we're using the default [`bedc134`](https://github.com/karmaniverous/hook-form-semantic/commit/bedc134918e053eaa6346431b7c395e5f087d3f4)
 - Update rrstack to v0.11.1 [`69532cc`](https://github.com/karmaniverous/hook-form-semantic/commit/69532ccca4c521e5778615dd0223d2c6a63f339e)
 
