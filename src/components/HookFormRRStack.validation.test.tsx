@@ -278,25 +278,30 @@ describe('HookFormRRStack Validation', () => {
     // Add a rule and open the editor
     fireEvent.click(screen.getByText('Add Rule'));
 
-    // Capture the title text (includes RRStackRuleDescription)
-    const title = screen.getAllByTestId('accordion-title')[0];
-    const initialText = title.textContent ?? '';
-    expect(initialText.length).toBeGreaterThan(0);
+    // Select the description node directly for reliable assertions
+    const description = screen.getByTestId('rule-description-0');
+    const initialText = description.textContent ?? '';
 
     // Find the rule editor content
     const content = screen.getAllByTestId('accordion-content')[0];
 
-    // Change Frequency from Span to Daily.
-    // Find the dropdown within the content (the first should be Frequency).
+    // 1) Change Frequency from Span to Daily (first dropdown)
     const dropdowns = within(content).getAllByTestId(
       'dropdown',
     ) as HTMLSelectElement[];
     expect(dropdowns.length).toBeGreaterThan(0);
     fireEvent.change(dropdowns[0], { target: { value: 'daily' } });
 
-    // Expect the accordion title text (including description) to change.
+    // 2) Provide Hours so description has concrete timing semantics.
+    //    Locate the Hours input via its placeholder ("9, 13, 17") and set it.
+    const hoursInput = within(content).getByPlaceholderText(
+      '9, 13, 17',
+    ) as HTMLInputElement;
+    fireEvent.change(hoursInput, { target: { value: '9' } });
+
+    // Expect the description text to update from its initial value.
     await waitFor(() => {
-      const nextText = title.textContent ?? '';
+      const nextText = description.textContent ?? '';
       expect(nextText).not.toBe(initialText);
       expect(nextText.length).toBeGreaterThan(0);
     });
