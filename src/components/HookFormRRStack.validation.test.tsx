@@ -272,21 +272,22 @@ describe('HookFormRRStack Validation', () => {
     });
   });
 
-  it('updates RRStackRuleDescription when rule settings change', async () => {
+  it('updates rule header when effect changes', async () => {
     render(<TestForm />);
 
-    // Add a rule and open the editor
-    fireEvent.click(screen.getByText('Add Rule'));
+    // Add a rule and open the editor    fireEvent.click(screen.getByText('Add Rule'));
 
-    // Select the description node directly for reliable assertions
-    const description = screen.getByTestId('rule-description-0');
-    const initialText = description.textContent ?? '';
-
-    // Find the rule editor content
+    // Find the rule editor content and the corresponding accordion title (header)
     const content = screen.getAllByTestId('accordion-content')[0];
+    const title = screen.getAllByTestId('accordion-title')[0];
 
-    // Make a deterministic change that must alter the description:
-    // Toggle Effect from Active to Blackout
+    // Read initial Effect label text in the title (ACTIVE/BLACKOUT)
+    const initialEffect = (
+      within(title).getByTestId('label').textContent ?? ''
+    ).trim();
+    expect(initialEffect).toMatch(/ACTIVE|BLACKOUT/i);
+
+    // Toggle Effect from Active to Blackout in the form
     const effectLabel = within(content).getByText('Effect');
     const effectField =
       effectLabel.closest('[data-testid="form-field"]') ??
@@ -300,11 +301,13 @@ describe('HookFormRRStack Validation', () => {
       target: { value: 'blackout' },
     });
 
-    // Expect the description text to update from its initial value.
+    // Expect the title Effect label to update to BLACKOUT
     await waitFor(() => {
-      const nextText = description.textContent ?? '';
-      expect(nextText).not.toBe(initialText);
-      expect(nextText.length).toBeGreaterThan(0);
+      const updated = (
+        within(title).getByTestId('label').textContent ?? ''
+      ).trim();
+      expect(updated).toContain('BLACKOUT');
+      expect(updated).not.toBe(initialEffect);
     });
   });
 });
