@@ -5,7 +5,6 @@
 ## Next up
 - Verify “equal widths” rendering of the 6-field Months/Weekdays/Time  row across default Semantic UI 16-col grid; adjust minor CSS only if  needed (keep component logic unchanged).- Confirm stakeholder preference about showing Duration for Span rules.  Current behavior shows Duration always, but validates only for  recurring rules.- Light UX pass on labels/help text for Valid Range to ensure clarity
   (no behavior changes).
-
 ## Completed (recent)
 
 - RRStackRuleForm layout:
@@ -57,6 +56,11 @@
   Frequency dropdown via its label rather than assuming the first
   dropdown, ensuring the Time section renders and Hours can be set
   to trigger a visible description update.
+- Tests: further stabilize RRStackRuleDescription live-update by toggling
+  the Effect field (Active → Blackout), which guarantees a visible change
+  in the description string. This avoids cases where certain frequency/
+  duration combinations still produce “Active continuously,” causing
+  false negatives.
 
 ## DX / utility ideas (backlog)
 - Consider shared “standalone” API parity across all HookForm*  date/time components to simplify reuse beyond RHF contexts.

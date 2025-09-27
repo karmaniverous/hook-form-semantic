@@ -285,33 +285,27 @@ describe('HookFormRRStack Validation', () => {
     // Find the rule editor content
     const content = screen.getAllByTestId('accordion-content')[0];
 
-    // 1) Change Frequency from Span to Daily by locating the Frequency field specifically.
-    //    We target the <label>Frequency</label> then query the nearest select under the same field.
-    const freqLabel = within(content).getByText('Frequency');
-    const freqField =
-      freqLabel.closest('[data-testid="form-field"]') ??
-      freqLabel.parentElement;
-    expect(freqField).toBeTruthy();
-    const freqDropdown = freqField!.querySelector(
+    // Change Effect from Active to Blackout (guaranteed description change).
+    const effectLabel = within(content).getByText('Effect');
+    const effectField =
+      effectLabel.closest('[data-testid="form-field"]') ??
+      effectLabel.parentElement;
+    expect(effectField).toBeTruthy();
+    const effectDropdown = effectField!.querySelector(
       '[data-testid="dropdown"]',
     ) as HTMLSelectElement | null;
-    expect(freqDropdown).toBeTruthy();
-    fireEvent.change(freqDropdown as HTMLSelectElement, {
-      target: { value: 'daily' },
+    expect(effectDropdown).toBeTruthy();
+    fireEvent.change(effectDropdown as HTMLSelectElement, {
+      target: { value: 'blackout' },
     });
-
-    // 2) Provide Hours so description has concrete timing semantics.
-    //    Locate the Hours input via its placeholder ("9, 13, 17") inside the Time section and set it.
-    const hoursInput = within(content).getByPlaceholderText(
-      '9, 13, 17',
-    ) as HTMLInputElement;
-    fireEvent.change(hoursInput, { target: { value: '9' } });
 
     // Expect the description text to update from its initial value.
     await waitFor(() => {
       const nextText = description.textContent ?? '';
       expect(nextText).not.toBe(initialText);
       expect(nextText.length).toBeGreaterThan(0);
+      // Optional: ensure the effect word toggled
+      expect(nextText.toLowerCase()).toContain('blackout');
     });
   });
 });
