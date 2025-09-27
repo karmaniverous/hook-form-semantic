@@ -500,18 +500,13 @@ vi.mock('semantic-ui-react', () => {
 // Date/time pickers
 vi.mock('react-date-picker', () => {
   const isoDate = (d: Date) => d.toISOString().slice(0, 10); // YYYY-MM-DD
-  const Comp: React.FC<any> = (props: any) => {
-    const {
-      onChange,
-      // ignore placeholders and calendarProps
-      dayPlaceholder: _d,
-      monthPlaceholder: _m,
-      yearPlaceholder: _y,
-      showLeadingZeros: _l,
-      calendarProps: _c,
-      value: rawValue,
-      ...rest
-    } = props;
+  interface DatePickerMockProps
+    extends React.InputHTMLAttributes<HTMLInputElement> {
+    onChange?: (value: Date | null) => void;
+    value?: Date | string | null | undefined;
+  }
+  const Comp: React.FC<DatePickerMockProps> = (props) => {
+    const { onChange, value: rawValue, ...rest } = props;
     const value =
       rawValue instanceof Date
         ? isoDate(rawValue)
@@ -533,23 +528,14 @@ vi.mock('react-date-picker', () => {
 });
 
 vi.mock('react-datetime-picker', () => {
-  const isoLocalMinute = (d: Date) => d.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm (UTC, good enough for tests)
-  const Comp: React.FC<any> = (props: any) => {
-    const {
-      onChange,
-      dayPlaceholder: _d,
-      monthPlaceholder: _m,
-      yearPlaceholder: _y,
-      hourPlaceholder: _hh,
-      minutePlaceholder: _mm,
-      secondPlaceholder: _ss,
-      showLeadingZeros: _lz,
-      disableClock: _dc,
-      maxDetail: _md,
-      calendarProps: _c,
-      value: rawValue,
-      ...rest
-    } = props;
+  const isoLocalMinute = (d: Date) => d.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm (UTC-ish, fine for tests)
+  interface DateTimePickerMockProps
+    extends React.InputHTMLAttributes<HTMLInputElement> {
+    onChange?: (value: Date | null) => void;
+    value?: Date | string | null | undefined;
+  }
+  const Comp: React.FC<DateTimePickerMockProps> = (props) => {
+    const { onChange, value: rawValue, ...rest } = props;
     const value =
       rawValue instanceof Date
         ? isoLocalMinute(rawValue)

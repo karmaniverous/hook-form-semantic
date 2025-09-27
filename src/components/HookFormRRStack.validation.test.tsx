@@ -300,17 +300,23 @@ describe('HookFormRRStack Validation', () => {
       target: { value: 'daily' },
     });
 
-    // 2) Set Hours to "9"
-    const hoursLabel = within(content).getByText('Hours');
+    // 2) Set Hours to "9" in the Time section (not the Duration section)
+    const timeHeader = within(content).getByText('Time');
+    const timeSegment =
+      timeHeader.closest('[data-testid="segment"]') ?? timeHeader.parentElement;
+    expect(timeSegment).toBeTruthy();
+
+    const hoursLabel = within(timeSegment as HTMLElement).getByText('Hours');
     const hoursField =
       hoursLabel.closest('[data-testid="form-field"]') ??
       hoursLabel.parentElement;
     expect(hoursField).toBeTruthy();
-    const hoursInput = hoursField!.querySelector(
+
+    const hoursInput = (hoursField as HTMLElement).querySelector(
       'input',
     ) as HTMLInputElement | null;
     expect(hoursInput).toBeTruthy();
-    fireEvent.change(hoursInput as HTMLInputElement, {
+    fireEvent.change(hoursInput!, {
       target: { value: '9' },
     });
 

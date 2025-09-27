@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-09-27T01:45:00Z
+# When updated: 2025-09-27T02:05:00Z
 
 ## Next up
 
@@ -14,10 +14,15 @@
 
 ## Completed (recent)
 
+- Lint: remove any and unused destructured props in test stubs for
+  react-date-picker and react-datetime-picker; type props explicitly to
+  satisfy @typescript-eslint/no-explicit-any and no-unused-vars.
+- Tests: scope “Hours” selection to the Time section to avoid ambiguity
+  with the Duration “Hours” label; RRStackRuleDescription test now
+  deterministic and unambiguous.
 - Tests: stabilize RRStackRuleDescription live-update by making a deterministic change (Frequency=Daily, Hours=9) and asserting the description differs from its initial value. Removed a brittle assertion that required the word “blackout”.
 - Test stubs: silence controlled/uncontrolled warnings by coercing null/undefined Date/DateTime values to '' in mocked widgets.
-- HookFormRRStack: gate console.log diagnostics behind NODE_ENV !== 'production'.
-- RRStackRuleForm layout:
+- HookFormRRStack: gate console.log diagnostics behind NODE_ENV !== 'production'.- RRStackRuleForm layout:
   - Replaced single Date Range control with two HookFormDatePicker instances (Start Date, End Date) with “Include Time” per picker.
   - Moved Count into the Valid Range row; hide Interval and Count when Frequency is Span.
   - Combined Months/Weekdays/Time into one 6-field row (Months, Days of Month, Weekdays, Position, Hours, Minutes) using widths={6}; hide entire row when Frequency is Span.
