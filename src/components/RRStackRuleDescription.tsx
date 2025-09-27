@@ -24,6 +24,7 @@ export const RRStackRuleDescription = <T extends ElementType = 'span'>({
   includeTimeZone,
   index,
   rrstack,
+  ...rest
 }: RRStackRuleDescriptionProps<T>) => {
   const As = (as ?? 'span') as ElementType;
 
@@ -72,5 +73,9 @@ export const RRStackRuleDescription = <T extends ElementType = 'span'>({
 
   if (!ruleRef) return fallback as JSX.Element | null;
 
-  return <As className={className}>{text}</As>;
+  return (
+    <As className={className} {...rest}>
+      {text}
+    </As>
+  );
 };
