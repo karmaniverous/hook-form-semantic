@@ -3,8 +3,7 @@
 # When updated: 2025-09-27T00:00:00Z
 
 ## Next up
-- Verify “equal widths” rendering of the 6-field Months/Weekdays/Time  row across default Semantic UI 16-col grid; adjust minor CSS only if  needed (keep component logic unchanged).
-- Confirm stakeholder preference about showing Duration for Span rules.
+- Verify “equal widths” rendering of the 6-field Months/Weekdays/Time  row across default Semantic UI 16-col grid; adjust minor CSS only if  needed (keep component logic unchanged).- Confirm stakeholder preference about showing Duration for Span rules.
   Current behavior shows Duration always, but validates only for
   recurring rules.
 - Light UX pass on labels/help text for Valid Range to ensure clarity
@@ -37,7 +36,12 @@
   in HookFormRRStack; assert field text content instead.
 - Tooling: fix docs command in stan.config.yml to use `npm run stan:docs`
   so TypeDoc receives `--emit none` correctly and finds entry points.
+- RRStackRuleDescription: fix live updates. Previously used a selector
+  on `rules[index]` with a strict-equality comparator; mutating the same
+  rule object and replacing the array prevented re-render. Now the
+  selector depends on the rules array identity and timezone, deriving
+  the rule by index. Added a test that changes Frequency to verify the
+  accordion title (containing the description) updates live.
 
 ## DX / utility ideas (backlog)
 - Consider shared “standalone” API parity across all HookForm*  date/time components to simplify reuse beyond RHF contexts.
-

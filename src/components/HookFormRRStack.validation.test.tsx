@@ -1,6 +1,12 @@
 import type { RRStackOptions } from '@karmaniverous/rrstack';
 import { RRStack } from '@karmaniverous/rrstack';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import type { FieldValues } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { Form } from 'semantic-ui-react';
@@ -263,6 +269,36 @@ describe('HookFormRRStack Validation', () => {
     fireEvent.change(inputs[1], { target: { value: '2025-01-04' } });
     await waitFor(() => {
       expect(endsField.textContent).not.toBe(prevEnds);
+    });
+  });
+
+  it('updates RRStackRuleDescription when rule settings change', async () => {
+    render(<TestForm />);
+
+    // Add a rule and open the editor
+    fireEvent.click(screen.getByText('Add Rule'));
+
+    // Capture the title text (includes RRStackRuleDescription)
+    const title = screen.getAllByTestId('accordion-title')[0];
+    const initialText = title.textContent ?? '';
+    expect(initialText.length).toBeGreaterThan(0);
+
+    // Find the rule editor content
+    const content = screen.getAllByTestId('accordion-content')[0];
+
+    // Change Frequency from Span to Daily.
+    // Find the dropdown within the content (the first should be Frequency).
+    const dropdowns = within(content).getAllByTestId(
+      'dropdown',
+    ) as HTMLSelectElement[];
+    expect(dropdowns.length).toBeGreaterThan(0);
+    fireEvent.change(dropdowns[0], { target: { value: 'daily' } });
+
+    // Expect the accordion title text (including description) to change.
+    await waitFor(() => {
+      const nextText = title.textContent ?? '';
+      expect(nextText).not.toBe(initialText);
+      expect(nextText.length).toBeGreaterThan(0);
     });
   });
 });

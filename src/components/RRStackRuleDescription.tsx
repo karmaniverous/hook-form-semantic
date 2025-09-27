@@ -29,13 +29,24 @@ export const RRStackRuleDescription = <T extends ElementType = 'span'>({
 
   // Select only the atoms needed for this description
   const {
-    selection: [ruleRef, tz],
+    selection: [rules, tz],
   } = useRRStackSelector({
     rrstack,
-    selector: (s) => [s.rules[index], s.timezone] as const,
-    // Suppress renders unless the referenced rule object OR timezone actually changed.
+    // IMPORTANT: depend on the rules array identity (and timezone).
+    // RRStackRuleForm mutates the rule object and replaces the array
+    // (rrstack.rules = [...]), so the array identity changes even if the
+    // element reference does not. This ensures we re-render on edits.
+    selector: (s) => [s.rules, s.timezone] as const,
     isEqual: (a, b) => a[0] === b[0] && a[1] === b[1],
   });
+
+  const ruleRef = useMemo(() => {
+    try {
+      return rules[index];
+    } catch {
+      return undefined;
+    }
+  }, [rules, index]);
 
   const text = useMemo(() => {
     if (!ruleRef) return '';
