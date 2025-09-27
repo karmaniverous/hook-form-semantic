@@ -35,7 +35,7 @@ import {
 export type DateRange = [Date | null, Date | null];
 export const extractTimestamps = (dateRange: DateRange) =>
   dateRange
-    ? dateRange.map((d) => (d ? d.getTime() : undefined))
+    ? (dateRange as (Date | null)[]).map((d) => (d ? d.getTime() : undefined))
     : [undefined, undefined];
 
 export type Presets = Record<
