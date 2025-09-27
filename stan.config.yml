@@ -15,7 +15,7 @@ scripts:
   lint: npm run lint:fix
   test: npm run test
   diagrams: npm run diagrams
-  docs: npm run docs --emit none
+  docs: npm run docs -- --emit none
   build: npm run build
   knip: npm run knip
 stanPath: .stan

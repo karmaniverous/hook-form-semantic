@@ -225,16 +225,12 @@ describe('HookFormRRStack Validation', () => {
     // Initially both should be "Not Set"
     const startsLabel = screen.getByText('Starts');
     const endsLabel = screen.getByText('Ends');
-    const startsP = startsLabel.parentElement?.querySelector(
-      'p',
-    ) as HTMLParagraphElement;
-    const endsP = endsLabel.parentElement?.querySelector(
-      'p',
-    ) as HTMLParagraphElement;
-    expect(startsP).toBeTruthy();
-    expect(endsP).toBeTruthy();
-    expect(startsP.textContent).toBe('Not Set');
-    expect(endsP.textContent).toBe('Not Set');
+    const startsField = startsLabel.parentElement as HTMLElement;
+    const endsField = endsLabel.parentElement as HTMLElement;
+    expect(startsField).toBeTruthy();
+    expect(endsField).toBeTruthy();
+    expect(startsField).toHaveTextContent('Not Set');
+    expect(endsField).toHaveTextContent('Not Set');
 
     // Add a rule
     fireEvent.click(screen.getByText('Add Rule'));
@@ -246,27 +242,27 @@ describe('HookFormRRStack Validation', () => {
     // Set start date -> Starts should update from "Not Set"
     fireEvent.change(inputs[0], { target: { value: '2025-01-01' } });
     await waitFor(() => {
-      expect(startsP.textContent).not.toBe('Not Set');
+      expect(startsField).not.toHaveTextContent('Not Set');
     });
 
     // Set end date -> Ends should update from "Not Set"
     fireEvent.change(inputs[1], { target: { value: '2025-01-02' } });
     await waitFor(() => {
-      expect(endsP.textContent).not.toBe('Not Set');
+      expect(endsField).not.toHaveTextContent('Not Set');
     });
 
     // Change start date again -> Starts should change text
-    const prevStarts = startsP.textContent;
+    const prevStarts = startsField.textContent;
     fireEvent.change(inputs[0], { target: { value: '2025-01-03' } });
     await waitFor(() => {
-      expect(startsP.textContent).not.toBe(prevStarts);
+      expect(startsField.textContent).not.toBe(prevStarts);
     });
 
     // Change end date again -> Ends should change text
-    const prevEnds = endsP.textContent;
+    const prevEnds = endsField.textContent;
     fireEvent.change(inputs[1], { target: { value: '2025-01-04' } });
     await waitFor(() => {
-      expect(endsP.textContent).not.toBe(prevEnds);
+      expect(endsField.textContent).not.toBe(prevEnds);
     });
   });
 });
