@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-09-27T02:18:00Z
+# When updated: 2025-09-27T02:28:00Z
 
 ## Next up
 - Verify “equal widths” rendering of the 6-field Months/Weekdays/Time row across default Semantic UI 16-col grid; adjust minor CSS only if needed (keep component logic unchanged).- Confirm stakeholder preference about showing Duration for Span rules. Current behavior shows Duration always, but validates only for recurring rules.
@@ -12,10 +12,16 @@
 
 ## Completed (recent)
 
+- RRStackRuleDescription: fix memoization so description recomputes when
+  rrstack.rules array identity changes (even if the rule object is
+  mutated in place). Drop ruleRef memo and key the text on [rules, tz].
+- Tests: restore live-update assertion on RRStackRuleDescription by
+  toggling Effect (Active → Blackout) and waiting for the description
+  text to differ from its initial value; await accordion content to ensure
+  the editor is open before interacting.
 - Tests: assert live update via the Effect label in the accordion title
   (ACTIVE → BLACKOUT) instead of relying on the description string.
-  This directly targets the visible header and removes description phrasing risk.
-- Tests: switch RRStackRuleDescription live-update to toggle Effect
+  This directly targets the visible header and removes description phrasing risk.- Tests: switch RRStackRuleDescription live-update to toggle Effect
   (Active → Blackout), guaranteeing a visible description change and
   removing dependency on daily/hours phrasing.- Lint: remove any and unused destructured props in test stubs for
   react-date-picker and react-datetime-picker; type props explicitly to

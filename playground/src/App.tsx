@@ -264,6 +264,7 @@ export default function App() {
           hookName="rrstack"
           hookControl={control}
           label="Schedule Rules"
+          rrstackRenderDebounce={300}
           timezone="America/New_York"
         />
 

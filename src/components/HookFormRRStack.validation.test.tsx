@@ -272,22 +272,21 @@ describe('HookFormRRStack Validation', () => {
     });
   });
 
-  it('updates rule header when effect changes', async () => {
+  it('updates RRStackRuleDescription when effect changes', async () => {
     render(<TestForm />);
 
-    // Add a rule and open the editor    fireEvent.click(screen.getByText('Add Rule'));
+    // Add a rule and open the editor
+    fireEvent.click(screen.getByText('Add Rule'));
 
-    // Find the rule editor content and the corresponding accordion title (header)
-    const content = screen.getAllByTestId('accordion-content')[0];
-    const title = screen.getAllByTestId('accordion-title')[0];
+    // Select the description node directly for reliable assertions
+    const description = screen.getByTestId('rule-description-0');
+    const initialText = (description.textContent ?? '').trim();
 
-    // Read initial Effect label text in the title (ACTIVE/BLACKOUT)
-    const initialEffect = (
-      within(title).getByTestId('label').textContent ?? ''
-    ).trim();
-    expect(initialEffect).toMatch(/ACTIVE|BLACKOUT/i);
+    // Wait for the editor content to appear, then change Effect
+    const contents = await screen.findAllByTestId('accordion-content');
+    const content = contents[0];
 
-    // Toggle Effect from Active to Blackout in the form
+    // Toggle Effect from Active to Blackout (guarantees description change)
     const effectLabel = within(content).getByText('Effect');
     const effectField =
       effectLabel.closest('[data-testid="form-field"]') ??
@@ -301,13 +300,11 @@ describe('HookFormRRStack Validation', () => {
       target: { value: 'blackout' },
     });
 
-    // Expect the title Effect label to update to BLACKOUT
+    // Expect the description text to update from its initial value.
     await waitFor(() => {
-      const updated = (
-        within(title).getByTestId('label').textContent ?? ''
-      ).trim();
-      expect(updated).toContain('BLACKOUT');
-      expect(updated).not.toBe(initialEffect);
+      const nextText = (description.textContent ?? '').trim();
+      expect(nextText).not.toBe(initialText);
+      expect(nextText.length).toBeGreaterThan(0);
     });
   });
 });

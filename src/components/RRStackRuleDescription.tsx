@@ -41,16 +41,9 @@ export const RRStackRuleDescription = <T extends ElementType = 'span'>({
     isEqual: (a, b) => a[0] === b[0] && a[1] === b[1],
   });
 
-  const ruleRef = useMemo(() => {
-    try {
-      return rules[index];
-    } catch {
-      return undefined;
-    }
-  }, [rules, index]);
-
   const text = useMemo(() => {
-    if (!ruleRef) return '';
+    const inRange = index >= 0 && index < rules.length;
+    if (!inRange) return '';
     try {
       return rrstack.describeRule(index, {
         includeBounds,
@@ -62,7 +55,7 @@ export const RRStackRuleDescription = <T extends ElementType = 'span'>({
       return '';
     }
   }, [
-    ruleRef,
+    rules,
     tz,
     rrstack,
     index,
@@ -71,7 +64,8 @@ export const RRStackRuleDescription = <T extends ElementType = 'span'>({
     formatTimeZone,
   ]);
 
-  if (!ruleRef) return fallback as JSX.Element | null;
+  if (!(index >= 0 && index < rules.length))
+    return fallback as JSX.Element | null;
 
   return (
     <As className={className} {...rest}>
