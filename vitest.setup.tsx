@@ -506,6 +506,7 @@ vi.mock('react-date-picker', () => {
     value?: Date | string | null | undefined;
   }
   const Comp: React.FC<DatePickerMockProps> = (props) => {
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     const {
       onChange,
       value: rawValue,
@@ -516,6 +517,7 @@ vi.mock('react-date-picker', () => {
       calendarProps: _calendarProps,
       ...rest
     } = props as DatePickerMockProps & Record<string, unknown>;
+    /* eslint-enable @typescript-eslint/no-unused-vars */
     const value =
       rawValue instanceof Date
         ? isoDate(rawValue)
@@ -544,6 +546,7 @@ vi.mock('react-datetime-picker', () => {
     value?: Date | string | null | undefined;
   }
   const Comp: React.FC<DateTimePickerMockProps> = (props) => {
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     const {
       onChange,
       value: rawValue,
@@ -559,6 +562,7 @@ vi.mock('react-datetime-picker', () => {
       calendarProps: _calendarProps,
       ...rest
     } = props as DateTimePickerMockProps & Record<string, unknown>;
+    /* eslint-enable @typescript-eslint/no-unused-vars */
     const value =
       rawValue instanceof Date
         ? isoLocalMinute(rawValue)
@@ -797,7 +801,7 @@ vi.mock('react-draft-wysiwyg', () => {
       editorState?: unknown;
       editorStyle?: React.CSSProperties;
     } & React.HTMLAttributes<HTMLDivElement>
-  >(({ onEditorStateChange, editorState: _s, editorStyle: _st, ...p }, ref) =>
+  >(({ onEditorStateChange, ...p }, ref) =>
     React.createElement('div', {
       ...p,
       ref,

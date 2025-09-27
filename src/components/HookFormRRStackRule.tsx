@@ -153,7 +153,6 @@ export const HookFormRRStackRule = ({
         </div>
         <RRStackRuleDescription
           as="div"
-          includeBounds
           includeTimeZone={false}
           data-testid={`rule-description-${index}`}
           index={index}
