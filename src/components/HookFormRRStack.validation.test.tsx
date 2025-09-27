@@ -218,4 +218,55 @@ describe('HookFormRRStack Validation', () => {
       });
     }).not.toThrow();
   });
+
+  it('updates Starts & Ends when rule dates are set and changed', async () => {
+    render(<TestForm />);
+
+    // Initially both should be "Not Set"
+    const startsLabel = screen.getByText('Starts');
+    const endsLabel = screen.getByText('Ends');
+    const startsP = startsLabel.parentElement?.querySelector(
+      'p',
+    ) as HTMLParagraphElement;
+    const endsP = endsLabel.parentElement?.querySelector(
+      'p',
+    ) as HTMLParagraphElement;
+    expect(startsP).toBeTruthy();
+    expect(endsP).toBeTruthy();
+    expect(startsP.textContent).toBe('Not Set');
+    expect(endsP.textContent).toBe('Not Set');
+
+    // Add a rule
+    fireEvent.click(screen.getByText('Add Rule'));
+
+    // There are two date-picker inputs inside the rule form (Start Date, End Date)
+    const inputs = await screen.findAllByTestId('date-picker');
+    expect(inputs.length).toBeGreaterThanOrEqual(2);
+
+    // Set start date -> Starts should update from "Not Set"
+    fireEvent.change(inputs[0], { target: { value: '2025-01-01' } });
+    await waitFor(() => {
+      expect(startsP.textContent).not.toBe('Not Set');
+    });
+
+    // Set end date -> Ends should update from "Not Set"
+    fireEvent.change(inputs[1], { target: { value: '2025-01-02' } });
+    await waitFor(() => {
+      expect(endsP.textContent).not.toBe('Not Set');
+    });
+
+    // Change start date again -> Starts should change text
+    const prevStarts = startsP.textContent;
+    fireEvent.change(inputs[0], { target: { value: '2025-01-03' } });
+    await waitFor(() => {
+      expect(startsP.textContent).not.toBe(prevStarts);
+    });
+
+    // Change end date again -> Ends should change text
+    const prevEnds = endsP.textContent;
+    fireEvent.change(inputs[1], { target: { value: '2025-01-04' } });
+    await waitFor(() => {
+      expect(endsP.textContent).not.toBe(prevEnds);
+    });
+  });
 });

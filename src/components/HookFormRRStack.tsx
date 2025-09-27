@@ -56,7 +56,7 @@ export interface HookFormRRStackProps<T extends FieldValues>
 }
 
 export const HookFormRRStack = <T extends FieldValues>({
-  timestampFormat,
+  timestampFormat = 'yyyy-MM-dd HH:mm:ss',
   ...props
 }: HookFormRRStackProps<T>) => {
   const {
@@ -104,7 +104,7 @@ export const HookFormRRStack = <T extends FieldValues>({
       starts: formatTimestamp(start),
       ends: formatTimestamp(end),
     };
-  }, [rrstack, timestampFormat]);
+  }, [rrstack.rules, rrstack.timezone, timestampFormat]);
 
   const handleTimezoneChange = useCallback(
     (value: string) => {
@@ -175,12 +175,12 @@ export const HookFormRRStack = <T extends FieldValues>({
 
           <Form.Field>
             <label>Starts</label>
-            <p>{starts}</p>
+            {starts}
           </Form.Field>
 
           <Form.Field>
             <label>Ends</label>
-            <p>{ends}</p>
+            {ends}
           </Form.Field>
         </Form.Group>
       </Segment>

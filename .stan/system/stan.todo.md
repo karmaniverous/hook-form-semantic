@@ -3,8 +3,7 @@
 # When updated: 2025-09-27T00:00:00Z
 
 ## Next up
-- Verify “equal widths” rendering of the 6-field Months/Weekdays/Time
-  row across default Semantic UI 16-col grid; adjust minor CSS only if
+- Verify “equal widths” rendering of the 6-field Months/Weekdays/Time  row across default Semantic UI 16-col grid; adjust minor CSS only if
   needed (keep component logic unchanged).
 - Confirm stakeholder preference about showing Duration for Span rules.
   Current behavior shows Duration always, but validates only for
@@ -31,9 +30,12 @@
   use a minimal rrstack stub to avoid runtime errors.
 - Tests: updated RRStackRuleForm timestamp tests to assert on Start/End
   labeling and Include Time toggles instead of the old Date Range label.
+- HookFormRRStack: fix Starts/Ends memoization to depend on
+  rrstack.rules and rrstack.timezone so values update when rule dates
+  change. Add tests that set and then change Start/End dates and assert
+  the Starts/Ends fields update accordingly.
 
 ## DX / utility ideas (backlog)
-
 - Consider shared “standalone” API parity across all HookForm*
   date/time components to simplify reuse beyond RHF contexts.
 
