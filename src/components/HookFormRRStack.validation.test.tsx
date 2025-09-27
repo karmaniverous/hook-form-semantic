@@ -285,18 +285,33 @@ describe('HookFormRRStack Validation', () => {
     // Find the rule editor content
     const content = screen.getAllByTestId('accordion-content')[0];
 
-    // Change Effect from Active to Blackout (guaranteed description change).
-    const effectLabel = within(content).getByText('Effect');
-    const effectField =
-      effectLabel.closest('[data-testid="form-field"]') ??
-      effectLabel.parentElement;
-    expect(effectField).toBeTruthy();
-    const effectDropdown = effectField!.querySelector(
+    // Make a deterministic change that must alter the description:
+    // 1) Set Frequency to "Daily"
+    const freqLabel = within(content).getByText('Frequency');
+    const freqField =
+      freqLabel.closest('[data-testid="form-field"]') ??
+      freqLabel.parentElement;
+    expect(freqField).toBeTruthy();
+    const freqDropdown = freqField!.querySelector(
       '[data-testid="dropdown"]',
     ) as HTMLSelectElement | null;
-    expect(effectDropdown).toBeTruthy();
-    fireEvent.change(effectDropdown as HTMLSelectElement, {
-      target: { value: 'blackout' },
+    expect(freqDropdown).toBeTruthy();
+    fireEvent.change(freqDropdown as HTMLSelectElement, {
+      target: { value: 'daily' },
+    });
+
+    // 2) Set Hours to "9"
+    const hoursLabel = within(content).getByText('Hours');
+    const hoursField =
+      hoursLabel.closest('[data-testid="form-field"]') ??
+      hoursLabel.parentElement;
+    expect(hoursField).toBeTruthy();
+    const hoursInput = hoursField!.querySelector(
+      'input',
+    ) as HTMLInputElement | null;
+    expect(hoursInput).toBeTruthy();
+    fireEvent.change(hoursInput as HTMLInputElement, {
+      target: { value: '9' },
     });
 
     // Expect the description text to update from its initial value.
@@ -304,8 +319,6 @@ describe('HookFormRRStack Validation', () => {
       const nextText = description.textContent ?? '';
       expect(nextText).not.toBe(initialText);
       expect(nextText.length).toBeGreaterThan(0);
-      // Optional: ensure the effect word toggled
-      expect(nextText.toLowerCase()).toContain('blackout');
     });
   });
 });

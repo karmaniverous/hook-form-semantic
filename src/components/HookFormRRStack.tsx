@@ -93,12 +93,10 @@ export const HookFormRRStack = <T extends FieldValues>({
   });
 
   const { starts, ends } = useMemo(() => {
-    console.log('Calc starts & ends');
     const formatTimestamp = (ts: number | null | undefined) =>
       ts ? rrstack.formatInstant(ts, { format: timestampFormat }) : 'Not Set';
 
     const { start, end } = rrstack.getEffectiveBounds();
-    console.log('Effective bounds:', { start, end });
 
     return {
       starts: formatTimestamp(start),

@@ -499,75 +499,76 @@ vi.mock('semantic-ui-react', () => {
 
 // Date/time pickers
 vi.mock('react-date-picker', () => {
-  type Props = {
-    onChange?: (value: Date | null) => void;
-    dayPlaceholder?: string;
-    monthPlaceholder?: string;
-    yearPlaceholder?: string;
-    showLeadingZeros?: boolean;
-    calendarProps?: Record<string, unknown>;
-  } & React.InputHTMLAttributes<HTMLInputElement>;
-  const Comp: React.FC<Props> = ({
-    onChange,
-    dayPlaceholder: _dayPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
-    monthPlaceholder: _monthPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
-    yearPlaceholder: _yearPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
-    showLeadingZeros: _showLeadingZeros, // eslint-disable-line @typescript-eslint/no-unused-vars
-    calendarProps: _calendarProps, // eslint-disable-line @typescript-eslint/no-unused-vars
-    ...p
-  }) =>
-    React.createElement('input', {
-      ...p,
+  const isoDate = (d: Date) => d.toISOString().slice(0, 10); // YYYY-MM-DD
+  const Comp: React.FC<any> = (props: any) => {
+    const {
+      onChange,
+      // ignore placeholders and calendarProps
+      dayPlaceholder: _d,
+      monthPlaceholder: _m,
+      yearPlaceholder: _y,
+      showLeadingZeros: _l,
+      calendarProps: _c,
+      value: rawValue,
+      ...rest
+    } = props;
+    const value =
+      rawValue instanceof Date
+        ? isoDate(rawValue)
+        : rawValue == null
+          ? ''
+          : String(rawValue);
+    return React.createElement('input', {
+      ...rest,
       'data-testid': 'date-picker',
       type: 'date',
+      value,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
         onChange?.(
           e.currentTarget.value ? new Date(e.currentTarget.value) : null,
         ),
     });
+  };
   return { __esModule: true, default: Comp };
 });
 
 vi.mock('react-datetime-picker', () => {
-  type Props = {
-    onChange?: (value: Date | null) => void;
-    dayPlaceholder?: string;
-    monthPlaceholder?: string;
-    yearPlaceholder?: string;
-    hourPlaceholder?: string;
-    minutePlaceholder?: string;
-    secondPlaceholder?: string;
-    showLeadingZeros?: boolean;
-    disableClock?: boolean;
-    maxDetail?: string;
-    calendarProps?: Record<string, unknown>;
-  } & React.InputHTMLAttributes<HTMLInputElement>;
-  const Comp: React.FC<Props> = ({
-    onChange,
-    dayPlaceholder: _dayPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
-    monthPlaceholder: _monthPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
-    yearPlaceholder: _yearPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
-    hourPlaceholder: _hourPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
-    minutePlaceholder: _minutePlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
-    secondPlaceholder: _secondPlaceholder, // eslint-disable-line @typescript-eslint/no-unused-vars
-    showLeadingZeros: _showLeadingZeros, // eslint-disable-line @typescript-eslint/no-unused-vars
-    disableClock: _disableClock, // eslint-disable-line @typescript-eslint/no-unused-vars
-    maxDetail: _maxDetail, // eslint-disable-line @typescript-eslint/no-unused-vars
-    calendarProps: _calendarProps, // eslint-disable-line @typescript-eslint/no-unused-vars
-    ...p
-  }) =>
-    React.createElement('input', {
-      ...p,
+  const isoLocalMinute = (d: Date) => d.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm (UTC, good enough for tests)
+  const Comp: React.FC<any> = (props: any) => {
+    const {
+      onChange,
+      dayPlaceholder: _d,
+      monthPlaceholder: _m,
+      yearPlaceholder: _y,
+      hourPlaceholder: _hh,
+      minutePlaceholder: _mm,
+      secondPlaceholder: _ss,
+      showLeadingZeros: _lz,
+      disableClock: _dc,
+      maxDetail: _md,
+      calendarProps: _c,
+      value: rawValue,
+      ...rest
+    } = props;
+    const value =
+      rawValue instanceof Date
+        ? isoLocalMinute(rawValue)
+        : rawValue == null
+          ? ''
+          : String(rawValue);
+    return React.createElement('input', {
+      ...rest,
       'data-testid': 'datetime-picker',
       type: 'datetime-local',
+      value,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
         onChange?.(
           e.currentTarget.value ? new Date(e.currentTarget.value) : null,
         ),
     });
+  };
   return { __esModule: true, default: Comp };
 });
-
 vi.mock('@wojtekmaj/react-daterange-picker', () => {
   type Props = {
     onChange?: (value: [Date | null, Date | null]) => void;
