@@ -151,15 +151,15 @@ export const HookFormRRStackRule = ({
             />
           </div>
         </div>
-
         <RRStackRuleDescription
           as="div"
+          includeBounds
           includeTimeZone={false}
           data-testid={`rule-description-${index}`}
           index={index}
           rrstack={rrstack}
           style={{ fontWeight: 'normal', marginTop: 4, marginLeft: 16 }}
-        />
+        />{' '}
       </Accordion.Title>
       ,
       <Accordion.Content

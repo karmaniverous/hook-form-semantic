@@ -2,20 +2,32 @@
 
 #
 
-# When updated: 2025-09-27T02:28:00Z
+# When updated: 2025-09-27T03:15:00Z
 
 ## Next up
 - Verify “equal widths” rendering of the 6-field Months/Weekdays/Time row across default Semantic UI 16-col grid; adjust minor CSS only if needed (keep component logic unchanged).- Confirm stakeholder preference about showing Duration for Span rules. Current behavior shows Duration always, but validates only for recurring rules.
 - Light UX pass on labels/help text for Valid Range to ensure clarity (no behavior changes).
-- Consider gating remaining console.debug lines in RRStackRuleForm behind NODE_ENV !== 'production' as well.
+- Consider gating any remaining console.debug lines in RRStackRuleForm behind NODE_ENV !== 'production' (stray logs removed in this pass).
 - Revisit Frequency/Duration description paths to ensure non‑continuous daily rules always yield distinct text (doc example parity).
-
 ## Completed (recent)
 
+- RRStackRuleDescription: ensure live updates for Start date, Hours/Minutes,
+  and Weekday Position:
+  - Pass includeBounds from HookFormRRStackRule so Start date affects the string.
+  - Augment description with concise extras (hours, minutes, positions) so those
+    edits are visible immediately.
+- RRStackRuleForm: DoM input now mirrors Hours/Minutes UX. Uses local input
+  state + tolerant parsing (parseOptions) + syncOptions, allowing users to type
+  commas/spaces and incomplete tokens without losing input. Removed stray debug
+  logs from handleStartChange.
+- Tests: silence React warnings by filtering widget-only props in date/datetime
+  mocks (day/month/year placeholder, showLeadingZeros, etc.). Forward-ref the
+  Wysiwyg mock to eliminate “Function components cannot be given refs” warnings.
+- RRStackRuleDescription recompute fix verified locally; description text now
+  changes on all targeted edits without flakes.
 - RRStackRuleDescription: fix memoization so description recomputes when
   rrstack.rules array identity changes (even if the rule object is
-  mutated in place). Drop ruleRef memo and key the text on [rules, tz].
-- Tests: restore live-update assertion on RRStackRuleDescription by
+  mutated in place). Drop ruleRef memo and key the text on [rules, tz].- Tests: restore live-update assertion on RRStackRuleDescription by
   toggling Effect (Active → Blackout) and waiting for the description
   text to differ from its initial value; await accordion content to ensure
   the editor is open before interacting.

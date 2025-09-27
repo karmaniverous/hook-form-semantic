@@ -81,6 +81,9 @@ export const RRStackRuleForm = ({ index, rrstack }: RRStackRuleFormProps) => {
   const [hoursInputValue, setHoursInputValue] = useState('');
   const [minutesInputValue, setMinutesInputValue] = useState('');
 
+  // Local state for Days of Month input (DoM)
+  const [daysInputValue, setDaysInputValue] = useState('');
+
   // Sync local state with rule state when rule changes externally
   useEffect(() => {
     syncOptions({
@@ -101,6 +104,16 @@ export const RRStackRuleForm = ({ index, rrstack }: RRStackRuleFormProps) => {
       setInput: setMinutesInputValue,
     });
   }, [rule.options.byminute]);
+
+  useEffect(() => {
+    syncOptions({
+      input: daysInputValue,
+      max: 31,
+      min: 1,
+      option: rule.options.bymonthday,
+      setInput: setDaysInputValue,
+    });
+  }, [rule.options.bymonthday]);
 
   // Check if screen is desktop size (768px+) - Semantic UI breakpoint
   useEffect(() => {
@@ -197,10 +210,7 @@ export const RRStackRuleForm = ({ index, rrstack }: RRStackRuleFormProps) => {
         setShowDateValidation(false);
       }
 
-      console.log('Setting start:', nextStart);
-
-      console.log('rule check', rule === rrstack.rules[index]);
-
+      // Write epoch ms or clear
       rule.options.starts = nextStart ? nextStart.getTime() : undefined;
       rrstack.rules = [...rrstack.rules]; // Trigger rrstack update
     },
@@ -376,7 +386,6 @@ export const RRStackRuleForm = ({ index, rrstack }: RRStackRuleFormProps) => {
           <Grid.Column style={{ paddingLeft: 0 }}>
             <Segment>
               <Header size="tiny">Months</Header>
-
               <Form.Group widths="equal" style={{ marginBottom: 0 }}>
                 <Form.Field>
                   <InfoLabel
@@ -410,28 +419,26 @@ export const RRStackRuleForm = ({ index, rrstack }: RRStackRuleFormProps) => {
 
                   <Input
                     size="small"
-                    value={
-                      rule.options.bymonthday
-                        ? Array.isArray(rule.options.bymonthday)
-                          ? rule.options.bymonthday.join(', ')
-                          : rule.options.bymonthday.toString()
-                        : ''
-                    }
+                    value={daysInputValue}
                     onChange={(e) => {
-                      const days = e.target.value
-                        .split(',')
-                        .map((d) => parseInt(d.trim()))
-                        .filter((d) => !isNaN(d) && d >= 1 && d <= 31);
+                      const [parsed, isValid] = parseOptions({
+                        inputValue: e.target.value,
+                        max: 31,
+                        min: 1,
+                        setValue: setDaysInputValue,
+                      });
 
-                      rule.options.bymonthday =
-                        days.length > 0 ? days : undefined;
-                      triggerUpdate();
+                      if (isValid) {
+                        rule.options.bymonthday =
+                          parsed.length > 0 ? parsed : undefined;
+                        triggerUpdate();
+                      }
                     }}
                     placeholder="25 (for 25th)"
                     style={responsiveMaxWidthStyle}
                   />
                 </Form.Field>
-              </Form.Group>
+              </Form.Group>{' '}
             </Segment>
           </Grid.Column>
 

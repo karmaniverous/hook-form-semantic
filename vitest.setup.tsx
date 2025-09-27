@@ -506,7 +506,16 @@ vi.mock('react-date-picker', () => {
     value?: Date | string | null | undefined;
   }
   const Comp: React.FC<DatePickerMockProps> = (props) => {
-    const { onChange, value: rawValue, ...rest } = props;
+    const {
+      onChange,
+      value: rawValue,
+      dayPlaceholder: _dayPlaceholder, // filter widget-only props
+      monthPlaceholder: _monthPlaceholder,
+      yearPlaceholder: _yearPlaceholder,
+      showLeadingZeros: _showLeadingZeros,
+      calendarProps: _calendarProps,
+      ...rest
+    } = props as DatePickerMockProps & Record<string, unknown>;
     const value =
       rawValue instanceof Date
         ? isoDate(rawValue)
@@ -535,7 +544,21 @@ vi.mock('react-datetime-picker', () => {
     value?: Date | string | null | undefined;
   }
   const Comp: React.FC<DateTimePickerMockProps> = (props) => {
-    const { onChange, value: rawValue, ...rest } = props;
+    const {
+      onChange,
+      value: rawValue,
+      dayPlaceholder: _dayPlaceholder,
+      disableClock: _disableClock,
+      hourPlaceholder: _hourPlaceholder,
+      maxDetail: _maxDetail,
+      minutePlaceholder: _minutePlaceholder,
+      monthPlaceholder: _monthPlaceholder,
+      secondPlaceholder: _secondPlaceholder,
+      showLeadingZeros: _showLeadingZeros,
+      yearPlaceholder: _yearPlaceholder,
+      calendarProps: _calendarProps,
+      ...rest
+    } = props as DateTimePickerMockProps & Record<string, unknown>;
     const value =
       rawValue instanceof Date
         ? isoLocalMinute(rawValue)
@@ -766,20 +789,21 @@ vi.mock('draft-js', () => {
   const convertToRaw = (content: unknown) => content;
   return { ContentState, EditorState, convertToRaw };
 });
-vi.mock('react-draft-wysiwyg', () => ({
-  Editor: ({
-    onEditorStateChange,
-    editorState: _editorState, // eslint-disable-line @typescript-eslint/no-unused-vars
-    editorStyle: _editorStyle, // eslint-disable-line @typescript-eslint/no-unused-vars
-    ...p
-  }: {
-    onEditorStateChange?: (s: unknown) => void;
-    editorState?: unknown;
-    editorStyle?: React.CSSProperties;
-  } & React.HTMLAttributes<HTMLDivElement>) =>
+vi.mock('react-draft-wysiwyg', () => {
+  const Editor = React.forwardRef<
+    HTMLDivElement,
+    {
+      onEditorStateChange?: (s: unknown) => void;
+      editorState?: unknown;
+      editorStyle?: React.CSSProperties;
+    } & React.HTMLAttributes<HTMLDivElement>
+  >(({ onEditorStateChange, editorState: _s, editorStyle: _st, ...p }, ref) =>
     React.createElement('div', {
       ...p,
+      ref,
       'data-testid': 'rdw-editor',
       onClick: () => onEditorStateChange?.({ getCurrentContent: () => ({}) }),
     }),
-}));
+  );
+  return { Editor };
+});
