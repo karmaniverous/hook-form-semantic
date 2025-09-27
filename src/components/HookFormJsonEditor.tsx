@@ -71,17 +71,15 @@ export const HookFormJsonEditor = <T extends FieldValues>(
   );
 
   return (
-    <>
-      <Form.Field {...omit(fieldProps as Record<string, unknown>, ['label'])}>
-        {fieldProps.label && <label>{fieldProps.label as ReactNode}</label>}
+    <Form.Field {...omit(fieldProps as Record<string, unknown>, ['label'])}>
+      {fieldProps.label && <label>{fieldProps.label as ReactNode}</label>}
 
-        <JsonEditor {...jsonProps} {...hookField} />
-        {error?.message && (
-          <Label basic color="red" pointing="above">
-            {error?.message}
-          </Label>
-        )}
-      </Form.Field>
-    </>
+      <JsonEditor {...jsonProps} {...hookField} />
+      {error?.message && (
+        <Label basic color="red" pointing="above">
+          {error?.message}
+        </Label>
+      )}
+    </Form.Field>
   );
 };
