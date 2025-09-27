@@ -5,7 +5,6 @@ import { Accordion, Button, Icon, Label, Segment } from 'semantic-ui-react';
 
 import { RRStackRuleDescription } from './RRStackRuleDescription';
 import { RRStackRuleForm } from './RRStackRuleForm';
-
 interface HookFormRRStackRuleProps
   extends Pick<AccordionTitleProps, 'onClick'> {
   activeIndex: number | null;
@@ -76,6 +75,10 @@ export const HookFormRRStackRule = ({
     [rrstack, activeIndex],
   );
 
+  // Safely access current rule and key attributes
+  const ruleAtIndex = rrstack.rules[index];
+  const effect = (ruleAtIndex?.effect ?? 'active') as 'active' | 'blackout';
+  const ruleLabel = ruleAtIndex?.label || `Rule ${index + 1}`;
   return (
     <>
       <Accordion.Title
@@ -95,15 +98,10 @@ export const HookFormRRStackRule = ({
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <Icon name="dropdown" />
-            <Label
-              color={rrstack.rules[index].effect === 'active' ? 'green' : 'red'}
-              size="mini"
-            >
-              {rrstack.rules[index].effect.toUpperCase()}
+            <Label color={effect === 'active' ? 'green' : 'red'} size="mini">
+              {effect.toUpperCase()}
             </Label>
-            <span style={{ fontSize: '0.9em' }}>
-              {rrstack.rules[index].label || `Rule ${index ?? 0 + 1}`}
-            </span>
+            <span style={{ fontSize: '0.9em' }}>{ruleLabel}</span>
           </div>
           <div
             style={{ display: 'flex', gap: 2 }}

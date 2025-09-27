@@ -42,6 +42,11 @@
   selector depends on the rules array identity and timezone, deriving
   the rule by index. Added a test that changes Frequency to verify the
   accordion title (containing the description) updates live.
+- HookFormRRStackRule: guard against missing `effect` on newly added or
+  transiently edited rules. Default to `'active'` when undefined and
+  compute label text safely. This prevents runtime errors during live
+  edits and allows RRStackRuleDescription/title updates to render
+  correctly.
 
 ## DX / utility ideas (backlog)
 - Consider shared “standalone” API parity across all HookForm*  date/time components to simplify reuse beyond RHF contexts.
