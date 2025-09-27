@@ -1,20 +1,21 @@
 cliDefaults:
   run:
+    plan: false
     sequential: true
 excludes:
-  - "**/*.ico"
-  - "**/*.png"
-  - "**/*.svg"
+  - '**/*.ico'
+  - '**/*.png'
+  - '**/*.svg'
   - docs
   - package-lock.json
 includes: []
 patchOpenCommand: code -g {file}
 scripts:
   typecheck: npm run typecheck
-  lint: npm run lint
+  lint: npm run lint:fix
   test: npm run test
   diagrams: npm run diagrams
-  docs: npm run stan:docs
+  docs: npm run docs --emit none
   build: npm run build
   knip: npm run knip
 stanPath: .stan

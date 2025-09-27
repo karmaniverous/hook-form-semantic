@@ -250,7 +250,6 @@
     "preview": "vite preview --config playground/vite.config.ts",
     "release": "dotenvx run -f .env.local -- release-it",
     "release:pre": "dotenvx run -f .env.local -- release-it --no-git.requireBranch --github.prerelease --preRelease",
-    "stan:docs": "typedoc --emit none",
     "test": "vitest --run --coverage",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",

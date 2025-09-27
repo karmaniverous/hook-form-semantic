@@ -1,9 +1,8 @@
 # Development Plan
 #
-# When updated: 2025-09-26T00:00:00Z
+# When updated: 2025-09-27T00:00:00Z
 
 ## Next up
-
 - Verify “equal widths” rendering of the 6-field Months/Weekdays/Time
   row across default Semantic UI 16-col grid; adjust minor CSS only if
   needed (keep component logic unchanged).
@@ -27,6 +26,9 @@
     positive duration applies to recurring rules only.
 - HookFormDatePicker: added standalone mode (standalone, value,
   onChange) to support non-RHF usage (as required by RRStackRuleForm).
+- Tests: align RRStackRuleForm.timestamp tests with new props
+  (index + rrstack; remove obsolete rule/onRuleChange props) and
+  use a minimal rrstack stub to avoid runtime errors.
 - Tests: updated RRStackRuleForm timestamp tests to assert on Start/End
   labeling and Include Time toggles instead of the old Date Range label.
 
