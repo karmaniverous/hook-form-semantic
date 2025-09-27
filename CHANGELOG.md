@@ -2,8 +2,34 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.21](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.20...0.1.21)
+
+- big bang [`60e639f`](https://github.com/karmaniverous/hook-form-semantic/commit/60e639f8a16ef9d204be12dfb81e94eedbc1a007)
+- tests: stabilize RRStack description update [`c3ea7ad`](https://github.com/karmaniverous/hook-form-semantic/commit/c3ea7ad775799627a941fdd8c7df6e3ffbab52db)
+- fix(tests): align RRStackRuleForm timestamp tests with new API [`e01e0b2`](https://github.com/karmaniverous/hook-form-semantic/commit/e01e0b264e7ecabc0c1f78e7c55c933d46f6447c)
+- RRStack: live description updates + input UX fixes [`09eb0a1`](https://github.com/karmaniverous/hook-form-semantic/commit/09eb0a1861153b895957c148a34ac8951edd5d27)
+- updated dependencies [`d7453e1`](https://github.com/karmaniverous/hook-form-semantic/commit/d7453e16a811236723037a4da5b0acf1cded7ca8)
+- Tests: silence lint no-unused-vars in vitest.setup [`7cd9f46`](https://github.com/karmaniverous/hook-form-semantic/commit/7cd9f46b7712ca5c6fd6fdde6d2d8fc51d009cb2)
+- tests(lint): fix date picker mocks and disambiguate Hours [`45620e1`](https://github.com/karmaniverous/hook-form-semantic/commit/45620e1acf5d7f030c49317dff5220c8c749ac30)
+- fix(rrstack): update Starts/Ends when rule dates change; add tests [`8540930`](https://github.com/karmaniverous/hook-form-semantic/commit/8540930cdcdd6ad12f815f42df45eb88f9856d61)
+- fix(rrstack): live-update RRStackRuleDescription on rule edits [`4eb1c97`](https://github.com/karmaniverous/hook-form-semantic/commit/4eb1c974fbeb31ee39166778c838762f48859288)
+- rrstack: fix rule description live updates; stabilize test [`1975015`](https://github.com/karmaniverous/hook-form-semantic/commit/1975015655188b52a72cacd2f2e9b882d321a202)
+- tests: guarantee RRStack description change via Effect toggle [`029f898`](https://github.com/karmaniverous/hook-form-semantic/commit/029f898b58a7c316e4b7a003eb7cb18e2783352e)
+- tests: assert Effect label changes in RRStack header [`54ab746`](https://github.com/karmaniverous/hook-form-semantic/commit/54ab7461962204d1bcf9cacfb0fd7d019e8e4d6e)
+- test(rrstack): adapt Starts/Ends test to no &lt;p&gt;; fix docs cmd [`b8b07ec`](https://github.com/karmaniverous/hook-form-semantic/commit/b8b07ec24688210a81b27772a8cbe1f79468f71f)
+- test(rrstack): ensure description updates by toggling Effect [`45b5ab9`](https://github.com/karmaniverous/hook-form-semantic/commit/45b5ab9f1495273e559424e4af824228b7dbe63f)
+- test(rrstack): stabilize description test and ensure visible change [`cdd765b`](https://github.com/karmaniverous/hook-form-semantic/commit/cdd765b265e858f864a5606ad9001515e2963ef9)
+- test(rrstack): reliably change Frequency to exercise description update [`96906a5`](https://github.com/karmaniverous/hook-form-semantic/commit/96906a5b5d515e6e928e31d14a59a8442cceac74)
+- fix(rrstack): guard missing effect in HookFormRRStackRule [`867295a`](https://github.com/karmaniverous/hook-form-semantic/commit/867295ad5ce4a6e260d11ca9564013f323716efd)
+- eliminated redundant fragments [`1e78a9b`](https://github.com/karmaniverous/hook-form-semantic/commit/1e78a9bd9bc92f8b5c64f7d569c86f26c1515189)
+- fix(rrstack): forward props from RuleDescription to DOM for tests [`2030375`](https://github.com/karmaniverous/hook-form-semantic/commit/2030375d0fd68e8205b17cdf4eb28707d37d1099)
+- fixed type error [`3dcf497`](https://github.com/karmaniverous/hook-form-semantic/commit/3dcf49728f8b12f2d6ae36758ecdbd5845d7b664)
+
 #### [0.1.20](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.19...0.1.20)
 
+> 26 September 2025
+
+- chore: release v0.1.20 [`b7e5508`](https://github.com/karmaniverous/hook-form-semantic/commit/b7e5508735d6753d81974954b3dd2cdd006a2a26)
 - Improve performance and memoize [`82f3f9d`](https://github.com/karmaniverous/hook-form-semantic/commit/82f3f9d3507fae5f1aa8a93f99c1e1676ad418db)
 
 #### [0.1.19](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.18...0.1.19)
