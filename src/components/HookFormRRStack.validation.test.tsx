@@ -285,15 +285,23 @@ describe('HookFormRRStack Validation', () => {
     // Find the rule editor content
     const content = screen.getAllByTestId('accordion-content')[0];
 
-    // 1) Change Frequency from Span to Daily (first dropdown)
-    const dropdowns = within(content).getAllByTestId(
-      'dropdown',
-    ) as HTMLSelectElement[];
-    expect(dropdowns.length).toBeGreaterThan(0);
-    fireEvent.change(dropdowns[0], { target: { value: 'daily' } });
+    // 1) Change Frequency from Span to Daily by locating the Frequency field specifically.
+    //    We target the <label>Frequency</label> then query the nearest select under the same field.
+    const freqLabel = within(content).getByText('Frequency');
+    const freqField =
+      freqLabel.closest('[data-testid="form-field"]') ??
+      freqLabel.parentElement;
+    expect(freqField).toBeTruthy();
+    const freqDropdown = freqField!.querySelector(
+      '[data-testid="dropdown"]',
+    ) as HTMLSelectElement | null;
+    expect(freqDropdown).toBeTruthy();
+    fireEvent.change(freqDropdown as HTMLSelectElement, {
+      target: { value: 'daily' },
+    });
 
     // 2) Provide Hours so description has concrete timing semantics.
-    //    Locate the Hours input via its placeholder ("9, 13, 17") and set it.
+    //    Locate the Hours input via its placeholder ("9, 13, 17") inside the Time section and set it.
     const hoursInput = within(content).getByPlaceholderText(
       '9, 13, 17',
     ) as HTMLInputElement;

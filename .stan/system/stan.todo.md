@@ -3,8 +3,7 @@
 # When updated: 2025-09-27T00:00:00Z
 
 ## Next up
-- Verify “equal widths” rendering of the 6-field Months/Weekdays/Time  row across default Semantic UI 16-col grid; adjust minor CSS only if  needed (keep component logic unchanged).- Confirm stakeholder preference about showing Duration for Span rules.  Current behavior shows Duration always, but validates only for  recurring rules.
-- Light UX pass on labels/help text for Valid Range to ensure clarity
+- Verify “equal widths” rendering of the 6-field Months/Weekdays/Time  row across default Semantic UI 16-col grid; adjust minor CSS only if  needed (keep component logic unchanged).- Confirm stakeholder preference about showing Duration for Span rules.  Current behavior shows Duration always, but validates only for  recurring rules.- Light UX pass on labels/help text for Valid Range to ensure clarity
   (no behavior changes).
 
 ## Completed (recent)
@@ -54,6 +53,10 @@
   to the rendered element so tests and consumers can target it directly.
   This unblocks the live-update test that queries the description node
   by test id.
+- Tests: fix RRStackRuleDescription live-update test to target the
+  Frequency dropdown via its label rather than assuming the first
+  dropdown, ensuring the Time section renders and Hours can be set
+  to trigger a visible description update.
 
 ## DX / utility ideas (backlog)
 - Consider shared “standalone” API parity across all HookForm*  date/time components to simplify reuse beyond RHF contexts.
