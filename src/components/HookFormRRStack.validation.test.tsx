@@ -286,38 +286,18 @@ describe('HookFormRRStack Validation', () => {
     const content = screen.getAllByTestId('accordion-content')[0];
 
     // Make a deterministic change that must alter the description:
-    // 1) Set Frequency to "Daily"
-    const freqLabel = within(content).getByText('Frequency');
-    const freqField =
-      freqLabel.closest('[data-testid="form-field"]') ??
-      freqLabel.parentElement;
-    expect(freqField).toBeTruthy();
-    const freqDropdown = freqField!.querySelector(
+    // Toggle Effect from Active to Blackout
+    const effectLabel = within(content).getByText('Effect');
+    const effectField =
+      effectLabel.closest('[data-testid="form-field"]') ??
+      effectLabel.parentElement;
+    expect(effectField).toBeTruthy();
+    const effectDropdown = effectField!.querySelector(
       '[data-testid="dropdown"]',
     ) as HTMLSelectElement | null;
-    expect(freqDropdown).toBeTruthy();
-    fireEvent.change(freqDropdown as HTMLSelectElement, {
-      target: { value: 'daily' },
-    });
-
-    // 2) Set Hours to "9" in the Time section (not the Duration section)
-    const timeHeader = within(content).getByText('Time');
-    const timeSegment =
-      timeHeader.closest('[data-testid="segment"]') ?? timeHeader.parentElement;
-    expect(timeSegment).toBeTruthy();
-
-    const hoursLabel = within(timeSegment as HTMLElement).getByText('Hours');
-    const hoursField =
-      hoursLabel.closest('[data-testid="form-field"]') ??
-      hoursLabel.parentElement;
-    expect(hoursField).toBeTruthy();
-
-    const hoursInput = (hoursField as HTMLElement).querySelector(
-      'input',
-    ) as HTMLInputElement | null;
-    expect(hoursInput).toBeTruthy();
-    fireEvent.change(hoursInput!, {
-      target: { value: '9' },
+    expect(effectDropdown).toBeTruthy();
+    fireEvent.change(effectDropdown as HTMLSelectElement, {
+      target: { value: 'blackout' },
     });
 
     // Expect the description text to update from its initial value.
