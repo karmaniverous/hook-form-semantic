@@ -62,4 +62,38 @@ for the RRStackRuleForm component and related date/time inputs.
 - Consumers should initialize the field’s JSON with a sensible default
   timezone (e.g., browser timezone) in their form’s default values. The
   dropdown remains the authoritative editor for the RRStack timezone.
+
+## Testing & Benchmarking Policy
+
+- Unit tests and component interaction:
+  - Use Vitest + Testing Library (happy-dom). Mocks for semantic-ui-react
+    and third-party widgets live in vitest.setup.tsx.
+  - For RRStackRuleDescription, assert that the description text updates
+    when rule settings change via the UI (e.g., Frequency/Hours/Minutes).
+    Avoid brittle expectations that depend on rrstack internal phrasing
+    (bounds/timezone strings are not guaranteed across versions).
+  - Stabilize field targeting:
+    - getFieldByLabel should find the exact label element and return its
+      closest [data-testid="form-field"] container.
+    - Labels may include InfoLabel icons; use “includes” on label text.
+    - Await accordion content before querying inside it.
+
+- HookFormRRStack → RRStackRuleDescription:
+  - HookFormRRStack forwards describe* props to RRStackRuleDescription
+    via HookFormRRStackRule.
+  - RRStackRuleDescription derives text from
+    rrstack.describeRule(index, { includeBounds, includeTimeZone,
+    formatTimeZone }) and subscribes to rrstack via
+    useRRStackSelector([rules, timezone]) for live updates.
+
+- Benchmarks:
+  - Implement benchmarks under src/**/*.bench.{ts,tsx}; discovered by
+    Vitest’s benchmark include; excluded from coverage; Knip aware.
+  - Drive the UI with Testing Library; do not call rrstack APIs directly.
+  - Known console warnings in benches (act/ref) are acceptable for perf
+    runs and stem from mocks/refs. Optionally silence later.
+
+- Coverage:
+  - Exclude .bench.* from coverage; keep existing vitest config as the
+    single source of truth for inclusion/exclusion.
 

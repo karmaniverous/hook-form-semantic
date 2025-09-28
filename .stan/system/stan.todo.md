@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-09-29T00:40:00Z
+# When updated: 2025-09-28T00:00:00Z
 
 ## Next up
 
@@ -11,6 +11,24 @@
 - Light UX pass on labels/help text for Valid Range to ensure clarity (no behavior changes).
 - Consider gating any remaining console.debug lines in RRStackRuleForm behind NODE_ENV !== 'production' (stray logs removed in this pass).
 - Revisit Frequency/Duration description paths to ensure non‑continuous daily rules always yield distinct text (doc example parity).
+
+- Silence/refactor “Function components cannot be given refs” warnings:
+  - Option A: omit ref from RHF hookFieldProps spread (e.g., in HookFormRRStack)
+    when passing props to Form.Field.
+  - Option B: update semantic-ui-react test doubles to forwardRef where refs are expected.
+
+- Benchmarks: wrap fireEvent sequences in act() or switch to userEvent to quiet
+  “not wrapped in act” warnings (optional; perf-only).
+
+- Tests: add targeted assertions that description updates when Interval/Count
+  change (if description semantics should reflect them). Keep/tighten Effect
+  toggle coverage.
+
+- Split plan (long-file rule): decompose RRStackRuleForm into smaller modules:
+  - LabelEffectHeader, ValidRangeSection, RecurrenceConstraintsSection
+    (Months/DoM/Weekdays/Position/Time), DurationSection.
+  - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and
+    UI behavior unchanged; add focused tests per section.
 
 ## Completed (recent)
 
@@ -32,6 +50,7 @@
 - Benchmarks: add Vitest benchmarks for HookFormRRStack component interactions (render, add/move/delete rule, Effect/Frequency/Interval/Count changes, Hours/Minutes & Duration edits, Start/End dates, Timezone). Avoid direct RRStack library benchmarking; measure React component only.
 - RRStack timezone source: remove timezone prop from HookFormRRStack; dropdown/JSON is the source of truth.
 - Playground TS program: add playground/tsconfig.json so VS Code picks up vite-env.d.ts (fix TS2882); root typecheck still ignores playground.
+
 - Tooling/tests: silence ESLint no-unused-vars in picker mocks by adding scoped disable/enable around filtered prop destructuring; remove unused editorState/editorStyle params from WYSIWYG mock forwardRef signature. Lint now clean without altering runtime behavior; tests remain green.
 - RRStackRuleDescription: pass includeBounds from HookFormRRStackRule and augment description with concise extras (hours, minutes, positions) so edits are visible immediately.
 - RRStackRuleForm: DoM input mirrors Hours/Minutes UX using local state + parseOptions + syncOptions; allows commas/spaces and incomplete tokens; removed stray debug logs.
