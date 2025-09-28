@@ -4,6 +4,7 @@ import {
   type UseRRStackOutput,
   type UseRRStackProps,
 } from '@karmaniverous/rrstack/react';
+import { omit } from 'radash';
 import { useCallback, useMemo, useState } from 'react';
 import {
   type ControllerProps,
@@ -144,7 +145,7 @@ export const HookFormRRStack = <T extends FieldValues>({
   return (
     <Form.Field
       {...fieldProps}
-      {...hookFieldProps}
+      {...omit(hookFieldProps, ['ref'])}
       className={concatClassNames(className, 'hook-form-rrstack')}
     >
       {label && <label>{label}</label>}

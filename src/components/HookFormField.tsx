@@ -1,3 +1,4 @@
+import { omit } from 'radash';
 import { useCallback, useMemo } from 'react';
 import type { ControllerFieldState } from 'react-hook-form';
 import {
@@ -75,7 +76,7 @@ export const HookFormField = <T extends FieldValues, C>({
       ...(typeof value === 'boolean'
         ? { checked: value }
         : { value: value ?? '' }),
-      ...rest,
+      ...omit(rest, ['ref']),
     };
   }, [handleChange, hookFieldProps]);
 
