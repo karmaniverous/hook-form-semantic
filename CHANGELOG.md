@@ -2,9 +2,17 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.1.22](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.21...0.1.22)
+
+- playground: add tsconfig to fix IDE typecheck [`0740ad7`](https://github.com/karmaniverous/hook-form-semantic/commit/0740ad7eceb0fc7b8dffd40dcad3a2d8166c074e)
+- rrstack: remove timezone prop; use UI/JSON as source [`650eea6`](https://github.com/karmaniverous/hook-form-semantic/commit/650eea6f9a089f9e994affa19aa7e680cab75b2d)
+
 #### [0.1.21](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.20...0.1.21)
 
+> 28 September 2025
+
 - big bang [`60e639f`](https://github.com/karmaniverous/hook-form-semantic/commit/60e639f8a16ef9d204be12dfb81e94eedbc1a007)
+- chore: release v0.1.21 [`8e6ad89`](https://github.com/karmaniverous/hook-form-semantic/commit/8e6ad89510e7b5f6abb5b361bcd64c8af6b2fefe)
 - tests: stabilize RRStack description update [`c3ea7ad`](https://github.com/karmaniverous/hook-form-semantic/commit/c3ea7ad775799627a941fdd8c7df6e3ffbab52db)
 - fix(tests): align RRStackRuleForm timestamp tests with new API [`e01e0b2`](https://github.com/karmaniverous/hook-form-semantic/commit/e01e0b264e7ecabc0c1f78e7c55c933d46f6447c)
 - RRStack: live description updates + input UX fixes [`09eb0a1`](https://github.com/karmaniverous/hook-form-semantic/commit/09eb0a1861153b895957c148a34ac8951edd5d27)
