@@ -54,3 +54,12 @@ for the RRStackRuleForm component and related date/time inputs.
   - onChange?: (value: Date | null) => void
   - RRStackRuleForm uses the standalone form.
 
+## Timezone source of truth
+
+- HookFormRRStack does not accept a `timezone` (or `rrstackTimezone`)
+  prop. The RRStack timezone originates from the schedule JSON value and
+  is edited exclusively via the component’s “Timezone” dropdown in the UI.
+- Consumers should initialize the field’s JSON with a sensible default
+  timezone (e.g., browser timezone) in their form’s default values. The
+  dropdown remains the authoritative editor for the RRStack timezone.
+

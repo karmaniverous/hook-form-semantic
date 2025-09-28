@@ -51,7 +51,7 @@ export interface HookFormRRStackProps<T extends FieldValues>
       | 'value'
     >,
     PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'>,
-    PrefixedPartial<Omit<UseRRStackProps, 'json'>, 'rrstack'> {
+    PrefixedPartial<Omit<UseRRStackProps, 'json' | 'timezone'>, 'rrstack'> {
   timestampFormat?: string;
 }
 
