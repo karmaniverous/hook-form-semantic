@@ -3,7 +3,7 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     benchmark: {
-      include: ['**/*.bench.ts'],
+      include: ['**/*.bench.{ts,tsx}'],
     },
     globals: true,
     environment: 'happy-dom',
@@ -26,6 +26,7 @@ export default defineConfig({
       // Only include your source code in coverage
       include: ['src/**/*.{js,ts,tsx}'],
       exclude: [
+        'src/**/*.bench.*',
         'src/**/*.{test,spec}.*',
         'src/**/*.d.ts',
         'docs/**',

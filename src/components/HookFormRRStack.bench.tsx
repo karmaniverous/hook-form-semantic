@@ -51,9 +51,8 @@ const getFieldByLabel = (root: HTMLElement, labelText: string) => {
 
 describe('HookFormRRStack (benchmarks: React component interactions)', () => {
   bench('render (empty schedule)', () => {
-    const r = renderRRStack();
+    renderRRStack();
     cleanup();
-    return r;
   });
 
   bench('add rule', () => {
@@ -172,6 +171,47 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
       const inp = fld.querySelector('input') as HTMLInputElement;
       fireEvent.change(inp, { target: { value } });
     }
+
+    cleanup();
+  });
+
+  bench('set Days of Month (DoM) while Monthly', () => {
+    const { container, getByText } = renderRRStack();
+    fireEvent.click(getByText('Add Rule'));
+    const content = container.querySelector(
+      '[data-testid="accordion-content"]',
+    ) as HTMLElement;
+
+    // Switch to Monthly to reveal the Months/DoM/Weekdays/Position section
+    const freqField = getFieldByLabel(content, 'Frequency');
+    const freqDropdown = within(freqField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(freqDropdown, { target: { value: 'monthly' } });
+
+    // Enter Days of Month (local text input; safe in current mocks)
+    const domInput = within(content).getByPlaceholderText(
+      '25 (for 25th)',
+    ) as HTMLInputElement;
+    fireEvent.change(domInput, { target: { value: '1, 15, 31' } });
+
+    cleanup();
+  });
+
+  bench('cycle Frequency (weekly → monthly → daily)', () => {
+    const { container, getByText } = renderRRStack();
+    fireEvent.click(getByText('Add Rule'));
+    const content = container.querySelector(
+      '[data-testid="accordion-content"]',
+    ) as HTMLElement;
+
+    const freqField = getFieldByLabel(content, 'Frequency');
+    const freqDropdown = within(freqField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(freqDropdown, { target: { value: 'weekly' } });
+    fireEvent.change(freqDropdown, { target: { value: 'monthly' } });
+    fireEvent.change(freqDropdown, { target: { value: 'daily' } });
 
     cleanup();
   });

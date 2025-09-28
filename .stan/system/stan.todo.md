@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-09-28T21:50:00Z
+# When updated: 2025-09-28T22:25:00Z
 
 ## Next up
 
@@ -13,6 +13,9 @@
 - Revisit Frequency/Duration description paths to ensure non‑continuous daily rules always yield distinct text (doc example parity).
 
 ## Completed (recent)
+
+ - Benchmarks: extend HookFormRRStack benches to set options on the first rule (Days of Month; cycle frequency weekly→monthly→daily). Ensure benches return void (fix TS) and stay at the React component layer (no RRStack calls).
+ - Tooling: include .bench.tsx in vitest benchmark discovery and exclude benchmarks from coverage; teach Knip to treat .bench.* as Vitest entries to avoid false “unused file” reports.
 
  - Benchmarks: add Vitest benchmarks for HookFormRRStack component interactions (render, add/move/delete rule, Effect/Frequency/Interval/Count changes, Hours/Minutes & Duration edits, Start/End dates, Timezone). Avoid direct RRStack library benchmarking; measure React component only.
  - RRStack timezone source: remove timezone prop from HookFormRRStack; dropdown/JSON is the source of truth.
