@@ -2,8 +2,15 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.2.1](https://github.com/karmaniverous/hook-form-semantic/compare/0.2.0...0.2.1)
+
+- updated peer deps [`80c14f5`](https://github.com/karmaniverous/hook-form-semantic/commit/80c14f50e1dac0919d0ff1ce6d007385100e8f7a)
+
 #### [0.2.0](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.22...0.2.0)
 
+> 29 September 2025
+
+- chore: release v0.2.0 [`c86cb58`](https://github.com/karmaniverous/hook-form-semantic/commit/c86cb583bae09b07d566959b4977fade19e89707)
 - feat(bench): add Vitest benchmarks for HookFormRRStack UI [`a8831f3`](https://github.com/karmaniverous/hook-form-semantic/commit/a8831f3ec1bdbe10fbc025c4db97c73f53cc14f6)
 - test(rrstack): assert rule description reflects settings [`04c4522`](https://github.com/karmaniverous/hook-form-semantic/commit/04c452207208225aca769f6e95d5a9c4dac0c61b)
 - tests(rrstack): ensure engine description updates; fix Dropdown mock [`453e6bf`](https://github.com/karmaniverous/hook-form-semantic/commit/453e6bf349ce085c061b07f41538406ede07dc86)
