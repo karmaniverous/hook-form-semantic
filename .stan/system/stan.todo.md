@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-09-29T00:20:00Z
+# When updated: 2025-09-29T00:40:00Z
 
 ## Next up
 
@@ -13,6 +13,9 @@
 - Revisit Frequency/Duration description paths to ensure non‑continuous daily rules always yield distinct text (doc example parity).
 
 ## Completed (recent)
+
+- Tests: make label helper robust to InfoLabel icons by matching label text
+  via “includes” (fix “Label not found: Frequency”).
 
 - Tests: stabilize rule-description suite by removing brittle includeBounds/timezone
   assertions and scoping/awaiting accordion content for Frequency/Time tests.

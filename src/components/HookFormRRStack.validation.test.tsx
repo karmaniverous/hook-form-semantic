@@ -315,7 +315,8 @@ const getFieldByLabel = (root: HTMLElement, labelText: string) => {
   // container instead of matching any ancestor that contains the label.
   const labels = Array.from(root.querySelectorAll('label'));
   const labelEl =
-    labels.find((l) => l.textContent?.trim() === labelText) ?? null;
+    labels.find((l) => (l.textContent ?? '').trim().includes(labelText)) ??
+    null;
 
   if (!labelEl) {
     throw new Error(`Label not found: ${labelText}`);
