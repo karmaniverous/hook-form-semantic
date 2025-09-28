@@ -3,9 +3,9 @@ cliDefaults:
     plan: false
     sequential: true
 excludes:
-  - "**/*.ico"
-  - "**/*.png"
-  - "**/*.svg"
+  - '**/*.ico'
+  - '**/*.png'
+  - '**/*.svg'
   - docs
   - package-lock.json
 includes: []
@@ -13,7 +13,7 @@ patchOpenCommand: code -g {file}
 scripts:
   typecheck: npm run typecheck
   lint: npm run lint:fix
-  test: npm run test
+  test: npm run test -- --no-color
   bench: npm run bench -- --no-color
   diagrams: npm run diagrams
   docs: npm run docs -- --emit none

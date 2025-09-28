@@ -308,3 +308,180 @@ describe('HookFormRRStack Validation', () => {
     });
   });
 });
+
+// Helpers for description-focused tests
+const getFieldByLabel = (root: HTMLElement, labelText: string) => {
+  const fields = Array.from(
+    root.querySelectorAll<HTMLElement>('[data-testid="form-field"]'),
+  );
+  for (const f of fields) {
+    const labels = Array.from(f.querySelectorAll('label'));
+    if (labels.some((l) => l.textContent?.trim() === labelText)) {
+      return f;
+    }
+  }
+  throw new Error(`Field not found: ${labelText}`);
+};
+
+type DescribeProps = {
+  includeBounds?: boolean;
+  includeTimeZone?: boolean;
+  formatTimeZone?: (tz: string) => string;
+};
+
+const renderWithDescribeProps = (describe?: DescribeProps) => {
+  interface TF extends FieldValues {
+    schedule: RRStackOptions;
+  }
+  const Harness = () => {
+    const { control } = useForm<TF>({
+      defaultValues: {
+        schedule: {
+          timezone: 'UTC',
+          rules: [],
+        },
+      },
+    });
+    return (
+      <Form>
+        <HookFormRRStack<TF>
+          hookName="schedule"
+          hookControl={control}
+          rrstackRenderDebounce={0}
+          describeIncludeBounds={describe?.includeBounds}
+          describeIncludeTimeZone={describe?.includeTimeZone}
+          describeFormatTimeZone={describe?.formatTimeZone}
+        />
+      </Form>
+    );
+  };
+  return render(<Harness />);
+};
+
+describe('RRStackRuleDescription — reflects rule settings and describe options', () => {
+  it('includes bounds when describeIncludeBounds=true', async () => {
+    const { container, getByText } = renderWithDescribeProps({
+      includeBounds: true,
+    });
+
+    fireEvent.click(getByText('Add Rule'));
+    const description = screen.getByTestId('rule-description-0');
+    const initialText = (description.textContent ?? '').trim();
+
+    const content = container.querySelector(
+      '[data-testid="accordion-content"]',
+    ) as HTMLElement;
+    const dateInputs = Array.from(
+      content.querySelectorAll<HTMLInputElement>('[data-testid="date-picker"]'),
+    );
+    // Start & End
+    fireEvent.change(dateInputs[0], { target: { value: '2026-01-01' } });
+    fireEvent.change(dateInputs[1], { target: { value: '2026-01-03' } });
+
+    await waitFor(() => {
+      const nextText = (description.textContent ?? '').trim();
+      expect(nextText).not.toBe(initialText);
+    });
+  });
+
+  it('description changes on timezone change only when describeIncludeTimeZone=true', async () => {
+    // includeTimeZone = true
+    {
+      const { container, getByText, unmount } = renderWithDescribeProps({
+        includeTimeZone: true,
+      });
+      fireEvent.click(getByText('Add Rule'));
+      const description = screen.getByTestId('rule-description-0');
+      const before = (description.textContent ?? '').trim();
+
+      const tzField = getFieldByLabel(container, 'Timezone');
+      const tzDropdown = within(tzField).getByTestId(
+        'dropdown',
+      ) as HTMLSelectElement;
+      fireEvent.change(tzDropdown, {
+        target: { value: 'America/Los_Angeles' },
+      });
+
+      await waitFor(() => {
+        const after = (description.textContent ?? '').trim();
+        expect(after).not.toBe(before);
+      });
+      unmount();
+    }
+
+    // includeTimeZone = false
+    {
+      const { container, getByText } = renderWithDescribeProps({
+        includeTimeZone: false,
+      });
+      fireEvent.click(getByText('Add Rule'));
+      const description = screen.getByTestId('rule-description-0');
+      const before = (description.textContent ?? '').trim();
+
+      const tzField = getFieldByLabel(container, 'Timezone');
+      const tzDropdown = within(tzField).getByTestId(
+        'dropdown',
+      ) as HTMLSelectElement;
+      fireEvent.change(tzDropdown, { target: { value: 'America/Chicago' } });
+
+      // Allow any state updates, then assert unchanged text
+      await new Promise((r) => setTimeout(r, 0));
+      const after = (description.textContent ?? '').trim();
+      expect(after).toBe(before);
+    }
+  });
+
+  it('applies a custom describeFormatTimeZone function', async () => {
+    const { container, getByText } = renderWithDescribeProps({
+      includeTimeZone: true,
+      formatTimeZone: (tz) => `TZ<${tz}>`,
+    });
+    fireEvent.click(getByText('Add Rule'));
+    const description = screen.getByTestId('rule-description-0');
+
+    const tzField = getFieldByLabel(container, 'Timezone');
+    const tzDropdown = within(tzField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(tzDropdown, { target: { value: 'America/Los_Angeles' } });
+
+    await waitFor(() => {
+      const text = (description.textContent ?? '').trim();
+      expect(text).toContain('TZ<America/Los_Angeles>');
+    });
+  });
+
+  it('updates when setting Frequency/Hours/Minutes', async () => {
+    const { container, getByText } = renderWithDescribeProps();
+    fireEvent.click(getByText('Add Rule'));
+    const description = screen.getByTestId('rule-description-0');
+    const before = (description.textContent ?? '').trim();
+
+    const content = container.querySelector(
+      '[data-testid="accordion-content"]',
+    ) as HTMLElement;
+
+    // Frequency → daily
+    const freqField = getFieldByLabel(content, 'Frequency');
+    const freqDropdown = within(freqField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(freqDropdown, { target: { value: 'daily' } });
+
+    // Time constraints
+    const hoursInput = within(content).getByPlaceholderText(
+      '9, 13, 17',
+    ) as HTMLInputElement;
+    fireEvent.change(hoursInput, { target: { value: '9, 13' } });
+
+    const minutesInput = within(content).getByPlaceholderText(
+      '0, 30',
+    ) as HTMLInputElement;
+    fireEvent.change(minutesInput, { target: { value: '30' } });
+
+    await waitFor(() => {
+      const after = (description.textContent ?? '').trim();
+      expect(after).not.toBe(before);
+    });
+  });
+});

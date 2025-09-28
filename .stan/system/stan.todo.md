@@ -14,14 +14,16 @@
 
 ## Completed (recent)
 
- - Benchmarks: add more first‑rule option benches (Frequency→span; clear Interval & Count; set only Start; set & clear Start/End; clear Hours & Minutes). All via component UI and returning void for Vitest bench types.
+- Tests: validate RRStackRuleDescription reflects rule settings and describe options (bounds, timezone include/exclude, custom formatter, frequency/time fields) via component UI interactions.
 
- - Benchmarks: extend HookFormRRStack benches to set options on the first rule (Days of Month; cycle frequency weekly→monthly→daily). Ensure benches return void (fix TS) and stay at the React component layer (no RRStack calls).
- - Tooling: include .bench.tsx in vitest benchmark discovery and exclude benchmarks from coverage; teach Knip to treat .bench.* as Vitest entries to avoid false “unused file” reports.
+- Benchmarks: add more first‑rule option benches (Frequency→span; clear Interval & Count; set only Start; set & clear Start/End; clear Hours & Minutes). All via component UI and returning void for Vitest bench types.
 
- - Benchmarks: add Vitest benchmarks for HookFormRRStack component interactions (render, add/move/delete rule, Effect/Frequency/Interval/Count changes, Hours/Minutes & Duration edits, Start/End dates, Timezone). Avoid direct RRStack library benchmarking; measure React component only.
- - RRStack timezone source: remove timezone prop from HookFormRRStack; dropdown/JSON is the source of truth.
- - Playground TS program: add playground/tsconfig.json so VS Code picks up vite-env.d.ts (fix TS2882); root typecheck still ignores playground.
+- Benchmarks: extend HookFormRRStack benches to set options on the first rule (Days of Month; cycle frequency weekly→monthly→daily). Ensure benches return void (fix TS) and stay at the React component layer (no RRStack calls).
+- Tooling: include .bench.tsx in vitest benchmark discovery and exclude benchmarks from coverage; teach Knip to treat .bench.\* as Vitest entries to avoid false “unused file” reports.
+
+- Benchmarks: add Vitest benchmarks for HookFormRRStack component interactions (render, add/move/delete rule, Effect/Frequency/Interval/Count changes, Hours/Minutes & Duration edits, Start/End dates, Timezone). Avoid direct RRStack library benchmarking; measure React component only.
+- RRStack timezone source: remove timezone prop from HookFormRRStack; dropdown/JSON is the source of truth.
+- Playground TS program: add playground/tsconfig.json so VS Code picks up vite-env.d.ts (fix TS2882); root typecheck still ignores playground.
 - Tooling/tests: silence ESLint no-unused-vars in picker mocks by adding scoped disable/enable around filtered prop destructuring; remove unused editorState/editorStyle params from WYSIWYG mock forwardRef signature. Lint now clean without altering runtime behavior; tests remain green.
 - RRStackRuleDescription: pass includeBounds from HookFormRRStackRule and augment description with concise extras (hours, minutes, positions) so edits are visible immediately.
 - RRStackRuleForm: DoM input mirrors Hours/Minutes UX using local state + parseOptions + syncOptions; allows commas/spaces and incomplete tokens; removed stray debug logs.
