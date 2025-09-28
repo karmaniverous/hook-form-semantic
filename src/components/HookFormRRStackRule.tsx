@@ -1,25 +1,33 @@
 import type { UseRRStackOutput } from '@karmaniverous/rrstack/react';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import type { AccordionTitleProps } from 'semantic-ui-react';
 import { Accordion, Button, Icon, Label, Segment } from 'semantic-ui-react';
 
+import {
+  deprefix,
+  type PrefixedPartial,
+} from '../../lib/utils/PrefixedPartial';
+import type { RRStackRuleDescriptionPropsBase } from './RRStackRuleDescription';
 import { RRStackRuleDescription } from './RRStackRuleDescription';
 import { RRStackRuleForm } from './RRStackRuleForm';
 interface HookFormRRStackRuleProps
-  extends Pick<AccordionTitleProps, 'onClick'> {
+  extends Pick<AccordionTitleProps, 'onClick'>,
+    PrefixedPartial<
+      Omit<RRStackRuleDescriptionPropsBase, 'index' | 'rrstack'>,
+      'describe'
+    > {
   activeIndex: number | null;
   index: number;
   rrstack: UseRRStackOutput['rrstack'];
   setActiveIndex: (index: number | null) => void;
 }
 
-export const HookFormRRStackRule = ({
-  activeIndex,
-  index,
-  onClick,
-  rrstack,
-  setActiveIndex,
-}: HookFormRRStackRuleProps) => {
+export const HookFormRRStackRule = (props: HookFormRRStackRuleProps) => {
+  const {
+    describe: describeProps,
+    rest: { activeIndex, index, onClick, rrstack, setActiveIndex },
+  } = useMemo(() => deprefix(props, ['describe']), [props]);
+
   const handleMoveRule = useCallback(
     (direction: 'top' | 'up' | 'down' | 'bottom') => {
       try {
@@ -153,12 +161,12 @@ export const HookFormRRStackRule = ({
         </div>
         <RRStackRuleDescription
           as="div"
-          includeTimeZone={false}
           data-testid={`rule-description-${index}`}
           index={index}
           rrstack={rrstack}
           style={{ fontWeight: 'normal', marginTop: 4, marginLeft: 16 }}
-        />{' '}
+          {...describeProps}
+        />
       </Accordion.Title>
       ,
       <Accordion.Content

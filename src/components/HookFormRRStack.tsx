@@ -31,6 +31,7 @@ import {
 } from '../../lib/utils/PrefixedPartial';
 import { timezoneOptions } from '../util/timezoneOptions';
 import { HookFormRRStackRule } from './HookFormRRStackRule';
+import type { RRStackRuleDescriptionPropsBase } from './RRStackRuleDescription';
 
 export interface HookFormRRStackProps<T extends FieldValues>
   extends Omit<
@@ -50,6 +51,10 @@ export interface HookFormRRStackProps<T extends FieldValues>
       | 'type'
       | 'value'
     >,
+    PrefixedPartial<
+      Omit<RRStackRuleDescriptionPropsBase, 'index' | 'rrstack'>,
+      'describe'
+    >,
     PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'>,
     PrefixedPartial<Omit<UseRRStackProps, 'json' | 'timezone'>, 'rrstack'> {
   timestampFormat?: string;
@@ -60,10 +65,11 @@ export const HookFormRRStack = <T extends FieldValues>({
   ...props
 }: HookFormRRStackProps<T>) => {
   const {
+    describe: describeProps,
     hook: hookProps,
     rrstack: { onChange: rrstackOnChange, ...rrstackProps },
     rest: { className, label, ...fieldProps },
-  } = useMemo(() => deprefix(props, ['hook', 'rrstack']), [props]);
+  } = useMemo(() => deprefix(props, ['describe', 'hook', 'rrstack']), [props]);
 
   const {
     field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
@@ -202,6 +208,7 @@ export const HookFormRRStack = <T extends FieldValues>({
         <Accordion fluid styled>
           {rrstack.rules.map((rule, index) => (
             <HookFormRRStackRule
+              {...describeProps}
               activeIndex={activeIndex}
               index={index}
               key={index}

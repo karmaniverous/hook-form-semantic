@@ -263,7 +263,7 @@ export default function App() {
           hookName="rrstack"
           hookControl={control}
           label="Schedule Rules"
-          rrstackRenderDebounce={300}
+          describeIncludeBounds={true}
         />
 
         <Divider />

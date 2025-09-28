@@ -4,16 +4,20 @@ import { useRRStackSelector } from '@karmaniverous/rrstack/react';
 import type { ComponentPropsWithoutRef, ElementType } from 'react';
 import { useMemo } from 'react';
 
-interface OwnProps extends DescribeOptions {
+export interface RRStackRuleDescriptionPropsBase extends DescribeOptions {
   fallback?: React.ReactNode; // displayed if rule index is out of range
   index: number;
   rrstack: UseRRStackOutput['rrstack'];
 }
 
-type RRStackRuleDescriptionProps<T extends ElementType> = OwnProps &
-  Omit<ComponentPropsWithoutRef<T>, keyof OwnProps | 'as'> & {
-    as?: T;
-  };
+type RRStackRuleDescriptionProps<T extends ElementType> =
+  RRStackRuleDescriptionPropsBase &
+    Omit<
+      ComponentPropsWithoutRef<T>,
+      keyof RRStackRuleDescriptionPropsBase | 'as'
+    > & {
+      as?: T;
+    };
 
 export const RRStackRuleDescription = <T extends ElementType = 'span'>({
   as,
