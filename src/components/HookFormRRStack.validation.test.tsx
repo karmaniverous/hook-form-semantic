@@ -272,6 +272,100 @@ describe('HookFormRRStack Validation', () => {
     });
   });
 
+  it('RRStackRuleDescription updates when setting Start/End (includeBounds)', async () => {
+    const { getByText } = renderWithDescribeProps({ includeBounds: true });
+    fireEvent.click(getByText('Add Rule'));
+    const description = screen.getByTestId('rule-description-0');
+    const before = (description.textContent ?? '').trim();
+
+    // Set Start Date
+    const inputs = await screen.findAllByTestId('date-picker');
+    fireEvent.change(inputs[0], { target: { value: '2025-04-01' } });
+    await waitFor(() => {
+      const after = (description.textContent ?? '').trim();
+      expect(after).not.toBe(before);
+      expect(after.length).toBeGreaterThan(0);
+    });
+
+    // Set End Date
+    const prev = (description.textContent ?? '').trim();
+    fireEvent.change(inputs[1], { target: { value: '2025-04-02' } });
+    await waitFor(() => {
+      const after = (description.textContent ?? '').trim();
+      expect(after).not.toBe(prev);
+      expect(after.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('RRStackRuleDescription updates when setting Months while monthly (without DoM)', async () => {
+    const { getByText } = renderWithDescribeProps();
+    fireEvent.click(getByText('Add Rule'));
+    const description = screen.getByTestId('rule-description-0');
+    const before = (description.textContent ?? '').trim();
+
+    // Wait for content
+    const contents = await screen.findAllByTestId('accordion-content');
+    const content = contents[0] as HTMLElement;
+
+    // Frequency → monthly
+    const freqField = getFieldByLabel(content, 'Frequency');
+    const freqDropdown = within(freqField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(freqDropdown, { target: { value: 'monthly' } });
+
+    // Set a Month (multi-select mock supports fallback to single value)
+    const monthsField = getFieldByLabel(content, 'Months');
+    const monthsDropdown = within(monthsField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(monthsDropdown, { target: { value: '1' } }); // Jan
+
+    await waitFor(() => {
+      const after = (description.textContent ?? '').trim();
+      expect(after).not.toBe(before);
+      expect(after.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('RRStackRuleDescription updates when setting Weekday and Position (weekly)', async () => {
+    const { getByText } = renderWithDescribeProps();
+    fireEvent.click(getByText('Add Rule'));
+    const description = screen.getByTestId('rule-description-0');
+    const before = (description.textContent ?? '').trim();
+
+    // Wait for content
+    const contents = await screen.findAllByTestId('accordion-content');
+    const content = contents[0] as HTMLElement;
+
+    // Frequency → weekly
+    const freqField = getFieldByLabel(content, 'Frequency');
+    const freqDropdown = within(freqField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(freqDropdown, { target: { value: 'weekly' } });
+
+    // Weekday: Monday (0)
+    const wdField = getFieldByLabel(content, 'Weekdays');
+    const wdDropdown = within(wdField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(wdDropdown, { target: { value: '0' } });
+
+    // Position: 1st (1)
+    const posField = getFieldByLabel(content, 'Position');
+    const posDropdown = within(posField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(posDropdown, { target: { value: '1' } });
+
+    await waitFor(() => {
+      const after = (description.textContent ?? '').trim();
+      expect(after).not.toBe(before);
+      expect(after.length).toBeGreaterThan(0);
+    });
+  });
+
   it('updates RRStackRuleDescription when effect changes', async () => {
     render(<TestForm />);
 

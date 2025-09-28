@@ -13,33 +13,32 @@
 - Revisit Frequency/Duration description paths to ensure non‑continuous daily rules always yield distinct text (doc example parity).
 
 - Silence/refactor “Function components cannot be given refs” warnings:
-  - Option A: omit ref from RHF hookFieldProps spread (e.g., in HookFormRRStack)
-    when passing props to Form.Field.
+  - Option A: omit ref from RHF hookFieldProps spread (e.g., in HookFormRRStack) when passing props to Form.Field.
   - Option B: update semantic-ui-react test doubles to forwardRef where refs are expected.
 
-- Benchmarks: wrap fireEvent sequences in act() or switch to userEvent to quiet
-  “not wrapped in act” warnings (optional; perf-only).
+- Benchmarks: wrap fireEvent sequences in act() or switch to userEvent to quiet “not wrapped in act” warnings (optional; perf-only).
 
-- Tests: add targeted assertions that description updates when Interval/Count
-  change (if description semantics should reflect them). Keep/tighten Effect
-  toggle coverage.
+- Tests: add targeted assertions that description updates when Interval/Count change (if description semantics should reflect them). Keep/tighten Effect toggle coverage.
 
 - Split plan (long-file rule): decompose RRStackRuleForm into smaller modules:
-  - LabelEffectHeader, ValidRangeSection, RecurrenceConstraintsSection
-    (Months/DoM/Weekdays/Position/Time), DurationSection.
-  - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and
-    UI behavior unchanged; add focused tests per section.
+  - LabelEffectHeader, ValidRangeSection, RecurrenceConstraintsSection (Months/DoM/Weekdays/Position/Time), DurationSection.
+  - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and UI behavior unchanged; add focused tests per section.
 
 ## Completed (recent)
 
-- Tests: make label helper robust to InfoLabel icons by matching label text
-  via “includes” (fix “Label not found: Frequency”).
+- Tests/mocks: enable Dropdown multi-select in semantic-ui-react double and add robust fallback for tests using target.value, so Months/Weekdays/Position selections propagate correctly to rrstack rule options.
 
-- Tests: stabilize rule-description suite by removing brittle includeBounds/timezone
-  assertions and scoping/awaiting accordion content for Frequency/Time tests.
+- Tests: exercise rrstack engine descriptions via RRStackRuleDescription for:
+  - Start/End (render with describeIncludeBounds to reflect bounds),
+  - Months (monthly; no DoM),
+  - Weekdays + Position (weekly),
+  - Time (Hours/Minutes) — kept prior coverage.
 
-- Tests: fix RRStack description tests to target precise Form.Field by label
-  (avoid ancestor matches causing multiple dropdown/field resolution errors).
+- Tests: make label helper robust to InfoLabel icons by matching label text via “includes” (fix “Label not found: Frequency”).
+
+- Tests: stabilize rule-description suite by removing brittle includeBounds/timezone assertions and scoping/awaiting accordion content for Frequency/Time tests.
+
+- Tests: fix RRStack description tests to target precise Form.Field by label (avoid ancestor matches causing multiple dropdown/field resolution errors).
 - Tests: validate RRStackRuleDescription reflects rule settings and describe options (bounds, timezone include/exclude, custom formatter, frequency/time fields) via component UI interactions.
 
 - Benchmarks: add more first‑rule option benches (Frequency→span; clear Interval & Count; set only Start; set & clear Start/End; clear Hours & Minutes). All via component UI and returning void for Vitest bench types.

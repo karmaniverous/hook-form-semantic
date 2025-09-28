@@ -119,8 +119,9 @@ vi.mock('semantic-ui-react', () => {
   };
   interface DropdownProps {
     options?: Option[];
-    value?: string | number;
+    value?: string | number | Array<string | number>;
     placeholder?: string;
+    multiple?: boolean;
     onChange?: (
       e: React.SyntheticEvent<HTMLElement>,
       data: { value: unknown },
@@ -132,17 +133,41 @@ vi.mock('semantic-ui-react', () => {
     options = [],
     value,
     placeholder,
+    multiple,
   }) =>
     React.createElement(
       'select',
       {
         'data-testid': 'dropdown',
-        value: value === undefined || value === null ? '' : String(value),
+        multiple: !!multiple,
+        value:
+          value === undefined || value === null
+            ? multiple
+              ? []
+              : ''
+            : Array.isArray(value)
+              ? (value as Array<string | number>).map((v) => String(v))
+              : String(value),
         onChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
-          const opt = options.find(
-            (o) => String(o.value) === e.currentTarget.value,
-          );
-          onChange?.(e, { value: opt?.value });
+          if (multiple) {
+            // Prefer selectedOptions when present; fall back to single value if tests only set target.value
+            const selected = Array.from(e.currentTarget.selectedOptions ?? []);
+            const selectedValues =
+              selected.length > 0
+                ? selected.map((opt) => opt.value)
+                : e.currentTarget.value
+                  ? [e.currentTarget.value]
+                  : [];
+            const vals = selectedValues
+              .map((sv) => options.find((o) => String(o.value) === sv)?.value)
+              .filter((v) => v !== undefined);
+            onChange?.(e, { value: vals });
+          } else {
+            const opt = options.find(
+              (o) => String(o.value) === e.currentTarget.value,
+            );
+            onChange?.(e, { value: opt?.value });
+          }
         },
       } as React.SelectHTMLAttributes<HTMLSelectElement>,
       [
