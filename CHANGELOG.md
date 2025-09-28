@@ -2,8 +2,28 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.2.0](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.22...0.2.0)
+
+- feat(bench): add Vitest benchmarks for HookFormRRStack UI [`a8831f3`](https://github.com/karmaniverous/hook-form-semantic/commit/a8831f3ec1bdbe10fbc025c4db97c73f53cc14f6)
+- test(rrstack): assert rule description reflects settings [`04c4522`](https://github.com/karmaniverous/hook-form-semantic/commit/04c452207208225aca769f6e95d5a9c4dac0c61b)
+- tests(rrstack): ensure engine description updates; fix Dropdown mock [`453e6bf`](https://github.com/karmaniverous/hook-form-semantic/commit/453e6bf349ce085c061b07f41538406ede07dc86)
+- bench(rrstack): add more first-rule option benchmarks [`e5dc511`](https://github.com/karmaniverous/hook-form-semantic/commit/e5dc511118763dd5edee05f3be80e23e13cc362e)
+- test(rrstack): stabilize rule description tests [`835e239`](https://github.com/karmaniverous/hook-form-semantic/commit/835e2398f0b7efb8909a5ba74432876d53e5ba0c)
+- updated rrstack [`fd7f09b`](https://github.com/karmaniverous/hook-form-semantic/commit/fd7f09b028d976a3fdbf2507e7f680f15b9c8d2f)
+- bench(rrstack): add option-setting benches; fix config/TS [`312b655`](https://github.com/karmaniverous/hook-form-semantic/commit/312b655271832daf7dfb22adf09c91eaff591cc2)
+- docs(project): record test/bench policy; update TODO [`82828d5`](https://github.com/karmaniverous/hook-form-semantic/commit/82828d590090532033b154f0e18916c5d62bedb6)
+- refactored for rrstack update [`491b1ec`](https://github.com/karmaniverous/hook-form-semantic/commit/491b1ec9a2670f5846226a365d8d7578bf08af78)
+- test(rrstack): fix field targeting in description tests [`34f92b8`](https://github.com/karmaniverous/hook-form-semantic/commit/34f92b8a2572d8d93d9443f9f3b7fafb6da1fdbf)
+- updated rrstack [`59d1897`](https://github.com/karmaniverous/hook-form-semantic/commit/59d1897e89623a83aa5c55b40100a5db714e67e9)
+- updated rrstack [`12d804a`](https://github.com/karmaniverous/hook-form-semantic/commit/12d804ab7159c20c285f6041348713c2f528aae0)
+- test(rrstack): tolerate InfoLabel icon text in label matcher [`b3222a0`](https://github.com/karmaniverous/hook-form-semantic/commit/b3222a0cb775bc9f270bf4216991ed0df747dd9a)
+- test(warn): drop ref passthrough to Form.Field to silence warnings [`c533008`](https://github.com/karmaniverous/hook-form-semantic/commit/c53300866fea88e31ba02b7683a9adc0b1b4fb5a)
+
 #### [0.1.22](https://github.com/karmaniverous/hook-form-semantic/compare/0.1.21...0.1.22)
 
+> 28 September 2025
+
+- chore: release v0.1.22 [`c97ab40`](https://github.com/karmaniverous/hook-form-semantic/commit/c97ab40396ddd8cfd063a3c4d4560c424024cbab)
 - playground: add tsconfig to fix IDE typecheck [`0740ad7`](https://github.com/karmaniverous/hook-form-semantic/commit/0740ad7eceb0fc7b8dffd40dcad3a2d8166c074e)
 - rrstack: remove timezone prop; use UI/JSON as source [`650eea6`](https://github.com/karmaniverous/hook-form-semantic/commit/650eea6f9a089f9e994affa19aa7e680cab75b2d)
 
