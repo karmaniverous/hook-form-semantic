@@ -311,16 +311,21 @@ describe('HookFormRRStack Validation', () => {
 
 // Helpers for description-focused tests
 const getFieldByLabel = (root: HTMLElement, labelText: string) => {
-  const fields = Array.from(
-    root.querySelectorAll<HTMLElement>('[data-testid="form-field"]'),
-  );
-  for (const f of fields) {
-    const labels = Array.from(f.querySelectorAll('label'));
-    if (labels.some((l) => l.textContent?.trim() === labelText)) {
-      return f;
-    }
+  // Find the label element with exact text, then return its nearest field
+  // container instead of matching any ancestor that contains the label.
+  const labels = Array.from(root.querySelectorAll('label'));
+  const labelEl =
+    labels.find((l) => l.textContent?.trim() === labelText) ?? null;
+
+  if (!labelEl) {
+    throw new Error(`Label not found: ${labelText}`);
   }
-  throw new Error(`Field not found: ${labelText}`);
+
+  const field = labelEl.closest(
+    '[data-testid="form-field"]',
+  ) as HTMLElement | null;
+  if (!field) throw new Error(`Field not found for label: ${labelText}`);
+  return field;
 };
 
 type DescribeProps = {

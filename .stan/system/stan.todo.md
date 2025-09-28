@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-09-28T22:35:00Z
+# When updated: 2025-09-29T00:00:00Z
 
 ## Next up
 
@@ -14,6 +14,8 @@
 
 ## Completed (recent)
 
+- Tests: fix RRStack description tests to target precise Form.Field by label
+  (avoid ancestor matches causing multiple dropdown/field resolution errors).
 - Tests: validate RRStackRuleDescription reflects rule settings and describe options (bounds, timezone include/exclude, custom formatter, frequency/time fields) via component UI interactions.
 
 - Benchmarks: add more first‑rule option benches (Frequency→span; clear Interval & Count; set only Start; set & clear Start/End; clear Hours & Minutes). All via component UI and returning void for Vitest bench types.
