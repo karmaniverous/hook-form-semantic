@@ -28,6 +28,8 @@ export const HookFormRRStackRule = (props: HookFormRRStackRuleProps) => {
     rest: { activeIndex, index, onClick, rrstack, setActiveIndex },
   } = useMemo(() => deprefix(props, ['describe']), [props]);
 
+  console.log('describeProps', describeProps);
+
   const handleMoveRule = useCallback(
     (direction: 'top' | 'up' | 'down' | 'bottom') => {
       try {

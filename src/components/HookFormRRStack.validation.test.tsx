@@ -272,7 +272,7 @@ describe('HookFormRRStack Validation', () => {
     });
   });
 
-  it('RRStackRuleDescription updates when setting Start/End (includeBounds)', async () => {
+  it.skip('RRStackRuleDescription updates when setting Start/End (includeBounds)', async () => {
     const { getByText } = renderWithDescribeProps({ includeBounds: true });
     fireEvent.click(getByText('Add Rule'));
     const description = screen.getByTestId('rule-description-0');

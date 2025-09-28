@@ -1,3 +1,5 @@
+import { mapKeys } from 'radash';
+
 export type PrefixedPartial<T, Prefix extends string> = {
   [K in keyof T as K extends string
     ? `${Prefix}${Capitalize<K>}`
@@ -25,15 +27,18 @@ type Deprefix<T, Prefixes extends string, RestKey extends string> = {
   [R in RestKey]: PickRest<T, Prefixes>;
 };
 
+const lowerFirst = (s: string) =>
+  s.length ? s[0].toLowerCase() + s.slice(1) : s;
+
+const upperFirst = (s: string) =>
+  s.length ? s[0].toUpperCase() + s.slice(1) : s;
+
 export const deprefix = <T, Prefixes extends string, RestKey extends string>(
   obj: T,
   prefixes: Prefixes | Prefixes[],
   restKey: RestKey = 'rest' as RestKey,
 ) => {
   const pfxs = Array.isArray(prefixes) ? prefixes : [prefixes];
-  const lowerFirst = (s: string) =>
-    s.length ? s[0].toLowerCase() + s.slice(1) : s;
-
   // Initialize result buckets for each prefix and the restKey
   const initial = Object.fromEntries(
     [...pfxs, restKey].map((k) => [k, {}]),
@@ -55,3 +60,6 @@ export const deprefix = <T, Prefixes extends string, RestKey extends string>(
 
   return result as Deprefix<T, Prefixes, RestKey>;
 };
+
+export const reprefix = (obj: object, prefix: string) =>
+  mapKeys(obj, (k) => `${prefix}${upperFirst(k)}`);

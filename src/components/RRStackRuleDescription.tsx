@@ -49,6 +49,12 @@ export const RRStackRuleDescription = <T extends ElementType = 'span'>({
     const inRange = index >= 0 && index < rules.length;
     if (!inRange) return '';
     try {
+      console.log('display options', {
+        includeBounds,
+        includeTimeZone,
+        formatTimeZone, // NEW: customize timezone label
+      });
+
       return rrstack.describeRule(index, {
         includeBounds,
         includeTimeZone,

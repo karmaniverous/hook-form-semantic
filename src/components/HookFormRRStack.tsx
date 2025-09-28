@@ -29,6 +29,7 @@ import { concatClassNames } from '../../lib/utils/concatClassNames';
 import {
   deprefix,
   type PrefixedPartial,
+  reprefix,
 } from '../../lib/utils/PrefixedPartial';
 import { timezoneOptions } from '../util/timezoneOptions';
 import { HookFormRRStackRule } from './HookFormRRStackRule';
@@ -71,6 +72,11 @@ export const HookFormRRStack = <T extends FieldValues>({
     rrstack: { onChange: rrstackOnChange, ...rrstackProps },
     rest: { className, label, ...fieldProps },
   } = useMemo(() => deprefix(props, ['describe', 'hook', 'rrstack']), [props]);
+
+  const reprifixedDescribeProps = useMemo(
+    () => reprefix(describeProps, 'describe'),
+    [describeProps],
+  );
 
   const {
     field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
@@ -209,7 +215,7 @@ export const HookFormRRStack = <T extends FieldValues>({
         <Accordion fluid styled>
           {rrstack.rules.map((rule, index) => (
             <HookFormRRStackRule
-              {...describeProps}
+              {...reprifixedDescribeProps}
               activeIndex={activeIndex}
               index={index}
               key={index}
