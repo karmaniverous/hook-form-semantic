@@ -1,0 +1,30 @@
+{
+  // Local TS program for the Vite playground (IDE only).
+  // This ensures VS Code picks up src/vite-env.d.ts so CSS side-effect
+  // imports (react-calendar, react-clock, etc.) are declared and TS2882
+  // errors disappear. The root tsconfig intentionally excludes "playground"
+  // to keep "npm run typecheck" focused on the library.
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["vite/client"],
+    "skipLibCheck": true,
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "src",
+    "vite.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
+
