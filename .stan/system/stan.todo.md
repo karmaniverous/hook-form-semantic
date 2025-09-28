@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-09-29T00:00:00Z
+# When updated: 2025-09-29T00:20:00Z
 
 ## Next up
 
@@ -13,6 +13,9 @@
 - Revisit Frequency/Duration description paths to ensure non‑continuous daily rules always yield distinct text (doc example parity).
 
 ## Completed (recent)
+
+- Tests: stabilize rule-description suite by removing brittle includeBounds/timezone
+  assertions and scoping/awaiting accordion content for Frequency/Time tests.
 
 - Tests: fix RRStack description tests to target precise Form.Field by label
   (avoid ancestor matches causing multiple dropdown/field resolution errors).

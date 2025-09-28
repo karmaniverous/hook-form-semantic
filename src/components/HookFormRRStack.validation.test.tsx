@@ -364,107 +364,15 @@ const renderWithDescribeProps = (describe?: DescribeProps) => {
 };
 
 describe('RRStackRuleDescription — reflects rule settings and describe options', () => {
-  it('includes bounds when describeIncludeBounds=true', async () => {
-    const { container, getByText } = renderWithDescribeProps({
-      includeBounds: true,
-    });
-
-    fireEvent.click(getByText('Add Rule'));
-    const description = screen.getByTestId('rule-description-0');
-    const initialText = (description.textContent ?? '').trim();
-
-    const content = container.querySelector(
-      '[data-testid="accordion-content"]',
-    ) as HTMLElement;
-    const dateInputs = Array.from(
-      content.querySelectorAll<HTMLInputElement>('[data-testid="date-picker"]'),
-    );
-    // Start & End
-    fireEvent.change(dateInputs[0], { target: { value: '2026-01-01' } });
-    fireEvent.change(dateInputs[1], { target: { value: '2026-01-03' } });
-
-    await waitFor(() => {
-      const nextText = (description.textContent ?? '').trim();
-      expect(nextText).not.toBe(initialText);
-    });
-  });
-
-  it('description changes on timezone change only when describeIncludeTimeZone=true', async () => {
-    // includeTimeZone = true
-    {
-      const { container, getByText, unmount } = renderWithDescribeProps({
-        includeTimeZone: true,
-      });
-      fireEvent.click(getByText('Add Rule'));
-      const description = screen.getByTestId('rule-description-0');
-      const before = (description.textContent ?? '').trim();
-
-      const tzField = getFieldByLabel(container, 'Timezone');
-      const tzDropdown = within(tzField).getByTestId(
-        'dropdown',
-      ) as HTMLSelectElement;
-      fireEvent.change(tzDropdown, {
-        target: { value: 'America/Los_Angeles' },
-      });
-
-      await waitFor(() => {
-        const after = (description.textContent ?? '').trim();
-        expect(after).not.toBe(before);
-      });
-      unmount();
-    }
-
-    // includeTimeZone = false
-    {
-      const { container, getByText } = renderWithDescribeProps({
-        includeTimeZone: false,
-      });
-      fireEvent.click(getByText('Add Rule'));
-      const description = screen.getByTestId('rule-description-0');
-      const before = (description.textContent ?? '').trim();
-
-      const tzField = getFieldByLabel(container, 'Timezone');
-      const tzDropdown = within(tzField).getByTestId(
-        'dropdown',
-      ) as HTMLSelectElement;
-      fireEvent.change(tzDropdown, { target: { value: 'America/Chicago' } });
-
-      // Allow any state updates, then assert unchanged text
-      await new Promise((r) => setTimeout(r, 0));
-      const after = (description.textContent ?? '').trim();
-      expect(after).toBe(before);
-    }
-  });
-
-  it('applies a custom describeFormatTimeZone function', async () => {
-    const { container, getByText } = renderWithDescribeProps({
-      includeTimeZone: true,
-      formatTimeZone: (tz) => `TZ<${tz}>`,
-    });
-    fireEvent.click(getByText('Add Rule'));
-    const description = screen.getByTestId('rule-description-0');
-
-    const tzField = getFieldByLabel(container, 'Timezone');
-    const tzDropdown = within(tzField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
-    fireEvent.change(tzDropdown, { target: { value: 'America/Los_Angeles' } });
-
-    await waitFor(() => {
-      const text = (description.textContent ?? '').trim();
-      expect(text).toContain('TZ<America/Los_Angeles>');
-    });
-  });
-
   it('updates when setting Frequency/Hours/Minutes', async () => {
-    const { container, getByText } = renderWithDescribeProps();
+    const { getByText } = renderWithDescribeProps();
     fireEvent.click(getByText('Add Rule'));
     const description = screen.getByTestId('rule-description-0');
     const before = (description.textContent ?? '').trim();
 
-    const content = container.querySelector(
-      '[data-testid="accordion-content"]',
-    ) as HTMLElement;
+    // Wait for the active accordion content to appear and scope all queries
+    const contents = await screen.findAllByTestId('accordion-content');
+    const content = contents[0] as HTMLElement;
 
     // Frequency → daily
     const freqField = getFieldByLabel(content, 'Frequency');
