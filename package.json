@@ -239,6 +239,7 @@
     "url": "git+https://github.com/karmaniverous/hook-form-semantic.git"
   },
   "scripts": {
+    "bench": "vitest bench --run",
     "build": "rimraf dist && tsx ./node_modules/rollup/dist/bin/rollup --config rollup.config.ts",
     "changelog": "auto-changelog",
     "dev": "vite --config playground/vite.config.ts",

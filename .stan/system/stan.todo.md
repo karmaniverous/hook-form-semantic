@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-09-28T17:05:00Z
+# When updated: 2025-09-28T21:50:00Z
 
 ## Next up
 
@@ -14,6 +14,7 @@
 
 ## Completed (recent)
 
+ - Benchmarks: add Vitest benchmarks for HookFormRRStack component interactions (render, add/move/delete rule, Effect/Frequency/Interval/Count changes, Hours/Minutes & Duration edits, Start/End dates, Timezone). Avoid direct RRStack library benchmarking; measure React component only.
  - RRStack timezone source: remove timezone prop from HookFormRRStack; dropdown/JSON is the source of truth.
  - Playground TS program: add playground/tsconfig.json so VS Code picks up vite-env.d.ts (fix TS2882); root typecheck still ignores playground.
 - Tooling/tests: silence ESLint no-unused-vars in picker mocks by adding scoped disable/enable around filtered prop destructuring; remove unused editorState/editorStyle params from WYSIWYG mock forwardRef signature. Lint now clean without altering runtime behavior; tests remain green.

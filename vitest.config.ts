@@ -2,6 +2,9 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
+    benchmark: {
+      include: ['**/*.bench.ts'],
+    },
     globals: true,
     environment: 'happy-dom',
     setupFiles: ['./vitest.setup.tsx'],
