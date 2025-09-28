@@ -216,6 +216,53 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
     cleanup();
   });
 
+  bench('set Frequency → span (Span rule)', () => {
+    const { container, getByText } = renderRRStack();
+    fireEvent.click(getByText('Add Rule'));
+    const content = container.querySelector(
+      '[data-testid="accordion-content"]',
+    ) as HTMLElement;
+
+    const freqField = getFieldByLabel(content, 'Frequency');
+    const freqDropdown = within(freqField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(freqDropdown, { target: { value: 'span' } });
+
+    cleanup();
+  });
+
+  bench('clear Interval & Count after setting', () => {
+    const { container, getByText } = renderRRStack();
+    fireEvent.click(getByText('Add Rule'));
+    const content = container.querySelector(
+      '[data-testid="accordion-content"]',
+    ) as HTMLElement;
+
+    // Ensure recurrence fields visible
+    const freqField = getFieldByLabel(content, 'Frequency');
+    const freqDropdown = within(freqField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(freqDropdown, { target: { value: 'daily' } });
+
+    const intervalField = getFieldByLabel(content, 'Interval');
+    const intervalInput = within(intervalField).getByRole('spinbutton', {
+      name: '',
+    }) as HTMLInputElement;
+    fireEvent.change(intervalInput, { target: { value: '3' } });
+    fireEvent.change(intervalInput, { target: { value: '' } });
+
+    const countField = getFieldByLabel(content, 'Count');
+    const countInput = within(countField).getByRole('spinbutton', {
+      name: '',
+    }) as HTMLInputElement;
+    fireEvent.change(countInput, { target: { value: '7' } });
+    fireEvent.change(countInput, { target: { value: '' } });
+
+    cleanup();
+  });
+
   bench('set Start & End dates', () => {
     const { container, getByText } = renderRRStack();
     fireEvent.click(getByText('Add Rule'));
@@ -230,6 +277,70 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
       fireEvent.change(dateInputs[0], { target: { value: '2025-01-01' } });
       fireEvent.change(dateInputs[1], { target: { value: '2025-01-03' } });
     }
+
+    cleanup();
+  });
+
+  bench('set only Start date', () => {
+    const { container, getByText } = renderRRStack();
+    fireEvent.click(getByText('Add Rule'));
+    const content = container.querySelector(
+      '[data-testid="accordion-content"]',
+    ) as HTMLElement;
+
+    const dateInputs = Array.from(
+      content.querySelectorAll<HTMLInputElement>('[data-testid="date-picker"]'),
+    );
+    if (dateInputs.length >= 1) {
+      fireEvent.change(dateInputs[0], { target: { value: '2025-02-01' } });
+    }
+    cleanup();
+  });
+
+  bench('set then clear Start & End dates', () => {
+    const { container, getByText } = renderRRStack();
+    fireEvent.click(getByText('Add Rule'));
+    const content = container.querySelector(
+      '[data-testid="accordion-content"]',
+    ) as HTMLElement;
+
+    const dateInputs = Array.from(
+      content.querySelectorAll<HTMLInputElement>('[data-testid="date-picker"]'),
+    );
+    if (dateInputs.length >= 2) {
+      fireEvent.change(dateInputs[0], { target: { value: '2025-03-01' } });
+      fireEvent.change(dateInputs[1], { target: { value: '2025-03-05' } });
+      // Clear both
+      fireEvent.change(dateInputs[0], { target: { value: '' } });
+      fireEvent.change(dateInputs[1], { target: { value: '' } });
+    }
+    cleanup();
+  });
+
+  bench('clear Hours & Minutes after setting', () => {
+    const { container, getByText } = renderRRStack();
+    fireEvent.click(getByText('Add Rule'));
+    const content = container.querySelector(
+      '[data-testid="accordion-content"]',
+    ) as HTMLElement;
+
+    const freqField = getFieldByLabel(content, 'Frequency');
+    const freqDropdown = within(freqField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(freqDropdown, { target: { value: 'daily' } });
+
+    const hoursInput = within(content).getByPlaceholderText(
+      '9, 13, 17',
+    ) as HTMLInputElement;
+    fireEvent.change(hoursInput, { target: { value: '8, 12, 16' } });
+    fireEvent.change(hoursInput, { target: { value: '' } });
+
+    const minutesInput = within(content).getByPlaceholderText(
+      '0, 30',
+    ) as HTMLInputElement;
+    fireEvent.change(minutesInput, { target: { value: '15, 45' } });
+    fireEvent.change(minutesInput, { target: { value: '' } });
 
     cleanup();
   });
