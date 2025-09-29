@@ -10,22 +10,13 @@
  */
 {
   "compilerOptions": {
-    // [req-5] Use ES2020 for better consumer compatibility while maintaining modern features
     "target": "ES2020",
     "lib": ["ES2020", "ES2021.String", "DOM", "DOM.Iterable"],
-
-    // [req-1] Do not type-check dependency .d.ts files (incl. node_modules).
     "skipLibCheck": true,
-
-    // [req-5] Use Node resolution for better consumer compatibility
     "module": "ESNext",
     "moduleResolution": "bundler",
-
-    // [req-5] Enable interop flags for better ESModule compatibility
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-
-    // Existing settings retained to satisfy [req-3] and [req-4].
     "allowJs": true,
     "checkJs": true,
     "forceConsistentCasingInFileNames": true,
@@ -35,11 +26,9 @@
     "resolveJsonModule": true,
     "strict": true,
     "tsBuildInfoFile": "./.tsbuildinfo",
-    // [req-4] Test environment globals.
     "types": ["node", "vitest/globals", "@testing-library/jest-dom"],
-    // React JSX runtime
     "jsx": "react-jsx"
   },
   "exclude": ["coverage", "dist", "docs", "node_modules", "playground"],
-  "include": ["src/**/*", "lib/**/*", "rollup.config.ts"]
+  "include": ["src/**/*", "rollup.config.ts", "src/utils"]
 }

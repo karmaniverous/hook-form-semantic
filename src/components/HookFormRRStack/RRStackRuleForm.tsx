@@ -12,11 +12,11 @@ import {
   Segment,
 } from 'semantic-ui-react';
 
-import { checkIfDesktop } from '../util/checkIfDesktop';
-import { parseOptions } from '../util/parseOptions';
-import { syncOptions } from '../util/syncOptions';
-import { HookFormDatePicker } from './HookFormDatePicker';
+import { HookFormDatePicker } from '../HookFormDatePicker/HookFormDatePicker';
+import { checkIfDesktop } from './checkIfDesktop';
 import { InfoLabel } from './InfoLabel';
+import { parseOptions } from './parseOptions';
+import { syncOptions } from './syncOptions';
 
 const FREQUENCY_OPTIONS = [
   { key: 'span', text: 'Span', value: 'span' },

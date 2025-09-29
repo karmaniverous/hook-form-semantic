@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { useForm } from 'react-hook-form';
 import { vi } from 'vitest';
 
-import { HookFormJsonEditor } from './HookFormJsonEditor';
+import { HookFormJsonEditor } from '../HookFormJsonEditor';
 
 type FormData = { cfg: object | string | undefined };
 let api: ReturnType<typeof useForm<FormData>>;

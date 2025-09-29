@@ -11,10 +11,7 @@ import {
 } from 'react-hook-form';
 import { Form, type FormFieldProps } from 'semantic-ui-react';
 
-import {
-  deprefix,
-  type PrefixedPartial,
-} from '../../lib/utils/PrefixedPartial';
+import { deprefix, type PrefixedPartial } from '../../types/PrefixedPartial';
 
 export interface HookFormFieldProps<T extends FieldValues, C>
   extends Omit<

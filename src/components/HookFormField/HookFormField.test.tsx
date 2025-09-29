@@ -6,7 +6,7 @@ import {
   useForm,
 } from 'react-hook-form';
 
-import { HookFormField } from './HookFormField';
+import { HookFormField } from '../HookFormField';
 
 type FormData = { name: string; subscribed: boolean };
 

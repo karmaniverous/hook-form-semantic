@@ -22,8 +22,8 @@ import {
   Label,
 } from 'semantic-ui-react';
 
-import type { PrefixedPartial } from '../../lib/utils/PrefixedPartial';
-import { deprefix } from '../../lib/utils/PrefixedPartial';
+import type { PrefixedPartial } from '../../types/PrefixedPartial';
+import { deprefix } from '../../types/PrefixedPartial';
 import { isPhoneValid } from './isPhoneValid';
 
 export interface HookFormPhoneProps<T extends FieldValues>

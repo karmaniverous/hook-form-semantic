@@ -26,16 +26,16 @@ import {
   Segment,
 } from 'semantic-ui-react';
 
-import { concatClassNames } from '../../lib/utils/concatClassNames';
+import type { Logger } from '../../types/Logger';
 import {
   deprefix,
   type PrefixedPartial,
   reprefix,
-} from '../../lib/utils/PrefixedPartial';
-import type { Logger } from '../types/Logger';
-import { timezoneOptions } from '../util/timezoneOptions';
+} from '../../types/PrefixedPartial';
+import { concatClassNames } from '../../utils/concatClassNames';
 import { HookFormRRStackRule } from './HookFormRRStackRule';
 import type { RRStackRuleDescriptionPropsBase } from './RRStackRuleDescription';
+import { timezoneOptions } from './timezoneOptions';
 
 export interface HookFormRRStackProps<T extends FieldValues>
   extends Omit<

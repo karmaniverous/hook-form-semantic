@@ -14,11 +14,8 @@ import {
   type StrictFormFieldProps,
 } from 'semantic-ui-react';
 
-import { concatClassNames } from '../../lib/utils/concatClassNames';
-import {
-  deprefix,
-  type PrefixedPartial,
-} from '../../lib/utils/PrefixedPartial';
+import { deprefix, type PrefixedPartial } from '../../types/PrefixedPartial';
+import { concatClassNames } from '../../utils/concatClassNames';
 
 export interface HookFormCheckboxProps<T extends FieldValues>
   extends Omit<

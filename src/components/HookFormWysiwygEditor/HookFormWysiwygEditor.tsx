@@ -9,10 +9,7 @@ import {
 } from 'react-hook-form';
 import { Form, type FormFieldProps, Label } from 'semantic-ui-react';
 
-import {
-  deprefix,
-  type PrefixedPartial,
-} from '../../lib/utils/PrefixedPartial';
+import { deprefix, type PrefixedPartial } from '../../types/PrefixedPartial';
 import { type WysiwygEditorProps } from './WysiwygEditor';
 
 const WysiwygEditor = React.lazy(() =>

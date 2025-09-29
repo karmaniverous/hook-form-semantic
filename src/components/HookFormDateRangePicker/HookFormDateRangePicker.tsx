@@ -25,12 +25,9 @@ import {
   type FormFieldProps,
 } from 'semantic-ui-react';
 
-import { concatClassNames } from '../../lib/utils/concatClassNames';
-import { offsetTruncatedDate } from '../../lib/utils/offsetTruncatedDate';
-import {
-  deprefix,
-  type PrefixedPartial,
-} from '../../lib/utils/PrefixedPartial';
+import { deprefix, type PrefixedPartial } from '../../types/PrefixedPartial';
+import { concatClassNames } from '../../utils/concatClassNames';
+import { offsetTruncatedDate } from '../../utils/offsetTruncatedDate';
 
 export type DateRange = [Date | null, Date | null];
 export const extractTimestamps = (dateRange: DateRange) =>
