@@ -1,6 +1,8 @@
 import type { DescribeOptions } from '@karmaniverous/rrstack';
-import type { UseRRStackOutput } from '@karmaniverous/rrstack/react';
-import { useRRStackSelector } from '@karmaniverous/rrstack/react';
+import {
+  type UseRRStackOutput,
+  useRRStackSelector,
+} from '@karmaniverous/rrstack/react';
 import type { ComponentPropsWithoutRef, ElementType } from 'react';
 import { useMemo } from 'react';
 

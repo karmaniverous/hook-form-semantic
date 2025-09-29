@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-09-28T00:00:00Z
+# When updated: 2025-09-29T00:00:00Z
 
 ## Next up
 
@@ -26,6 +26,9 @@
 
 ## Completed (recent)
 
+- Build tooling: add "@/” path alias → "src/" across Rollup (build),
+  Vitest (tests), Vite playground (dev), and TypeScript (paths). No
+  runtime behavior change; enables cleaner imports.
 - Tests/mocks: enable Dropdown multi-select in semantic-ui-react double and add robust fallback for tests using target.value, so Months/Weekdays/Position selections propagate correctly to rrstack rule options.
 
 - Tests: exercise rrstack engine descriptions via RRStackRuleDescription for:

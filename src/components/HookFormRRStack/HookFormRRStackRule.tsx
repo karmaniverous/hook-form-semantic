@@ -3,7 +3,8 @@ import { useCallback, useMemo } from 'react';
 import type { AccordionTitleProps } from 'semantic-ui-react';
 import { Accordion, Button, Icon, Label, Segment } from 'semantic-ui-react';
 
-import { deprefix, type PrefixedPartial } from '../../types/PrefixedPartial';
+import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
+
 import type { RRStackRuleDescriptionPropsBase } from './RRStackRuleDescription';
 import { RRStackRuleDescription } from './RRStackRuleDescription';
 import { RRStackRuleForm } from './RRStackRuleForm';

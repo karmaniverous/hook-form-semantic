@@ -12,7 +12,8 @@ import {
   Segment,
 } from 'semantic-ui-react';
 
-import { HookFormDatePicker } from '../HookFormDatePicker/HookFormDatePicker';
+import { HookFormDatePicker } from '@/components/HookFormDatePicker';
+
 import { checkIfDesktop } from './checkIfDesktop';
 import { InfoLabel } from './InfoLabel';
 import { parseOptions } from './parseOptions';

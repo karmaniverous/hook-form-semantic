@@ -18,15 +18,15 @@ import {
   Segment,
 } from 'semantic-ui-react';
 
-import { HookFormDatePicker } from '../../src/components/HookFormDatePicker';
-import { HookFormDateRangePicker } from '../../src/components/HookFormDateRangePicker';
-import { HookFormField } from '../../src/components/HookFormField';
-import { HookFormJsonEditor } from '../../src/components/HookFormJsonEditor';
-import { HookFormNumeric } from '../../src/components/HookFormNumeric';
-import { HookFormPhone } from '../../src/components/HookFormPhone';
-import { HookFormRRStack } from '../../src/components/HookFormRRStack';
-import { HookFormSort } from '../../src/components/HookFormSort';
-import { HookFormWysiwygEditor } from '../../src/components/HookFormWysiwygEditor';
+import { HookFormDatePicker } from '@/components/HookFormDatePicker';
+import { HookFormDateRangePicker } from '@/components/HookFormDateRangePicker';
+import { HookFormField } from '@/components/HookFormField';
+import { HookFormJsonEditor } from '@/components/HookFormJsonEditor';
+import { HookFormNumeric } from '@/components/HookFormNumeric';
+import { HookFormPhone } from '@/components/HookFormPhone';
+import { HookFormRRStack } from '@/components/HookFormRRStack';
+import { HookFormSort } from '@/components/HookFormSort';
+import { HookFormWysiwygEditor } from '@/components/HookFormWysiwygEditor';
 
 interface FormData {
   firstName: string;

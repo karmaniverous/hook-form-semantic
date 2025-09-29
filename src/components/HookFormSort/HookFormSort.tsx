@@ -17,7 +17,7 @@ import {
   type StrictDropdownProps,
 } from 'semantic-ui-react';
 
-import { deprefix, type PrefixedPartial } from '../../types/PrefixedPartial';
+import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
 
 export type Sort<T extends string | undefined> = [
   NonNullable<T> | 'auto',

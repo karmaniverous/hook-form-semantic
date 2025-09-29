@@ -13,7 +13,8 @@ import type {
   OnChangeStatus,
 } from 'vanilla-jsoneditor';
 
-import { deprefix, type PrefixedPartial } from '../../types/PrefixedPartial';
+import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
+
 import JsonEditor from './JsonEditor';
 
 export interface HookFormJsonEditorProps<T extends FieldValues>

@@ -26,13 +26,14 @@ import {
   Segment,
 } from 'semantic-ui-react';
 
-import type { Logger } from '../../types/Logger';
+import type { Logger } from '@/types/Logger';
 import {
   deprefix,
   type PrefixedPartial,
   reprefix,
-} from '../../types/PrefixedPartial';
-import { concatClassNames } from '../../utils/concatClassNames';
+} from '@/types/PrefixedPartial';
+import { concatClassNames } from '@/utils/concatClassNames';
+
 import { HookFormRRStackRule } from './HookFormRRStackRule';
 import type { RRStackRuleDescriptionPropsBase } from './RRStackRuleDescription';
 import { timezoneOptions } from './timezoneOptions';

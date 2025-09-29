@@ -14,7 +14,7 @@ import {
   type StrictMenuProps,
 } from 'semantic-ui-react';
 
-import { deprefix, type PrefixedPartial } from '../../types/PrefixedPartial';
+import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
 
 export interface HookFormMenuProps<T extends FieldValues>
   extends Omit<

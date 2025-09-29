@@ -24,6 +24,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
     "strict": true,
     "tsBuildInfoFile": "./.tsbuildinfo",
     "types": ["node", "vitest/globals", "@testing-library/jest-dom"],

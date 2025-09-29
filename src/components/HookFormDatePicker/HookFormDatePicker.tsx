@@ -12,8 +12,8 @@ import {
 } from 'react-hook-form';
 import { Checkbox, Form, type FormFieldProps } from 'semantic-ui-react';
 
-import { deprefix, type PrefixedPartial } from '../../types/PrefixedPartial';
-import { concatClassNames } from '../../utils/concatClassNames';
+import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
+import { concatClassNames } from '@/utils/concatClassNames';
 
 export interface HookFormDatePickerProps<T extends FieldValues>
   extends Omit<

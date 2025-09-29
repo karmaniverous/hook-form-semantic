@@ -10,7 +10,7 @@ import {
 import { NumericFormat, type NumericFormatProps } from 'react-number-format';
 import { Form, type FormFieldProps, Input, Label } from 'semantic-ui-react';
 
-import { deprefix, type PrefixedPartial } from '../../types/PrefixedPartial';
+import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
 
 export interface HookFormNumericProps<T extends FieldValues>
   extends Omit<

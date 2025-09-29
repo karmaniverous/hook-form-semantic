@@ -45,7 +45,9 @@ const commonPlugins = [
   }),
 ];
 
-const commonAliases: Array<{ find: string; replacement: string }> = [];
+const commonAliases: Array<{ find: string; replacement: string }> = [
+  { find: '@/', replacement: 'src/' },
+];
 
 const commonInputOptions = {
   input: 'src/index.ts',
