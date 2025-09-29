@@ -5,12 +5,13 @@ import {
   type UseRRStackProps,
 } from '@karmaniverous/rrstack/react';
 import { omit } from 'radash';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { ControllerProps } from 'react-hook-form';
 import {
-  type ControllerProps,
   type FieldValues,
   useController,
   type UseControllerProps,
+  useWatch,
 } from 'react-hook-form';
 import {
   Accordion,
@@ -31,6 +32,7 @@ import {
   type PrefixedPartial,
   reprefix,
 } from '../../lib/utils/PrefixedPartial';
+import type { Logger } from '../types/Logger';
 import { timezoneOptions } from '../util/timezoneOptions';
 import { HookFormRRStackRule } from './HookFormRRStackRule';
 import type { RRStackRuleDescriptionPropsBase } from './RRStackRuleDescription';
@@ -59,10 +61,12 @@ export interface HookFormRRStackProps<T extends FieldValues>
     >,
     PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'>,
     PrefixedPartial<Omit<UseRRStackProps, 'json' | 'timezone'>, 'rrstack'> {
+  logger?: Logger;
   timestampFormat?: string;
 }
 
 export const HookFormRRStack = <T extends FieldValues>({
+  logger,
   timestampFormat = 'yyyy-MM-dd HH:mm:ss',
   ...props
 }: HookFormRRStackProps<T>) => {
@@ -82,6 +86,19 @@ export const HookFormRRStack = <T extends FieldValues>({
     field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
     fieldState: { error },
   } = useController(hookProps as UseControllerProps);
+
+  const watchedValue = useWatch({
+    control: hookProps.control,
+    name: hookProps.name,
+  });
+
+  useEffect(() => {
+    (logger === true
+      ? console.log
+      : typeof logger === 'function'
+        ? logger
+        : undefined)?.('HookFormRRStack form data', watchedValue);
+  }, [watchedValue]);
 
   const handleChange = useCallback(
     (stack: UseRRStackOutput['rrstack']) => {

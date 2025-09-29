@@ -263,6 +263,7 @@ export default function App() {
           hookName="rrstack"
           hookControl={control}
           label="Schedule Rules"
+          logger={console.log}
           describeIncludeBounds={true}
         />
 
