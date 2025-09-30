@@ -20,6 +20,37 @@ export function rrstack2rhf(engine: RRStackOptions): UISchedule {
           const starts =
             typeof o.starts === 'number' ? new Date(o.starts) : null;
           const ends = typeof o.ends === 'number' ? new Date(o.ends) : null;
+
+          // Normalize engine byweekday to UI number[]
+          const byweekday: number[] | undefined = Array.isArray(o.byweekday)
+            ? (o.byweekday as unknown[])
+                .map((v) => {
+                  if (typeof v === 'number') return v;
+                  if (typeof v === 'string') {
+                    const m: Record<string, number> = {
+                      mo: 0,
+                      tu: 1,
+                      we: 2,
+                      th: 3,
+                      fr: 4,
+                      sa: 5,
+                      su: 6,
+                    };
+                    const k = v.toLowerCase().slice(0, 2);
+                    return m[k];
+                  }
+                  if (
+                    v &&
+                    typeof v === 'object' &&
+                    'weekday' in (v as Record<string, unknown>)
+                  ) {
+                    const w = (v as Record<string, unknown>).weekday;
+                    if (typeof w === 'number') return w;
+                  }
+                  return undefined;
+                })
+                .filter((n): n is number => typeof n === 'number')
+            : undefined;
           return {
             label: r.label ?? undefined,
             effect: r.effect ?? 'active',
@@ -31,7 +62,7 @@ export function rrstack2rhf(engine: RRStackOptions): UISchedule {
               ends,
               // ensure arrays or undefined for array-like options
               bymonth: Array.isArray(o.bymonth) ? o.bymonth : undefined,
-              byweekday: Array.isArray(o.byweekday) ? o.byweekday : undefined,
+              byweekday,
               bysetpos: Array.isArray(o.bysetpos) ? o.bysetpos : undefined,
               // sanitize count: never null on UI shape
               count: typeof o.count === 'number' ? o.count : undefined,

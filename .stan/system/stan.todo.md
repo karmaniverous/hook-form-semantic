@@ -26,6 +26,14 @@
 
 ## Completed (recent)
 
+- Tests/mocks: render Form.Field label prop in semantic-ui-react double; keep unknown props off the wrapper. Restores label-driven queries without DOM warnings.
+
+- HookFormField: default to [] for multiple Dropdowns when RHF value is undefined; fixes React warning and multi-select tests with control={Dropdown}.
+
+- rrstack2rhf: normalize engine byweekday to UI number[]; keep arrays-or-undefined for bymonth/bysetpos; sanitize count. Fixes TS2322 and aligns UI types.
+
+- Tests: fix entry test to assert rendered label element (no attribute passthrough). Scope Starts/Ends assertions to value-only text (exclude labels). Drop brittle “Test Rule” display assertions in RRStackRuleForm timestamp tests (label originates from RHF defaults).
+
 - RRStackRuleForm (UI hygiene): remove redundant Form.Field wrappers and pass labels directly to HookForm\* components. Switch Dropdown usage to control={Dropdown} with native Semantic props (selection, multiple, search, compact, options). No behavioral changes; layout preserved.
 
 - Tests/mocks: update semantic-ui-react Form.Field test double to honor the “control” prop and forward input/dropdown props to the rendered child; stop leaking unknown props to the wrapper div. This unblocks HookFormField control={Input|Dropdown} interactions in tests and silences DOM warnings.

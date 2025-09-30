@@ -18,9 +18,9 @@ function TestComponent() {
 describe('library entry (src/index.ts)', () => {
   it('re-exports HookFormField', () => {
     render(<TestComponent />);
-    expect(screen.getByTestId('form-field')).toHaveAttribute(
-      'label',
-      'Test Field',
-    );
+    const field = screen.getByTestId('form-field');
+    const lbl = field.querySelector('label');
+    expect(lbl).toBeTruthy();
+    expect(lbl?.textContent?.trim()).toBe('Test Field');
   });
 });

@@ -61,15 +61,18 @@ export const HookFormField = <T extends FieldValues, C>(
 
   const hookField = useMemo(() => {
     const { value, ...rest } = hookFieldProps;
+    // If this field is a multi-select (e.g., Dropdown multiple), default empty to []
+    const isMultiple =
+      (fieldProps as unknown as Record<string, unknown>)?.multiple === true;
 
     return {
       onChange: handleChange,
       ...(typeof value === 'boolean'
         ? { checked: value }
-        : { value: value ?? '' }),
+        : { value: value ?? (isMultiple ? [] : '') }),
       ...omit(rest, ['ref']),
     };
-  }, [handleChange, hookFieldProps]);
+  }, [handleChange, hookFieldProps, fieldProps]);
 
   return (
     <Form.Field

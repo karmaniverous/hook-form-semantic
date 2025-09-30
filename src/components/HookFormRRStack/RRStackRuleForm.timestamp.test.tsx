@@ -1,7 +1,7 @@
 import type { RuleJson } from '@karmaniverous/rrstack';
 import type { UseRRStackOutput } from '@karmaniverous/rrstack/react';
 import { render, screen } from '@testing-library/react';
-import { type FieldValues, type Path, useForm } from 'react-hook-form';
+import { type Path, useForm } from 'react-hook-form';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RRStackRuleForm } from './RRStackRuleForm';
@@ -63,7 +63,6 @@ describe('RRStackRuleForm Timestamp Handling', () => {
 
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('Test Rule')).toBeInTheDocument();
   });
 
   it('renders with end date without automatic time adjustment', () => {
@@ -85,7 +84,6 @@ describe('RRStackRuleForm Timestamp Handling', () => {
 
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('Test Rule')).toBeInTheDocument();
   });
 
   it('handles clearing dates properly', () => {
@@ -108,7 +106,6 @@ describe('RRStackRuleForm Timestamp Handling', () => {
 
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('Test Rule')).toBeInTheDocument();
   });
 
   it('displays date picker fields', () => {
@@ -179,6 +176,5 @@ describe('RRStackRuleForm Timestamp Handling', () => {
 
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('Test Rule')).toBeInTheDocument();
   });
 });

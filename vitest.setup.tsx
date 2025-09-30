@@ -16,10 +16,17 @@ vi.mock('semantic-ui-react', () => {
     React.HTMLAttributes<HTMLDivElement> & {
       error?: string | boolean;
       control?: React.ElementType;
+      label?: React.ReactNode;
     }
   >;
 
-  const Field: React.FC<FieldProps> = ({ children, error, control, ...p }) => {
+  const Field: React.FC<FieldProps> = ({
+    children,
+    error,
+    control,
+    label,
+    ...p
+  }) => {
     // If a control is provided, render it with the received props.
     const child =
       control != null
@@ -32,7 +39,13 @@ vi.mock('semantic-ui-react', () => {
       'data-testid': 'form-field',
       'data-error': error ? String(error) : '',
     };
-    return React.createElement('div', divProps, child);
+    const renderedLabel =
+      label == null
+        ? null
+        : typeof label === 'string'
+          ? React.createElement('label', undefined, label)
+          : (label as React.ReactNode);
+    return React.createElement('div', divProps, [renderedLabel, child]);
   };
 
   const FormGroup: React.FC<

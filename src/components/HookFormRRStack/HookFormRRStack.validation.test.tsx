@@ -235,8 +235,20 @@ describe('HookFormRRStack Validation', () => {
     const endsField = endsLabel.parentElement as HTMLElement;
     expect(startsField).toBeTruthy();
     expect(endsField).toBeTruthy();
-    expect(startsField).toHaveTextContent('Not Set');
-    expect(endsField).toHaveTextContent('Not Set');
+
+    // Extract value-only text (exclude labels)
+    const getFieldValueText = (field: HTMLElement) => {
+      const textNodes = Array.from(field.childNodes).filter(
+        (n) => n.nodeType === Node.TEXT_NODE,
+      );
+      return textNodes
+        .map((n) => (n.textContent ?? '').trim())
+        .join(' ')
+        .trim();
+    };
+
+    expect(getFieldValueText(startsField)).toBe('Not Set');
+    expect(getFieldValueText(endsField)).toBe('Not Set');
 
     // Add a rule
     fireEvent.click(screen.getByText('Add Rule'));
@@ -248,27 +260,27 @@ describe('HookFormRRStack Validation', () => {
     // Set start date -> Starts should update from "Not Set"
     fireEvent.change(inputs[0], { target: { value: '2025-01-01' } });
     await waitFor(() => {
-      expect(startsField).not.toHaveTextContent('Not Set');
+      expect(getFieldValueText(startsField)).not.toBe('Not Set');
     });
 
     // Set end date -> Ends should update from "Not Set"
     fireEvent.change(inputs[1], { target: { value: '2025-01-02' } });
     await waitFor(() => {
-      expect(endsField).not.toHaveTextContent('Not Set');
+      expect(getFieldValueText(endsField)).not.toBe('Not Set');
     });
 
     // Change start date again -> Starts should change text
-    const prevStarts = startsField.textContent;
+    const prevStarts = getFieldValueText(startsField);
     fireEvent.change(inputs[0], { target: { value: '2025-01-03' } });
     await waitFor(() => {
-      expect(startsField.textContent).not.toBe(prevStarts);
+      expect(getFieldValueText(startsField)).not.toBe(prevStarts);
     });
 
     // Change end date again -> Ends should change text
-    const prevEnds = endsField.textContent;
+    const prevEnds = getFieldValueText(endsField);
     fireEvent.change(inputs[1], { target: { value: '2025-01-04' } });
     await waitFor(() => {
-      expect(endsField.textContent).not.toBe(prevEnds);
+      expect(getFieldValueText(endsField)).not.toBe(prevEnds);
     });
   });
 
@@ -383,8 +395,8 @@ describe('HookFormRRStack Validation', () => {
     // Toggle Effect from Active to Blackout (guarantees description change)
     const effectLabel = within(content).getByText('Effect');
     const effectField =
-      effectLabel.closest('[data-testid="form-field"]') ??
-      effectLabel.parentElement;
+      (effectLabel.closest('[data-testid="form-field"]') as HTMLElement) ??
+      (effectLabel.parentElement as HTMLElement);
     expect(effectField).toBeTruthy();
     const effectDropdown = effectField!.querySelector(
       '[data-testid="dropdown"]',

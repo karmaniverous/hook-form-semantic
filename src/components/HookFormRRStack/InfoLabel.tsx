@@ -14,7 +14,7 @@ export const InfoLabel: React.FC<InfoLabelProps> = ({
   icon = 'info circle',
   style,
 }) => (
-  <label
+  <span
     style={{
       display: 'inline-flex',
       alignItems: 'center',
@@ -40,5 +40,5 @@ export const InfoLabel: React.FC<InfoLabelProps> = ({
       size="small"
       inverted
     />
-  </label>
+  </span>
 );
