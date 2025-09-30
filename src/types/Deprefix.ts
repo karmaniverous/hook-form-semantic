@@ -1,12 +1,16 @@
+import type { FieldValues } from 'react-hook-form';
+
+import type { HookFormProps } from './HookFormProps';
 import type { PickPrefix } from './PickPrefix';
 import type { PickRest } from './PickRest';
 
 export type Deprefix<
-  Props extends Record<string, unknown>,
+  T extends FieldValues,
+  Props extends HookFormProps<T>,
   Prefix extends string,
-  RestKey extends string,
 > = {
-  [P in Prefix]: PickPrefix<Props, P>;
-} & {
-  [R in RestKey]: PickRest<Props, Prefix>;
+  deprefixed: {
+    [P in Prefix]: PickPrefix<Props, P>;
+  };
+  rest: PickRest<Props, Prefix>;
 };

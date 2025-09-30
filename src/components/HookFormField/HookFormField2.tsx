@@ -12,7 +12,7 @@ import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 
 export interface HookFormFieldProps<T extends FieldValues, C>
-  extends HookFormProps<T, 'hook'>,
+  extends HookFormProps<T>,
     Omit<
       FormFieldProps,
       | 'children'
@@ -38,13 +38,11 @@ export const HookFormField = <T extends FieldValues, C>(
   props: HookFormFieldProps<T, C>,
 ) => {
   const {
-    controllerState: {
+    controller: {
       field: { onChange: hookFieldOnChange, ...hookFieldProps },
       fieldState,
     },
-    deprefixedProps: {
-      rest: { children, onChange, ...fieldProps },
-    },
+    rest: { children, onChange, ...fieldProps },
   } = useHookForm({ props });
 
   const handleChange = useCallback(
