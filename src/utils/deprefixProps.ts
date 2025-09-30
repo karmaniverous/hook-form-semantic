@@ -2,46 +2,38 @@ import type { FieldValues } from 'react-hook-form';
 
 import type { Deprefix } from '@/types/Deprefix';
 import type { HookFormProps } from '@/types/HookFormProps';
-import type { PickPrefix } from '@/types/PickPrefix';
-import type { PickRest } from '@/types/PickRest';
 
 export function deprefixProps<
   T extends FieldValues,
   Props extends HookFormProps<T>,
-  const Prefixes extends readonly string[],
->(props: Props, prefixes: Prefixes) {
-  type Prefix = 'hook' | Prefixes[number];
+  const Prefix extends string,
+>(props: Props, prefixes: readonly Prefix[]) {
+  type PrefixWithHook = 'hook' | Prefix;
 
-  const allPrefixes = ['hook', ...prefixes] as const;
+  const prefixesWithHook = ['hook', ...prefixes] as const;
 
   const result = {
-    deprefixed: Object.fromEntries(allPrefixes.map((k) => [k, {}])),
+    deprefixed: Object.fromEntries(prefixesWithHook.map((k) => [k, {}])),
     rest: {},
-  } as Deprefix<T, Props, Prefix>;
+  } as Deprefix<T, Props, PrefixWithHook>;
 
   for (const key of Object.keys(props)) {
-    const match: Prefix | undefined = allPrefixes.find((p) =>
+    const match: PrefixWithHook | undefined = prefixesWithHook.find((p) =>
       key.startsWith(p),
     );
 
     if (match) {
       const stripped = key.slice(match.length);
 
-      const deprefixedKey = (
-        stripped ? stripped[0].toLowerCase() + stripped.slice(1) : stripped
-      ) as keyof PickPrefix<Props, Prefix>;
+      const deprefixedKey = stripped
+        ? stripped[0].toLowerCase() + stripped.slice(1)
+        : stripped;
 
-      result.deprefixed[match][deprefixedKey] = props[
-        key as keyof Props
-      ] as unknown as PickPrefix<Props, Prefix>[keyof PickPrefix<
-        Props,
-        Prefix
-      >];
-    } else {
-      result.rest[key as keyof PickRest<Props, Prefix>] = props[
-        key as keyof Props
-      ] as unknown as PickRest<Props, Prefix>[keyof PickRest<Props, Prefix>];
-    }
+      // @ts-expect-error Deprefixing logic
+      result.deprefixed[match][deprefixedKey] = props[key];
+    } else
+      // @ts-expect-error Rest logic
+      result.rest[key] = props[key];
   }
 
   return result;

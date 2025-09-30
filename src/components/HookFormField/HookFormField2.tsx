@@ -43,7 +43,7 @@ export const HookFormField = <T extends FieldValues, C>(
       fieldState,
     },
     rest: { children, onChange, ...fieldProps },
-  } = useHookForm({ props });
+  } = useHookForm<T, typeof props>({ props });
 
   const handleChange = useCallback(
     (event: React.SyntheticEvent<HTMLElement>, data: C) => {

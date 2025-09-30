@@ -6,23 +6,23 @@ import { deprefixProps } from '@/utils/deprefixProps';
 
 export interface UseHookFormProps<
   T extends FieldValues,
-  Props extends HookFormProps<T>,
-  Prefixes extends readonly string[] = [],
+  Props extends HookFormProps<T> = HookFormProps<T>,
+  Prefix extends string = never,
 > {
   props: Props;
-  prefixes: Prefixes;
+  prefixes?: readonly Prefix[];
 }
 
 export const useHookForm = <
   T extends FieldValues,
-  Props extends HookFormProps<T>,
-  Prefixes extends readonly string[] = [],
+  Props extends HookFormProps<T> = HookFormProps<T>,
+  Prefix extends string = never,
 >({
   props,
-  prefixes,
-}: UseHookFormProps<T, Props, Prefixes>) => {
+  prefixes = [] as const,
+}: UseHookFormProps<T, Props, Prefix>) => {
   const { deprefixed, rest } = useMemo(() => {
-    return deprefixProps<T, Props, Prefixes>(props, prefixes);
+    return deprefixProps<T, Props, Prefix>(props, prefixes);
   }, [prefixes, props]);
 
   const controller = useController(deprefixed.hook);

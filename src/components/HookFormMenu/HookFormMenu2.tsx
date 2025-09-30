@@ -32,9 +32,9 @@ export interface HookFormMenu2Props<T extends FieldValues>
       'menu'
     > {}
 
-export const HookFormMenu2 = <T extends FieldValues>({
-  ...props
-}: HookFormMenu2Props<T>) => {
+export const HookFormMenu2 = <T extends FieldValues>(
+  props: HookFormMenu2Props<T>,
+) => {
   const {
     controller: {
       field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
@@ -42,7 +42,7 @@ export const HookFormMenu2 = <T extends FieldValues>({
     },
     deprefixed: { menu: menuProps },
     rest: { label, ...fieldProps },
-  } = useHookForm<T, typeof props, ['menu']>({
+  } = useHookForm<T, typeof props, 'menu'>({
     props,
     prefixes: ['menu'] as const,
   });
