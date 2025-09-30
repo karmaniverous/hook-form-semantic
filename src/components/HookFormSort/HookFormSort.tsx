@@ -1,11 +1,6 @@
 import { omit } from 'radash';
-import { useCallback, useMemo } from 'react';
-import {
-  type ControllerProps,
-  type FieldValues,
-  useController,
-  type UseControllerProps,
-} from 'react-hook-form';
+import { useCallback } from 'react';
+import { type FieldValues } from 'react-hook-form';
 import {
   Button,
   Dropdown,
@@ -17,7 +12,9 @@ import {
   type StrictDropdownProps,
 } from 'semantic-ui-react';
 
-import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
+import { useHookForm } from '@/hooks/useHookForm';
+import type { HookFormProps } from '@/types/HookFormProps';
+import type { PrefixProps } from '@/types/PrefixProps';
 
 export type Sort<T extends string | undefined> = [
   NonNullable<T> | 'auto',
@@ -25,7 +22,8 @@ export type Sort<T extends string | undefined> = [
 ];
 
 export interface HookFormSortProps<T extends FieldValues>
-  extends Omit<
+  extends HookFormProps<T>,
+    Omit<
       FormFieldProps,
       | 'children'
       | 'checked'
@@ -37,18 +35,17 @@ export interface HookFormSortProps<T extends FieldValues>
       | 'ref'
       | 'value'
     >,
-    PrefixedPartial<
+    PrefixProps<
       Omit<StrictButtonProps, 'children' | 'icon' | 'onClick'>,
       'button'
     >,
-    PrefixedPartial<
+    PrefixProps<
       Omit<
         StrictDropdownProps,
         'button' | 'children' | 'selection' | 'style' | 'value'
       >,
       'dropdown'
-    >,
-    PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'> {
+    > {
   ascIcon?: SemanticICONS;
   descIcon?: SemanticICONS;
   sortOptions?: StrictDropdownProps['options'];
@@ -63,16 +60,13 @@ export const HookFormSort = <T extends FieldValues>({
   ...props
 }: HookFormSortProps<T>) => {
   const {
-    button: buttonProps,
-    dropdown: dropdownProps,
-    hook: hookProps,
+    controller: {
+      field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
+      fieldState,
+    },
+    deprefixed: { button: buttonProps, dropdown: dropdownProps },
     rest: { label, ...fieldProps },
-  } = useMemo(() => deprefix(props, ['button', 'dropdown', 'hook']), [props]);
-
-  const {
-    field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
-    fieldState,
-  } = useController(hookProps as UseControllerProps);
+  } = useHookForm({ props, prefixes: ['button', 'dropdown'] as const });
 
   const handleDropdownChange = useCallback(
     (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) =>
