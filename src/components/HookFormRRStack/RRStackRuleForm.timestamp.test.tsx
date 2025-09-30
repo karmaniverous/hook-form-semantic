@@ -1,6 +1,7 @@
 import type { RuleJson } from '@karmaniverous/rrstack';
 import type { UseRRStackOutput } from '@karmaniverous/rrstack/react';
 import { render, screen } from '@testing-library/react';
+import { type FieldValues, type Path, useForm } from 'react-hook-form';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RRStackRuleForm } from './RRStackRuleForm';
@@ -40,12 +41,25 @@ describe('RRStackRuleForm Timestamp Handling', () => {
   });
 
   it('renders with start date without automatic time adjustment', () => {
+    // RHF harness
+    const Harness = () => {
+      const { control } = useForm<{ schedule: unknown }>();
+      return (
+        <RRStackRuleForm
+          index={0}
+          rrstack={rrstack}
+          hookControl={control}
+          hookNameBase={'schedule' as Path<FieldValues>}
+        />
+      );
+    };
+
     const testDate = new Date('2024-01-15');
     // set starts on the first rule
     (rrstack.rules[0] as unknown as RuleJson).options.starts =
       testDate.getTime();
 
-    render(<RRStackRuleForm index={0} rrstack={rrstack} />);
+    render(<Harness />);
 
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
@@ -53,10 +67,21 @@ describe('RRStackRuleForm Timestamp Handling', () => {
   });
 
   it('renders with end date without automatic time adjustment', () => {
+    const Harness = () => {
+      const { control } = useForm<{ schedule: unknown }>();
+      return (
+        <RRStackRuleForm
+          index={0}
+          rrstack={rrstack}
+          hookControl={control}
+          hookNameBase={'schedule' as Path<FieldValues>}
+        />
+      );
+    };
     const testDate = new Date('2024-01-15');
     (rrstack.rules[0] as unknown as RuleJson).options.ends = testDate.getTime();
 
-    render(<RRStackRuleForm index={0} rrstack={rrstack} />);
+    render(<Harness />);
 
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
@@ -64,11 +89,22 @@ describe('RRStackRuleForm Timestamp Handling', () => {
   });
 
   it('handles clearing dates properly', () => {
+    const Harness = () => {
+      const { control } = useForm<{ schedule: unknown }>();
+      return (
+        <RRStackRuleForm
+          index={0}
+          rrstack={rrstack}
+          hookControl={control}
+          hookNameBase={'schedule' as Path<FieldValues>}
+        />
+      );
+    };
     const r = rrstack.rules[0] as unknown as RuleJson;
     r.options.starts = undefined;
     r.options.ends = undefined;
 
-    render(<RRStackRuleForm index={0} rrstack={rrstack} />);
+    render(<Harness />);
 
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
@@ -76,7 +112,18 @@ describe('RRStackRuleForm Timestamp Handling', () => {
   });
 
   it('displays date picker fields', () => {
-    render(<RRStackRuleForm index={0} rrstack={rrstack} />);
+    const Harness = () => {
+      const { control } = useForm<{ schedule: unknown }>();
+      return (
+        <RRStackRuleForm
+          index={0}
+          rrstack={rrstack}
+          hookControl={control}
+          hookNameBase={'schedule' as Path<FieldValues>}
+        />
+      );
+    };
+    render(<Harness />);
 
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
@@ -84,6 +131,17 @@ describe('RRStackRuleForm Timestamp Handling', () => {
   });
 
   it('creates proper date range when both dates are selected', () => {
+    const Harness = () => {
+      const { control } = useForm<{ schedule: unknown }>();
+      return (
+        <RRStackRuleForm
+          index={0}
+          rrstack={rrstack}
+          hookControl={control}
+          hookNameBase={'schedule' as Path<FieldValues>}
+        />
+      );
+    };
     const startDate = new Date('2024-01-15');
     const endDate = new Date('2024-01-16');
 
@@ -91,7 +149,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     r.options.starts = startDate.getTime();
     r.options.ends = endDate.getTime();
 
-    render(<RRStackRuleForm index={0} rrstack={rrstack} />);
+    render(<Harness />);
 
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
@@ -99,6 +157,17 @@ describe('RRStackRuleForm Timestamp Handling', () => {
   });
 
   it('preserves timestamp values without automatic adjustment', () => {
+    const Harness = () => {
+      const { control } = useForm<{ schedule: unknown }>();
+      return (
+        <RRStackRuleForm
+          index={0}
+          rrstack={rrstack}
+          hookControl={control}
+          hookNameBase={'schedule' as Path<FieldValues>}
+        />
+      );
+    };
     const startTimestamp = new Date('2024-01-15T14:30:00').getTime();
     const endTimestamp = new Date('2024-01-16T16:45:00').getTime();
 
@@ -106,7 +175,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     r.options.starts = startTimestamp;
     r.options.ends = endTimestamp;
 
-    render(<RRStackRuleForm index={0} rrstack={rrstack} />);
+    render(<Harness />);
 
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();

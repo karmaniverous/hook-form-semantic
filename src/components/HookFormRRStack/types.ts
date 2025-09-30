@@ -54,29 +54,3 @@ export interface UISchedule {
   timezone: string;
   rules: UIRuleUI[];
 }
-
-export interface EngineRuleOptions {
-  freq?: FrequencyEngine;
-  starts?: number;
-  ends?: number;
-  interval?: number;
-  count?: number;
-  bymonth?: number[];
-  byweekday?: number[];
-  bysetpos?: number[];
-  bymonthday?: number[];
-  byhour?: number[];
-  byminute?: number[];
-}
-
-export interface EngineRule {
-  label?: string;
-  effect: Effect;
-  duration?: UIDuration;
-  options: EngineRuleOptions;
-}
-
-export interface EngineSchedule {
-  timezone: string;
-  rules: EngineRule[];
-}

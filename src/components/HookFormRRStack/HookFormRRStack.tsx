@@ -1,5 +1,6 @@
 import { RRStack } from '@karmaniverous/rrstack';
 import {
+  type RRStackOptions,
   useRRStack,
   type UseRRStackOutput,
   type UseRRStackProps,
@@ -23,10 +24,7 @@ import {
 import { HookFormField } from '@/components/HookFormField';
 import { rhf2rrstack } from '@/components/HookFormRRStack/rhf2rrstack';
 import { rrstack2rhf } from '@/components/HookFormRRStack/rrstack2rhf';
-import {
-  type EngineSchedule,
-  type UISchedule,
-} from '@/components/HookFormRRStack/types';
+import { type UISchedule } from '@/components/HookFormRRStack/types';
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import { reprefix } from '@/types/PrefixedPartial';
@@ -98,7 +96,7 @@ export const HookFormRRStack = <T extends FieldValues>(
     return { ...uiValue, timezone: isValidTz(tz) ? tz : 'UTC' };
   }, [uiValue]);
 
-  const engineJson = useMemo<EngineSchedule>(
+  const engineJson = useMemo<RRStackOptions>(
     () => rhf2rrstack(safeUi),
     [safeUi],
   );

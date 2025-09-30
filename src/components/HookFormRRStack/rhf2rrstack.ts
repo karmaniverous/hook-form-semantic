@@ -1,10 +1,7 @@
+import type { RRStackOptions, RuleJson } from '@karmaniverous/rrstack';
+
 import { csv2int } from './csv2int';
-import type {
-  EngineRule,
-  EngineSchedule,
-  FrequencyEngine,
-  UISchedule,
-} from './types';
+import type { FrequencyEngine, UISchedule } from './types';
 
 /**
  * Map the RHF UI schedule (UI-friendly types) to the rrstack engine schedule.
@@ -14,8 +11,8 @@ import type {
  * - arrays pass through unchanged
  * Assumes timezone has been validated upstream.
  */
-export function rhf2rrstack(ui: UISchedule): EngineSchedule {
-  const rules: EngineRule[] = Array.isArray(ui.rules)
+export function rhf2rrstack(ui: UISchedule): RRStackOptions {
+  const rules: RuleJson[] = Array.isArray(ui.rules)
     ? ui.rules.map((r) => {
         const o = r.options ?? {};
         const freq =
