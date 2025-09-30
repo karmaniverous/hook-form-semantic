@@ -26,6 +26,18 @@
 
 ## Completed (recent)
 
+- RRStackRuleForm (UI hygiene): remove redundant Form.Field wrappers and pass labels directly to HookForm\* components. Switch Dropdown usage to control={Dropdown} with native Semantic props (selection, multiple, search, compact, options). No behavioral changes; layout preserved.
+
+- Tests/mocks: update semantic-ui-react Form.Field test double to honor the “control” prop and forward input/dropdown props to the rendered child; stop leaking unknown props to the wrapper div. This unblocks HookFormField control={Input|Dropdown} interactions in tests and silences DOM warnings.
+
+- HookFormRRStack: convert Timezone field to HookFormField control={Dropdown} with native props; remove function-as-child and any usage of the broad Function type.
+
+- Types/mappers:
+  - Import RRStackOptions from @karmaniverous/rrstack (not @…/react).
+  - rrstack2rhf: sanitize options.count to number | undefined and only stringify array options for bymonthday/byhour/byminute to satisfy types.
+
+- Tests (types): fix Path typing in RRStackRuleForm.timestamp test harness to avoid TS2322 by binding Path to the actual form shape.
+
 - Build tooling: add "@/” path alias → "src/" across Rollup (build), Vitest (tests), Vite playground (dev), and TypeScript (paths). No runtime behavior change; enables cleaner imports.
 - Tests/mocks: enable Dropdown multi-select in semantic-ui-react double and add robust fallback for tests using target.value, so Months/Weekdays/Position selections propagate correctly to rrstack rule options.
 

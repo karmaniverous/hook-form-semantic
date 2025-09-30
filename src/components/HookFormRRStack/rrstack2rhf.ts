@@ -29,12 +29,22 @@ export function rrstack2rhf(engine: RRStackOptions): UISchedule {
               freq,
               starts,
               ends,
-              bymonth: o.bymonth ?? undefined,
-              byweekday: o.byweekday ?? undefined,
-              bysetpos: o.bysetpos ?? undefined,
-              bymonthdayText: int2csv(o.bymonthday),
-              byhourText: int2csv(o.byhour),
-              byminuteText: int2csv(o.byminute),
+              // ensure arrays or undefined for array-like options
+              bymonth: Array.isArray(o.bymonth) ? o.bymonth : undefined,
+              byweekday: Array.isArray(o.byweekday) ? o.byweekday : undefined,
+              bysetpos: Array.isArray(o.bysetpos) ? o.bysetpos : undefined,
+              // sanitize count: never null on UI shape
+              count: typeof o.count === 'number' ? o.count : undefined,
+              // stringify only arrays for CSV-backed UI text fields
+              bymonthdayText: int2csv(
+                Array.isArray(o.bymonthday) ? o.bymonthday : undefined,
+              ),
+              byhourText: int2csv(
+                Array.isArray(o.byhour) ? o.byhour : undefined,
+              ),
+              byminuteText: int2csv(
+                Array.isArray(o.byminute) ? o.byminute : undefined,
+              ),
             },
           };
         })

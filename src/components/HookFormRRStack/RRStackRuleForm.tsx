@@ -105,34 +105,36 @@ export const RRStackRuleForm = <T extends FieldValues = FieldValues>({
     <Container>
       {/* Top row: Label, Effect */}
       <Form.Group>
-        <Form.Field width={12}>
-          <InfoLabel
-            text="Label"
-            help="Optional descriptive name for this rule to help identify its purpose."
-          />
-          <HookFormField<T, { value: string }>
-            control={Input}
-            hookControl={hookControl}
-            hookName={`${rulePath}.label` as Path<T>}
-            placeholder="Rule label"
-            size="small"
-          />
-        </Form.Field>
+        <HookFormField<T, { value: string }>
+          control={Input}
+          hookControl={hookControl}
+          hookName={`${rulePath}.label` as Path<T>}
+          placeholder="Rule label"
+          size="small"
+          width={12}
+          label={
+            <InfoLabel
+              text="Label"
+              help="Optional descriptive name for this rule to help identify its purpose."
+            />
+          }
+        />
 
-        <Form.Field width={4}>
-          <InfoLabel
-            text="Effect"
-            help="Active enables windows; Blackout blocks them. Use Blackout to exclude periods."
-          />
-          <HookFormField<T, { value: 'active' | 'blackout' }>
-            control={Dropdown}
-            hookControl={hookControl}
-            hookName={`${rulePath}.effect` as Path<T>}
-            dropdownSelection
-            dropdownCompact
-            dropdownOptions={EFFECT_OPTIONS}
-          />
-        </Form.Field>
+        <HookFormField<T, { value: 'active' | 'blackout' }>
+          control={Dropdown}
+          hookControl={hookControl}
+          hookName={`${rulePath}.effect` as Path<T>}
+          selection
+          compact
+          options={EFFECT_OPTIONS}
+          width={4}
+          label={
+            <InfoLabel
+              text="Effect"
+              help="Active enables windows; Blackout blocks them. Use Blackout to exclude periods."
+            />
+          }
+        />
       </Form.Group>
 
       {/* Valid Range */}
@@ -140,66 +142,62 @@ export const RRStackRuleForm = <T extends FieldValues = FieldValues>({
         <Header size="tiny">Valid Range</Header>
 
         <Form.Group style={{ alignItems: 'flex-end' }}>
-          <Form.Field width={5}>
-            <HookFormDatePicker<T>
-              hookControl={hookControl}
-              hookName={`${optionsPath}.starts` as Path<T>}
-              label="Start Date"
-            />
-          </Form.Field>
+          <HookFormDatePicker<T>
+            hookControl={hookControl}
+            hookName={`${optionsPath}.starts` as Path<T>}
+            label="Start Date"
+            width={5}
+          />
 
-          <Form.Field width={5}>
-            <HookFormDatePicker<T>
-              hookControl={hookControl}
-              hookName={`${optionsPath}.ends` as Path<T>}
-              label="End Date"
-            />
-          </Form.Field>
+          <HookFormDatePicker<T>
+            hookControl={hookControl}
+            hookName={`${optionsPath}.ends` as Path<T>}
+            label="End Date"
+            width={5}
+          />
 
-          <Form.Field width={2}>
-            <InfoLabel
-              text="Frequency"
-              help="Span = a continuous time range (no recurrence). Yearly/Monthly/etc. define recurring schedules."
-            />
+          <HookFormField<T, { value: string }>
+            control={Dropdown}
+            hookControl={hookControl}
+            hookName={`${optionsPath}.freq` as Path<T>}
+            selection
+            compact
+            options={FREQUENCY_OPTIONS}
+            style={{ width: '100%', height: '42px' }}
+            width={2}
+            label={
+              <InfoLabel
+                text="Frequency"
+                help="Span = a continuous time range (no recurrence). Yearly/Monthly/etc. define recurring schedules."
+              />
+            }
+          />
 
-            <HookFormField<T, { value: string }>
-              control={Dropdown}
-              hookControl={hookControl}
-              hookName={`${optionsPath}.freq` as Path<T>}
-              dropdownSelection
-              dropdownCompact
-              dropdownOptions={FREQUENCY_OPTIONS}
-              style={{ width: '100%', height: '42px' }}
-            />
-          </Form.Field>
+          <HookFormNumeric<T>
+            hookControl={hookControl}
+            hookName={`${optionsPath}.interval` as Path<T>}
+            numericDecimalScale={0}
+            width={2}
+            label={
+              <InfoLabel
+                text="Interval"
+                help="Number of frequency units to skip between occurrences. Example: every 2 weeks."
+              />
+            }
+          />
 
-          <Form.Field width={2}>
-            <InfoLabel
-              text="Interval"
-              help="Number of frequency units to skip between occurrences. Example: every 2 weeks."
-            />
-
-            <HookFormNumeric<T>
-              hookControl={hookControl}
-              hookName={`${optionsPath}.interval` as Path<T>}
-              label=""
-              numericDecimalScale={0}
-            />
-          </Form.Field>
-
-          <Form.Field width={2}>
-            <InfoLabel
-              text="Count"
-              help="Maximum number of occurrences to generate for this rule."
-            />
-
-            <HookFormNumeric<T>
-              hookControl={hookControl}
-              hookName={`${optionsPath}.count` as Path<T>}
-              label=""
-              numericDecimalScale={0}
-            />
-          </Form.Field>
+          <HookFormNumeric<T>
+            hookControl={hookControl}
+            hookName={`${optionsPath}.count` as Path<T>}
+            numericDecimalScale={0}
+            width={2}
+            label={
+              <InfoLabel
+                text="Count"
+                help="Maximum number of occurrences to generate for this rule."
+              />
+            }
+          />
         </Form.Group>
       </Segment>
 
@@ -210,39 +208,37 @@ export const RRStackRuleForm = <T extends FieldValues = FieldValues>({
           <Segment>
             <Header size="tiny">Months</Header>
             <Form.Group widths="equal" style={{ marginBottom: 0 }}>
-              <Form.Field>
-                <InfoLabel
-                  text="Months"
-                  help="Restrict recurrences to specific months."
-                />
+              <HookFormField<T, { value: number[] }>
+                control={Dropdown}
+                hookControl={hookControl}
+                hookName={`${optionsPath}.bymonth` as Path<T>}
+                selection
+                multiple
+                search
+                compact
+                options={MONTH_OPTIONS}
+                label={
+                  <InfoLabel
+                    text="Months"
+                    help="Restrict recurrences to specific months."
+                  />
+                }
+              />
 
-                <HookFormField<T, { value: number[] }>
-                  control={Dropdown}
-                  hookControl={hookControl}
-                  hookName={`${optionsPath}.bymonth` as Path<T>}
-                  dropdownSelection
-                  dropdownMultiple
-                  dropdownSearch
-                  dropdownCompact
-                  dropdownOptions={MONTH_OPTIONS}
-                />
-              </Form.Field>
-
-              <Form.Field>
-                <InfoLabel
-                  text="DoM"
-                  help="Comma-separated days within the month for recurrences (e.g., 1, 15, 31)."
-                />
-
-                <HookFormField<T, { value: string }>
-                  control={Input}
-                  hookControl={hookControl}
-                  hookName={`${optionsPath}.bymonthdayText` as Path<T>}
-                  placeholder="25 (for 25th)"
-                  size="small"
-                  style={responsiveMaxWidthStyle}
-                />
-              </Form.Field>
+              <HookFormField<T, { value: string }>
+                control={Input}
+                hookControl={hookControl}
+                hookName={`${optionsPath}.bymonthdayText` as Path<T>}
+                placeholder="25 (for 25th)"
+                size="small"
+                style={responsiveMaxWidthStyle}
+                label={
+                  <InfoLabel
+                    text="DoM"
+                    help="Comma-separated days within the month for recurrences (e.g., 1, 15, 31)."
+                  />
+                }
+              />
             </Form.Group>{' '}
           </Segment>
         </Grid.Column>
@@ -253,40 +249,38 @@ export const RRStackRuleForm = <T extends FieldValues = FieldValues>({
             <Header size="tiny">Weekdays</Header>
 
             <Form.Group widths="equal" style={{ marginBottom: '-5px' }}>
-              <Form.Field>
-                <InfoLabel
-                  text="Weekdays"
-                  help="Select days of the week for recurrences within periods."
-                />
+              <HookFormField<T, { value: number[] }>
+                control={Dropdown}
+                hookControl={hookControl}
+                hookName={`${optionsPath}.byweekday` as Path<T>}
+                selection
+                multiple
+                search
+                compact
+                options={WEEKDAY_OPTIONS}
+                label={
+                  <InfoLabel
+                    text="Weekdays"
+                    help="Select days of the week for recurrences within periods."
+                  />
+                }
+              />
 
-                <HookFormField<T, { value: number[] }>
-                  control={Dropdown}
-                  hookControl={hookControl}
-                  hookName={`${optionsPath}.byweekday` as Path<T>}
-                  dropdownSelection
-                  dropdownMultiple
-                  dropdownSearch
-                  dropdownCompact
-                  dropdownOptions={WEEKDAY_OPTIONS}
-                />
-              </Form.Field>
-
-              <Form.Field>
-                <InfoLabel
-                  text="Position"
-                  help="Select nth occurrence within the period (e.g., 1st, 2nd, Last). Requires weekdays to be selected."
-                />
-
-                <HookFormField<T, { value: number[] }>
-                  control={Dropdown}
-                  hookControl={hookControl}
-                  hookName={`${optionsPath}.bysetpos` as Path<T>}
-                  dropdownSelection
-                  dropdownMultiple
-                  dropdownCompact
-                  dropdownOptions={POSITION_OPTIONS}
-                />
-              </Form.Field>
+              <HookFormField<T, { value: number[] }>
+                control={Dropdown}
+                hookControl={hookControl}
+                hookName={`${optionsPath}.bysetpos` as Path<T>}
+                selection
+                multiple
+                compact
+                options={POSITION_OPTIONS}
+                label={
+                  <InfoLabel
+                    text="Position"
+                    help="Select nth occurrence within the period (e.g., 1st, 2nd, Last). Requires weekdays to be selected."
+                  />
+                }
+              />
             </Form.Group>
           </Segment>
         </Grid.Column>
@@ -296,36 +290,34 @@ export const RRStackRuleForm = <T extends FieldValues = FieldValues>({
           <Segment>
             <Header size="tiny">Time</Header>
             <Form.Group widths="equal" style={{ marginBottom: 0 }}>
-              <Form.Field>
-                <InfoLabel
-                  text="Hours"
-                  help="Comma-separated hours (0–23) when events should occur. Example: 9, 13, 17"
-                />
-
-                <HookFormField<T, { value: string }>
-                  control={Input}
-                  hookControl={hookControl}
-                  hookName={`${optionsPath}.byhourText` as Path<T>}
-                  placeholder="9, 13, 17"
-                  size="small"
-                  style={responsiveMaxWidthStyle}
-                />
-              </Form.Field>
-              <Form.Field>
-                <InfoLabel
-                  text="Minutes"
-                  help="Comma-separated minutes (0–59). Example: 0, 30"
-                />
-
-                <HookFormField<T, { value: string }>
-                  control={Input}
-                  hookControl={hookControl}
-                  hookName={`${optionsPath}.byminuteText` as Path<T>}
-                  placeholder="0, 30"
-                  size="small"
-                  style={responsiveMaxWidthStyle}
-                />
-              </Form.Field>
+              <HookFormField<T, { value: string }>
+                control={Input}
+                hookControl={hookControl}
+                hookName={`${optionsPath}.byhourText` as Path<T>}
+                placeholder="9, 13, 17"
+                size="small"
+                style={responsiveMaxWidthStyle}
+                label={
+                  <InfoLabel
+                    text="Hours"
+                    help="Comma-separated hours (0–23) when events should occur. Example: 9, 13, 17"
+                  />
+                }
+              />
+              <HookFormField<T, { value: string }>
+                control={Input}
+                hookControl={hookControl}
+                hookName={`${optionsPath}.byminuteText` as Path<T>}
+                placeholder="0, 30"
+                size="small"
+                style={responsiveMaxWidthStyle}
+                label={
+                  <InfoLabel
+                    text="Minutes"
+                    help="Comma-separated minutes (0–59). Example: 0, 30"
+                  />
+                }
+              />
             </Form.Group>
           </Segment>
         </Grid.Column>
@@ -338,65 +330,59 @@ export const RRStackRuleForm = <T extends FieldValues = FieldValues>({
         </Header>
 
         <Form.Group widths={6}>
-          <Form.Field>
-            <InfoLabel text="Years" help="Duration years component (0+)." />
+          <HookFormNumeric<T>
+            hookControl={hookControl}
+            hookName={`${durationPath}.years` as Path<T>}
+            numericDecimalScale={0}
+            label={
+              <InfoLabel text="Years" help="Duration years component (0+)." />
+            }
+          />
 
-            <HookFormNumeric<T>
-              hookControl={hookControl}
-              hookName={`${durationPath}.years` as Path<T>}
-              numericDecimalScale={0}
-            />
-          </Form.Field>
+          <HookFormNumeric<T>
+            hookControl={hookControl}
+            hookName={`${durationPath}.months` as Path<T>}
+            numericDecimalScale={0}
+            label={
+              <InfoLabel text="Months" help="Duration months component (0+)." />
+            }
+          />
 
-          <Form.Field>
-            <InfoLabel text="Months" help="Duration months component (0+)." />
+          <HookFormNumeric<T>
+            hookControl={hookControl}
+            hookName={`${durationPath}.days` as Path<T>}
+            numericDecimalScale={0}
+            label={
+              <InfoLabel text="Days" help="Duration days component (0+)." />
+            }
+          />
 
-            <HookFormNumeric<T>
-              hookControl={hookControl}
-              hookName={`${durationPath}.months` as Path<T>}
-              numericDecimalScale={0}
-            />
-          </Form.Field>
+          <HookFormNumeric<T>
+            hookControl={hookControl}
+            hookName={`${durationPath}.hours` as Path<T>}
+            numericDecimalScale={0}
+            label={
+              <InfoLabel text="Hours" help="Duration hours component (0+)." />
+            }
+          />
 
-          <Form.Field>
-            <InfoLabel text="Days" help="Duration days component (0+).." />
+          <HookFormNumeric<T>
+            hookControl={hookControl}
+            hookName={`${durationPath}.minutes` as Path<T>}
+            numericDecimalScale={0}
+            label={
+              <InfoLabel text="Min" help="Duration minutes component (0+)." />
+            }
+          />
 
-            <HookFormNumeric<T>
-              hookControl={hookControl}
-              hookName={`${durationPath}.days` as Path<T>}
-              numericDecimalScale={0}
-            />
-          </Form.Field>
-
-          <Form.Field>
-            <InfoLabel text="Hours" help="Duration hours component (0+)." />
-
-            <HookFormNumeric<T>
-              hookControl={hookControl}
-              hookName={`${durationPath}.hours` as Path<T>}
-              numericDecimalScale={0}
-            />
-          </Form.Field>
-
-          <Form.Field>
-            <InfoLabel text="Min" help="Duration minutes component (0+)." />
-
-            <HookFormNumeric<T>
-              hookControl={hookControl}
-              hookName={`${durationPath}.minutes` as Path<T>}
-              numericDecimalScale={0}
-            />
-          </Form.Field>
-
-          <Form.Field>
-            <InfoLabel text="Sec" help="Duration seconds component (0+)." />
-
-            <HookFormNumeric<T>
-              hookControl={hookControl}
-              hookName={`${durationPath}.seconds` as Path<T>}
-              numericDecimalScale={0}
-            />
-          </Form.Field>
+          <HookFormNumeric<T>
+            hookControl={hookControl}
+            hookName={`${durationPath}.seconds` as Path<T>}
+            numericDecimalScale={0}
+            label={
+              <InfoLabel text="Sec" help="Duration seconds component (0+)." />
+            }
+          />
         </Form.Group>
       </Segment>
     </Container>

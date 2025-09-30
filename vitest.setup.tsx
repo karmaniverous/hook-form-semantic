@@ -13,17 +13,26 @@ vi.mock('semantic-ui-react', () => {
     React.createElement('form', p, children);
 
   type FieldProps = React.PropsWithChildren<
-    React.HTMLAttributes<HTMLDivElement> & { error?: string | boolean }
+    React.HTMLAttributes<HTMLDivElement> & {
+      error?: string | boolean;
+      control?: React.ElementType;
+    }
   >;
 
-  const Field: React.FC<FieldProps> = ({ children, error, ...p }) => {
+  const Field: React.FC<FieldProps> = ({ children, error, control, ...p }) => {
+    // If a control is provided, render it with the received props.
+    const child =
+      control != null
+        ? React.createElement(control as React.ElementType, { ...p })
+        : children;
+
+    // Do not forward unknown props to the wrapper to avoid DOM warnings.
     const divProps: React.HTMLAttributes<HTMLDivElement> &
       Record<string, unknown> = {
-      ...p,
       'data-testid': 'form-field',
       'data-error': error ? String(error) : '',
     };
-    return React.createElement('div', divProps, children);
+    return React.createElement('div', divProps, child);
   };
 
   const FormGroup: React.FC<

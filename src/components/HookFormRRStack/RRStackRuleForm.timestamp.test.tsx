@@ -49,7 +49,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookNameBase={'schedule' as Path<FieldValues>}
+          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
@@ -74,7 +74,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookNameBase={'schedule' as Path<FieldValues>}
+          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
@@ -96,7 +96,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookNameBase={'schedule' as Path<FieldValues>}
+          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
@@ -119,7 +119,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookNameBase={'schedule' as Path<FieldValues>}
+          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
@@ -138,7 +138,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookNameBase={'schedule' as Path<FieldValues>}
+          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
@@ -164,7 +164,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookNameBase={'schedule' as Path<FieldValues>}
+          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };

@@ -1,6 +1,5 @@
-import { RRStack } from '@karmaniverous/rrstack';
+import { RRStack, type RRStackOptions } from '@karmaniverous/rrstack';
 import {
-  type RRStackOptions,
   useRRStack,
   type UseRRStackOutput,
   type UseRRStackProps,
@@ -185,28 +184,16 @@ export const HookFormRRStack = <T extends FieldValues>(
       <Segment basic style={{ padding: '0 0 1em 0' }}>
         <Form.Group widths={'equal'}>
           <HookFormField<T, { value: string }>
+            control={Dropdown}
             hookControl={props.hookControl!}
             hookName={`${props.hookName as Path<T>}.timezone` as Path<T>}
-          >
-            {(field) => (
-              <>
-                <label>Timezone</label>
-                <Dropdown
-                  placeholder="Select timezone"
-                  fluid
-                  search
-                  selection
-                  options={timezoneOptions}
-                  value={(field as { value?: string }).value}
-                  onChange={(e, { value }) =>
-                    (field as { onChange: Function }).onChange(e, {
-                      value,
-                    })
-                  }
-                />
-              </>
-            )}
-          </HookFormField>
+            label="Timezone"
+            placeholder="Select timezone"
+            fluid
+            search
+            selection
+            options={timezoneOptions}
+          />
           {validationErrors.timezone && (
             <Label basic color="red" pointing>
               {validationErrors.timezone}
