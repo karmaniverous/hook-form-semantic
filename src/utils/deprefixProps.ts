@@ -1,12 +1,10 @@
-import type { FieldValues } from 'react-hook-form';
-
 import type { Deprefix } from '@/types/Deprefix';
 import type { HookFormProps } from '@/types/HookFormProps';
 
 export function deprefixProps<
-  T extends FieldValues,
-  Props extends HookFormProps<T>,
-  const Prefix extends string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Props extends HookFormProps<any>,
+  const Prefix extends string = never,
 >(props: Props, prefixes: readonly Prefix[]) {
   type PrefixWithHook = 'hook' | Prefix;
 
@@ -15,7 +13,7 @@ export function deprefixProps<
   const result = {
     deprefixed: Object.fromEntries(prefixesWithHook.map((k) => [k, {}])),
     rest: {},
-  } as Deprefix<T, Props, PrefixWithHook>;
+  } as Deprefix<Props, PrefixWithHook>;
 
   for (const key of Object.keys(props)) {
     const match: PrefixWithHook | undefined = prefixesWithHook.find((p) =>

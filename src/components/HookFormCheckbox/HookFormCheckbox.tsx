@@ -1,12 +1,7 @@
 import { omit } from 'radash';
 import type { FormEvent, ReactNode } from 'react';
-import { useCallback, useMemo, useRef } from 'react';
-import {
-  type ControllerProps,
-  type FieldValues,
-  useController,
-  type UseControllerProps,
-} from 'react-hook-form';
+import { useCallback, useRef } from 'react';
+import { type FieldValues } from 'react-hook-form';
 import {
   Checkbox,
   Form,
@@ -14,11 +9,14 @@ import {
   type StrictFormFieldProps,
 } from 'semantic-ui-react';
 
-import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
+import { useHookForm } from '@/hooks/useHookForm';
+import type { HookFormProps } from '@/types/HookFormProps';
+import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
 
 export interface HookFormCheckboxProps<T extends FieldValues>
-  extends Omit<
+  extends HookFormProps<T>,
+    Omit<
       StrictFormFieldProps,
       | 'children'
       | 'checked'
@@ -30,8 +28,7 @@ export interface HookFormCheckboxProps<T extends FieldValues>
       | 'ref'
       | 'value'
     >,
-    PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'>,
-    PrefixedPartial<StrictCheckboxProps, 'checkbox'> {
+    PrefixProps<StrictCheckboxProps, 'checkbox'> {
   checkLabel?: string;
   leftLabel?: string;
   rightLabel?: string;
@@ -47,15 +44,13 @@ export const HookFormCheckbox = <T extends FieldValues>({
   ...props
 }: HookFormCheckboxProps<T>) => {
   const {
-    hook: hookProps,
-    checkbox: checkboxProps,
+    controller: {
+      field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
+      fieldState: { error },
+    },
+    deprefixed: { checkbox: checkboxProps },
     rest: fieldProps,
-  } = useMemo(() => deprefix(props, ['hook', 'checkbox']), [props]);
-
-  const {
-    field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
-    fieldState: { error },
-  } = useController(hookProps as UseControllerProps);
+  } = useHookForm({ props, prefixes: ['checkbox'] });
 
   const handleChange = useCallback(
     (event: FormEvent<HTMLInputElement>, data: StrictCheckboxProps) => {

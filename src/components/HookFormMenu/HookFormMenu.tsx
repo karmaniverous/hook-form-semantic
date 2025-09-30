@@ -1,11 +1,6 @@
 import { omit } from 'radash';
-import { useCallback, useMemo } from 'react';
-import {
-  type ControllerProps,
-  type FieldValues,
-  useController,
-  type UseControllerProps,
-} from 'react-hook-form';
+import { useCallback } from 'react';
+import { type FieldValues } from 'react-hook-form';
 import {
   Form,
   type FormFieldProps,
@@ -14,10 +9,13 @@ import {
   type StrictMenuProps,
 } from 'semantic-ui-react';
 
-import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
+import { useHookForm } from '@/hooks/useHookForm';
+import type { HookFormProps } from '@/types/HookFormProps';
+import type { PrefixProps } from '@/types/PrefixProps';
 
 export interface HookFormMenuProps<T extends FieldValues>
-  extends Omit<
+  extends HookFormProps<T>,
+    Omit<
       FormFieldProps,
       | 'children'
       | 'checked'
@@ -29,25 +27,25 @@ export interface HookFormMenuProps<T extends FieldValues>
       | 'ref'
       | 'value'
     >,
-    PrefixedPartial<
+    PrefixProps<
       Omit<StrictMenuProps, 'activeIndex' | 'children' | 'onItemClick'>,
       'menu'
-    >,
-    PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'> {}
+    > {}
 
-export const HookFormMenu = <T extends FieldValues>({
-  ...props
-}: HookFormMenuProps<T>) => {
+export const HookFormMenu = <T extends FieldValues>(
+  props: HookFormMenuProps<T>,
+) => {
   const {
-    menu: menuProps,
-    hook: hookProps,
+    controller: {
+      field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
+      fieldState,
+    },
+    deprefixed: { menu: menuProps },
     rest: { label, ...fieldProps },
-  } = useMemo(() => deprefix(props, ['menu', 'hook']), [props]);
-
-  const {
-    field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
-    fieldState,
-  } = useController(hookProps as UseControllerProps);
+  } = useHookForm({
+    props,
+    prefixes: ['menu'] as const,
+  });
 
   const handleItemClick = useCallback(
     (event: React.SyntheticEvent<HTMLElement>, data: MenuItemProps) =>

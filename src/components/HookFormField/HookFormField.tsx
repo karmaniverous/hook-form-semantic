@@ -2,19 +2,18 @@ import { omit } from 'radash';
 import { useCallback, useMemo } from 'react';
 import type { ControllerFieldState } from 'react-hook-form';
 import {
-  type ControllerProps,
   type ControllerRenderProps,
   type FieldValues,
   type Path,
-  useController,
-  type UseControllerProps,
 } from 'react-hook-form';
 import { Form, type FormFieldProps } from 'semantic-ui-react';
 
-import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
+import { useHookForm } from '@/hooks/useHookForm';
+import type { HookFormProps } from '@/types/HookFormProps';
 
 export interface HookFormFieldProps<T extends FieldValues, C>
-  extends Omit<
+  extends HookFormProps<T>,
+    Omit<
       FormFieldProps,
       | 'children'
       | 'checked'
@@ -25,8 +24,7 @@ export interface HookFormFieldProps<T extends FieldValues, C>
       | 'onChange'
       | 'ref'
       | 'value'
-    >,
-    PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'> {
+    > {
   children?:
     | FormFieldProps['children']
     | ((
@@ -36,20 +34,16 @@ export interface HookFormFieldProps<T extends FieldValues, C>
   onChange?: (event: React.SyntheticEvent<HTMLElement>, data: C) => void;
 }
 
-export const HookFormField = <T extends FieldValues, C>({
-  children,
-  onChange,
-  ...props
-}: HookFormFieldProps<T, C>) => {
-  const { hook: hookProps, rest: fieldProps } = useMemo(
-    () => deprefix(props, 'hook'),
-    [props],
-  );
-
+export const HookFormField = <T extends FieldValues, C>(
+  props: HookFormFieldProps<T, C>,
+) => {
   const {
-    field: { onChange: hookFieldOnChange, ...hookFieldProps },
-    fieldState,
-  } = useController(hookProps as UseControllerProps);
+    controller: {
+      field: { onChange: hookFieldOnChange, ...hookFieldProps },
+      fieldState,
+    },
+    rest: { children, onChange, ...fieldProps },
+  } = useHookForm({ props });
 
   const handleChange = useCallback(
     (event: React.SyntheticEvent<HTMLElement>, data: C) => {
