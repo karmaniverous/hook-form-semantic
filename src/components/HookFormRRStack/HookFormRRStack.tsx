@@ -6,7 +6,7 @@ import {
 } from '@karmaniverous/rrstack/react';
 import { omit } from 'radash';
 import { useCallback, useMemo, useState } from 'react';
-import { type FieldValues } from 'react-hook-form';
+import { type FieldValues, type Path } from 'react-hook-form';
 import {
   Accordion,
   Button,
@@ -20,6 +20,7 @@ import {
   Segment,
 } from 'semantic-ui-react';
 
+import { HookFormField } from '@/components/HookFormField';
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import { reprefix } from '@/types/PrefixedPartial';
@@ -82,12 +83,114 @@ export const HookFormRRStack = <T extends FieldValues>(
     [describeProps],
   );
 
+  // ---------- Mapping helpers: UI (form) <-> Engine (rrstack) ----------
+  type UiSchedule = unknown; // use structural typing; runtime mapping only
+  type EngineSchedule = unknown;
+
+  const parseCsvInts = (
+    text?: string | null,
+    min = -Infinity,
+    max = Infinity,
+  ) => {
+    if (!text) return undefined;
+    const vals = String(text)
+      .split(',')
+      .map((s) => s.trim())
+      .filter((s) => s.length)
+      .map((s) => Number.parseInt(s, 10))
+      .filter((n) => Number.isFinite(n) && n >= min && n <= max) as number[];
+    return vals.length ? vals : undefined;
+  };
+
+  const intsToCsv = (arr?: number[] | null) =>
+    !arr || arr.length === 0 ? '' : arr.join(', ');
+
+  const isValidTz = (tz?: string) => !!tz && RRStack.isValidTimeZone(tz);
+
+  const uiToEngine = (ui: any): any => {
+    if (!ui || typeof ui !== 'object') return ui;
+    const timezone = isValidTz(ui.timezone) ? ui.timezone : 'UTC';
+    return {
+      timezone,
+      rules: Array.isArray(ui.rules)
+        ? ui.rules.map((r: any) => {
+            const opts = r?.options ?? {};
+            const freq = opts?.freq === 'span' ? undefined : opts?.freq;
+            const starts =
+              opts?.starts instanceof Date ? opts.starts.getTime() : undefined;
+            const ends =
+              opts?.ends instanceof Date ? opts.ends.getTime() : undefined;
+
+            return {
+              label: r?.label ?? undefined,
+              effect: r?.effect ?? 'active',
+              duration: r?.duration ?? undefined,
+              options: {
+                ...opts,
+                freq,
+                starts,
+                ends,
+                // pass through arrays as-is
+                bymonth: opts?.bymonth ?? undefined,
+                byweekday: opts?.byweekday ?? undefined,
+                bysetpos: opts?.bysetpos ?? undefined,
+                // map tolerant text to arrays
+                bymonthday: parseCsvInts(opts?.bymonthdayText, 1, 31),
+                byhour: parseCsvInts(opts?.byhourText, 0, 23),
+                byminute: parseCsvInts(opts?.byminuteText, 0, 59),
+              },
+            };
+          })
+        : [],
+    };
+  };
+
+  const engineToUi = (engine: any): any => {
+    if (!engine || typeof engine !== 'object') return engine;
+    return {
+      timezone: engine.timezone,
+      rules: Array.isArray(engine.rules)
+        ? engine.rules.map((r: any) => {
+            const opts = r?.options ?? {};
+            const freq = opts?.freq ?? 'span';
+            const starts =
+              typeof opts?.starts === 'number' ? new Date(opts.starts) : null;
+            const ends =
+              typeof opts?.ends === 'number' ? new Date(opts.ends) : null;
+            return {
+              label: r?.label ?? undefined,
+              effect: r?.effect ?? 'active',
+              duration: r?.duration ?? undefined,
+              options: {
+                ...opts,
+                freq,
+                starts,
+                ends,
+                // arrays stay arrays
+                bymonth: opts?.bymonth ?? undefined,
+                byweekday: opts?.byweekday ?? undefined,
+                bysetpos: opts?.bysetpos ?? undefined,
+                // arrays -> tolerant text strings
+                bymonthdayText: intsToCsv(opts?.bymonthday),
+                byhourText: intsToCsv(opts?.byhour),
+                byminuteText: intsToCsv(opts?.byminute),
+              },
+            };
+          })
+        : [],
+    };
+  };
+
+  // ---------- RHF value (UI shape) -> rrstack (engine shape) ----------
+  const uiValue = value as UiSchedule;
+  const engineJson = useMemo(() => uiToEngine(uiValue), [uiValue]);
+
   const handleChange = useCallback(
     (stack: UseRRStackOutput['rrstack']) => {
       rrstackOnChange?.(stack);
-
-      // Conform to RHF expectations by passing a minimal event-like payload
-      hookFieldOnChange({ target: { value: stack.toJson() } });
+      const engine = stack.toJson();
+      const uiNext = engineToUi(engine);
+      hookFieldOnChange({ target: { value: uiNext } });
     },
     [hookFieldOnChange, rrstackOnChange],
   );
@@ -99,7 +202,7 @@ export const HookFormRRStack = <T extends FieldValues>(
   }>({});
 
   const { rrstack } = useRRStack({
-    json: value,
+    json: engineJson,
     onChange: handleChange,
     ...rrstackProps,
   });
@@ -116,17 +219,16 @@ export const HookFormRRStack = <T extends FieldValues>(
     };
   }, [rrstack.rules, rrstack.timezone, timestampFormat]);
 
-  const handleTimezoneChange = useCallback(
-    (value: string) => {
-      // Validate timezone before setting it
-      const timezoneError = RRStack.isValidTimeZone(value)
-        ? undefined
-        : `Invalid timezone: ${value}`;
-
-      if (!timezoneError) rrstack.timezone = value;
-      setValidationErrors((prev) => ({ ...prev, timezone: timezoneError }));
-    },
-    [rrstack],
+  const uiTimezone = (uiValue as any)?.timezone as string | undefined;
+  const timezoneError =
+    uiTimezone && !RRStack.isValidTimeZone(uiTimezone)
+      ? `Invalid timezone: ${uiTimezone}`
+      : undefined;
+  // Track for inline label
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useMemo(
+    () => setValidationErrors((p) => ({ ...p, timezone: timezoneError })),
+    [timezoneError],
   );
 
   const handleAddRule = useCallback(() => {
@@ -165,23 +267,22 @@ export const HookFormRRStack = <T extends FieldValues>(
 
       <Segment basic style={{ padding: '0 0 1em 0' }}>
         <Form.Group widths={'equal'}>
-          <Form.Field error={!!validationErrors.timezone}>
-            <label>Timezone</label>
-            <Dropdown
-              placeholder="Select timezone"
-              fluid
-              search
-              selection
-              options={timezoneOptions}
-              value={rrstack.timezone}
-              onChange={(e, { value }) => handleTimezoneChange(value as string)}
-            />
-            {validationErrors.timezone && (
-              <Label basic color="red" pointing>
-                {validationErrors.timezone}
-              </Label>
-            )}
-          </Form.Field>
+          <HookFormField<T, { value: string }>
+            control={Dropdown}
+            hookControl={props.hookControl}
+            hookName={`${props.hookName as Path<T>}.timezone` as Path<T>}
+            label="Timezone"
+            placeholder="Select timezone"
+            dropdownOptions={timezoneOptions}
+            dropdownSelection
+            dropdownSearch
+            error={!!validationErrors.timezone}
+          />
+          {validationErrors.timezone && (
+            <Label basic color="red" pointing>
+              {validationErrors.timezone}
+            </Label>
+          )}
 
           <Form.Field>
             <label>Starts</label>
@@ -213,7 +314,7 @@ export const HookFormRRStack = <T extends FieldValues>(
       {rrstack.rules.length ? (
         <Accordion fluid styled>
           {rrstack.rules.map((rule, index) => (
-            <HookFormRRStackRule
+            <HookFormRRStackRule<T>
               {...reprifixedDescribeProps}
               activeIndex={activeIndex}
               index={index}
@@ -223,6 +324,8 @@ export const HookFormRRStack = <T extends FieldValues>(
               }
               rrstack={rrstack}
               setActiveIndex={setActiveIndex}
+              hookControl={props.hookControl}
+              hookNameBase={props.hookName}
             />
           ))}
         </Accordion>

@@ -1,5 +1,6 @@
 import type { UseRRStackOutput } from '@karmaniverous/rrstack/react';
 import { useCallback, useMemo } from 'react';
+import type { Control, FieldValues, Path } from 'react-hook-form';
 import type { AccordionTitleProps } from 'semantic-ui-react';
 import { Accordion, Button, Icon, Label, Segment } from 'semantic-ui-react';
 
@@ -8,7 +9,7 @@ import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
 import type { RRStackRuleDescriptionPropsBase } from './RRStackRuleDescription';
 import { RRStackRuleDescription } from './RRStackRuleDescription';
 import { RRStackRuleForm } from './RRStackRuleForm';
-interface HookFormRRStackRuleProps
+interface HookFormRRStackRuleProps<T extends FieldValues = FieldValues>
   extends Pick<AccordionTitleProps, 'onClick'>,
     PrefixedPartial<
       Omit<RRStackRuleDescriptionPropsBase, 'index' | 'rrstack'>,
@@ -18,9 +19,13 @@ interface HookFormRRStackRuleProps
   index: number;
   rrstack: UseRRStackOutput['rrstack'];
   setActiveIndex: (index: number | null) => void;
+  hookControl: Control<T>;
+  hookNameBase: Path<T>;
 }
 
-export const HookFormRRStackRule = (props: HookFormRRStackRuleProps) => {
+export const HookFormRRStackRule = <T extends FieldValues = FieldValues>(
+  props: HookFormRRStackRuleProps<T>,
+) => {
   const {
     describe: describeProps,
     rest: { activeIndex, index, onClick, rrstack, setActiveIndex },
@@ -172,7 +177,12 @@ export const HookFormRRStackRule = (props: HookFormRRStackRuleProps) => {
         active={index === activeIndex}
       >
         <Segment basic style={{ fontSize: '0.9em', padding: 0 }}>
-          <RRStackRuleForm index={index} rrstack={rrstack} />
+          <RRStackRuleForm<T>
+            index={index}
+            rrstack={rrstack}
+            hookControl={props.hookControl}
+            hookNameBase={props.hookNameBase}
+          />
         </Segment>
       </Accordion.Content>
       ,

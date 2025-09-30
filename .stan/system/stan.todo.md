@@ -26,9 +26,7 @@
 
 ## Completed (recent)
 
-- Build tooling: add "@/” path alias → "src/" across Rollup (build),
-  Vitest (tests), Vite playground (dev), and TypeScript (paths). No
-  runtime behavior change; enables cleaner imports.
+- Build tooling: add "@/” path alias → "src/" across Rollup (build), Vitest (tests), Vite playground (dev), and TypeScript (paths). No runtime behavior change; enables cleaner imports.
 - Tests/mocks: enable Dropdown multi-select in semantic-ui-react double and add robust fallback for tests using target.value, so Months/Weekdays/Position selections propagate correctly to rrstack rule options.
 
 - Tests: exercise rrstack engine descriptions via RRStackRuleDescription for:
@@ -58,7 +56,9 @@
 - RRStackRuleForm: DoM input mirrors Hours/Minutes UX using local state + parseOptions + syncOptions; allows commas/spaces and incomplete tokens; removed stray debug logs.
 
 - Refactor remaining components to use useHookForm:
-  - HookFormPhone, HookFormJsonEditor, HookFormSort, HookFormWysiwygEditor,
-    HookFormRRStack now use the shared hook; retained public props and UX.
-  - Centralized RHF Controller wiring and debug logging; removed ad‑hoc
-    useController/useWatch in components.
+  - HookFormPhone, HookFormJsonEditor, HookFormSort, HookFormWysiwygEditor, HookFormRRStack now use the shared hook; retained public props and UX.
+  - Centralized RHF Controller wiring and debug logging; removed ad‑hoc useController/useWatch in components.
+
+- RRStack refactor: remove internal mutations for normal fields; wire all child inputs to parent RHF via hookControl/hookName. Add UI↔Engine mapping in HookFormRRStack (uiToEngine/engineToUi):
+  - UI holds DoM/Hours/Minutes as text strings; dates as Date|null; months/ weekdays/position as arrays; freq uses 'span' string.
+  - rrstack consumes ms/arrays; onChange maps back to UI shape and updates RHF.
