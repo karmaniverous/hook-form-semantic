@@ -8,17 +8,21 @@ import type { PickRest } from '@/types/PickRest';
 export function deprefixProps<
   T extends FieldValues,
   Props extends HookFormProps<T>,
-  const Prefixes extends readonly ['hook', ...(readonly string[])],
+  const Prefixes extends readonly string[],
 >(props: Props, prefixes: Prefixes) {
-  type Prefix = Prefixes[number];
+  type Prefix = 'hook' | Prefixes[number];
+
+  const allPrefixes = ['hook', ...prefixes] as const;
 
   const result = {
-    deprefixed: Object.fromEntries(prefixes.map((k) => [k, {}])),
+    deprefixed: Object.fromEntries(allPrefixes.map((k) => [k, {}])),
     rest: {},
   } as Deprefix<T, Props, Prefix>;
 
   for (const key of Object.keys(props)) {
-    const match: Prefix | undefined = prefixes.find((p) => key.startsWith(p));
+    const match: Prefix | undefined = allPrefixes.find((p) =>
+      key.startsWith(p),
+    );
 
     if (match) {
       const stripped = key.slice(match.length);

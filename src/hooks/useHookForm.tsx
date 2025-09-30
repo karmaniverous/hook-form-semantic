@@ -22,9 +22,7 @@ export const useHookForm = <
   prefixes,
 }: UseHookFormProps<T, Props, Prefixes>) => {
   const { deprefixed, rest } = useMemo(() => {
-    const allPrefixes = ['hook', ...prefixes] as const;
-
-    return deprefixProps<T, Props, typeof allPrefixes>(props, allPrefixes);
+    return deprefixProps<T, Props, Prefixes>(props, prefixes);
   }, [prefixes, props]);
 
   const controller = useController(deprefixed.hook);

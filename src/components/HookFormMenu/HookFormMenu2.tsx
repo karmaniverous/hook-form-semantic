@@ -42,7 +42,10 @@ export const HookFormMenu2 = <T extends FieldValues>({
     },
     deprefixed: { menu: menuProps },
     rest: { label, ...fieldProps },
-  } = useHookForm({ props, prefixes: ['menu'] });
+  } = useHookForm<T, typeof props, ['menu']>({
+    props,
+    prefixes: ['menu'] as const,
+  });
 
   const handleItemClick = useCallback(
     (event: React.SyntheticEvent<HTMLElement>, data: MenuItemProps) =>
