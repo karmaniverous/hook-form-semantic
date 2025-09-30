@@ -1,5 +1,5 @@
 import type { UseRRStackOutput } from '@karmaniverous/rrstack/react';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Control, FieldValues, Path } from 'react-hook-form';
 import {
   Container,
@@ -79,6 +79,8 @@ export const RRStackRuleForm = <T extends FieldValues = FieldValues>({
   hookControl,
   hookNameBase,
 }: RRStackRuleFormProps<T>) => {
+  // Avoid unused param lint error (structural actions are in parent title row)
+  void rrstack;
   const rulePath = useMemo(
     () => `${hookNameBase as string}.rules.${index}`,
     [hookNameBase, index],

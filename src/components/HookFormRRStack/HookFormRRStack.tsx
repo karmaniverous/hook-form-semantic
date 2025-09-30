@@ -89,18 +89,13 @@ export const HookFormRRStack = <T extends FieldValues>(
     [describeProps],
   );
 
-  // ---------- Mapping helpers: UI (form) <-> Engine (rrstack) ----------
-  const isValidTz = (tz?: string) => !!tz && RRStack.isValidTimeZone(tz);
-
   // ---------- RHF value (UI shape) -> rrstack (engine shape) ----------
+  const isValidTz = (tz?: string) => !!tz && RRStack.isValidTimeZone(tz);
   const uiValue = value as UISchedule;
   const safeUi = useMemo<UISchedule>(() => {
     if (!uiValue || typeof uiValue !== 'object') return uiValue;
-    const tz = (uiValue as UISchedule)?.timezone;
-    return {
-      ...uiValue,
-      timezone: isValidTz(tz) ? tz : 'UTC',
-    };
+    const tz = uiValue?.timezone;
+    return { ...uiValue, timezone: isValidTz(tz) ? tz : 'UTC' };
   }, [uiValue]);
 
   const engineJson = useMemo<EngineSchedule>(
@@ -192,16 +187,28 @@ export const HookFormRRStack = <T extends FieldValues>(
       <Segment basic style={{ padding: '0 0 1em 0' }}>
         <Form.Group widths={'equal'}>
           <HookFormField<T, { value: string }>
-            control={Dropdown}
             hookControl={props.hookControl!}
             hookName={`${props.hookName as Path<T>}.timezone` as Path<T>}
-            label="Timezone"
-            placeholder="Select timezone"
-            dropdownOptions={timezoneOptions}
-            dropdownSelection
-            dropdownSearch
-            error={!!validationErrors.timezone}
-          />
+          >
+            {(field) => (
+              <>
+                <label>Timezone</label>
+                <Dropdown
+                  placeholder="Select timezone"
+                  fluid
+                  search
+                  selection
+                  options={timezoneOptions}
+                  value={(field as { value?: string }).value}
+                  onChange={(e, { value }) =>
+                    (field as { onChange: Function }).onChange(e, {
+                      value,
+                    })
+                  }
+                />
+              </>
+            )}
+          </HookFormField>
           {validationErrors.timezone && (
             <Label basic color="red" pointing>
               {validationErrors.timezone}
