@@ -1,19 +1,16 @@
 import { omit } from 'radash';
 import type { ChangeEventHandler } from 'react';
-import { useMemo } from 'react';
-import {
-  type ControllerProps,
-  type FieldValues,
-  useController,
-  type UseControllerProps,
-} from 'react-hook-form';
+import { type FieldValues } from 'react-hook-form';
 import { NumericFormat, type NumericFormatProps } from 'react-number-format';
 import { Form, type FormFieldProps, Input, Label } from 'semantic-ui-react';
 
-import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
+import { useHookForm } from '@/hooks/useHookForm';
+import type { HookFormProps } from '@/types/HookFormProps';
+import type { PrefixProps } from '@/types/PrefixProps';
 
 export interface HookFormNumericProps<T extends FieldValues>
-  extends Omit<
+  extends HookFormProps<T>,
+    Omit<
       FormFieldProps,
       | 'children'
       | 'checked'
@@ -25,8 +22,7 @@ export interface HookFormNumericProps<T extends FieldValues>
       | 'ref'
       | 'value'
     >,
-    PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'>,
-    PrefixedPartial<
+    PrefixProps<
       Omit<NumericFormatProps, 'customInput' | 'onChange'>,
       'numeric'
     > {
@@ -38,25 +34,25 @@ export const HookFormNumeric = <T extends FieldValues>({
   ...props
 }: HookFormNumericProps<T>) => {
   const {
-    hook: hookProps,
-    numeric: numericProps,
+    controller: {
+      field: { onChange: hookFieldOnChange, ...hookFieldProps },
+      fieldState,
+    },
+    deprefixed: { numeric: numericProps },
     rest: fieldProps,
-  } = useMemo(() => deprefix(props, ['hook', 'numeric']), [props]);
-
-  const {
-    field: { onChange: hookFieldOnChange, ...hookFieldProps },
-    fieldState,
-  } = useController(hookProps as UseControllerProps);
+  } = useHookForm({ props, prefixes: ['numeric'] as const });
 
   return (
-    <Form.Field {...fieldProps} error={!!fieldState.error?.message}>
+    <Form.Field {...fieldProps} error={fieldState.error?.message}>
       {label && <label>{label}</label>}
       <NumericFormat
         {...numericProps}
         {...omit(hookFieldProps, ['ref'])}
         customInput={Input}
         onValueChange={({ floatValue }) =>
-          hookFieldOnChange({ target: { type: 'number', value: floatValue } })
+          hookFieldOnChange({
+            target: { type: 'number', value: floatValue },
+          })
         }
       />
 
