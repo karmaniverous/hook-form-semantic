@@ -5,14 +5,8 @@ import {
   type UseRRStackProps,
 } from '@karmaniverous/rrstack/react';
 import { omit } from 'radash';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { ControllerProps } from 'react-hook-form';
-import {
-  type FieldValues,
-  useController,
-  type UseControllerProps,
-  useWatch,
-} from 'react-hook-form';
+import { useCallback, useMemo, useState } from 'react';
+import { type FieldValues } from 'react-hook-form';
 import {
   Accordion,
   Button,
@@ -26,12 +20,10 @@ import {
   Segment,
 } from 'semantic-ui-react';
 
-import type { Logger } from '@/types/Logger';
-import {
-  deprefix,
-  type PrefixedPartial,
-  reprefix,
-} from '@/types/PrefixedPartial';
+import { useHookForm } from '@/hooks/useHookForm';
+import type { HookFormProps } from '@/types/HookFormProps';
+import { reprefix } from '@/types/PrefixedPartial';
+import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
 
 import { HookFormRRStackRule } from './HookFormRRStackRule';
@@ -39,7 +31,8 @@ import type { RRStackRuleDescriptionPropsBase } from './RRStackRuleDescription';
 import { timezoneOptions } from './timezoneOptions';
 
 export interface HookFormRRStackProps<T extends FieldValues>
-  extends Omit<
+  extends HookFormProps<T>,
+    Omit<
       FormFieldProps,
       | 'as'
       | 'children'
@@ -56,46 +49,38 @@ export interface HookFormRRStackProps<T extends FieldValues>
       | 'type'
       | 'value'
     >,
-    PrefixedPartial<
+    PrefixProps<
       Omit<RRStackRuleDescriptionPropsBase, 'index' | 'rrstack'>,
       'describe'
     >,
-    PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'>,
-    PrefixedPartial<Omit<UseRRStackProps, 'json' | 'timezone'>, 'rrstack'> {
-  logger?: Logger;
+    PrefixProps<Omit<UseRRStackProps, 'json' | 'timezone'>, 'rrstack'> {
   timestampFormat?: string;
 }
 
-export const HookFormRRStack = <T extends FieldValues>({
-  logger,
-  timestampFormat = 'yyyy-MM-dd HH:mm:ss',
-  ...props
-}: HookFormRRStackProps<T>) => {
+export const HookFormRRStack = <T extends FieldValues>(
+  props: HookFormRRStackProps<T>,
+) => {
   const {
-    describe: describeProps,
-    hook: hookProps,
-    rrstack: { onChange: rrstackOnChange, ...rrstackProps },
-    rest: { className, label, ...fieldProps },
-  } = useMemo(() => deprefix(props, ['describe', 'hook', 'rrstack']), [props]);
+    controller: {
+      field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
+      fieldState: { error },
+    },
+    deprefixed: {
+      describe: describeProps,
+      rrstack: { onChange: rrstackOnChange, ...rrstackProps },
+    },
+    rest: {
+      className,
+      label,
+      timestampFormat = 'yyyy-MM-dd HH:mm:ss',
+      ...fieldProps
+    },
+  } = useHookForm({ props, prefixes: ['describe', 'rrstack'] as const });
 
   const reprifixedDescribeProps = useMemo(
     () => reprefix(describeProps, 'describe'),
     [describeProps],
   );
-
-  const {
-    field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
-    fieldState: { error },
-  } = useController(hookProps as UseControllerProps);
-
-  const watchedValue = useWatch({
-    control: hookProps.control,
-    name: hookProps.name,
-  });
-
-  useEffect(() => {
-    logger?.debug('HookFormRRStack form data', watchedValue);
-  }, [watchedValue]);
 
   const handleChange = useCallback(
     (stack: UseRRStackOutput['rrstack']) => {
@@ -104,7 +89,7 @@ export const HookFormRRStack = <T extends FieldValues>({
       // Conform to RHF expectations by passing a minimal event-like payload
       hookFieldOnChange({ target: { value: stack.toJson() } });
     },
-    [hookFieldOnChange],
+    [hookFieldOnChange, rrstackOnChange],
   );
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -165,7 +150,7 @@ export const HookFormRRStack = <T extends FieldValues>({
   return (
     <Form.Field
       {...fieldProps}
-      {...omit(hookFieldProps, ['ref'])}
+      {...omit(hookFieldProps as Record<string, unknown>, ['ref'])}
       className={concatClassNames(className, 'hook-form-rrstack')}
     >
       {label && <label>{label}</label>}

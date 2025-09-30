@@ -1,10 +1,6 @@
 import { omit } from 'radash';
 import { type ChangeEvent, type ReactNode, useMemo, useState } from 'react';
-import {
-  type ControllerProps,
-  type FieldValues,
-  useController,
-} from 'react-hook-form';
+import { type FieldValues } from 'react-hook-form';
 import {
   defaultCountries,
   FlagImage,
@@ -22,18 +18,19 @@ import {
   Label,
 } from 'semantic-ui-react';
 
-import type { PrefixedPartial } from '@/types/PrefixedPartial';
-import { deprefix } from '@/types/PrefixedPartial';
+import { useHookForm } from '@/hooks/useHookForm';
+import type { HookFormProps } from '@/types/HookFormProps';
+import type { PrefixProps } from '@/types/PrefixProps';
 
 import { isPhoneValid } from './isPhoneValid';
 
 export interface HookFormPhoneProps<T extends FieldValues>
-  extends Omit<
+  extends HookFormProps<T>,
+    Omit<
       FormFieldProps,
       'disabled' | 'error' | 'name' | 'onBlur' | 'onChange' | 'ref' | 'value'
     >,
-    PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'>,
-    PrefixedPartial<Omit<UsePhoneInputConfig, 'value'>, 'phone'> {
+    PrefixProps<Omit<UsePhoneInputConfig, 'value'>, 'phone'> {
   phonePlaceholderNumberChar?: string;
   mobileBreakpoint?: number;
   isValidating?: boolean;
@@ -44,49 +41,51 @@ const NEXT_PUBLIC_MOBILE_BREAKPOINT = 768;
 export const HookFormPhone = <T extends FieldValues>(
   props: HookFormPhoneProps<T>,
 ) => {
-  const {
-    hook: hookProps,
-    phone: phoneProps,
-    rest: { breakpointCountryCode, children, isValidating, ...fieldProps },
-  } = useMemo(() => deprefix(props, ['hook', 'phone']), [props]);
-
+  // One-char formatting tokens (derive directly from props)
   const [prefix, charAfterDialCode, placeholderNumberChar] = useMemo(() => {
-    const prefix = phoneProps.prefix?.slice(0, 1) || '+';
-    const charAfterDialCode = phoneProps.charAfterDialCode?.slice(0, 1) || ' ';
-    const placeholderNumberChar =
-      phoneProps.placeholderNumberChar?.slice(0, 1) || '.';
-
-    return [prefix, charAfterDialCode, placeholderNumberChar];
+    const p = props.phonePrefix?.slice(0, 1) || '+';
+    const c = props.phoneCharAfterDialCode?.slice(0, 1) || ' ';
+    const n = props.phonePlaceholderNumberChar?.slice(0, 1) || '.';
+    return [p, c, n] as const;
   }, [
-    phoneProps.charAfterDialCode,
-    phoneProps.placeholderNumberChar,
-    phoneProps.prefix,
+    props.phonePrefix,
+    props.phoneCharAfterDialCode,
+    props.phonePlaceholderNumberChar,
   ]);
 
   const [dialCode, setDialCode] = useState('');
 
-  const {
-    field: {
-      onChange: hookFieldOnChange,
-      value: hookFieldValue,
-      ...hookFieldProps
-    },
-    fieldState: { error },
-  } = useController({
-    ...hookProps,
-    rules: {
-      ...hookProps.rules,
-      validate: {
-        ...(hookProps.rules?.validate || {}),
-        valid: (v: string) => {
-          if (`${prefix}${dialCode}`.startsWith(v) || isPhoneValid(v)) {
-            return true;
-          }
-          return 'Invalid phone number!';
+  // Merge dynamic validation into hookRules to allow partial dial-code during input
+  const mergedProps = useMemo(() => {
+    const baseValidate =
+      (props.hookRules?.validate as Record<string, unknown> | undefined) ?? {};
+    return {
+      ...props,
+      hookRules: {
+        ...props.hookRules,
+        validate: {
+          ...baseValidate,
+          valid: (v: string) =>
+            `${prefix}${dialCode}`.startsWith(v) ||
+            isPhoneValid(v) ||
+            'Invalid phone number!',
         },
       },
+    } as HookFormPhoneProps<T>;
+  }, [props, prefix, dialCode]);
+
+  const {
+    controller: {
+      field: {
+        onChange: hookFieldOnChange,
+        value: hookFieldValue,
+        ...hookFieldProps
+      },
+      fieldState: { error },
     },
-  });
+    deprefixed: { phone: phoneProps },
+    rest: { mobileBreakpoint, children, isValidating, ...fieldProps },
+  } = useHookForm({ props: mergedProps, prefixes: ['phone'] as const });
 
   const { inputValue, phone, country, setCountry, handlePhoneValueChange } =
     usePhoneInput({
@@ -123,8 +122,7 @@ export const HookFormPhone = <T extends FieldValues>(
   );
 
   const isMobile = useMediaQuery({
-    maxWidth:
-      (breakpointCountryCode as number) ?? NEXT_PUBLIC_MOBILE_BREAKPOINT,
+    maxWidth: (mobileBreakpoint as number) ?? NEXT_PUBLIC_MOBILE_BREAKPOINT,
   });
 
   const countryOptions = useMemo(

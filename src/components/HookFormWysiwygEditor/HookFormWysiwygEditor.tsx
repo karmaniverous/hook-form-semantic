@@ -1,15 +1,12 @@
 import { omit } from 'radash';
 import { type ReactNode, Suspense, useMemo } from 'react';
 import React from 'react';
-import {
-  type ControllerProps,
-  type FieldValues,
-  useController,
-  type UseControllerProps,
-} from 'react-hook-form';
+import { type FieldValues } from 'react-hook-form';
 import { Form, type FormFieldProps, Label } from 'semantic-ui-react';
 
-import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
+import { useHookForm } from '@/hooks/useHookForm';
+import type { HookFormProps } from '@/types/HookFormProps';
+import type { PrefixProps } from '@/types/PrefixProps';
 
 import { type WysiwygEditorProps } from './WysiwygEditor';
 
@@ -20,26 +17,26 @@ const WysiwygEditor = React.lazy(() =>
 );
 
 export interface HookFormWysiwygEditorProps<T extends FieldValues>
-  extends Omit<
+  extends HookFormProps<T>,
+    Omit<
       FormFieldProps,
       'children' | 'disabled' | 'error' | 'name' | 'onBlur' | 'ref' | 'value'
     >,
-    PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'>,
-    PrefixedPartial<Partial<WysiwygEditorProps>, 'wysiwyg'> {}
+    PrefixProps<Partial<WysiwygEditorProps>, 'wysiwyg'> {}
 
 export const HookFormWysiwygEditor = <T extends FieldValues>(
   props: HookFormWysiwygEditorProps<T>,
 ) => {
   const {
-    hook: hookProps,
+    controller: {
+      field: { onChange: hookFieldOnChange, ...hookFieldProps },
+      fieldState: { error },
+    },
+    deprefixed: {
+      wysiwyg: { onChange: wysiwygOnChange, ...wysiwygProps },
+    },
     rest: fieldProps,
-    wysiwyg: { onChange: wysiwygOnChange, ...wysiwygProps },
-  } = useMemo(() => deprefix(props, ['hook', 'wysiwyg']), [props]);
-
-  const {
-    field: { onChange: hookFieldOnChange, ...hookFieldProps },
-    fieldState: { error },
-  } = useController(hookProps as UseControllerProps);
+  } = useHookForm({ props, prefixes: ['wysiwyg'] as const });
 
   const hookField = useMemo(
     () => ({
@@ -58,8 +55,10 @@ export const HookFormWysiwygEditor = <T extends FieldValues>(
         {fieldProps.label && <label>{fieldProps.label as ReactNode}</label>}
 
         <Suspense fallback={<div>Loading editor...</div>}>
-          {' '}
-          <WysiwygEditor {...wysiwygProps} {...hookField} />
+          <WysiwygEditor
+            {...wysiwygProps}
+            {...(hookField as unknown as WysiwygEditorProps)}
+          />
         </Suspense>
 
         {error?.message && (

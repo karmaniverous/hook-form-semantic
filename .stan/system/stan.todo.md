@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-09-29T00:00:00Z
+# When updated: 2025-09-30T00:00:00Z
 
 ## Next up
 
@@ -56,3 +56,9 @@
 - Tooling/tests: silence ESLint no-unused-vars in picker mocks by adding scoped disable/enable around filtered prop destructuring; remove unused editorState/editorStyle params from WYSIWYG mock forwardRef signature. Lint now clean without altering runtime behavior; tests remain green.
 - RRStackRuleDescription: pass includeBounds from HookFormRRStackRule and augment description with concise extras (hours, minutes, positions) so edits are visible immediately.
 - RRStackRuleForm: DoM input mirrors Hours/Minutes UX using local state + parseOptions + syncOptions; allows commas/spaces and incomplete tokens; removed stray debug logs.
+
+- Refactor remaining components to use useHookForm:
+  - HookFormPhone, HookFormJsonEditor, HookFormSort, HookFormWysiwygEditor,
+    HookFormRRStack now use the shared hook; retained public props and UX.
+  - Centralized RHF Controller wiring and debug logging; removed ad‑hoc
+    useController/useWatch in components.

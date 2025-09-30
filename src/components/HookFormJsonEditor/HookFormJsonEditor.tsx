@@ -1,11 +1,6 @@
 import { omit } from 'radash';
 import { type ReactNode, useMemo } from 'react';
-import {
-  type ControllerProps,
-  type FieldValues,
-  useController,
-  type UseControllerProps,
-} from 'react-hook-form';
+import { type FieldValues } from 'react-hook-form';
 import { Form, type FormFieldProps, Label } from 'semantic-ui-react';
 import type {
   Content,
@@ -13,42 +8,41 @@ import type {
   OnChangeStatus,
 } from 'vanilla-jsoneditor';
 
-import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
+import { useHookForm } from '@/hooks/useHookForm';
+import type { HookFormProps } from '@/types/HookFormProps';
+import type { PrefixProps } from '@/types/PrefixProps';
 
 import JsonEditor from './JsonEditor';
 
 export interface HookFormJsonEditorProps<T extends FieldValues>
-  extends Omit<
+  extends HookFormProps<T>,
+    Omit<
       FormFieldProps,
       'children' | 'disabled' | 'error' | 'name' | 'onBlur' | 'ref' | 'value'
     >,
-    PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'>,
-    PrefixedPartial<
-      Partial<Omit<JSONEditorPropsOptional, 'content'>>,
-      'json'
-    > {}
+    PrefixProps<Partial<Omit<JSONEditorPropsOptional, 'content'>>, 'json'> {}
 
 export const HookFormJsonEditor = <T extends FieldValues>(
   props: HookFormJsonEditorProps<T>,
 ) => {
   const {
-    hook: hookProps,
-    json: { onChange: jsonOnChange, ...jsonProps },
-    rest: fieldProps,
-  } = useMemo(() => deprefix(props, ['hook', 'json']), [props]);
-
-  const {
-    field: {
-      onChange: hookFieldOnChange,
-      value: hookFieldValue,
-      ...hookFieldProps
+    controller: {
+      field: {
+        onChange: hookFieldOnChange,
+        value: hookFieldValue,
+        ...hookFieldProps
+      },
+      fieldState: { error },
     },
-    fieldState: { error },
-  } = useController(hookProps as UseControllerProps);
+    deprefixed: {
+      json: { onChange: jsonOnChange, ...jsonProps },
+    },
+    rest: fieldProps,
+  } = useHookForm({ props, prefixes: ['json'] as const });
 
   const hookField = useMemo(
     () => ({
-      ...omit(hookFieldProps, ['disabled', 'name']),
+      ...omit(hookFieldProps as Record<string, unknown>, ['disabled', 'name']),
       content: hookFieldValue
         ? typeof hookFieldValue === 'string'
           ? { text: hookFieldValue }
