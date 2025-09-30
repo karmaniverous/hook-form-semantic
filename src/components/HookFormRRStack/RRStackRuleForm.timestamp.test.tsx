@@ -124,7 +124,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
 
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('Test Rule')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Rule label')).toBeInTheDocument();
   });
 
   it('creates proper date range when both dates are selected', () => {
@@ -150,7 +150,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
 
     expect(screen.getByText('Start Date')).toBeInTheDocument();
     expect(screen.getByText('End Date')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('Test Rule')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Rule label')).toBeInTheDocument();
   });
 
   it('preserves timestamp values without automatic adjustment', () => {

@@ -45,7 +45,7 @@ vi.mock('semantic-ui-react', () => {
         : typeof label === 'string'
           ? React.createElement('label', undefined, label)
           : (label as React.ReactNode);
-    return React.createElement('div', divProps, [renderedLabel, child]);
+    return React.createElement('div', divProps, renderedLabel, child);
   };
 
   const FormGroup: React.FC<

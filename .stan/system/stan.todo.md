@@ -26,6 +26,14 @@
 
 ## Completed (recent)
 
+- Tests: adapt label-based queries to support InfoLabel (non-<label> labels). Updated helpers to read the first child of each [data-testid="form-field"] and match on its text content. Fixes “Label not found: Frequency/Effect” errors.
+
+- Tests: drop brittle getByDisplayValue('Test Rule') assertions in RRStackRuleForm timestamp tests; assert presence via placeholder "Rule label" instead.
+
+- Tests: in Effect toggle case, wait for description text to populate before comparing; stabilizes the update assertion.
+
+- Mocks: eliminate “unique key” warning in semantic-ui-react Form.Field double by passing children as variadic args instead of an array.
+
 - Tests/mocks: render Form.Field label prop in semantic-ui-react double; keep unknown props off the wrapper. Restores label-driven queries without DOM warnings.
 
 - HookFormField: default to [] for multiple Dropdowns when RHF value is undefined; fixes React warning and multi-select tests with control={Dropdown}.

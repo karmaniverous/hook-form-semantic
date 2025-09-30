@@ -253,7 +253,7 @@ describe('HookFormRRStack Validation', () => {
     // Add a rule
     fireEvent.click(screen.getByText('Add Rule'));
 
-    // There are two date-picker inputs inside the rule form (Start Date, End Date)
+    // There are two date-picker inputs inside the rule form (accordion should be open)
     const inputs = await screen.findAllByTestId('date-picker');
     expect(inputs.length).toBeGreaterThanOrEqual(2);
 

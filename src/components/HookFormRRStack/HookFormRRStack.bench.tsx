@@ -41,10 +41,9 @@ const getFieldByLabel = (root: HTMLElement, labelText: string) => {
     root.querySelectorAll<HTMLElement>('[data-testid="form-field"]'),
   );
   for (const f of fields) {
-    const labels = Array.from(f.querySelectorAll('label'));
-    if (labels.some((l) => l.textContent?.trim() === labelText)) {
-      return f;
-    }
+    const first = f.firstElementChild as HTMLElement | null;
+    const txt = (first?.textContent ?? '').trim();
+    if (txt.includes(labelText)) return f;
   }
   throw new Error(`Field not found: ${labelText}`);
 };

@@ -117,10 +117,13 @@ export const HookFormRRStack = <T extends FieldValues>(
   }>({});
 
   const { rrstack } = useRRStack({
-    json: engineJson,
     onChange: handleChange,
     ...rrstackProps,
   });
+
+  useEffect(() => {
+    rrstack.updateOptions(engineJson);
+  }, [engineJson, rrstack]);
 
   const { starts, ends } = useMemo(() => {
     const formatTimestamp = (ts: number | null | undefined) =>
