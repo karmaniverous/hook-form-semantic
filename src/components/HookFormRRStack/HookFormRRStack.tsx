@@ -94,11 +94,7 @@ export const HookFormRRStack = <T extends FieldValues>({
   });
 
   useEffect(() => {
-    (logger === true
-      ? console.log
-      : typeof logger === 'function'
-        ? logger
-        : undefined)?.('HookFormRRStack form data', watchedValue);
+    logger?.debug('HookFormRRStack form data', watchedValue);
   }, [watchedValue]);
 
   const handleChange = useCallback(

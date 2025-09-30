@@ -1,3 +1,6 @@
-export type PickRest<T, Prefixes extends string> = {
-  [K in keyof T as K extends `${Prefixes}${string}` ? never : K]: T[K];
+export type PickRest<
+  Props extends Record<string, unknown>,
+  Prefix extends string,
+> = {
+  [K in keyof Props as K extends `${Prefix}${string}` ? never : K]: Props[K];
 };

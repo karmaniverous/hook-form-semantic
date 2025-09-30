@@ -1,5 +1,1 @@
-export type Logger =
-  | ((...args: unknown[]) => void)
-  | boolean
-  | null
-  | undefined;
+export type Logger = Pick<Console, 'debug' | 'log' | 'warn' | 'error'>;
