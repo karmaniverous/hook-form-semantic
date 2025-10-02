@@ -18,13 +18,7 @@ vi.mock('react-number-format', () => {
       React.InputHTMLAttributes<HTMLInputElement>
     >;
   }
-  const NumericFormat: React.FC<Props> = ({
-    onValueChange,
-    allowNegative: _allowNegative,
-    decimalScale: _decimalScale,
-    customInput: _customInput,
-    ...p
-  }) =>
+  const NumericFormat: React.FC<Props> = ({ onValueChange, ...p }) =>
     React.createElement('input', {
       ...p,
       'data-testid': 'numeric-input',

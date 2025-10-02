@@ -1,4 +1,8 @@
 import React from 'react';
+import type {
+  StrictCheckboxProps,
+  StrictDropdownProps,
+} from 'semantic-ui-react';
 import { vi } from 'vitest';
 
 // semantic-ui-react lightweight doubles
@@ -73,6 +77,7 @@ vi.mock('semantic-ui-react', () => {
     React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
   > = ({ children, ...p }) =>
     React.createElement('div', { ...p, 'data-testid': 'label' }, children);
+  (Label as unknown as { displayName?: string }).displayName = 'Label';
 
   const Input = React.forwardRef<
     HTMLInputElement,
@@ -93,70 +98,42 @@ vi.mock('semantic-ui-react', () => {
   );
   (Input as unknown as { displayName?: string }).displayName = 'Input';
 
-  type CheckboxData = { checked: boolean } & Record<string, unknown>;
-  interface CheckboxProps
-    extends Omit<
-      React.InputHTMLAttributes<HTMLInputElement>,
-      'onChange' | 'type' | 'checked'
-    > {
-    onChange?: (
-      e: React.FormEvent<HTMLInputElement>,
-      data: CheckboxData,
-    ) => void;
-    checked?: boolean;
-    label?: React.ReactNode;
-  }
-
-  const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
+  const Checkbox = React.forwardRef<HTMLInputElement, StrictCheckboxProps>(
     ({ onChange, checked, label, ...rest }, ref) =>
       React.createElement(
         'label',
         undefined,
         React.createElement('input', {
-          ...rest,
+          ...(rest as Record<string, unknown>),
           ref,
           type: 'checkbox',
           'aria-label': typeof label === 'string' ? label : 'checkbox',
           checked: !!checked,
           onChange: (e: React.FormEvent<HTMLInputElement>) =>
             onChange?.(e, {
-              ...rest,
+              ...(rest as StrictCheckboxProps),
               checked: (e.target as HTMLInputElement).checked,
-            }),
+            } as StrictCheckboxProps),
         } as React.InputHTMLAttributes<HTMLInputElement>),
         label,
       ),
   );
   (Checkbox as unknown as { displayName?: string }).displayName = 'Checkbox';
 
-  type Option = {
-    value: string | number;
-    text?: string;
-    content?: React.ReactNode;
-  };
-  interface DropdownProps {
-    options?: Option[];
-    value?: string | number | Array<string | number>;
-    placeholder?: string;
-    multiple?: boolean;
-    onChange?: (
-      e: React.SyntheticEvent<HTMLElement>,
-      data: { value: unknown },
-    ) => void;
-  }
-
-  const Dropdown: React.FC<DropdownProps> = ({
+  const Dropdown: React.FC<StrictDropdownProps> = ({
     onChange,
     options = [],
     value,
     placeholder,
     multiple,
+    ...rest
   }) =>
     React.createElement(
       'select',
       {
         'data-testid': 'dropdown',
         multiple: !!multiple,
+        ...rest,
         value:
           value === undefined || value === null
             ? multiple
@@ -175,14 +152,22 @@ vi.mock('semantic-ui-react', () => {
                   ? [e.currentTarget.value]
                   : [];
             const vals = selectedValues
-              .map((sv) => options.find((o) => String(o.value) === sv)?.value)
+              .map(
+                (sv) =>
+                  (options as unknown as Array<{ value: unknown }>).find(
+                    (o) => String(o.value) === sv,
+                  )?.value,
+              )
               .filter((v) => v !== undefined);
-            onChange?.(e, { value: vals });
+            onChange?.(e, { ...(rest as StrictDropdownProps), value: vals });
           } else {
-            const opt = options.find(
+            const opt = (options as unknown as Array<{ value: unknown }>).find(
               (o) => String(o.value) === e.currentTarget.value,
             );
-            onChange?.(e, { value: opt?.value });
+            onChange?.(e, {
+              ...(rest as StrictDropdownProps),
+              value: opt?.value,
+            });
           }
         },
       } as React.SelectHTMLAttributes<HTMLSelectElement>,
@@ -192,7 +177,13 @@ vi.mock('semantic-ui-react', () => {
           { key: '__placeholder__', value: '', disabled: true },
           placeholder ?? '',
         ),
-        ...options.map((o) =>
+        ...(
+          options as unknown as Array<{
+            value: unknown;
+            text?: React.ReactNode;
+            content?: React.ReactNode;
+          }>
+        ).map((o) =>
           React.createElement(
             'option',
             { key: String(o.value), value: o.value },
@@ -201,27 +192,18 @@ vi.mock('semantic-ui-react', () => {
         ),
       ],
     );
+  (Dropdown as unknown as { displayName?: string }).displayName = 'Dropdown';
 
   interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     icon?: unknown;
-    primary?: boolean;
-    color?: string;
-    size?: string;
   }
-  const Button: React.FC<ButtonProps> = ({
-    onClick,
-    icon,
-    primary: _primary,
-    color: _color,
-    size: _size,
-    children,
-    ...r
-  }) =>
+  const Button: React.FC<ButtonProps> = ({ onClick, icon, children, ...r }) =>
     React.createElement(
       'button',
       { ...r, onClick, 'data-icon': String(icon ?? '') },
       children ?? String(icon ?? ''),
     );
+  (Button as unknown as { displayName?: string }).displayName = 'Button';
 
   interface MenuItem {
     name: string;

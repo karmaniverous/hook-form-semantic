@@ -26,6 +26,17 @@
 
 ## Completed (recent)
 
+- Test setup:
+  - Decomposed vitest.setup.tsx to side‑effect imports (semantic/pickers/inputs/json‑wysiwyg).
+  - Updated doubles to derive key prop types from Semantic UI React (StrictCheckboxProps, StrictDropdownProps).
+  - Added displayName on core doubles; removed unused destructures to satisfy lint.
+
+- A11y (checkbox controls):
+  - Switched interactive labels to real <button type="button"> elements in HookFormCheckbox to satisfy jsx-a11y/no-noninteractive-element-to-interactive-role without changing behavior.
+
+- RRStack (live bounds):
+  - Keyed Starts/Ends recomputation on useRRStack version so changes to rule dates/timezone immediately update the displayed effective bounds.
+
 - Requirements split:
   - Moved durable RRStack UI requirements into `.stan/system/stan.requirements.md`.
   - Trimmed `.stan/system/stan.project.md` to assistant instructions (kept testing/bench policy).

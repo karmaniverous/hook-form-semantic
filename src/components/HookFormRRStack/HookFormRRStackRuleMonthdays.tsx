@@ -73,7 +73,7 @@ export const HookFormRRStackRuleMonthdays = <
           placeholder="25 (for 25th)"
           size="small"
         />
-      </Form.Group>{' '}
+      </Form.Group>
     </Segment>
   );
 };

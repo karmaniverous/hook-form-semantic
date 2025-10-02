@@ -102,7 +102,7 @@ export const HookFormRRStack = <
 
   const json = useWatch({ control, name, compute: (v) => rhf2rrstack(v) });
 
-  const { rrstack } = useRRStack({
+  const { rrstack, version } = useRRStack({
     json,
     onChange: handleChange,
     ...rrstackProps,
@@ -120,7 +120,7 @@ export const HookFormRRStack = <
       starts: formatTimestamp(start),
       ends: formatTimestamp(end),
     };
-  }, [rrstack, timestampFormat]);
+  }, [rrstack, version, timestampFormat]);
 
   const handleAddRule = useCallback(() => {
     rrstack.addRule();
