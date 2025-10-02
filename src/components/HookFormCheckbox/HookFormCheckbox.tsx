@@ -1,6 +1,7 @@
 import { omit } from 'radash';
 import type { FormEvent, ReactNode } from 'react';
 import { useCallback, useRef } from 'react';
+import type { FieldPath } from 'react-hook-form';
 import { type FieldValues } from 'react-hook-form';
 import {
   Checkbox,
@@ -14,8 +15,10 @@ import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
 
-export interface HookFormCheckboxProps<T extends FieldValues>
-  extends HookFormProps<T>,
+export interface HookFormCheckboxProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> extends HookFormProps<TFieldValues, TName>,
     Omit<
       StrictFormFieldProps,
       | 'children'
@@ -35,14 +38,17 @@ export interface HookFormCheckboxProps<T extends FieldValues>
   uncheckLabel?: string;
 }
 
-export const HookFormCheckbox = <T extends FieldValues>({
+export const HookFormCheckbox = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
   checkLabel,
   label,
   leftLabel,
   rightLabel,
   uncheckLabel,
   ...props
-}: HookFormCheckboxProps<T>) => {
+}: HookFormCheckboxProps<TFieldValues, TName>) => {
   const {
     controller: {
       field: { onChange: hookFieldOnChange, value, ...hookFieldProps },

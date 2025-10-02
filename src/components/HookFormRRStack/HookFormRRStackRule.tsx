@@ -1,6 +1,6 @@
 import type { UseRRStackOutput } from '@karmaniverous/rrstack/react';
 import { useCallback } from 'react';
-import type { FieldValues } from 'react-hook-form';
+import type { FieldPath, FieldValues } from 'react-hook-form';
 import type { AccordionTitleProps } from 'semantic-ui-react';
 import { Accordion, Button, Icon, Label, Segment } from 'semantic-ui-react';
 
@@ -11,8 +11,10 @@ import type { PrefixProps } from '@/types/PrefixProps';
 import { HookFormRRStackRuleForm } from './HookFormRRStackRuleForm';
 import type { RRStackRuleDescriptionPropsBase } from './RRStackRuleDescription';
 import { RRStackRuleDescription } from './RRStackRuleDescription';
-interface HookFormRRStackRuleProps<T extends FieldValues = FieldValues>
-  extends HookFormProps<T>,
+interface HookFormRRStackRuleProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> extends HookFormProps<TFieldValues, TName>,
     Pick<AccordionTitleProps, 'onClick'>,
     PrefixProps<
       Omit<RRStackRuleDescriptionPropsBase, 'index' | 'rrstack'>,
@@ -24,8 +26,11 @@ interface HookFormRRStackRuleProps<T extends FieldValues = FieldValues>
   setActiveIndex: (index: number | null) => void;
 }
 
-export const HookFormRRStackRule = <T extends FieldValues = FieldValues>(
-  props: HookFormRRStackRuleProps<T>,
+export const HookFormRRStackRule = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(
+  props: HookFormRRStackRuleProps<TFieldValues, TName>,
 ) => {
   const {
     deprefixed: {
@@ -184,7 +189,7 @@ export const HookFormRRStackRule = <T extends FieldValues = FieldValues>(
         active={index === activeIndex}
       >
         <Segment basic style={{ fontSize: '0.9em', padding: 0 }}>
-          <HookFormRRStackRuleForm<T>
+          <HookFormRRStackRuleForm<TFieldValues, TName>
             index={index}
             hookControl={control}
             hookName={name}

@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
+import type { FieldPath } from 'react-hook-form';
 import {
   type FieldValues,
-  type Path,
   useController,
   type UseControllerProps,
   useWatch,
@@ -21,29 +21,32 @@ export interface UseHookFormProps<
 
 export const useHookForm = <
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Props extends HookFormProps<any>,
+  Props extends HookFormProps<any, any>,
   Prefix extends string = never,
 >({
   props,
   prefixes = [] as const,
 }: UseHookFormProps<Props, Prefix>) => {
   // Infer the form value type T from the HookFormProps<T> passed in.
-  type T = Props extends HookFormProps<infer U> ? U : FieldValues;
+  type TFieldValues =
+    Props extends HookFormProps<infer T, any> ? T : FieldValues;
+  type TName =
+    Props extends HookFormProps<any, infer T> ? T : FieldPath<TFieldValues>;
 
   const { deprefixed, hookProps, rest } = useMemo(() => {
     // Split props into deprefixed groups and the rest.
     const { deprefixed, rest } = deprefixProps(props, prefixes);
 
     // Narrow the deprefixed hook props so RHF infers the concrete T.
-    const hookProps = deprefixed.hook as unknown as UseControllerProps<
-      T,
-      Path<T>
+    const hookProps = deprefixed.hook as UseControllerProps<
+      TFieldValues,
+      TName
     >;
 
     return { deprefixed, hookProps, rest };
   }, [prefixes, props]);
 
-  const controller = useController<T, Path<T>>(hookProps);
+  const controller = useController<TFieldValues, TName>(hookProps);
 
   const watchedValue = useWatch({
     control: hookProps.control,

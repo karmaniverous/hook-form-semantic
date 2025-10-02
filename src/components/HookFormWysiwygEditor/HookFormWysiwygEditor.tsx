@@ -1,6 +1,7 @@
 import { omit } from 'radash';
 import { type ReactNode, Suspense, useMemo } from 'react';
 import React from 'react';
+import type { FieldPath } from 'react-hook-form';
 import { type FieldValues } from 'react-hook-form';
 import { Form, type FormFieldProps, Label } from 'semantic-ui-react';
 
@@ -16,16 +17,21 @@ const WysiwygEditor = React.lazy(() =>
   })),
 );
 
-export interface HookFormWysiwygEditorProps<T extends FieldValues>
-  extends HookFormProps<T>,
+export interface HookFormWysiwygEditorProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> extends HookFormProps<TFieldValues, TName>,
     Omit<
       FormFieldProps,
       'children' | 'disabled' | 'error' | 'name' | 'onBlur' | 'ref' | 'value'
     >,
     PrefixProps<Partial<WysiwygEditorProps>, 'wysiwyg'> {}
 
-export const HookFormWysiwygEditor = <T extends FieldValues>(
-  props: HookFormWysiwygEditorProps<T>,
+export const HookFormWysiwygEditor = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(
+  props: HookFormWysiwygEditorProps<TFieldValues, TName>,
 ) => {
   const {
     controller: {

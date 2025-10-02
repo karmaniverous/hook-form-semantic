@@ -1,4 +1,4 @@
-import type { FieldValues, Path } from 'react-hook-form';
+import type { FieldPath, FieldValues } from 'react-hook-form';
 import { Form, Header, Input, Segment } from 'semantic-ui-react';
 
 import { HookFormField } from '@/components/HookFormField';
@@ -7,11 +7,16 @@ import type { HookFormProps } from '@/types/HookFormProps';
 
 import { InfoLabel } from './InfoLabel';
 
-type HookFormRRStackRuleTimeProps<T extends FieldValues = FieldValues> =
-  HookFormProps<T>;
+type HookFormRRStackRuleTimeProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> = HookFormProps<TFieldValues, TName>;
 
-export const HookFormRRStackRuleTime = <T extends FieldValues = FieldValues>(
-  props: HookFormRRStackRuleTimeProps<T>,
+export const HookFormRRStackRuleTime = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(
+  props: HookFormRRStackRuleTimeProps<TFieldValues, TName>,
 ) => {
   const {
     deprefixed: {
@@ -23,10 +28,10 @@ export const HookFormRRStackRuleTime = <T extends FieldValues = FieldValues>(
     <Segment>
       <Header size="tiny">Time</Header>
       <Form.Group widths="equal" style={{ marginBottom: 0 }}>
-        <HookFormField<T, { value: string }>
+        <HookFormField<TFieldValues, { value: string }, TName>
           control={Input}
           hookControl={control}
-          hookName={`${name}.options.byhourText` as Path<T>}
+          hookName={`${name}.options.byhourText` as TName}
           label={
             <InfoLabel
               text="Hours"
@@ -36,10 +41,10 @@ export const HookFormRRStackRuleTime = <T extends FieldValues = FieldValues>(
           placeholder="9, 13, 17"
           size="small"
         />
-        <HookFormField<T, { value: string }>
+        <HookFormField<TFieldValues, { value: string }, TName>
           control={Input}
           hookControl={control}
-          hookName={`${name}.options.byminuteText` as Path<T>}
+          hookName={`${name}.options.byminuteText` as TName}
           label={
             <InfoLabel
               text="Minutes"

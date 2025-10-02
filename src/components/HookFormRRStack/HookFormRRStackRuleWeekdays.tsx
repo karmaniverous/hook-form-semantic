@@ -1,4 +1,4 @@
-import type { FieldValues, Path } from 'react-hook-form';
+import type { FieldPath, FieldValues } from 'react-hook-form';
 import { Dropdown, Form, Header, Segment } from 'semantic-ui-react';
 
 import { HookFormField } from '@/components/HookFormField';
@@ -25,13 +25,16 @@ const POSITION_OPTIONS = [
   { key: -1, text: 'Last', value: -1 },
 ];
 
-type HookFormRRStackRuleWeekdaysProps<T extends FieldValues = FieldValues> =
-  HookFormProps<T>;
+type HookFormRRStackRuleWeekdaysProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> = HookFormProps<TFieldValues, TName>;
 
 export const HookFormRRStackRuleWeekdays = <
-  T extends FieldValues = FieldValues,
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(
-  props: HookFormRRStackRuleWeekdaysProps<T>,
+  props: HookFormRRStackRuleWeekdaysProps<TFieldValues, TName>,
 ) => {
   const {
     deprefixed: {
@@ -44,11 +47,11 @@ export const HookFormRRStackRuleWeekdays = <
       <Header size="tiny">Weekdays</Header>
 
       <Form.Group widths="equal" style={{ marginBottom: '-5px' }}>
-        <HookFormField<T, { value: number[] }>
+        <HookFormField<TFieldValues, { value: number[] }, TName>
           compact
           control={Dropdown}
           hookControl={control}
-          hookName={`${name}.options.byweekday` as Path<T>}
+          hookName={`${name}.options.byweekday` as TName}
           label={
             <InfoLabel
               text="Weekdays"
@@ -61,11 +64,11 @@ export const HookFormRRStackRuleWeekdays = <
           selection
         />
 
-        <HookFormField<T, { value: number[] }>
+        <HookFormField<TFieldValues, { value: number[] }, TName>
           compact
           control={Dropdown}
           hookControl={control}
-          hookName={`${name}.options.bysetpos` as Path<T>}
+          hookName={`${name}.options.bysetpos` as TName}
           label={
             <InfoLabel
               text="Position"

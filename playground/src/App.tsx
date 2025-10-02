@@ -25,6 +25,7 @@ import { HookFormJsonEditor } from '@/components/HookFormJsonEditor';
 import { HookFormNumeric } from '@/components/HookFormNumeric';
 import { HookFormPhone } from '@/components/HookFormPhone';
 import { HookFormRRStack } from '@/components/HookFormRRStack';
+import type { HookFormRRStackData } from '@/components/HookFormRRStack/types';
 import { HookFormSort } from '@/components/HookFormSort';
 import { HookFormWysiwygEditor } from '@/components/HookFormWysiwygEditor';
 
@@ -46,7 +47,7 @@ interface FormData {
   jsonData: object;
   newsletter: boolean;
   terms: boolean;
-  rrstack: object;
+  rrstack: HookFormRRStackData;
 }
 
 export default function App() {

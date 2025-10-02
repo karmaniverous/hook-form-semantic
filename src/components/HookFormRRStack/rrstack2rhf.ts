@@ -1,7 +1,7 @@
 import type { RRStackOptions } from '@karmaniverous/rrstack';
 
 import { int2csv } from './int2csv';
-import type { FrequencyUI, UISchedule } from './types';
+import type { HookFormRRStackData } from './types';
 
 /**
  * Map the rrstack engine schedule to the RHF UI schedule (UI-friendly types).
@@ -10,13 +10,13 @@ import type { FrequencyUI, UISchedule } from './types';
  * - number[] → tolerant CSV text strings
  * - arrays pass through unchanged
  */
-export function rrstack2rhf(engine: RRStackOptions): UISchedule {
+export function rrstack2rhf(engine: RRStackOptions): HookFormRRStackData {
   return {
     timezone: engine.timezone,
     rules: Array.isArray(engine.rules)
       ? engine.rules.map((r) => {
           const o = r.options ?? {};
-          const freq: FrequencyUI = (o.freq as FrequencyUI) ?? 'span';
+          const freq = o.freq ?? 'span';
           const starts =
             typeof o.starts === 'number' ? new Date(o.starts) : null;
           const ends = typeof o.ends === 'number' ? new Date(o.ends) : null;

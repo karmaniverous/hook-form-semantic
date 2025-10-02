@@ -1,4 +1,5 @@
-import { type FieldValues, type Path, useWatch } from 'react-hook-form';
+import type { FieldPath } from 'react-hook-form';
+import { type FieldValues, useWatch } from 'react-hook-form';
 import { Dropdown, Form, Header, Segment } from 'semantic-ui-react';
 
 import { HookFormDatePicker } from '@/components/HookFormDatePicker';
@@ -20,11 +21,16 @@ const FREQUENCY_OPTIONS = [
   { key: 'secondly', text: 'Secondly', value: 'secondly' },
 ];
 
-type HookFormRRStackRuleRangeProps<T extends FieldValues = FieldValues> =
-  HookFormProps<T>;
+type HookFormRRStackRuleRangeProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> = HookFormProps<TFieldValues, TName>;
 
-export const HookFormRRStackRuleRange = <T extends FieldValues = FieldValues>(
-  props: HookFormRRStackRuleRangeProps<T>,
+export const HookFormRRStackRuleRange = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(
+  props: HookFormRRStackRuleRangeProps<TFieldValues, TName>,
 ) => {
   const {
     deprefixed: {
@@ -34,7 +40,7 @@ export const HookFormRRStackRuleRange = <T extends FieldValues = FieldValues>(
 
   const freq = useWatch({
     control,
-    name: `${name}.freq` as Path<T>,
+    name: `${name}.freq` as TName,
   });
 
   return (
@@ -42,25 +48,25 @@ export const HookFormRRStackRuleRange = <T extends FieldValues = FieldValues>(
       <Header size="tiny">Valid Range</Header>
 
       <Form.Group style={{ alignItems: 'flex-end' }}>
-        <HookFormDatePicker<T>
+        <HookFormDatePicker<TFieldValues, TName>
           hookControl={control}
-          hookName={`${name}.starts` as Path<T>}
+          hookName={`${name}.starts` as TName}
           label="Start Date"
           width={5}
         />
 
-        <HookFormDatePicker<T>
+        <HookFormDatePicker<TFieldValues, TName>
           hookControl={control}
-          hookName={`${name}.ends` as Path<T>}
+          hookName={`${name}.ends` as TName}
           label="End Date"
           width={5}
         />
 
-        <HookFormField<T, { value: string }>
+        <HookFormField<TFieldValues, { value: string }, TName>
           compact
           control={Dropdown}
           hookControl={control}
-          hookName={`${name}.freq` as Path<T>}
+          hookName={`${name}.freq` as TName}
           label={
             <InfoLabel
               text="Frequency"
@@ -75,9 +81,9 @@ export const HookFormRRStackRuleRange = <T extends FieldValues = FieldValues>(
 
         {freq && freq !== 'span' && (
           <>
-            <HookFormNumeric<T>
+            <HookFormNumeric<TFieldValues, TName>
               hookControl={control}
-              hookName={`${name}.interval` as Path<T>}
+              hookName={`${name}.interval` as TName}
               label={
                 <InfoLabel
                   text="Interval"
@@ -88,9 +94,9 @@ export const HookFormRRStackRuleRange = <T extends FieldValues = FieldValues>(
               width={2}
             />
 
-            <HookFormNumeric<T>
+            <HookFormNumeric<TFieldValues, TName>
               hookControl={control}
-              hookName={`${name}.count` as Path<T>}
+              hookName={`${name}.count` as TName}
               label={
                 <InfoLabel
                   text="Count"

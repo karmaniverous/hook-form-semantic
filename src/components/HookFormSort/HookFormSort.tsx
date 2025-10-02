@@ -1,5 +1,6 @@
 import { omit } from 'radash';
 import { useCallback } from 'react';
+import type { FieldPath } from 'react-hook-form';
 import { type FieldValues } from 'react-hook-form';
 import {
   Button,
@@ -21,8 +22,10 @@ export type Sort<T extends string | undefined> = [
   boolean,
 ];
 
-export interface HookFormSortProps<T extends FieldValues>
-  extends HookFormProps<T>,
+export interface HookFormSortProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> extends HookFormProps<TFieldValues, TName>,
     Omit<
       FormFieldProps,
       | 'children'
@@ -52,13 +55,16 @@ export interface HookFormSortProps<T extends FieldValues>
   dropdownOptions?: StrictDropdownProps['options']; // Backward compatibility
 }
 
-export const HookFormSort = <T extends FieldValues>({
+export const HookFormSort = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
   ascIcon = 'arrow up',
   descIcon = 'arrow down',
   sortOptions,
   dropdownOptions,
   ...props
-}: HookFormSortProps<T>) => {
+}: HookFormSortProps<TFieldValues, TName>) => {
   const {
     controller: {
       field: { onChange: hookFieldOnChange, value, ...hookFieldProps },

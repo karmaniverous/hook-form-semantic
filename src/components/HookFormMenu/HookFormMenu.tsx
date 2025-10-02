@@ -1,5 +1,6 @@
 import { omit } from 'radash';
 import { useCallback } from 'react';
+import type { FieldPath } from 'react-hook-form';
 import { type FieldValues } from 'react-hook-form';
 import {
   Form,
@@ -13,8 +14,10 @@ import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 
-export interface HookFormMenuProps<T extends FieldValues>
-  extends HookFormProps<T>,
+export interface HookFormMenuProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> extends HookFormProps<TFieldValues, TName>,
     Omit<
       FormFieldProps,
       | 'children'
@@ -32,8 +35,11 @@ export interface HookFormMenuProps<T extends FieldValues>
       'menu'
     > {}
 
-export const HookFormMenu = <T extends FieldValues>(
-  props: HookFormMenuProps<T>,
+export const HookFormMenu = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(
+  props: HookFormMenuProps<TFieldValues, TName>,
 ) => {
   const {
     controller: {

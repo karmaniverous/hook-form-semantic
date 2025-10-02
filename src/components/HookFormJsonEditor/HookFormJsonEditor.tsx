@@ -1,5 +1,6 @@
 import { omit } from 'radash';
 import { type ReactNode, useMemo } from 'react';
+import type { FieldPath } from 'react-hook-form';
 import { type FieldValues } from 'react-hook-form';
 import { Form, type FormFieldProps, Label } from 'semantic-ui-react';
 import type {
@@ -14,16 +15,21 @@ import type { PrefixProps } from '@/types/PrefixProps';
 
 import JsonEditor from './JsonEditor';
 
-export interface HookFormJsonEditorProps<T extends FieldValues>
-  extends HookFormProps<T>,
+export interface HookFormJsonEditorProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> extends HookFormProps<TFieldValues, TName>,
     Omit<
       FormFieldProps,
       'children' | 'disabled' | 'error' | 'name' | 'onBlur' | 'ref' | 'value'
     >,
     PrefixProps<Partial<Omit<JSONEditorPropsOptional, 'content'>>, 'json'> {}
 
-export const HookFormJsonEditor = <T extends FieldValues>(
-  props: HookFormJsonEditorProps<T>,
+export const HookFormJsonEditor = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(
+  props: HookFormJsonEditorProps<TFieldValues, TName>,
 ) => {
   const {
     controller: {

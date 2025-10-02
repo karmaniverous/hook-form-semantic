@@ -11,6 +11,7 @@ import {
   useMemo,
   useState,
 } from 'react';
+import type { FieldPath } from 'react-hook-form';
 import {
   type ControllerProps,
   type FieldValues,
@@ -27,189 +28,23 @@ import {
 
 import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
 import { concatClassNames } from '@/utils/concatClassNames';
-import { offsetTruncatedDate } from '@/utils/offsetTruncatedDate';
+import { isFn } from '@/utils/isFn';
 
-export type DateRange = [Date | null, Date | null];
-export const extractTimestamps = (dateRange: DateRange) =>
-  dateRange
-    ? (dateRange as (Date | null)[]).map((d) => (d ? d.getTime() : undefined))
-    : [undefined, undefined];
+import type { DateRange } from './DateRange';
+import type { Presets } from './presets';
 
-export type Presets = Record<
-  string,
-  {
-    text: string;
-    value: DateRange | (() => DateRange);
-    epoch: 'past' | 'present' | 'future';
-  }
->;
+const eqDate = (a: Date | null | undefined, b: Date | null | undefined) =>
+  (a == null && b == null) || (!!a && !!b && a.getTime() === b.getTime());
 
-export const defaultPresets: Presets = {
-  today: {
-    text: 'Today',
-    value: () => [
-      offsetTruncatedDate({ truncateAt: 'day' }),
-      offsetTruncatedDate({
-        truncateAt: 'day',
-        offsetDays: 1,
-        offsetMilliseconds: -1,
-      }),
-    ],
-    epoch: 'present',
-  },
-  yesterday: {
-    text: 'Yesterday',
-    value: () => [
-      offsetTruncatedDate({ truncateAt: 'day', offsetDays: -1 }),
-      offsetTruncatedDate({
-        truncateAt: 'day',
-        offsetMilliseconds: -1,
-      }),
-    ],
-    epoch: 'past',
-  },
-  tomorrow: {
-    text: 'Tomorrow',
-    value: () => [
-      offsetTruncatedDate({ truncateAt: 'day', offsetDays: 1 }),
-      offsetTruncatedDate({
-        truncateAt: 'day',
-        offsetDays: 2,
-        offsetMilliseconds: -1,
-      }),
-    ],
-    epoch: 'future',
-  },
-  thisWeek: {
-    text: 'This Week',
-    value: () => [
-      offsetTruncatedDate({
-        truncateAt: 'day',
-        offsetDays: -new Date().getDay(),
-      }),
-      offsetTruncatedDate({
-        truncateAt: 'day',
-        offsetDays: 7 - new Date().getDay(),
-        offsetMilliseconds: -1,
-      }),
-    ],
-    epoch: 'present',
-  },
-  lastWeek: {
-    text: 'Last Week',
-    value: () => [
-      offsetTruncatedDate({
-        truncateAt: 'day',
-        offsetDays: -new Date().getDay() - 7,
-      }),
-      offsetTruncatedDate({
-        truncateAt: 'day',
-        offsetDays: -new Date().getDay(),
-        offsetMilliseconds: -1,
-      }),
-    ],
-    epoch: 'past',
-  },
-  nextWeek: {
-    text: 'Next Week',
-    value: () => [
-      offsetTruncatedDate({
-        truncateAt: 'day',
-        offsetDays: 7 - new Date().getDay(),
-      }),
-      offsetTruncatedDate({
-        truncateAt: 'day',
-        offsetDays: 14 - new Date().getDay(),
-        offsetMilliseconds: -1,
-      }),
-    ],
-    epoch: 'future',
-  },
-  thisMonth: {
-    text: 'This Month',
-    value: () => [
-      offsetTruncatedDate({ truncateAt: 'month' }),
-      offsetTruncatedDate({
-        truncateAt: 'month',
-        offsetMonths: 1,
-        offsetMilliseconds: -1,
-      }),
-    ],
-    epoch: 'present',
-  },
-  lastMonth: {
-    text: 'Last Month',
-    value: () => [
-      offsetTruncatedDate({ truncateAt: 'month', offsetMonths: -1 }),
-      offsetTruncatedDate({
-        truncateAt: 'month',
-        offsetMilliseconds: -1,
-      }),
-    ],
-    epoch: 'past',
-  },
-  nextMonth: {
-    text: 'Next Month',
-    value: () => [
-      offsetTruncatedDate({ truncateAt: 'month', offsetMonths: 1 }),
-      offsetTruncatedDate({
-        truncateAt: 'month',
-        offsetMonths: 2,
-        offsetMilliseconds: -1,
-      }),
-    ],
-    epoch: 'future',
-  },
-  thisYear: {
-    text: 'This Year',
-    value: () => [
-      offsetTruncatedDate({ truncateAt: 'year' }),
-      offsetTruncatedDate({
-        truncateAt: 'year',
-        offsetYears: 1,
-        offsetMilliseconds: -1,
-      }),
-    ],
-    epoch: 'present',
-  },
-  lastYear: {
-    text: 'Last Year',
-    value: () => [
-      offsetTruncatedDate({ truncateAt: 'year', offsetYears: -1 }),
-      offsetTruncatedDate({
-        truncateAt: 'year',
-        offsetMilliseconds: -1,
-      }),
-    ],
-    epoch: 'past',
-  },
-  nextYear: {
-    text: 'Next Year',
-    value: () => [
-      offsetTruncatedDate({ truncateAt: 'year', offsetYears: 1 }),
-      offsetTruncatedDate({
-        truncateAt: 'year',
-        offsetYears: 2,
-        offsetMilliseconds: -1,
-      }),
-    ],
-    epoch: 'future',
-  },
-};
+const eqRange = (
+  a?: [Date | null, Date | null],
+  b?: [Date | null, Date | null],
+) => !!a && !!b && eqDate(a[0], b[0]) && eqDate(a[1], b[1]);
 
-export const filterPresets = (
-  epochs: Presets[string]['epoch'][],
-  presets: Presets = defaultPresets,
-) =>
-  Object.fromEntries(
-    Object.entries(presets).filter(([, v]) => epochs.includes(v.epoch)),
-  ) as Presets;
-
-const isFn = (v: unknown): v is (...args: never[]) => unknown =>
-  typeof v === 'function';
-
-export interface HookFormDateRangePickerProps<T extends FieldValues>
-  extends Omit<
+export interface HookFormDateRangePickerProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> extends Omit<
       FormFieldProps,
       | 'children'
       | 'checked'
@@ -222,7 +57,12 @@ export interface HookFormDateRangePickerProps<T extends FieldValues>
       | 'ref'
       | 'value'
     >,
-    Partial<PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'>>,
+    Partial<
+      PrefixedPartial<
+        Omit<ControllerProps<TFieldValues, TName>, 'render'>,
+        'hook'
+      >
+    >,
     PrefixedPartial<DateRangePickerProps, 'datePicker'>,
     PrefixedPartial<DateTimeRangePickerProps, 'timePicker'> {
   presets?: Presets;
@@ -231,20 +71,16 @@ export interface HookFormDateRangePickerProps<T extends FieldValues>
   onChange?: (value: DateRange) => void;
 }
 
-const eqDate = (a: Date | null | undefined, b: Date | null | undefined) =>
-  (a == null && b == null) || (!!a && !!b && a.getTime() === b.getTime());
-const eqRange = (
-  a?: [Date | null, Date | null],
-  b?: [Date | null, Date | null],
-) => !!a && !!b && eqDate(a[0], b[0]) && eqDate(a[1], b[1]);
-
-export const HookFormDateRangePicker = <T extends FieldValues>({
+export const HookFormDateRangePicker = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
   standalone = false,
   value: standaloneValue,
   onChange: standaloneOnChange,
   presets,
   ...props
-}: HookFormDateRangePickerProps<T>) => {
+}: HookFormDateRangePickerProps<TFieldValues, TName>) => {
   const {
     hook: hookProps,
     datePicker: { onChange: onDateChange, ...datePickerProps },

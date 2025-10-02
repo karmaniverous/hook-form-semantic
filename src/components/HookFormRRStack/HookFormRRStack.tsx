@@ -30,9 +30,13 @@ import { concatClassNames } from '@/utils/concatClassNames';
 import { HookFormRRStackRule } from './HookFormRRStackRule';
 import type { RRStackRuleDescriptionPropsBase } from './RRStackRuleDescription';
 import { timezoneOptions } from './timezoneOptions';
+import type { HookFormRRStackPath } from './types';
 
-export interface HookFormRRStackProps<T extends FieldValues>
-  extends HookFormProps<T>,
+export interface HookFormRRStackProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends
+    HookFormRRStackPath<TFieldValues> = HookFormRRStackPath<TFieldValues>,
+> extends HookFormProps<TFieldValues, TName>,
     Omit<
       FormFieldProps,
       | 'as'
@@ -58,8 +62,12 @@ export interface HookFormRRStackProps<T extends FieldValues>
   timestampFormat?: string;
 }
 
-export const HookFormRRStack = <T extends FieldValues>(
-  props: HookFormRRStackProps<T>,
+export const HookFormRRStack = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends
+    HookFormRRStackPath<TFieldValues> = HookFormRRStackPath<TFieldValues>,
+>(
+  props: HookFormRRStackProps<TFieldValues, TName>,
 ) => {
   const {
     controller: {
@@ -150,10 +158,10 @@ export const HookFormRRStack = <T extends FieldValues>(
 
       <Segment basic style={{ padding: '0 0 1em 0' }}>
         <Form.Group widths={'equal'}>
-          <HookFormField<T, { value: string }>
+          <HookFormField<TFieldValues, { value: string }, TName>
             control={Dropdown}
             hookControl={control}
-            hookName={`${name as Path<T>}.timezone` as Path<T>}
+            hookName={`${name}.timezone` as TName}
             label="Timezone"
             placeholder="Select timezone"
             fluid
@@ -192,7 +200,7 @@ export const HookFormRRStack = <T extends FieldValues>(
       {rrstack.rules.length ? (
         <Accordion fluid styled>
           {rrstack.rules.map((rule, index) => (
-            <HookFormRRStackRule<T>
+            <HookFormRRStackRule<TFieldValues>
               {...reprifixedDescribeProps}
               activeIndex={activeIndex}
               index={index}
@@ -203,7 +211,7 @@ export const HookFormRRStack = <T extends FieldValues>(
               rrstack={rrstack}
               setActiveIndex={setActiveIndex}
               hookControl={control}
-              hookName={`${name}.rules.${index}` as Path<T>}
+              hookName={`${name}.rules.${index}` as Path<TFieldValues>}
             />
           ))}
         </Accordion>

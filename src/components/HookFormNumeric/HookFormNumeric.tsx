@@ -1,5 +1,6 @@
 import { omit } from 'radash';
 import type { ChangeEventHandler } from 'react';
+import type { FieldPath } from 'react-hook-form';
 import { type FieldValues } from 'react-hook-form';
 import { NumericFormat, type NumericFormatProps } from 'react-number-format';
 import { Form, type FormFieldProps, Input, Label } from 'semantic-ui-react';
@@ -8,8 +9,10 @@ import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 
-export interface HookFormNumericProps<T extends FieldValues>
-  extends HookFormProps<T>,
+export interface HookFormNumericProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> extends HookFormProps<TFieldValues, TName>,
     Omit<
       FormFieldProps,
       | 'children'
@@ -29,10 +32,13 @@ export interface HookFormNumericProps<T extends FieldValues>
   onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
-export const HookFormNumeric = <T extends FieldValues>({
+export const HookFormNumeric = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
   label,
   ...props
-}: HookFormNumericProps<T>) => {
+}: HookFormNumericProps<TFieldValues, TName>) => {
   const {
     controller: {
       field: { onChange: hookFieldOnChange, ...hookFieldProps },

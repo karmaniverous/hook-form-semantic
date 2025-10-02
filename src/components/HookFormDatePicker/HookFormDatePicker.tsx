@@ -4,6 +4,7 @@ import DatePicker, { type DatePickerProps } from 'react-date-picker';
 import DateTimePicker, {
   type DateTimePickerProps,
 } from 'react-datetime-picker';
+import type { FieldPath } from 'react-hook-form';
 import {
   type ControllerProps,
   type FieldValues,
@@ -15,8 +16,10 @@ import { Checkbox, Form, type FormFieldProps } from 'semantic-ui-react';
 import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
 import { concatClassNames } from '@/utils/concatClassNames';
 
-export interface HookFormDatePickerProps<T extends FieldValues>
-  extends Omit<
+export interface HookFormDatePickerProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> extends Omit<
       FormFieldProps,
       | 'children'
       | 'checked'
@@ -29,7 +32,12 @@ export interface HookFormDatePickerProps<T extends FieldValues>
       | 'ref'
       | 'value'
     >,
-    Partial<PrefixedPartial<Omit<ControllerProps<T>, 'render'>, 'hook'>>,
+    Partial<
+      PrefixedPartial<
+        Omit<ControllerProps<TFieldValues, TName>, 'render'>,
+        'hook'
+      >
+    >,
     PrefixedPartial<DatePickerProps, 'datePicker'>,
     PrefixedPartial<DateTimePickerProps, 'timePicker'> {
   /**
@@ -40,12 +48,15 @@ export interface HookFormDatePickerProps<T extends FieldValues>
   onChange?: (value: Date | null) => void;
 }
 
-export const HookFormDatePicker = <T extends FieldValues>({
+export const HookFormDatePicker = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
   standalone = false,
   value: standaloneValue,
   onChange: standaloneOnChange,
   ...props
-}: HookFormDatePickerProps<T>) => {
+}: HookFormDatePickerProps<TFieldValues, TName>) => {
   const {
     hook: hookProps,
     datePicker: { onChange: onDateChange, ...datePickerProps },

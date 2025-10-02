@@ -1,18 +1,17 @@
 import { omit } from 'radash';
 import { useCallback, useMemo } from 'react';
-import type { ControllerFieldState } from 'react-hook-form';
-import {
-  type ControllerRenderProps,
-  type FieldValues,
-  type Path,
-} from 'react-hook-form';
+import type { ControllerFieldState, FieldPath } from 'react-hook-form';
+import { type ControllerRenderProps, type FieldValues } from 'react-hook-form';
 import { Form, type FormFieldProps } from 'semantic-ui-react';
 
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 
-export interface HookFormFieldProps<T extends FieldValues, C>
-  extends HookFormProps<T>,
+export interface HookFormFieldProps<
+  TFieldValues extends FieldValues = FieldValues,
+  C = Record<string, unknown>,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> extends HookFormProps<TFieldValues, TName>,
     Omit<
       FormFieldProps,
       | 'children'
@@ -28,14 +27,18 @@ export interface HookFormFieldProps<T extends FieldValues, C>
   children?:
     | FormFieldProps['children']
     | ((
-        field: ControllerRenderProps<T, Path<T>>,
+        field: ControllerRenderProps<TFieldValues, TName>,
         fieldState: ControllerFieldState,
       ) => FormFieldProps['children']);
   onChange?: (event: React.SyntheticEvent<HTMLElement>, data: C) => void;
 }
 
-export const HookFormField = <T extends FieldValues, C>(
-  props: HookFormFieldProps<T, C>,
+export const HookFormField = <
+  TFieldValues extends FieldValues = FieldValues,
+  C = Record<string, unknown>,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(
+  props: HookFormFieldProps<TFieldValues, C, TName>,
 ) => {
   const {
     controller: {
@@ -81,7 +84,10 @@ export const HookFormField = <T extends FieldValues, C>(
       error={fieldState.error?.message}
     >
       {typeof children === 'function'
-        ? children(hookField as ControllerRenderProps<T, Path<T>>, fieldState)
+        ? children(
+            hookField as unknown as ControllerRenderProps<TFieldValues, TName>,
+            fieldState,
+          )
         : children}
     </Form.Field>
   );

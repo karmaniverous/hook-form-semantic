@@ -1,5 +1,6 @@
 import { omit } from 'radash';
 import { type ChangeEvent, type ReactNode, useMemo, useState } from 'react';
+import type { FieldPath } from 'react-hook-form';
 import { type FieldValues } from 'react-hook-form';
 import {
   defaultCountries,
@@ -24,8 +25,10 @@ import type { PrefixProps } from '@/types/PrefixProps';
 
 import { isPhoneValid } from './isPhoneValid';
 
-export interface HookFormPhoneProps<T extends FieldValues>
-  extends HookFormProps<T>,
+export interface HookFormPhoneProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> extends HookFormProps<TFieldValues, TName>,
     Omit<
       FormFieldProps,
       'disabled' | 'error' | 'name' | 'onBlur' | 'onChange' | 'ref' | 'value'
@@ -38,8 +41,11 @@ export interface HookFormPhoneProps<T extends FieldValues>
 
 const NEXT_PUBLIC_MOBILE_BREAKPOINT = 768;
 
-export const HookFormPhone = <T extends FieldValues>(
-  props: HookFormPhoneProps<T>,
+export const HookFormPhone = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(
+  props: HookFormPhoneProps<TFieldValues, TName>,
 ) => {
   // One-char formatting tokens (derive directly from props)
   const [prefix, charAfterDialCode, placeholderNumberChar] = useMemo(() => {
@@ -71,7 +77,7 @@ export const HookFormPhone = <T extends FieldValues>(
             'Invalid phone number!',
         },
       },
-    } as HookFormPhoneProps<T>;
+    } as HookFormPhoneProps<TFieldValues, TName>;
   }, [props, prefix, dialCode]);
 
   const {

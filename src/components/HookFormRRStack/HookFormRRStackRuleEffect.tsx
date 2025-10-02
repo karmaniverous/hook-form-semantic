@@ -1,4 +1,4 @@
-import type { FieldValues, Path } from 'react-hook-form';
+import type { FieldPath, FieldValues } from 'react-hook-form';
 import { Dropdown, Form, Input } from 'semantic-ui-react';
 
 import { HookFormField } from '@/components/HookFormField';
@@ -12,11 +12,16 @@ const EFFECT_OPTIONS = [
   { key: 'blackout', text: 'Blackout', value: 'blackout' },
 ];
 
-type HookFormRRStackRuleEffectProps<T extends FieldValues = FieldValues> =
-  HookFormProps<T>;
+type HookFormRRStackRuleEffectProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> = HookFormProps<TFieldValues, TName>;
 
-export const HookFormRRStackRuleEffect = <T extends FieldValues = FieldValues>(
-  props: HookFormRRStackRuleEffectProps<T>,
+export const HookFormRRStackRuleEffect = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(
+  props: HookFormRRStackRuleEffectProps<TFieldValues, TName>,
 ) => {
   const {
     deprefixed: {
@@ -26,10 +31,10 @@ export const HookFormRRStackRuleEffect = <T extends FieldValues = FieldValues>(
 
   return (
     <Form.Group>
-      <HookFormField<T, { value: string }>
+      <HookFormField<TFieldValues, { value: string }, TName>
         control={Input}
         hookControl={control}
-        hookName={`${name}.label` as Path<T>}
+        hookName={`${name}.label` as TName}
         label={
           <InfoLabel
             text="Label"
@@ -41,11 +46,11 @@ export const HookFormRRStackRuleEffect = <T extends FieldValues = FieldValues>(
         width={12}
       />
 
-      <HookFormField<T, { value: 'active' | 'blackout' }>
+      <HookFormField<TFieldValues, { value: 'active' | 'blackout' }, TName>
         compact
         control={Dropdown}
         hookControl={control}
-        hookName={`${name}.effect` as Path<T>}
+        hookName={`${name}.effect` as TName}
         label={
           <InfoLabel
             text="Effect"

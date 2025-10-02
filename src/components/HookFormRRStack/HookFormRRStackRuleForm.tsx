@@ -1,5 +1,6 @@
 import type { UseRRStackOutput } from '@karmaniverous/rrstack/react';
-import { type FieldValues, type Path, useWatch } from 'react-hook-form';
+import type { FieldPath } from 'react-hook-form';
+import { type FieldValues, useWatch } from 'react-hook-form';
 import { Container, Grid } from 'semantic-ui-react';
 
 import { useHookForm } from '@/hooks/useHookForm';
@@ -12,14 +13,19 @@ import { HookFormRRStackRuleRange } from './HookFormRRStackRuleRange';
 import { HookFormRRStackRuleTime } from './HookFormRRStackRuleTime';
 import { HookFormRRStackRuleWeekdays } from './HookFormRRStackRuleWeekdays';
 
-interface HookFormRRStackRuleFormProps<T extends FieldValues = FieldValues>
-  extends HookFormProps<T> {
+interface HookFormRRStackRuleFormProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> extends HookFormProps<TFieldValues, TName> {
   index: number;
   rrstack: UseRRStackOutput['rrstack'];
 }
 
-export const HookFormRRStackRuleForm = <T extends FieldValues = FieldValues>(
-  props: HookFormRRStackRuleFormProps<T>,
+export const HookFormRRStackRuleForm = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(
+  props: HookFormRRStackRuleFormProps<TFieldValues, TName>,
 ) => {
   const {
     deprefixed: {
@@ -29,46 +35,49 @@ export const HookFormRRStackRuleForm = <T extends FieldValues = FieldValues>(
 
   const freq = useWatch({
     control,
-    name: `${name}.options.freq` as Path<T>,
+    name: `${name}.options.freq` as TName,
   });
 
   return (
     <Container>
-      <HookFormRRStackRuleEffect<T> hookControl={control} hookName={name} />
-
-      <HookFormRRStackRuleRange<T>
+      <HookFormRRStackRuleEffect<TFieldValues, TName>
         hookControl={control}
-        hookName={`${name}.options` as Path<T>}
+        hookName={name}
+      />
+
+      <HookFormRRStackRuleRange<TFieldValues, TName>
+        hookControl={control}
+        hookName={`${name}.options` as TName}
       />
 
       {freq && freq !== 'span' && (
         <>
           <Grid columns={3} stackable style={{ margin: 0, padding: 0 }}>
             <Grid.Column style={{ paddingLeft: 0 }}>
-              <HookFormRRStackRuleMonthdays<T>
+              <HookFormRRStackRuleMonthdays<TFieldValues, TName>
                 hookControl={control}
-                hookName={name as Path<T>}
+                hookName={name as TName}
               />
             </Grid.Column>
 
             <Grid.Column style={{ paddingLeft: 0 }}>
-              <HookFormRRStackRuleWeekdays<T>
+              <HookFormRRStackRuleWeekdays<TFieldValues, TName>
                 hookControl={control}
-                hookName={name as Path<T>}
+                hookName={name as TName}
               />
             </Grid.Column>
 
             <Grid.Column style={{ paddingLeft: 0, paddingRight: 0 }}>
-              <HookFormRRStackRuleTime<T>
+              <HookFormRRStackRuleTime<TFieldValues, TName>
                 hookControl={control}
-                hookName={name as Path<T>}
+                hookName={name as TName}
               />
             </Grid.Column>
           </Grid>
 
-          <HookFormRRStackRuleDuration<T>
+          <HookFormRRStackRuleDuration<TFieldValues, TName>
             hookControl={control}
-            hookName={`${name}.duration` as Path<T>}
+            hookName={`${name}.duration` as TName}
           />
         </>
       )}

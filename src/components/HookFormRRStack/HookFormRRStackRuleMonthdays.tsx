@@ -1,4 +1,4 @@
-import type { FieldValues, Path } from 'react-hook-form';
+import type { FieldPath, FieldValues } from 'react-hook-form';
 import { Dropdown, Form, Header, Input, Segment } from 'semantic-ui-react';
 
 import { HookFormField } from '@/components/HookFormField';
@@ -22,13 +22,16 @@ const MONTH_OPTIONS = [
   { key: 12, text: 'Dec', value: 12 },
 ];
 
-type HookFormRRStackRuleMonthdaysProps<T extends FieldValues = FieldValues> =
-  HookFormProps<T>;
+type HookFormRRStackRuleMonthdaysProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> = HookFormProps<TFieldValues, TName>;
 
 export const HookFormRRStackRuleMonthdays = <
-  T extends FieldValues = FieldValues,
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(
-  props: HookFormRRStackRuleMonthdaysProps<T>,
+  props: HookFormRRStackRuleMonthdaysProps<TFieldValues, TName>,
 ) => {
   const {
     deprefixed: {
@@ -40,11 +43,11 @@ export const HookFormRRStackRuleMonthdays = <
     <Segment>
       <Header size="tiny">Months</Header>
       <Form.Group widths="equal" style={{ marginBottom: 0 }}>
-        <HookFormField<T, { value: number[] }>
+        <HookFormField<TFieldValues, { value: number[] }, TName>
           compact
           control={Dropdown}
           hookControl={control}
-          hookName={`${name}.options.bymonth` as Path<T>}
+          hookName={`${name}.options.bymonth` as TName}
           label={
             <InfoLabel
               text="Months"
@@ -57,10 +60,10 @@ export const HookFormRRStackRuleMonthdays = <
           selection
         />
 
-        <HookFormField<T, { value: string }>
+        <HookFormField<TFieldValues, { value: string }, TName>
           control={Input}
           hookControl={control}
-          hookName={`${name}.options.bymonthdayText` as Path<T>}
+          hookName={`${name}.options.bymonthdayText` as TName}
           label={
             <InfoLabel
               text="DoM"
