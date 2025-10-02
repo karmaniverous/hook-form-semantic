@@ -26,6 +26,10 @@
 
 ## Completed (recent)
 
+- Tests(rrstack recurring): set minimal Duration (Min = 1) in validation
+  tests when switching Frequency to monthly/weekly/daily so rrstack
+  compiles under the “recurring rules require a positive duration” policy.
+
 - Fix(imports): correct RRStack rule description import paths in
   HookFormRRStack.tsx and HookFormRRStackRule.tsx to
   './HookFormRRStackRuleDescription'.

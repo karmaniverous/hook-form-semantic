@@ -326,6 +326,14 @@ describe('HookFormRRStack Validation', () => {
     ) as HTMLSelectElement;
     fireEvent.change(freqDropdown, { target: { value: 'monthly' } });
 
+    // Recurring rules require a positive duration. Set Duration → Min = 1.
+    // Use the Duration field labeled "Min" (distinct from "Minutes" in Time).
+    const durMinField = getFieldByLabel(content, 'Min');
+    const durMinInput = within(durMinField).getByRole('spinbutton', {
+      name: '',
+    }) as HTMLInputElement;
+    fireEvent.change(durMinInput, { target: { value: '1' } });
+
     // Set a Month (multi-select mock supports fallback to single value)
     const monthsField = getFieldByLabel(content, 'Months');
     const monthsDropdown = within(monthsField).getByTestId(
@@ -356,6 +364,13 @@ describe('HookFormRRStack Validation', () => {
       'dropdown',
     ) as HTMLSelectElement;
     fireEvent.change(freqDropdown, { target: { value: 'weekly' } });
+
+    // Recurring rules require a positive duration. Set Duration → Min = 1.
+    const durMinField = getFieldByLabel(content, 'Min');
+    const durMinInput = within(durMinField).getByRole('spinbutton', {
+      name: '',
+    }) as HTMLInputElement;
+    fireEvent.change(durMinInput, { target: { value: '1' } });
 
     // Weekday: Monday (0)
     const wdField = getFieldByLabel(content, 'Weekdays');
@@ -482,6 +497,13 @@ describe('HookFormRRStackRuleDescription — reflects rule settings and describe
       'dropdown',
     ) as HTMLSelectElement;
     fireEvent.change(freqDropdown, { target: { value: 'daily' } });
+
+    // Recurring rules require a positive duration. Set Duration → Min = 1.
+    const durMinField = getFieldByLabel(content, 'Min');
+    const durMinInput = within(durMinField).getByRole('spinbutton', {
+      name: '',
+    }) as HTMLInputElement;
+    fireEvent.change(durMinInput, { target: { value: '1' } });
 
     // Time constraints
     const hoursInput = within(content).getByPlaceholderText(

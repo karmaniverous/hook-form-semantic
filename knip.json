@@ -25,16 +25,13 @@
     "semantic-ui-css",
     "vanilla-jsoneditor"
   ],
-  "ignore": ["playground/src/vite-env.d.ts"],
+  "ignore": [".stan/**", "playground/src/vite-env.d.ts"],
   "project": ["*/**", "!docs/**"],
   "rules": {
     "exports": "off",
     "types": "off"
   },
   "vitest": {
-    "entry": [
-      "*/**/*.test.!(*.*)",
-      "*/**/*.bench.!(*.*)"
-    ]
+    "entry": ["*/**/*.test.!(*.*)", "*/**/*.bench.!(*.*)"]
   }
 }
