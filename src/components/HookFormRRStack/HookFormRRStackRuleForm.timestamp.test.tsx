@@ -47,7 +47,6 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
       return (
         <HookFormRRStackRuleForm
           index={0}
-          logger={console}
           rrstack={rrstack}
           hookControl={control}
           hookName={'schedule' as Path<{ schedule: unknown }>}
@@ -72,7 +71,6 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
       return (
         <HookFormRRStackRuleForm
           index={0}
-          logger={console}
           rrstack={rrstack}
           hookControl={control}
           hookName={'schedule' as Path<{ schedule: unknown }>}
@@ -94,7 +92,6 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
       return (
         <HookFormRRStackRuleForm
           index={0}
-          logger={console}
           rrstack={rrstack}
           hookControl={control}
           hookName={'schedule' as Path<{ schedule: unknown }>}
@@ -117,7 +114,6 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
       return (
         <HookFormRRStackRuleForm
           index={0}
-          logger={console}
           rrstack={rrstack}
           hookControl={control}
           hookName={'schedule' as Path<{ schedule: unknown }>}

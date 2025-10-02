@@ -6,6 +6,11 @@
 
 ## Next up
 
+- (Optional) Gate remaining UI debug logs by env or dedicated flag if future diagnostics are needed outside tests.
+- (Optional) Silence boolean-attribute warnings in semantic Dropdown mock (map to data-* or omit).
+- (Optional) Finish a11y cleanup for HookFormCheckbox interactive labels if not already applied in your local branch.
+
+
 - Verify “equal widths” rendering of the 6-field Months/Weekdays/Time row across default Semantic UI 16-col grid; adjust minor CSS only if needed (keep component logic unchanged).
 - Confirm stakeholder preference about default duration ({ days: 1 }) when switching Span → recurring; tweak if a different default is desired.
 - Light UX pass on labels/help text for Valid Range to ensure clarity (no behavior changes).
@@ -25,6 +30,17 @@
   - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and UI behavior unchanged; add focused tests per section.
 
 ## Completed (recent)
+
+- Tests/logging:
+  - Removed logger={console} from existing RRStack tests and RuleForm timestamp
+    tests to eliminate verbose per-field logs from useHookForm.
+  - Added a single logged test that creates a rule, switches Frequency to
+    “yearly”, and asserts the Duration Days field is “1” after the RRStack
+    round-trip (verifying default duration policy).
+
+- Mapping logs:
+  - Removed unconditional console.log from rhf2rrstack.ts and rrstack2rhf.ts so
+    mapping logs only appear when HookFormRRStack receives a logger.
 
 - RRStack (logging & round-trip visibility):
   - Threaded useHookForm rest.logger through HookFormRRStack and all subcomponents; passed to HookForm* children so each field logs its value via useHookForm.

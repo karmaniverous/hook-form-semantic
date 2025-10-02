@@ -59,7 +59,7 @@ export function rhf2rrstack(rhf: HookFormRRStackData): RRStackOptions {
     rules,
   };
 
-  console.log('rhf2rrstack', { rhf, rrstack });
+  // console.log('rhf2rrstack', { rhf, rrstack });
 
   return rrstack;
 }

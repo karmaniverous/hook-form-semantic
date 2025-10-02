@@ -38,7 +38,6 @@ const TestForm = () => {
       <HookFormRRStack
         hookName="schedule"
         hookControl={control}
-        logger={console}
         label="Schedule Configuration"
       />
       <button type="submit">Submit</button>
@@ -455,7 +454,6 @@ const renderWithDescribeProps = (describe?: DescribeProps) => {
         <HookFormRRStack<TF>
           hookName="schedule"
           hookControl={control}
-          logger={console}
           describeIncludeBounds={describe?.includeBounds}
           describeIncludeTimeZone={describe?.includeTimeZone}
           describeFormatTimeZone={describe?.formatTimeZone}
@@ -499,5 +497,55 @@ describe('HookFormRRStackRuleDescription — reflects rule settings and describe
       const after = (description.textContent ?? '').trim();
       expect(after).not.toBe(before);
     });
+  });
+});
+
+// Single logged test to exercise round‑trip and default duration policy.
+describe('HookFormRRStack (logged round-trip)', () => {
+  it('freq → yearly sets default duration days = 1', async () => {
+    interface TF extends FieldValues {
+      schedule: RRStackOptions;
+    }
+    const LoggedHarness = () => {
+      const { control } = useForm<TF>({
+        defaultValues: {
+          schedule: {
+            timezone: 'UTC',
+            rules: [],
+          },
+        },
+      });
+      return (
+        <Form>
+          <HookFormRRStack<TF>
+            hookName="schedule"
+            hookControl={control}
+            // Enable logging only for this test
+            logger={console}
+          />
+        </Form>
+      );
+    };
+
+    const { getByText, container } = render(<LoggedHarness />);
+    // Create a new rule
+    fireEvent.click(getByText('Add Rule'));
+
+    // Work inside the active accordion content
+    const content = container.querySelector(
+      '[data-testid="accordion-content"]',
+    ) as HTMLElement;
+
+    // Change Frequency → yearly
+    const freqField = getFieldByLabel(content, 'Frequency');
+    const freqDropdown = within(freqField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(freqDropdown, { target: { value: 'yearly' } });
+
+    // Assert default duration days = 1 after RRStack round-trip
+    const daysField = getFieldByLabel(content, 'Days');
+    const daysInput = daysField.querySelector('input') as HTMLInputElement;
+    await waitFor(() => expect(daysInput.value).toBe('1'));
   });
 });
