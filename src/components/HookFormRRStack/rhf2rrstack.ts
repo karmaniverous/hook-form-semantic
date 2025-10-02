@@ -1,4 +1,9 @@
-import type { RRStackOptions, RuleJson } from '@karmaniverous/rrstack';
+import type {
+  DurationParts,
+  RRStackOptions,
+  RuleJson,
+} from '@karmaniverous/rrstack';
+import { omit } from 'radash';
 
 import { csv2int } from './csv2int';
 import type { HookFormRRStackData } from './types';
@@ -11,20 +16,30 @@ import type { HookFormRRStackData } from './types';
  * - arrays pass through unchanged
  * Assumes timezone has been validated upstream.
  */
-export function rhf2rrstack(ui: HookFormRRStackData): RRStackOptions {
-  const rules: RuleJson[] = Array.isArray(ui.rules)
-    ? ui.rules.map((r) => {
+export function rhf2rrstack(rhf: HookFormRRStackData): RRStackOptions {
+  const rules: RuleJson[] = Array.isArray(rhf.rules)
+    ? rhf.rules.map((r) => {
         const o = r.options ?? {};
+
         const freq = o.freq && o.freq !== 'span' ? o.freq : undefined;
+
         const starts =
           o.starts instanceof Date ? o.starts.getTime() : undefined;
+
         const ends = o.ends instanceof Date ? o.ends.getTime() : undefined;
+
+        const duration: DurationParts | undefined = freq
+          ? r.duration && Object.values(r.duration).some(Boolean)
+            ? r.duration
+            : { days: 1 }
+          : undefined;
+
         return {
           label: r.label ?? undefined,
           effect: r.effect ?? 'active',
-          duration: r.duration ?? undefined,
+          duration,
           options: {
-            ...o,
+            ...omit(o, ['bymonthdayText', 'byhourText', 'byminuteText']),
             freq,
             starts,
             ends,
@@ -38,8 +53,13 @@ export function rhf2rrstack(ui: HookFormRRStackData): RRStackOptions {
         };
       })
     : [];
-  return {
-    timezone: ui.timezone,
+
+  const rrstack: RRStackOptions = {
+    timezone: rhf.timezone,
     rules,
   };
+
+  console.log('rhf2rrstack', { rhf, rrstack });
+
+  return rrstack;
 }

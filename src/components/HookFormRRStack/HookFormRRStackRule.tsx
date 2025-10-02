@@ -123,10 +123,7 @@ export const HookFormRRStackRule = <
             </Label>
             <span style={{ fontSize: '0.9em' }}>{ruleLabel}</span>
           </div>
-          <div
-            style={{ display: 'flex', gap: 2 }}
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div style={{ display: 'flex', gap: 2 }}>
             <Button.Group size="mini">
               <Button
                 disabled={index === 0}

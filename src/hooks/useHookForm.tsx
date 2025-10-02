@@ -58,7 +58,7 @@ export const useHookForm = <
 
   useEffect(() => {
     props.logger?.debug(`${hookProps.name} form data`, watchedValue);
-  }, [watchedValue, props.logger]);
+  }, [watchedValue, props.logger, hookProps.name]);
 
   return { controller, deprefixed, rest };
 };

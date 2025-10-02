@@ -26,6 +26,10 @@
 
 ## Completed (recent)
 
+- Lint(react): enable eslint-plugin-react, eslint-plugin-react-hooks, and
+  eslint-plugin-jsx-a11y with recommended rules for JSX/TSX files; disabled
+  react/prop-types and react/react-in-jsx-scope for TS + new JSX runtime.
+
 - Types(rrstack): drop child TName generic in HookFormRRStackRuleForm and let
   FieldPath infer from hookName (Path<TFieldValues>). Resolves TS2322 from
   passing Path<TFieldValues> to children constrained by the parent TName.

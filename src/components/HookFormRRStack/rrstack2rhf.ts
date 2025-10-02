@@ -4,24 +4,24 @@ import { int2csv } from './int2csv';
 import type { HookFormRRStackData } from './types';
 
 /**
- * Map the rrstack engine schedule to the RHF UI schedule (UI-friendly types).
+ * Map the rrstack schedule to the RHF UI schedule (UI-friendly types).
  * - undefined freq → 'span'
  * - epoch ms | undefined → Date | null
  * - number[] → tolerant CSV text strings
  * - arrays pass through unchanged
  */
-export function rrstack2rhf(engine: RRStackOptions): HookFormRRStackData {
-  return {
-    timezone: engine.timezone,
-    rules: Array.isArray(engine.rules)
-      ? engine.rules.map((r) => {
+export function rrstack2rhf(rrstack: RRStackOptions): HookFormRRStackData {
+  const rhf: HookFormRRStackData = {
+    timezone: rrstack.timezone,
+    rules: Array.isArray(rrstack.rules)
+      ? rrstack.rules.map((r) => {
           const o = r.options ?? {};
           const freq = o.freq ?? 'span';
           const starts =
             typeof o.starts === 'number' ? new Date(o.starts) : null;
           const ends = typeof o.ends === 'number' ? new Date(o.ends) : null;
 
-          // Normalize engine byweekday to UI number[]
+          // Normalize rrstack byweekday to UI number[]
           const byweekday: number[] | undefined = Array.isArray(o.byweekday)
             ? (o.byweekday as unknown[])
                 .map((v) => {
@@ -81,4 +81,8 @@ export function rrstack2rhf(engine: RRStackOptions): HookFormRRStackData {
         })
       : [],
   };
+
+  console.log('rrstack2rhf', { rrstack, rhf });
+
+  return rhf;
 }

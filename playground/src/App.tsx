@@ -265,7 +265,6 @@ export default function App() {
           hookControl={control}
           label="Schedule Rules"
           logger={console}
-          describeIncludeBounds={true}
         />
 
         <Divider />

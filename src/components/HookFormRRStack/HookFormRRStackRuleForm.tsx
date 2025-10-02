@@ -78,13 +78,13 @@ export const HookFormRRStackRuleForm = <
               />
             </Grid.Column>
           </Grid>
+
+          <HookFormRRStackRuleDuration<TFieldValues>
+            hookControl={control}
+            hookName={`${name}.duration` as Path<TFieldValues>}
+          />
         </>
       )}
-
-      <HookFormRRStackRuleDuration<TFieldValues>
-        hookControl={control}
-        hookName={`${name}.duration` as Path<TFieldValues>}
-      />
     </Container>
   );
 };
