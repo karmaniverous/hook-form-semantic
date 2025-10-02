@@ -44,12 +44,12 @@ export const HookFormRRStackRuleForm = <
 
   return (
     <Container>
-      <HookFormRRStackRuleEffect<TFieldValues, TName>
+      <HookFormRRStackRuleEffect<TFieldValues>
         hookControl={control}
         hookName={name}
       />
 
-      <HookFormRRStackRuleRange<TFieldValues, TName>
+      <HookFormRRStackRuleRange<TFieldValues>
         hookControl={control}
         hookName={`${name}.options` as Path<TFieldValues>}
       />
@@ -58,21 +58,21 @@ export const HookFormRRStackRuleForm = <
         <>
           <Grid columns={3} stackable style={{ margin: 0, padding: 0 }}>
             <Grid.Column style={{ paddingLeft: 0 }}>
-              <HookFormRRStackRuleMonthdays<TFieldValues, TName>
+              <HookFormRRStackRuleMonthdays<TFieldValues>
                 hookControl={control}
                 hookName={name as Path<TFieldValues>}
               />
             </Grid.Column>
 
             <Grid.Column style={{ paddingLeft: 0 }}>
-              <HookFormRRStackRuleWeekdays<TFieldValues, TName>
+              <HookFormRRStackRuleWeekdays<TFieldValues>
                 hookControl={control}
                 hookName={name as Path<TFieldValues>}
               />
             </Grid.Column>
 
             <Grid.Column style={{ paddingLeft: 0, paddingRight: 0 }}>
-              <HookFormRRStackRuleTime<TFieldValues, TName>
+              <HookFormRRStackRuleTime<TFieldValues>
                 hookControl={control}
                 hookName={name as Path<TFieldValues>}
               />
@@ -81,7 +81,7 @@ export const HookFormRRStackRuleForm = <
         </>
       )}
 
-      <HookFormRRStackRuleDuration<TFieldValues, TName>
+      <HookFormRRStackRuleDuration<TFieldValues>
         hookControl={control}
         hookName={`${name}.duration` as Path<TFieldValues>}
       />

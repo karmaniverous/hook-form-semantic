@@ -26,6 +26,13 @@
 
 ## Completed (recent)
 
+- Types(rrstack): drop child TName generic in HookFormRRStackRuleForm and let
+  FieldPath infer from hookName (Path<TFieldValues>). Resolves TS2322 from
+  passing Path<TFieldValues> to children constrained by the parent TName.
+
+- Tests(mocks): render NumericFormat as type="number" in vitest.setup so
+  role="spinbutton" queries succeed for Duration Min/Hours/Minutes fields.
+
 - Types(rrstack): replace unsafe "as TName" casts with "as Path<TFieldValues>" across RRStack subcomponents (Effect, Range, Monthdays, Weekdays, Time, Duration, and Timezone in HookFormRRStack). Let HookForm\* components infer TName where possible and pass strongly typed FieldPaths to RHF. This ensures each subcomponent targets its exact slice of the overall form shape.
 
 - UI(rrstack): render Duration section for both span and recurring rules, keeping the Months/Weekdays/Time row gated for recurring only. This aligns with the project prompt and stabilizes tests that set Duration before changing Frequency (recurring rules require a positive duration).

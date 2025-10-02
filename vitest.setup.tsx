@@ -731,7 +731,7 @@ vi.mock('react-number-format', () => {
     React.createElement('input', {
       ...p,
       'data-testid': 'numeric-input',
-      type: 'text',
+      type: 'number',
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
         const v = e.currentTarget.value;
         const num = v === '' ? undefined : Number(v);
