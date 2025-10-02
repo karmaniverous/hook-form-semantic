@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-10-02T00:00:00Z
+# When updated: 2025-10-02T00:20:00Z
 
 ## Next up
 
@@ -31,6 +31,10 @@
 
 ## Completed (recent)
 
+- Tests(wysiwyg):
+  - Stabilized HookFormWysiwygEditor test for lazy-loaded editor by waiting for
+    the Suspense fallback ("Loading editor...") to disappear and using a longer
+    timeout when querying for the editor node. Keeps the editor lazy-loaded.
 - Tests/logging:
   - Removed logger={console} from existing RRStack tests and RuleForm timestamp
     tests to eliminate verbose per-field logs from useHookForm.

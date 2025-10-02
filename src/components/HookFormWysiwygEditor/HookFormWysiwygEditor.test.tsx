@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
 import { useForm } from 'react-hook-form';
 
 import { HookFormWysiwygEditor } from './HookFormWysiwygEditor';
@@ -17,7 +23,14 @@ function Harness() {
 describe('HookFormWysiwygEditor', () => {
   it('updates value on editor interaction', async () => {
     render(<Harness />);
-    const editor = await screen.findByTestId('rdw-editor');
+    // The editor component is lazy-loaded; wait for the Suspense fallback to disappear.
+    await waitForElementToBeRemoved(
+      () => screen.queryByText('Loading editor...'),
+      {
+        timeout: 5000,
+      },
+    );
+    const editor = await screen.findByTestId('rdw-editor', { timeout: 5000 });
     fireEvent.click(editor);
     await waitFor(() => expect(api.getValues('desc')).toBe('<p>converted</p>'));
   });

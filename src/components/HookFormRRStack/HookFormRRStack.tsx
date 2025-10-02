@@ -99,7 +99,8 @@ export const HookFormRRStack = <
       const json = rrstack.toJson();
       const mapped = rrstack2rhf(json);
       logger?.debug?.('rrstack2rhf', { rrstack: json, rhf: mapped });
-      hookFieldOnChange({ target: { value: mapped } });
+      // Write the mapped JSON directly to RHF so nested Controllers update reliably.
+      hookFieldOnChange(mapped as unknown);
     },
     [hookFieldOnChange, rrstackOnChange, logger],
   );
@@ -114,7 +115,7 @@ export const HookFormRRStack = <
     },
   });
 
-  const { rrstack, version } = useRRStack({
+  const { rrstack } = useRRStack({
     json,
     onChange: handleChange,
     ...rrstackProps,
@@ -132,7 +133,7 @@ export const HookFormRRStack = <
       starts: formatTimestamp(start),
       ends: formatTimestamp(end),
     };
-  }, [rrstack, version, timestampFormat]);
+  }, [rrstack, timestampFormat]);
 
   const handleAddRule = useCallback(() => {
     rrstack.addRule();
