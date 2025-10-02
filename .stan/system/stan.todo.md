@@ -26,34 +26,23 @@
 
 ## Completed (recent)
 
-- Tests(rrstack recurring): set Duration before changing Frequency in
-  validation tests (monthly/weekly/daily) to avoid interim compile with
-  zero duration under the new engine policy.
+- Types(rrstack): replace unsafe "as TName" casts with "as Path<TFieldValues>" across RRStack subcomponents (Effect, Range, Monthdays, Weekdays, Time, Duration, and Timezone in HookFormRRStack). Let HookForm\* components infer TName where possible and pass strongly typed FieldPaths to RHF. This ensures each subcomponent targets its exact slice of the overall form shape.
 
-- Tests(rrstack recurring): set minimal Duration (Min = 1) in validation
-  tests when switching Frequency to monthly/weekly/daily so rrstack
-  compiles under the “recurring rules require a positive duration” policy.
+- UI(rrstack): render Duration section for both span and recurring rules, keeping the Months/Weekdays/Time row gated for recurring only. This aligns with the project prompt and stabilizes tests that set Duration before changing Frequency (recurring rules require a positive duration).
 
-- Fix(imports): correct RRStack rule description import paths in
-  HookFormRRStack.tsx and HookFormRRStackRule.tsx to
-  './HookFormRRStackRuleDescription'.
-- Tests(timestamp): update legacy HookFormRRStackRuleForm.timestamp test to use
-  hookName 'schedule.rules.0' and a precise form type; removes RHF path errors.
+- Tests(rrstack recurring): set Duration before changing Frequency in validation tests (monthly/weekly/daily) to avoid interim compile with zero duration under the new engine policy.
 
-- Fix(DateRangePicker barrel): re-export DateRange, defaultPresets,
-  filterPresets, extractTimestamps from source modules; component exports
-  unchanged. Unblocked build/docs/typecheck.
-- Fix(hooks): tighten useHookForm generics (TName extends FieldPath<TFieldValues>);
-  remove any, type useWatch generically; resolves TS2344 and ESLint.
-- Fix(RRStack types): remove unused import from
-  src/components/HookFormRRStack/types.ts; lint clean.
-- Fix(bench typing): use HookFormRRStackData for FormData.schedule in
-  HookFormRRStack.bench.tsx; resolves hookName inference (never).
-- Tests(RRStackRuleForm.timestamp): migrate to hookName prop and pass
-  'schedule.rules.0'; adjust harness types; resolves TS errors and runtime
-  substring exception.
-- Tests(RRStack validation): robust field finder matches first child text in
-  [data-testid="form-field"] to support InfoLabel.
+- Tests(rrstack recurring): set minimal Duration (Min = 1) in validation tests when switching Frequency to monthly/weekly/daily so rrstack compiles under the “recurring rules require a positive duration” policy.
+
+- Fix(imports): correct RRStack rule description import paths in HookFormRRStack.tsx and HookFormRRStackRule.tsx to './HookFormRRStackRuleDescription'.
+- Tests(timestamp): update legacy HookFormRRStackRuleForm.timestamp test to use hookName 'schedule.rules.0' and a precise form type; removes RHF path errors.
+
+- Fix(DateRangePicker barrel): re-export DateRange, defaultPresets, filterPresets, extractTimestamps from source modules; component exports unchanged. Unblocked build/docs/typecheck.
+- Fix(hooks): tighten useHookForm generics (TName extends FieldPath<TFieldValues>); remove any, type useWatch generically; resolves TS2344 and ESLint.
+- Fix(RRStack types): remove unused import from src/components/HookFormRRStack/types.ts; lint clean.
+- Fix(bench typing): use HookFormRRStackData for FormData.schedule in HookFormRRStack.bench.tsx; resolves hookName inference (never).
+- Tests(RRStackRuleForm.timestamp): migrate to hookName prop and pass 'schedule.rules.0'; adjust harness types; resolves TS errors and runtime substring exception.
+- Tests(RRStack validation): robust field finder matches first child text in [data-testid="form-field"] to support InfoLabel.
 
 - Tests: adapt label-based queries to support InfoLabel (non-<label> labels). Updated helpers to read the first child of each [data-testid="form-field"] and match on its text content. Fixes “Label not found: Frequency/Effect” errors.
 

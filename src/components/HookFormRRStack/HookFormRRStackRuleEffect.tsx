@@ -1,4 +1,4 @@
-import type { FieldPath, FieldValues } from 'react-hook-form';
+import type { FieldPath, FieldValues, Path } from 'react-hook-form';
 import { Dropdown, Form, Input } from 'semantic-ui-react';
 
 import { HookFormField } from '@/components/HookFormField';
@@ -31,10 +31,10 @@ export const HookFormRRStackRuleEffect = <
 
   return (
     <Form.Group>
-      <HookFormField<TFieldValues, { value: string }, TName>
+      <HookFormField<TFieldValues, { value: string }>
         control={Input}
         hookControl={control}
-        hookName={`${name}.label` as TName}
+        hookName={`${name}.label` as Path<TFieldValues>}
         label={
           <InfoLabel
             text="Label"
@@ -46,11 +46,11 @@ export const HookFormRRStackRuleEffect = <
         width={12}
       />
 
-      <HookFormField<TFieldValues, { value: 'active' | 'blackout' }, TName>
+      <HookFormField<TFieldValues, { value: 'active' | 'blackout' }>
         compact
         control={Dropdown}
         hookControl={control}
-        hookName={`${name}.effect` as TName}
+        hookName={`${name}.effect` as Path<TFieldValues>}
         label={
           <InfoLabel
             text="Effect"

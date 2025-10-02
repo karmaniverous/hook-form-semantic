@@ -1,4 +1,4 @@
-import type { FieldPath, FieldValues } from 'react-hook-form';
+import type { FieldPath, FieldValues, Path } from 'react-hook-form';
 import { Form, Header, Input, Segment } from 'semantic-ui-react';
 
 import { HookFormField } from '@/components/HookFormField';
@@ -28,10 +28,10 @@ export const HookFormRRStackRuleTime = <
     <Segment>
       <Header size="tiny">Time</Header>
       <Form.Group widths="equal" style={{ marginBottom: 0 }}>
-        <HookFormField<TFieldValues, { value: string }, TName>
+        <HookFormField<TFieldValues, { value: string }>
           control={Input}
           hookControl={control}
-          hookName={`${name}.options.byhourText` as TName}
+          hookName={`${name}.options.byhourText` as Path<TFieldValues>}
           label={
             <InfoLabel
               text="Hours"
@@ -41,10 +41,10 @@ export const HookFormRRStackRuleTime = <
           placeholder="9, 13, 17"
           size="small"
         />
-        <HookFormField<TFieldValues, { value: string }, TName>
+        <HookFormField<TFieldValues, { value: string }>
           control={Input}
           hookControl={control}
-          hookName={`${name}.options.byminuteText` as TName}
+          hookName={`${name}.options.byminuteText` as Path<TFieldValues>}
           label={
             <InfoLabel
               text="Minutes"

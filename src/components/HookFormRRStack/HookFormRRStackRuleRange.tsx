@@ -1,5 +1,9 @@
-import type { FieldPath } from 'react-hook-form';
-import { type FieldValues, useWatch } from 'react-hook-form';
+import {
+  type FieldPath,
+  type FieldValues,
+  type Path,
+  useWatch,
+} from 'react-hook-form';
 import { Dropdown, Form, Header, Segment } from 'semantic-ui-react';
 
 import { HookFormDatePicker } from '@/components/HookFormDatePicker';
@@ -40,7 +44,7 @@ export const HookFormRRStackRuleRange = <
 
   const freq = useWatch({
     control,
-    name: `${name}.freq` as TName,
+    name: `${name}.freq` as Path<TFieldValues>,
   });
 
   return (
@@ -48,25 +52,25 @@ export const HookFormRRStackRuleRange = <
       <Header size="tiny">Valid Range</Header>
 
       <Form.Group style={{ alignItems: 'flex-end' }}>
-        <HookFormDatePicker<TFieldValues, TName>
+        <HookFormDatePicker<TFieldValues>
           hookControl={control}
-          hookName={`${name}.starts` as TName}
+          hookName={`${name}.starts` as Path<TFieldValues>}
           label="Start Date"
           width={5}
         />
 
-        <HookFormDatePicker<TFieldValues, TName>
+        <HookFormDatePicker<TFieldValues>
           hookControl={control}
-          hookName={`${name}.ends` as TName}
+          hookName={`${name}.ends` as Path<TFieldValues>}
           label="End Date"
           width={5}
         />
 
-        <HookFormField<TFieldValues, { value: string }, TName>
+        <HookFormField<TFieldValues, { value: string }>
           compact
           control={Dropdown}
           hookControl={control}
-          hookName={`${name}.freq` as TName}
+          hookName={`${name}.freq` as Path<TFieldValues>}
           label={
             <InfoLabel
               text="Frequency"
@@ -81,9 +85,9 @@ export const HookFormRRStackRuleRange = <
 
         {freq && freq !== 'span' && (
           <>
-            <HookFormNumeric<TFieldValues, TName>
+            <HookFormNumeric<TFieldValues>
               hookControl={control}
-              hookName={`${name}.interval` as TName}
+              hookName={`${name}.interval` as Path<TFieldValues>}
               label={
                 <InfoLabel
                   text="Interval"
@@ -94,9 +98,9 @@ export const HookFormRRStackRuleRange = <
               width={2}
             />
 
-            <HookFormNumeric<TFieldValues, TName>
+            <HookFormNumeric<TFieldValues>
               hookControl={control}
-              hookName={`${name}.count` as TName}
+              hookName={`${name}.count` as Path<TFieldValues>}
               label={
                 <InfoLabel
                   text="Count"

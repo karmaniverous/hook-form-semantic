@@ -1,4 +1,4 @@
-import type { FieldPath, FieldValues } from 'react-hook-form';
+import type { FieldPath, FieldValues, Path } from 'react-hook-form';
 import { Form, Header, Segment } from 'semantic-ui-react';
 
 import { HookFormNumeric } from '@/components/HookFormNumeric';
@@ -31,52 +31,52 @@ export const HookFormRRStackRuleDuration = <
       </Header>
 
       <Form.Group widths={6}>
-        <HookFormNumeric<TFieldValues, TName>
+        <HookFormNumeric<TFieldValues>
           hookControl={control}
-          hookName={`${name}.years` as TName}
+          hookName={`${name}.years` as Path<TFieldValues>}
           label={
             <InfoLabel text="Years" help="Duration years component (0+)." />
           }
           numericDecimalScale={0}
         />
 
-        <HookFormNumeric<TFieldValues, TName>
+        <HookFormNumeric<TFieldValues>
           hookControl={control}
-          hookName={`${name}.months` as TName}
+          hookName={`${name}.months` as Path<TFieldValues>}
           label={
             <InfoLabel text="Months" help="Duration months component (0+)." />
           }
           numericDecimalScale={0}
         />
 
-        <HookFormNumeric<TFieldValues, TName>
+        <HookFormNumeric<TFieldValues>
           hookControl={control}
-          hookName={`${name}.days` as TName}
+          hookName={`${name}.days` as Path<TFieldValues>}
           label={<InfoLabel text="Days" help="Duration days component (0+)." />}
           numericDecimalScale={0}
         />
 
-        <HookFormNumeric<TFieldValues, TName>
+        <HookFormNumeric<TFieldValues>
           hookControl={control}
-          hookName={`${name}.hours` as TName}
+          hookName={`${name}.hours` as Path<TFieldValues>}
           label={
             <InfoLabel text="Hours" help="Duration hours component (0+)." />
           }
           numericDecimalScale={0}
         />
 
-        <HookFormNumeric<TFieldValues, TName>
+        <HookFormNumeric<TFieldValues>
           hookControl={control}
-          hookName={`${name}.minutes` as TName}
+          hookName={`${name}.minutes` as Path<TFieldValues>}
           numericDecimalScale={0}
           label={
             <InfoLabel text="Min" help="Duration minutes component (0+)." />
           }
         />
 
-        <HookFormNumeric<TFieldValues, TName>
+        <HookFormNumeric<TFieldValues>
           hookControl={control}
-          hookName={`${name}.seconds` as TName}
+          hookName={`${name}.seconds` as Path<TFieldValues>}
           numericDecimalScale={0}
           label={
             <InfoLabel text="Sec" help="Duration seconds component (0+)." />

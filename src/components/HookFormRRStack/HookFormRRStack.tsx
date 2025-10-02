@@ -158,10 +158,10 @@ export const HookFormRRStack = <
 
       <Segment basic style={{ padding: '0 0 1em 0' }}>
         <Form.Group widths={'equal'}>
-          <HookFormField<TFieldValues, { value: string }, TName>
+          <HookFormField<TFieldValues, { value: string }>
             control={Dropdown}
             hookControl={control}
-            hookName={`${name}.timezone` as TName}
+            hookName={`${name}.timezone` as Path<TFieldValues>}
             label="Timezone"
             placeholder="Select timezone"
             fluid

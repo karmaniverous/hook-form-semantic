@@ -1,4 +1,4 @@
-import type { FieldPath, FieldValues } from 'react-hook-form';
+import type { FieldPath, FieldValues, Path } from 'react-hook-form';
 import { Dropdown, Form, Header, Segment } from 'semantic-ui-react';
 
 import { HookFormField } from '@/components/HookFormField';
@@ -47,11 +47,11 @@ export const HookFormRRStackRuleWeekdays = <
       <Header size="tiny">Weekdays</Header>
 
       <Form.Group widths="equal" style={{ marginBottom: '-5px' }}>
-        <HookFormField<TFieldValues, { value: number[] }, TName>
+        <HookFormField<TFieldValues, { value: number[] }>
           compact
           control={Dropdown}
           hookControl={control}
-          hookName={`${name}.options.byweekday` as TName}
+          hookName={`${name}.options.byweekday` as Path<TFieldValues>}
           label={
             <InfoLabel
               text="Weekdays"
@@ -64,11 +64,11 @@ export const HookFormRRStackRuleWeekdays = <
           selection
         />
 
-        <HookFormField<TFieldValues, { value: number[] }, TName>
+        <HookFormField<TFieldValues, { value: number[] }>
           compact
           control={Dropdown}
           hookControl={control}
-          hookName={`${name}.options.bysetpos` as TName}
+          hookName={`${name}.options.bysetpos` as Path<TFieldValues>}
           label={
             <InfoLabel
               text="Position"

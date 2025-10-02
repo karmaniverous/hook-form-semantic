@@ -1,6 +1,10 @@
 import type { UseRRStackOutput } from '@karmaniverous/rrstack/react';
-import type { FieldPath } from 'react-hook-form';
-import { type FieldValues, useWatch } from 'react-hook-form';
+import {
+  type FieldPath,
+  type FieldValues,
+  type Path,
+  useWatch,
+} from 'react-hook-form';
 import { Container, Grid } from 'semantic-ui-react';
 
 import { useHookForm } from '@/hooks/useHookForm';
@@ -35,7 +39,7 @@ export const HookFormRRStackRuleForm = <
 
   const freq = useWatch({
     control,
-    name: `${name}.options.freq` as TName,
+    name: `${name}.options.freq` as Path<TFieldValues>,
   });
 
   return (
@@ -47,7 +51,7 @@ export const HookFormRRStackRuleForm = <
 
       <HookFormRRStackRuleRange<TFieldValues, TName>
         hookControl={control}
-        hookName={`${name}.options` as TName}
+        hookName={`${name}.options` as Path<TFieldValues>}
       />
 
       {freq && freq !== 'span' && (
@@ -56,31 +60,31 @@ export const HookFormRRStackRuleForm = <
             <Grid.Column style={{ paddingLeft: 0 }}>
               <HookFormRRStackRuleMonthdays<TFieldValues, TName>
                 hookControl={control}
-                hookName={name as TName}
+                hookName={name as Path<TFieldValues>}
               />
             </Grid.Column>
 
             <Grid.Column style={{ paddingLeft: 0 }}>
               <HookFormRRStackRuleWeekdays<TFieldValues, TName>
                 hookControl={control}
-                hookName={name as TName}
+                hookName={name as Path<TFieldValues>}
               />
             </Grid.Column>
 
             <Grid.Column style={{ paddingLeft: 0, paddingRight: 0 }}>
               <HookFormRRStackRuleTime<TFieldValues, TName>
                 hookControl={control}
-                hookName={name as TName}
+                hookName={name as Path<TFieldValues>}
               />
             </Grid.Column>
           </Grid>
-
-          <HookFormRRStackRuleDuration<TFieldValues, TName>
-            hookControl={control}
-            hookName={`${name}.duration` as TName}
-          />
         </>
       )}
+
+      <HookFormRRStackRuleDuration<TFieldValues, TName>
+        hookControl={control}
+        hookName={`${name}.duration` as Path<TFieldValues>}
+      />
     </Container>
   );
 };
