@@ -12,12 +12,7 @@ import {
   useState,
 } from 'react';
 import type { FieldPath } from 'react-hook-form';
-import {
-  type ControllerProps,
-  type FieldValues,
-  useController,
-  type UseControllerProps,
-} from 'react-hook-form';
+import { type FieldValues } from 'react-hook-form';
 import type { DropdownProps } from 'semantic-ui-react';
 import {
   Checkbox,
@@ -26,7 +21,9 @@ import {
   type FormFieldProps,
 } from 'semantic-ui-react';
 
-import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
+import { useHookForm } from '@/hooks/useHookForm';
+import type { HookFormProps } from '@/types/HookFormProps';
+import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
 import { isFn } from '@/utils/isFn';
 
@@ -44,11 +41,11 @@ const eqRange = (
 export interface HookFormDateRangePickerProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> extends Omit<
+> extends HookFormProps<TFieldValues, TName>,
+    Omit<
       FormFieldProps,
       | 'children'
       | 'checked'
-      | 'control'
       | 'disabled'
       | 'error'
       | 'name'
@@ -57,81 +54,45 @@ export interface HookFormDateRangePickerProps<
       | 'ref'
       | 'value'
     >,
-    Partial<
-      PrefixedPartial<
-        Omit<ControllerProps<TFieldValues, TName>, 'render'>,
-        'hook'
-      >
-    >,
-    PrefixedPartial<DateRangePickerProps, 'datePicker'>,
-    PrefixedPartial<DateTimeRangePickerProps, 'timePicker'> {
+    PrefixProps<Omit<DateRangePickerProps, 'value'>, 'datePicker'>,
+    PrefixProps<Omit<DateTimeRangePickerProps, 'value'>, 'timePicker'> {
   presets?: Presets;
-  standalone?: boolean;
-  value?: DateRange;
-  onChange?: (value: DateRange) => void;
 }
 
 export const HookFormDateRangePicker = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
-  standalone = false,
-  value: standaloneValue,
-  onChange: standaloneOnChange,
   presets,
   ...props
 }: HookFormDateRangePickerProps<TFieldValues, TName>) => {
   const {
-    hook: hookProps,
-    datePicker: { onChange: onDateChange, ...datePickerProps },
-    timePicker: { onChange: onTimeChange, ...timePickerProps },
-    rest: { className, label, error: standaloneError, ...fieldProps },
-  } = useMemo(
-    () => deprefix(props, ['hook', 'datePicker', 'timePicker']),
-    [props],
-  );
+    controller: {
+      field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
+      fieldState: { error },
+    },
+    deprefixed: {
+      datePicker: { onChange: onDateChange, ...datePickerProps },
+      timePicker: { onChange: onTimeChange, ...timePickerProps },
+    },
+    rest: { className, label, ...fieldProps },
+  } = useHookForm({ props, prefixes: ['datePicker', 'timePicker'] as const });
 
   const [includeTime, setIncludeTime] = useState<boolean | undefined>(false);
 
-  const controllerResult = standalone
-    ? undefined
-    : useController(hookProps as UseControllerProps);
-
-  const hookFieldOnChange = standalone
-    ? undefined
-    : controllerResult?.field?.onChange;
-
-  const hookFieldProps = standalone
-    ? { value: standaloneValue }
-    : controllerResult?.field;
-
-  const error = standalone
-    ? standaloneError
-      ? { message: standaloneError }
-      : undefined
-    : controllerResult?.fieldState?.error;
+  const handleChange = useCallback(
+    (...[v]: Parameters<NonNullable<DateRangePickerProps['onChange']>>) => {
+      // Call through to the widget's onChange (per selected mode)
+      (includeTime ? onTimeChange : onDateChange)?.(v as DateRange);
+      // Bridge to RHF
+      hookFieldOnChange({
+        target: { type: 'date', value: v as DateRange },
+      } as unknown as React.SyntheticEvent<HTMLElement>);
+    },
+    [hookFieldOnChange, includeTime, onDateChange, onTimeChange],
+  );
 
   const [preset, setPreset] = useState<string | false>(false);
-
-  const handleChange = useCallback(
-    (...[value]: Parameters<NonNullable<DateRangePickerProps['onChange']>>) => {
-      (includeTime ? onTimeChange : onDateChange)?.(value);
-
-      if (standalone) {
-        standaloneOnChange?.(value as DateRange);
-      } else {
-        hookFieldOnChange?.({ target: { type: 'date', value } });
-      }
-    },
-    [
-      hookFieldOnChange,
-      includeTime,
-      onDateChange,
-      onTimeChange,
-      standalone,
-      standaloneOnChange,
-    ],
-  );
 
   const presetOptions = useMemo(
     () =>
@@ -155,18 +116,11 @@ export const HookFormDateRangePicker = <
           : value
         : [null, null];
 
-      if (standalone) {
-        standaloneOnChange?.(resolvedValue as DateRange);
-      } else {
-        hookFieldOnChange?.({
-          target: {
-            type: 'date',
-            value: resolvedValue,
-          },
-        });
-      }
+      hookFieldOnChange({
+        target: { type: 'date', value: resolvedValue as DateRange },
+      } as unknown as React.SyntheticEvent<HTMLElement>);
     },
-    [hookFieldOnChange, presets, standalone, standaloneOnChange],
+    [hookFieldOnChange, presets],
   );
 
   useEffect(() => {
@@ -174,7 +128,7 @@ export const HookFormDateRangePicker = <
       setPreset(false);
       return;
     }
-    const current = hookFieldProps?.value as DateRange | undefined;
+    const current = (value as DateRange | undefined) ?? undefined;
     const key =
       Object.keys(presets).find((k) => {
         const pv = presets[k]?.value;
@@ -182,7 +136,7 @@ export const HookFormDateRangePicker = <
         return eqRange(current, resolved as DateRange);
       }) ?? false;
     setPreset(key);
-  }, [hookFieldProps?.value, presets]);
+  }, [value, presets]);
 
   return (
     <Form.Field
@@ -233,17 +187,11 @@ export const HookFormDateRangePicker = <
               returnValue: 'range',
             }}
             {...timePickerProps}
-            {...(hookFieldProps && !standalone
-              ? {
-                  value: hookFieldProps.value,
-                  name:
-                    'name' in hookFieldProps ? hookFieldProps.name : undefined,
-                  disabled:
-                    'disabled' in hookFieldProps
-                      ? hookFieldProps.disabled
-                      : undefined,
-                }
-              : { value: standaloneValue })}
+            {...({
+              ...hookFieldProps,
+              // Normalize value to DateRange
+              value: ((value as DateRange) ?? [null, null]) as DateRange,
+            } as Record<string, unknown>)}
           />
         ) : (
           <DateRangePicker
@@ -259,17 +207,10 @@ export const HookFormDateRangePicker = <
               returnValue: 'range',
             }}
             {...datePickerProps}
-            {...(hookFieldProps && !standalone
-              ? {
-                  value: hookFieldProps.value,
-                  name:
-                    'name' in hookFieldProps ? hookFieldProps.name : undefined,
-                  disabled:
-                    'disabled' in hookFieldProps
-                      ? hookFieldProps.disabled
-                      : undefined,
-                }
-              : { value: standaloneValue })}
+            {...({
+              ...hookFieldProps,
+              value: ((value as DateRange) ?? [null, null]) as DateRange,
+            } as Record<string, unknown>)}
           />
         )}
       </div>

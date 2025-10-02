@@ -26,6 +26,26 @@
 
 ## Completed (recent)
 
+- Requirements split:
+  - Moved durable RRStack UI requirements into `.stan/system/stan.requirements.md`.
+  - Trimmed `.stan/system/stan.project.md` to assistant instructions (kept testing/bench policy).
+
+- RRStack live recompute:
+  - HookFormRRStack now keys Starts/Ends on `version` from useRRStack to recompute after mutations.
+  - HookFormRRStackRuleDescription recomputes description text on render (removed identity-only memo).
+
+- Date range picker:
+  - Refactored HookFormDateRangePicker to the standard useHookForm pattern; removed `standalone` and conditional hooks. Fixes react-hooks/rules-of-hooks lint error.
+
+- A11y (checkbox):
+  - Made “control” labels keyboard-accessible (role="button", tabIndex, Enter/Space handler) to satisfy jsx-a11y rules.
+
+- Lint (test doubles):
+  - Added displayName to mocked Input, Checkbox, and Editor components in vitest.setup.tsx to satisfy react/display-name.
+
+- Duration defaults (recurring):
+  - Confirmed policy in requirements: default { days: 1 } created on Span → recurring and removed on recurring → Span; surfaced via rrstack2rhf.
+
 - Requirements split: moved RRStack UI requirements into `.stan/system/stan.requirements.md` and pared `.stan/system/stan.project.md` down to assistant instructions (kept testing/bench guidance). Updated requirements to state “Duration is displayed only when Frequency ≠ Span” and that default duration is created when switching to recurring.
 
 - RRStack UI (render refresh): HookFormRRStack now recomputes “Starts/Ends” when rrstack mutates by keying on `version`. HookFormRRStackRuleDescription recomputes description text on render (no identity-only memo), ensuring live updates when Effect/Frequency/constraints change.

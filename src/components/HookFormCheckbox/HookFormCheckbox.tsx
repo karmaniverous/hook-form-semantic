@@ -84,6 +84,7 @@ export const HookFormCheckbox = <
         {uncheckLabel && (
           <label
             className="control"
+            role="none"
             onClick={() => (value ? checkboxRef.current?.click() : undefined)}
           >
             {uncheckLabel}
@@ -100,7 +101,15 @@ export const HookFormCheckbox = <
         {checkLabel && (
           <label
             className="control"
+            role="button"
+            tabIndex={0}
             onClick={() => (!value ? checkboxRef.current?.click() : undefined)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (!value) checkboxRef.current?.click();
+              }
+            }}
           >
             {checkLabel}
           </label>

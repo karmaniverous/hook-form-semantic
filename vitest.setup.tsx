@@ -98,6 +98,7 @@ vi.mock('semantic-ui-react', () => {
       },
     }),
   );
+  (Input as unknown as { displayName?: string }).displayName = 'Input';
 
   type CheckboxData = { checked: boolean } & Record<string, unknown>;
   interface CheckboxProps
@@ -133,6 +134,7 @@ vi.mock('semantic-ui-react', () => {
         label,
       ),
   );
+  (Checkbox as unknown as { displayName?: string }).displayName = 'Checkbox';
 
   type Option = {
     value: string | number;
@@ -856,5 +858,6 @@ vi.mock('react-draft-wysiwyg', () => {
       onClick: () => onEditorStateChange?.({ getCurrentContent: () => ({}) }),
     }),
   );
+  (Editor as unknown as { displayName?: string }).displayName = 'Editor';
   return { Editor };
 });
