@@ -120,7 +120,7 @@ export const HookFormRRStack = <
       starts: formatTimestamp(start),
       ends: formatTimestamp(end),
     };
-  }, [rrstack.rules, rrstack.timezone, timestampFormat]);
+  }, [rrstack, timestampFormat]);
 
   const handleAddRule = useCallback(() => {
     rrstack.addRule();
@@ -170,15 +170,9 @@ export const HookFormRRStack = <
             options={timezoneOptions}
           />
 
-          <Form.Field>
-            <label>Starts</label>
-            {starts}
-          </Form.Field>
+          <Form.Field label="Starts">{starts}</Form.Field>
 
-          <Form.Field>
-            <label>Ends</label>
-            {ends}
-          </Form.Field>
+          <Form.Field label="Ends">{ends}</Form.Field>
         </Form.Group>
       </Segment>
 

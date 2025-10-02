@@ -1,8 +1,5 @@
 import type { DescribeOptions } from '@karmaniverous/rrstack';
-import {
-  type UseRRStackOutput,
-  useRRStackSelector,
-} from '@karmaniverous/rrstack/react';
+import { type UseRRStackOutput } from '@karmaniverous/rrstack/react';
 import type { ComponentPropsWithoutRef, ElementType } from 'react';
 import { useMemo } from 'react';
 
@@ -35,48 +32,21 @@ export const HookFormRRStackRuleDescription = <T extends ElementType = 'span'>({
 }: HookFormRRStackRuleDescriptionProps<T>) => {
   const As = (as ?? 'span') as ElementType;
 
-  // Select only the atoms needed for this description
-  const {
-    selection: [rules, tz],
-  } = useRRStackSelector({
-    rrstack,
-    // IMPORTANT: depend on the rules array identity (and timezone).
-    // HookFormRRStackRuleForm mutates the rule object and replaces the array
-    // (rrstack.rules = [...]), so the array identity changes even if the
-    // element reference does not. This ensures we re-render on edits.
-    selector: (s) => [s.rules, s.timezone] as const,
-    isEqual: (a, b) => a[0] === b[0] && a[1] === b[1],
-  });
-
-  const text = useMemo(() => {
-    const inRange = index >= 0 && index < rules.length;
-    if (!inRange) return '';
-    try {
-      return rrstack.describeRule(index, {
+  const text = useMemo(
+    () =>
+      rrstack.describeRule(index, {
         includeBounds,
         includeTimeZone,
-        formatTimeZone, // NEW: customize timezone label
-      });
-    } catch {
-      // describeRule throws if index is out of range; guard defensively
-      return '';
-    }
-  }, [
-    rules,
-    tz,
-    rrstack,
-    index,
-    includeBounds,
-    includeTimeZone,
-    formatTimeZone,
-  ]);
+        formatTimeZone,
+      }),
+    [rrstack, index, includeBounds, includeTimeZone, formatTimeZone],
+  );
 
-  if (!(index >= 0 && index < rules.length))
-    return fallback as JSX.Element | null;
-
-  return (
+  return index >= 0 && index < rrstack.rules.length ? (
     <As className={className} {...rest}>
       {text}
     </As>
+  ) : (
+    fallback
   );
 };
