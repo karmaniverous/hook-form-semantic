@@ -40,7 +40,7 @@ export const RRStackRuleDescription = <T extends ElementType = 'span'>({
   } = useRRStackSelector({
     rrstack,
     // IMPORTANT: depend on the rules array identity (and timezone).
-    // RRStackRuleForm mutates the rule object and replaces the array
+    // HookFormRRStackRuleForm mutates the rule object and replaces the array
     // (rrstack.rules = [...]), so the array identity changes even if the
     // element reference does not. This ensures we re-render on edits.
     selector: (s) => [s.rules, s.timezone] as const,

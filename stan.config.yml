@@ -8,7 +8,11 @@ excludes:
   - '**/*.svg'
   - docs
   - package-lock.json
-includes: []
+imports:
+  rrstack:
+    - '../rrstack/.stan/system/stan.requirements.md'
+    - '../rrstack/.stan/system/stan.todo.md'
+    - '../rrstack/dist/react/index.d.ts'
 patchOpenCommand: code -g {file}
 scripts:
   typecheck: npm run typecheck

@@ -4,9 +4,9 @@ import { render, screen } from '@testing-library/react';
 import { type Path, useForm } from 'react-hook-form';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { RRStackRuleForm } from './RRStackRuleForm';
+import { HookFormRRStackRuleForm } from './HookFormRRStackRuleForm';
 
-describe('RRStackRuleForm Timestamp Handling', () => {
+describe('HookFormRRStackRuleForm Timestamp Handling', () => {
   const baseRule: RuleJson = {
     effect: 'active',
     duration: {},
@@ -45,7 +45,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     const Harness = () => {
       const { control } = useForm<{ schedule: unknown }>();
       return (
-        <RRStackRuleForm
+        <HookFormRRStackRuleForm
           index={0}
           rrstack={rrstack}
           hookControl={control}
@@ -69,7 +69,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     const Harness = () => {
       const { control } = useForm<{ schedule: unknown }>();
       return (
-        <RRStackRuleForm
+        <HookFormRRStackRuleForm
           index={0}
           rrstack={rrstack}
           hookControl={control}
@@ -90,7 +90,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     const Harness = () => {
       const { control } = useForm<{ schedule: unknown }>();
       return (
-        <RRStackRuleForm
+        <HookFormRRStackRuleForm
           index={0}
           rrstack={rrstack}
           hookControl={control}
@@ -112,7 +112,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     const Harness = () => {
       const { control } = useForm<{ schedule: unknown }>();
       return (
-        <RRStackRuleForm
+        <HookFormRRStackRuleForm
           index={0}
           rrstack={rrstack}
           hookControl={control}
@@ -131,7 +131,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     const Harness = () => {
       const { control } = useForm<{ schedule: unknown }>();
       return (
-        <RRStackRuleForm
+        <HookFormRRStackRuleForm
           index={0}
           rrstack={rrstack}
           hookControl={control}
@@ -157,7 +157,7 @@ describe('RRStackRuleForm Timestamp Handling', () => {
     const Harness = () => {
       const { control } = useForm<{ schedule: unknown }>();
       return (
-        <RRStackRuleForm
+        <HookFormRRStackRuleForm
           index={0}
           rrstack={rrstack}
           hookControl={control}

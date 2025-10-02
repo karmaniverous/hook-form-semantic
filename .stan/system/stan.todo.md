@@ -9,7 +9,7 @@
 - Verify “equal widths” rendering of the 6-field Months/Weekdays/Time row across default Semantic UI 16-col grid; adjust minor CSS only if needed (keep component logic unchanged).
 - Confirm stakeholder preference about showing Duration for Span rules. Current behavior shows Duration always, but validates only for recurring rules.
 - Light UX pass on labels/help text for Valid Range to ensure clarity (no behavior changes).
-- Consider gating any remaining console.debug lines in RRStackRuleForm behind NODE_ENV !== 'production' (stray logs removed in this pass).
+- Consider gating any remaining console.debug lines in HookFormRRStackRuleForm behind NODE_ENV !== 'production' (stray logs removed in this pass).
 - Revisit Frequency/Duration description paths to ensure non‑continuous daily rules always yield distinct text (doc example parity).
 
 - Silence/refactor “Function components cannot be given refs” warnings:
@@ -20,7 +20,7 @@
 
 - Tests: add targeted assertions that description updates when Interval/Count change (if description semantics should reflect them). Keep/tighten Effect toggle coverage.
 
-- Split plan (long-file rule): decompose RRStackRuleForm into smaller modules:
+- Split plan (long-file rule): decompose HookFormRRStackRuleForm into smaller modules:
   - LabelEffectHeader, ValidRangeSection, RecurrenceConstraintsSection (Months/DoM/Weekdays/Position/Time), DurationSection.
   - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and UI behavior unchanged; add focused tests per section.
 
@@ -28,7 +28,7 @@
 
 - Tests: adapt label-based queries to support InfoLabel (non-<label> labels). Updated helpers to read the first child of each [data-testid="form-field"] and match on its text content. Fixes “Label not found: Frequency/Effect” errors.
 
-- Tests: drop brittle getByDisplayValue('Test Rule') assertions in RRStackRuleForm timestamp tests; assert presence via placeholder "Rule label" instead.
+- Tests: drop brittle getByDisplayValue('Test Rule') assertions in HookFormRRStackRuleForm timestamp tests; assert presence via placeholder "Rule label" instead.
 
 - Tests: in Effect toggle case, wait for description text to populate before comparing; stabilizes the update assertion.
 
@@ -40,9 +40,9 @@
 
 - rrstack2rhf: normalize engine byweekday to UI number[]; keep arrays-or-undefined for bymonth/bysetpos; sanitize count. Fixes TS2322 and aligns UI types.
 
-- Tests: fix entry test to assert rendered label element (no attribute passthrough). Scope Starts/Ends assertions to value-only text (exclude labels). Drop brittle “Test Rule” display assertions in RRStackRuleForm timestamp tests (label originates from RHF defaults).
+- Tests: fix entry test to assert rendered label element (no attribute passthrough). Scope Starts/Ends assertions to value-only text (exclude labels). Drop brittle “Test Rule” display assertions in HookFormRRStackRuleForm timestamp tests (label originates from RHF defaults).
 
-- RRStackRuleForm (UI hygiene): remove redundant Form.Field wrappers and pass labels directly to HookForm\* components. Switch Dropdown usage to control={Dropdown} with native Semantic props (selection, multiple, search, compact, options). No behavioral changes; layout preserved.
+- HookFormRRStackRuleForm (UI hygiene): remove redundant Form.Field wrappers and pass labels directly to HookForm\* components. Switch Dropdown usage to control={Dropdown} with native Semantic props (selection, multiple, search, compact, options). No behavioral changes; layout preserved.
 
 - Tests/mocks: update semantic-ui-react Form.Field test double to honor the “control” prop and forward input/dropdown props to the rendered child; stop leaking unknown props to the wrapper div. This unblocks HookFormField control={Input|Dropdown} interactions in tests and silences DOM warnings.
 
@@ -52,7 +52,7 @@
   - Import RRStackOptions from @karmaniverous/rrstack (not @…/react).
   - rrstack2rhf: sanitize options.count to number | undefined and only stringify array options for bymonthday/byhour/byminute to satisfy types.
 
-- Tests (types): fix Path typing in RRStackRuleForm.timestamp test harness to avoid TS2322 by binding Path to the actual form shape.
+- Tests (types): fix Path typing in HookFormRRStackRuleForm.timestamp test harness to avoid TS2322 by binding Path to the actual form shape.
 
 - Build tooling: add "@/” path alias → "src/" across Rollup (build), Vitest (tests), Vite playground (dev), and TypeScript (paths). No runtime behavior change; enables cleaner imports.
 - Tests/mocks: enable Dropdown multi-select in semantic-ui-react double and add robust fallback for tests using target.value, so Months/Weekdays/Position selections propagate correctly to rrstack rule options.
@@ -81,7 +81,7 @@
 
 - Tooling/tests: silence ESLint no-unused-vars in picker mocks by adding scoped disable/enable around filtered prop destructuring; remove unused editorState/editorStyle params from WYSIWYG mock forwardRef signature. Lint now clean without altering runtime behavior; tests remain green.
 - RRStackRuleDescription: pass includeBounds from HookFormRRStackRule and augment description with concise extras (hours, minutes, positions) so edits are visible immediately.
-- RRStackRuleForm: DoM input mirrors Hours/Minutes UX using local state + parseOptions + syncOptions; allows commas/spaces and incomplete tokens; removed stray debug logs.
+- HookFormRRStackRuleForm: DoM input mirrors Hours/Minutes UX using local state + parseOptions + syncOptions; allows commas/spaces and incomplete tokens; removed stray debug logs.
 
 - Refactor remaining components to use useHookForm:
   - HookFormPhone, HookFormJsonEditor, HookFormSort, HookFormWysiwygEditor, HookFormRRStack now use the shared hook; retained public props and UX.

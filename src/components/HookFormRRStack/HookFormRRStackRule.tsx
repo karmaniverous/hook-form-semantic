@@ -1,17 +1,20 @@
 import type { UseRRStackOutput } from '@karmaniverous/rrstack/react';
-import { useCallback, useMemo } from 'react';
-import type { Control, FieldValues, Path } from 'react-hook-form';
+import { useCallback } from 'react';
+import type { FieldValues } from 'react-hook-form';
 import type { AccordionTitleProps } from 'semantic-ui-react';
 import { Accordion, Button, Icon, Label, Segment } from 'semantic-ui-react';
 
-import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
+import { useHookForm } from '@/hooks/useHookForm';
+import type { HookFormProps } from '@/types/HookFormProps';
+import type { PrefixProps } from '@/types/PrefixProps';
 
+import { HookFormRRStackRuleForm } from './HookFormRRStackRuleForm';
 import type { RRStackRuleDescriptionPropsBase } from './RRStackRuleDescription';
 import { RRStackRuleDescription } from './RRStackRuleDescription';
-import { RRStackRuleForm } from './RRStackRuleForm';
 interface HookFormRRStackRuleProps<T extends FieldValues = FieldValues>
-  extends Pick<AccordionTitleProps, 'onClick'>,
-    PrefixedPartial<
+  extends HookFormProps<T>,
+    Pick<AccordionTitleProps, 'onClick'>,
+    PrefixProps<
       Omit<RRStackRuleDescriptionPropsBase, 'index' | 'rrstack'>,
       'describe'
     > {
@@ -19,72 +22,71 @@ interface HookFormRRStackRuleProps<T extends FieldValues = FieldValues>
   index: number;
   rrstack: UseRRStackOutput['rrstack'];
   setActiveIndex: (index: number | null) => void;
-  hookControl: Control<T>;
-  hookNameBase: Path<T>;
 }
 
 export const HookFormRRStackRule = <T extends FieldValues = FieldValues>(
   props: HookFormRRStackRuleProps<T>,
 ) => {
   const {
-    describe: describeProps,
+    deprefixed: {
+      describe: describeProps,
+      hook: { name, control },
+    },
     rest: { activeIndex, index, onClick, rrstack, setActiveIndex },
-  } = useMemo(() => deprefix(props, ['describe']), [props]);
+  } = useHookForm({ props, prefixes: ['describe'] as const });
 
-  const handleMoveRule = useCallback(
-    (direction: 'top' | 'up' | 'down' | 'bottom') => {
-      try {
-        // Bounds check before moving
-        if (index < 0 || index >= rrstack.rules.length) {
-          console.warn(`Cannot move rule at index ${index}: out of bounds`);
-          return;
-        }
-
-        switch (direction) {
-          case 'top':
-            if (index > 0) rrstack.top(index);
-            break;
-          case 'up':
-            if (index > 0) rrstack.up(index);
-            break;
-          case 'down':
-            if (index < rrstack.rules.length - 1) rrstack.down(index);
-            break;
-          case 'bottom':
-            if (index < rrstack.rules.length - 1) rrstack.bottom(index);
-            break;
-        }
-      } catch (error) {
-        console.error(`Error moving rule at index ${index}:`, error);
+  const handleUp = useCallback(() => {
+    if (index > 0) {
+      rrstack.up(index);
+      if (activeIndex === index) {
+        setActiveIndex(index - 1);
+      } else if (activeIndex === index - 1) {
+        setActiveIndex(index);
       }
-    },
-    [index, rrstack],
-  );
+    }
+  }, [index, rrstack, activeIndex, setActiveIndex]);
 
-  const handleDeleteRule = useCallback(
-    (index: number) => {
-      try {
-        // Bounds check before deleting
-        if (index < 0 || index >= rrstack.rules.length) {
-          console.warn(`Cannot delete rule at index ${index}: out of bounds`);
-          return;
-        }
-
-        rrstack.removeRule(index);
-
-        // Close accordion if we deleted the active rule
-        if (activeIndex === index) {
-          setActiveIndex(null);
-        } else if (activeIndex !== null && activeIndex > index) {
-          // Adjust active index if we deleted a rule above it
-          setActiveIndex(activeIndex - 1);
-        }
-      } catch (error) {
-        console.error(`Error deleting rule at index ${index}:`, error);
+  const handleDown = useCallback(() => {
+    if (index < rrstack.rules.length - 1) {
+      rrstack.down(index);
+      if (activeIndex === index) {
+        setActiveIndex(index + 1);
+      } else if (activeIndex === index + 1) {
+        setActiveIndex(index);
       }
-    },
-    [rrstack, activeIndex],
-  );
+    }
+  }, [index, rrstack, activeIndex, setActiveIndex]);
+
+  const handleTop = useCallback(() => {
+    if (index > 0) {
+      rrstack.top(index);
+      if (activeIndex === index) {
+        setActiveIndex(0);
+      } else if (activeIndex !== null && activeIndex < index) {
+        setActiveIndex(activeIndex + 1);
+      }
+    }
+  }, [index, rrstack, activeIndex, setActiveIndex]);
+
+  const handleBottom = useCallback(() => {
+    if (index < rrstack.rules.length - 1) {
+      rrstack.bottom(index);
+      if (activeIndex === index) {
+        setActiveIndex(rrstack.rules.length - 1);
+      } else if (activeIndex !== null && activeIndex > index) {
+        setActiveIndex(activeIndex - 1);
+      }
+    }
+  }, [index, rrstack, activeIndex, setActiveIndex]);
+
+  const handleDelete = useCallback(() => {
+    rrstack.removeRule(index);
+    if (activeIndex === index) {
+      setActiveIndex(null);
+    } else if (activeIndex !== null && activeIndex > index) {
+      setActiveIndex(activeIndex - 1);
+    }
+  }, [index, rrstack, activeIndex, setActiveIndex]);
 
   // Safely access current rule and key attributes
   const ruleAtIndex = rrstack.rules[index];
@@ -101,9 +103,9 @@ export const HookFormRRStackRule = <T extends FieldValues = FieldValues>(
       >
         <div
           style={{
+            alignItems: 'center',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center',
             width: '100%',
           }}
         >
@@ -120,48 +122,53 @@ export const HookFormRRStackRule = <T extends FieldValues = FieldValues>(
           >
             <Button.Group size="mini">
               <Button
-                type="button"
+                disabled={index === 0}
                 icon="angle double up"
-                onClick={() => handleMoveRule('top')}
-                disabled={index === 0}
+                onClick={handleTop}
+                size="mini"
                 title="Move to top"
-                size="mini"
-              />
-              <Button
                 type="button"
-                icon="angle up"
-                onClick={() => handleMoveRule('up')}
+              />
+
+              <Button
                 disabled={index === 0}
+                icon="angle up"
+                onClick={handleUp}
+                size="mini"
                 title="Move up"
-                size="mini"
-              />
-              <Button
                 type="button"
+              />
+
+              <Button
+                disabled={index === rrstack.rules.length - 1}
                 icon="angle down"
-                onClick={() => handleMoveRule('down')}
-                disabled={index === rrstack.rules.length - 1}
+                onClick={handleDown}
+                size="mini"
                 title="Move down"
-                size="mini"
-              />
-              <Button
                 type="button"
-                icon="angle double down"
-                onClick={() => handleMoveRule('bottom')}
+              />
+
+              <Button
                 disabled={index === rrstack.rules.length - 1}
-                title="Move to bottom"
+                icon="angle double down"
+                onClick={handleBottom}
                 size="mini"
+                title="Move to bottom"
+                type="button"
               />
             </Button.Group>
+
             <Button
-              type="button"
-              icon="delete"
-              onClick={() => handleDeleteRule(index)}
-              title="Delete rule"
               color="red"
+              icon="delete"
+              onClick={handleDelete}
               size="mini"
+              title="Delete rule"
+              type="button"
             />
           </div>
         </div>
+
         <RRStackRuleDescription
           as="div"
           data-testid={`rule-description-${index}`}
@@ -171,21 +178,20 @@ export const HookFormRRStackRule = <T extends FieldValues = FieldValues>(
           {...describeProps}
         />
       </Accordion.Title>
-      ,
+
       <Accordion.Content
         key={`content-${index}`}
         active={index === activeIndex}
       >
         <Segment basic style={{ fontSize: '0.9em', padding: 0 }}>
-          <RRStackRuleForm<T>
+          <HookFormRRStackRuleForm<T>
             index={index}
+            hookControl={control}
+            hookName={name}
             rrstack={rrstack}
-            hookControl={props.hookControl}
-            hookNameBase={props.hookNameBase}
           />
         </Segment>
       </Accordion.Content>
-      ,
     </>
   );
 };

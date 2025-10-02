@@ -55,7 +55,7 @@ All notable changes to this project will be documented in this file. Dates are d
 - big bang [`60e639f`](https://github.com/karmaniverous/hook-form-semantic/commit/60e639f8a16ef9d204be12dfb81e94eedbc1a007)
 - chore: release v0.1.21 [`8e6ad89`](https://github.com/karmaniverous/hook-form-semantic/commit/8e6ad89510e7b5f6abb5b361bcd64c8af6b2fefe)
 - tests: stabilize RRStack description update [`c3ea7ad`](https://github.com/karmaniverous/hook-form-semantic/commit/c3ea7ad775799627a941fdd8c7df6e3ffbab52db)
-- fix(tests): align RRStackRuleForm timestamp tests with new API [`e01e0b2`](https://github.com/karmaniverous/hook-form-semantic/commit/e01e0b264e7ecabc0c1f78e7c55c933d46f6447c)
+- fix(tests): align HookFormRRStackRuleForm timestamp tests with new API [`e01e0b2`](https://github.com/karmaniverous/hook-form-semantic/commit/e01e0b264e7ecabc0c1f78e7c55c933d46f6447c)
 - RRStack: live description updates + input UX fixes [`09eb0a1`](https://github.com/karmaniverous/hook-form-semantic/commit/09eb0a1861153b895957c148a34ac8951edd5d27)
 - updated dependencies [`d7453e1`](https://github.com/karmaniverous/hook-form-semantic/commit/d7453e16a811236723037a4da5b0acf1cded7ca8)
 - Tests: silence lint no-unused-vars in vitest.setup [`7cd9f46`](https://github.com/karmaniverous/hook-form-semantic/commit/7cd9f46b7712ca5c6fd6fdde6d2d8fc51d009cb2)
@@ -117,7 +117,7 @@ All notable changes to this project will be documented in this file. Dates are d
 
 > 26 September 2025
 
-- RRStackRuleForm: new layout; DatePicker standalone; hide span-only bits [`18d3a0d`](https://github.com/karmaniverous/hook-form-semantic/commit/18d3a0dccf8e8b21998c05b5543cd5b17022257c)
+- HookFormRRStackRuleForm: new layout; DatePicker standalone; hide span-only bits [`18d3a0d`](https://github.com/karmaniverous/hook-form-semantic/commit/18d3a0dccf8e8b21998c05b5543cd5b17022257c)
 - chore: release v0.1.15 [`22485cc`](https://github.com/karmaniverous/hook-form-semantic/commit/22485cc767409d79ea80910658b73574c969d2ba)
 - Fix failing test [`2db3ffd`](https://github.com/karmaniverous/hook-form-semantic/commit/2db3ffde4bdb7576c578dc2345eb2a3158d578b7)
 - Fix HookFormRRStack "Rule Index Out of Range" error [`61ca4b9`](https://github.com/karmaniverous/hook-form-semantic/commit/61ca4b920a3d435f10ffc19aa98e094bea36da92)
@@ -151,7 +151,7 @@ All notable changes to this project will be documented in this file. Dates are d
 - Update HookFormRRStack component to use rrstack v0.11.0 [`5c398c1`](https://github.com/karmaniverous/hook-form-semantic/commit/5c398c1783e49e082fce95e5d04f64922a60cf1d)
 - Date range instead of separate start date and end date pickers [`b1d1183`](https://github.com/karmaniverous/hook-form-semantic/commit/b1d11838fa1bbea5c7a52f68d0fd895a389ebaa7)
 - chore: release v0.1.12 [`0fce17b`](https://github.com/karmaniverous/hook-form-semantic/commit/0fce17b50b88838cf514291b392d900542508a0d)
-- Use HookFormDateRangePicker in RRStackRuleForm [`2920a71`](https://github.com/karmaniverous/hook-form-semantic/commit/2920a7173d2f081f43a1a1c128257ff9cc4f579f)
+- Use HookFormDateRangePicker in HookFormRRStackRuleForm [`2920a71`](https://github.com/karmaniverous/hook-form-semantic/commit/2920a7173d2f081f43a1a1c128257ff9cc4f579f)
 - Dynamic rule description [`654b9d0`](https://github.com/karmaniverous/hook-form-semantic/commit/654b9d084950ffd9f8e4d4d0d05713304150be61)
 - Fix failing test [`532e7af`](https://github.com/karmaniverous/hook-form-semantic/commit/532e7afd2461c1e5a9cb5c3304b10f8805e37715)
 - Fix failing tests [`c94d665`](https://github.com/karmaniverous/hook-form-semantic/commit/c94d665ff7e2ae6029df8c3620c3928e9cd5b1ae)
@@ -223,7 +223,7 @@ All notable changes to this project will be documented in this file. Dates are d
 
 > 20 September 2025
 
-- Compact RRStackRuleForm layout; standardize small sizing [`147fd10`](https://github.com/karmaniverous/hook-form-semantic/commit/147fd10cf85fbd3096ce85f84856a4b1143f470a)
+- Compact HookFormRRStackRuleForm layout; standardize small sizing [`147fd10`](https://github.com/karmaniverous/hook-form-semantic/commit/147fd10cf85fbd3096ce85f84856a4b1143f470a)
 - chore: release v0.1.6 [`7e374ab`](https://github.com/karmaniverous/hook-form-semantic/commit/7e374abfc0c5b5598173412ef664b650982f3623)
 - Removed incorrect requirement for start/end dates [`b7e9255`](https://github.com/karmaniverous/hook-form-semantic/commit/b7e92558dc523682e33544f85bc8516f071041c5)
 - Separate buttons instead of button bar [`e771554`](https://github.com/karmaniverous/hook-form-semantic/commit/e771554a40165aff800da803df453217f37c6857)

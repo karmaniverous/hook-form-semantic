@@ -1,12 +1,11 @@
-import { RRStack, type RRStackOptions } from '@karmaniverous/rrstack';
 import {
   useRRStack,
   type UseRRStackOutput,
   type UseRRStackProps,
 } from '@karmaniverous/rrstack/react';
 import { omit } from 'radash';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { type FieldValues, type Path } from 'react-hook-form';
+import { useCallback, useMemo, useState } from 'react';
+import { type FieldValues, type Path, useWatch } from 'react-hook-form';
 import {
   Accordion,
   Button,
@@ -15,7 +14,6 @@ import {
   type FormFieldProps,
   Header,
   Icon,
-  Label,
   Message,
   Segment,
 } from 'semantic-ui-react';
@@ -23,7 +21,6 @@ import {
 import { HookFormField } from '@/components/HookFormField';
 import { rhf2rrstack } from '@/components/HookFormRRStack/rhf2rrstack';
 import { rrstack2rhf } from '@/components/HookFormRRStack/rrstack2rhf';
-import { type UISchedule } from '@/components/HookFormRRStack/types';
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import { reprefix } from '@/types/PrefixedPartial';
@@ -66,11 +63,12 @@ export const HookFormRRStack = <T extends FieldValues>(
 ) => {
   const {
     controller: {
-      field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
+      field: { onChange: hookFieldOnChange, ...hookFieldProps },
       fieldState: { error },
     },
     deprefixed: {
       describe: describeProps,
+      hook: { control, name },
       rrstack: { onChange: rrstackOnChange, ...rrstackProps },
     },
     rest: {
@@ -86,44 +84,23 @@ export const HookFormRRStack = <T extends FieldValues>(
     [describeProps],
   );
 
-  // ---------- RHF value (UI shape) -> rrstack (engine shape) ----------
-  const isValidTz = (tz?: string) => !!tz && RRStack.isValidTimeZone(tz);
-  const uiValue = value as UISchedule;
-  const safeUi = useMemo<UISchedule>(() => {
-    if (!uiValue || typeof uiValue !== 'object') return uiValue;
-    const tz = uiValue?.timezone;
-    return { ...uiValue, timezone: isValidTz(tz) ? tz : 'UTC' };
-  }, [uiValue]);
-
-  const engineJson = useMemo<RRStackOptions>(
-    () => rhf2rrstack(safeUi),
-    [safeUi],
-  );
-
   const handleChange = useCallback(
-    (stack: UseRRStackOutput['rrstack']) => {
-      rrstackOnChange?.(stack);
-      const engine = stack.toJson();
-      const uiNext = rrstack2rhf(engine);
-      hookFieldOnChange({ target: { value: uiNext } });
+    (rrstack: UseRRStackOutput['rrstack']) => {
+      rrstackOnChange?.(rrstack);
+      hookFieldOnChange({ target: { value: rrstack2rhf(rrstack.toJson()) } });
     },
     [hookFieldOnChange, rrstackOnChange],
   );
 
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-  const [validationErrors, setValidationErrors] = useState<{
-    timezone?: string;
-  }>({});
+  const json = useWatch({ control, name, compute: (v) => rhf2rrstack(v) });
 
   const { rrstack } = useRRStack({
+    json,
     onChange: handleChange,
     ...rrstackProps,
   });
 
-  useEffect(() => {
-    rrstack.updateOptions(engineJson);
-  }, [engineJson, rrstack]);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const { starts, ends } = useMemo(() => {
     const formatTimestamp = (ts: number | null | undefined) =>
@@ -136,19 +113,6 @@ export const HookFormRRStack = <T extends FieldValues>(
       ends: formatTimestamp(end),
     };
   }, [rrstack.rules, rrstack.timezone, timestampFormat]);
-
-  const uiTimezone = (uiValue as UISchedule | undefined)?.timezone;
-  const timezoneError =
-    uiTimezone && !RRStack.isValidTimeZone(uiTimezone)
-      ? `Invalid timezone: ${uiTimezone}`
-      : undefined;
-
-  useEffect(() => {
-    setValidationErrors((p) => ({
-      ...p,
-      timezone: timezoneError,
-    }));
-  }, [timezoneError]);
 
   const handleAddRule = useCallback(() => {
     rrstack.addRule();
@@ -188,8 +152,8 @@ export const HookFormRRStack = <T extends FieldValues>(
         <Form.Group widths={'equal'}>
           <HookFormField<T, { value: string }>
             control={Dropdown}
-            hookControl={props.hookControl!}
-            hookName={`${props.hookName as Path<T>}.timezone` as Path<T>}
+            hookControl={control}
+            hookName={`${name as Path<T>}.timezone` as Path<T>}
             label="Timezone"
             placeholder="Select timezone"
             fluid
@@ -197,11 +161,6 @@ export const HookFormRRStack = <T extends FieldValues>(
             selection
             options={timezoneOptions}
           />
-          {validationErrors.timezone && (
-            <Label basic color="red" pointing>
-              {validationErrors.timezone}
-            </Label>
-          )}
 
           <Form.Field>
             <label>Starts</label>
@@ -243,8 +202,8 @@ export const HookFormRRStack = <T extends FieldValues>(
               }
               rrstack={rrstack}
               setActiveIndex={setActiveIndex}
-              hookControl={props.hookControl!}
-              hookNameBase={props.hookName}
+              hookControl={control}
+              hookName={`${name}.rules.${index}` as Path<T>}
             />
           ))}
         </Accordion>
