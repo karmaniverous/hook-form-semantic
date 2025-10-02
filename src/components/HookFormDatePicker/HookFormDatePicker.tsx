@@ -1,29 +1,25 @@
 import { omit } from 'radash';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import DatePicker, { type DatePickerProps } from 'react-date-picker';
 import DateTimePicker, {
   type DateTimePickerProps,
 } from 'react-datetime-picker';
 import type { FieldPath } from 'react-hook-form';
-import {
-  type ControllerProps,
-  type FieldValues,
-  useController,
-  type UseControllerProps,
-} from 'react-hook-form';
 import { Checkbox, Form, type FormFieldProps } from 'semantic-ui-react';
 
-import { deprefix, type PrefixedPartial } from '@/types/PrefixedPartial';
+import { useHookForm } from '@/hooks/useHookForm';
+import type { HookFormProps } from '@/types/HookFormProps';
+import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
 
 export interface HookFormDatePickerProps<
-  TFieldValues extends FieldValues = FieldValues,
+  TFieldValues extends Record<string, unknown> = Record<string, unknown>,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> extends Omit<
+> extends HookFormProps<TFieldValues, TName>,
+    Omit<
       FormFieldProps,
       | 'children'
       | 'checked'
-      | 'control'
       | 'disabled'
       | 'error'
       | 'name'
@@ -32,85 +28,47 @@ export interface HookFormDatePickerProps<
       | 'ref'
       | 'value'
     >,
-    Partial<
-      PrefixedPartial<
-        Omit<ControllerProps<TFieldValues, TName>, 'render'>,
-        'hook'
-      >
-    >,
-    PrefixedPartial<DatePickerProps, 'datePicker'>,
-    PrefixedPartial<DateTimePickerProps, 'timePicker'> {
-  /**
-   * Standalone mode (no RHF). Provide value and onChange handlers.
-   */
-  standalone?: boolean;
-  value?: Date | null;
-  onChange?: (value: Date | null) => void;
-}
+    PrefixProps<Omit<DatePickerProps, 'value'>, 'datePicker'>,
+    PrefixProps<Omit<DateTimePickerProps, 'value'>, 'timePicker'> {}
 
 export const HookFormDatePicker = <
-  TFieldValues extends FieldValues = FieldValues,
+  TFieldValues extends Record<string, unknown> = Record<string, unknown>,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
-  standalone = false,
-  value: standaloneValue,
-  onChange: standaloneOnChange,
   ...props
 }: HookFormDatePickerProps<TFieldValues, TName>) => {
   const {
-    hook: hookProps,
-    datePicker: { onChange: onDateChange, ...datePickerProps },
-    timePicker: { onChange: onTimeChange, ...timePickerProps },
+    controller: {
+      field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
+      fieldState: { error },
+    },
+    deprefixed: {
+      datePicker: { onChange: onDateChange, ...datePickerProps },
+      timePicker: { onChange: onTimeChange, ...timePickerProps },
+    },
     rest: { className, label, ...fieldProps },
-  } = useMemo(
-    () => deprefix(props, ['hook', 'datePicker', 'timePicker']),
-    [props],
-  );
+  } = useHookForm({
+    props,
+    prefixes: ['datePicker', 'timePicker'] as const,
+  });
 
   const [includeTime, setIncludeTime] = useState<boolean | undefined>(false);
 
-  // RHF controller (skipped in standalone mode)
-  const controllerResult = standalone
-    ? undefined
-    : useController(hookProps as UseControllerProps);
-
-  const hookFieldOnChange = standalone
-    ? undefined
-    : controllerResult?.field?.onChange;
-
-  const hookFieldProps = standalone
-    ? undefined
-    : controllerResult?.field
-      ? omit(controllerResult.field, ['onBlur', 'onChange', 'ref'])
-      : undefined;
-
-  const error = standalone ? undefined : controllerResult?.fieldState?.error;
-
   const handleChange = useCallback(
-    (...[value]: Parameters<NonNullable<DatePickerProps['onChange']>>) => {
-      (includeTime ? onTimeChange : onDateChange)?.(value as Date | null);
-
-      if (standalone) {
-        standaloneOnChange?.(value as Date | null);
-      } else {
-        hookFieldOnChange?.({ target: { type: 'date', value } });
-      }
+    (...[v]: Parameters<NonNullable<DatePickerProps['onChange']>>) => {
+      (includeTime ? onTimeChange : onDateChange)?.(v as Date | null);
+      hookFieldOnChange({
+        target: { type: 'date', value: v as Date | null },
+      } as unknown as React.SyntheticEvent<HTMLElement>);
     },
-    [
-      hookFieldOnChange,
-      includeTime,
-      onDateChange,
-      onTimeChange,
-      standalone,
-      standaloneOnChange,
-    ],
+    [hookFieldOnChange, includeTime, onDateChange, onTimeChange],
   );
 
   return (
     <Form.Field
       {...fieldProps}
       className={concatClassNames(className, 'hook-form-date-picker')}
-      error={!!error}
+      error={error?.message}
     >
       {label && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -143,9 +101,8 @@ export const HookFormDatePicker = <
               returnValue: 'start',
             }}
             {...timePickerProps}
-            {...(hookFieldProps && !standalone
-              ? hookFieldProps
-              : { value: standaloneValue })}
+            {...omit(hookFieldProps as Record<string, unknown>, ['ref'])}
+            value={(value as Date | null) ?? null}
           />
         ) : (
           <DatePicker
@@ -160,9 +117,8 @@ export const HookFormDatePicker = <
               returnValue: 'start',
             }}
             {...datePickerProps}
-            {...(hookFieldProps && !standalone
-              ? hookFieldProps
-              : { value: standaloneValue })}
+            {...omit(hookFieldProps as Record<string, unknown>, ['ref'])}
+            value={(value as Date | null) ?? null}
           />
         )}
       </div>

@@ -7,7 +7,7 @@
 ## Next up
 
 - Verify “equal widths” rendering of the 6-field Months/Weekdays/Time row across default Semantic UI 16-col grid; adjust minor CSS only if needed (keep component logic unchanged).
-- Confirm stakeholder preference about showing Duration for Span rules. Current behavior shows Duration always, but validates only for recurring rules.
+- Confirm stakeholder preference about default duration ({ days: 1 }) when switching Span → recurring; tweak if a different default is desired.
 - Light UX pass on labels/help text for Valid Range to ensure clarity (no behavior changes).
 - Consider gating any remaining console.debug lines in HookFormRRStackRuleForm behind NODE_ENV !== 'production' (stray logs removed in this pass).
 - Revisit Frequency/Duration description paths to ensure non‑continuous daily rules always yield distinct text (doc example parity).
@@ -25,6 +25,16 @@
   - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and UI behavior unchanged; add focused tests per section.
 
 ## Completed (recent)
+
+- Requirements split: moved RRStack UI requirements into `.stan/system/stan.requirements.md` and pared `.stan/system/stan.project.md` down to assistant instructions (kept testing/bench guidance). Updated requirements to state “Duration is displayed only when Frequency ≠ Span” and that default duration is created when switching to recurring.
+
+- RRStack UI (render refresh): HookFormRRStack now recomputes “Starts/Ends” when rrstack mutates by keying on `version`. HookFormRRStackRuleDescription recomputes description text on render (no identity-only memo), ensuring live updates when Effect/Frequency/constraints change.
+
+- Tests (validation/description): stop setting Duration before Frequency (Duration hidden while span). Rely on default duration after switching Frequency to recurring. Removed rrstackRenderDebounce={0} in harness (undefined disables debouncing). Stabilized monthly/weekly/daily description tests and Starts/Ends update test.
+
+- Date pickers: refactored HookFormDatePicker and HookFormDateRangePicker to the useHookForm pattern; removed `standalone` props and conditional hooks; kept Include Time toggle and presets logic; preserved public props via prefixed groups (datePicker*, timePicker*).
+
+- Lint: added displayName to WysiwygEditor to quiet React display-name rule.
 
 - Lint(react): enable eslint-plugin-react, eslint-plugin-react-hooks, and
   eslint-plugin-jsx-a11y with recommended rules for JSX/TSX files; disabled

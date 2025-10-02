@@ -319,14 +319,6 @@ describe('HookFormRRStack Validation', () => {
     const contents = await screen.findAllByTestId('accordion-content');
     const content = contents[0] as HTMLElement;
 
-    // Recurring rules require a positive duration. Set Duration → Min = 1.
-    // Use the Duration field labeled "Min" (distinct from "Minutes" in Time).
-    const durMinField = getFieldByLabel(content, 'Min');
-    const durMinInput = within(durMinField).getByRole('spinbutton', {
-      name: '',
-    }) as HTMLInputElement;
-    fireEvent.change(durMinInput, { target: { value: '1' } });
-
     // Frequency → monthly
     const freqField = getFieldByLabel(content, 'Frequency');
     const freqDropdown = within(freqField).getByTestId(
@@ -334,7 +326,7 @@ describe('HookFormRRStack Validation', () => {
     ) as HTMLSelectElement;
     fireEvent.change(freqDropdown, { target: { value: 'monthly' } });
 
-    // Set a Month (multi-select mock supports fallback to single value)
+    // Set a Month (multi-select mock supports fallback to single value).
     const monthsField = getFieldByLabel(content, 'Months');
     const monthsDropdown = within(monthsField).getByTestId(
       'dropdown',
@@ -357,13 +349,6 @@ describe('HookFormRRStack Validation', () => {
     // Wait for content
     const contents = await screen.findAllByTestId('accordion-content');
     const content = contents[0] as HTMLElement;
-
-    // Recurring rules require a positive duration. Set Duration → Min = 1.
-    const durMinField = getFieldByLabel(content, 'Min');
-    const durMinInput = within(durMinField).getByRole('spinbutton', {
-      name: '',
-    }) as HTMLInputElement;
-    fireEvent.change(durMinInput, { target: { value: '1' } });
 
     // Frequency → weekly
     const freqField = getFieldByLabel(content, 'Frequency');
@@ -469,7 +454,6 @@ const renderWithDescribeProps = (describe?: DescribeProps) => {
         <HookFormRRStack<TF>
           hookName="schedule"
           hookControl={control}
-          rrstackRenderDebounce={0}
           describeIncludeBounds={describe?.includeBounds}
           describeIncludeTimeZone={describe?.includeTimeZone}
           describeFormatTimeZone={describe?.formatTimeZone}
@@ -490,13 +474,6 @@ describe('HookFormRRStackRuleDescription — reflects rule settings and describe
     // Wait for the active accordion content to appear and scope all queries
     const contents = await screen.findAllByTestId('accordion-content');
     const content = contents[0] as HTMLElement;
-
-    // Recurring rules require a positive duration. Set Duration → Min = 1.
-    const durMinField = getFieldByLabel(content, 'Min');
-    const durMinInput = within(durMinField).getByRole('spinbutton', {
-      name: '',
-    }) as HTMLInputElement;
-    fireEvent.change(durMinInput, { target: { value: '1' } });
 
     // Frequency → daily
     const freqField = getFieldByLabel(content, 'Frequency');

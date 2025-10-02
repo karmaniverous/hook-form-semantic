@@ -116,3 +116,5 @@ export const WysiwygEditor = forwardRef<Editor, WysiwygEditorProps>(
     );
   },
 );
+
+WysiwygEditor.displayName = 'WysiwygEditor';
