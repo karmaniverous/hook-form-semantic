@@ -43,15 +43,13 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
   it('renders with start date without automatic time adjustment', () => {
     // RHF harness
     const Harness = () => {
-      const { control } = useForm<{ schedule: { rules: unknown[] } }>();
+      const { control } = useForm<{ schedule: unknown }>();
       return (
         <HookFormRRStackRuleForm
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookName={
-            'schedule.rules.0' as Path<{ schedule: { rules: unknown[] } }>
-          }
+          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
@@ -69,15 +67,13 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
 
   it('renders with end date without automatic time adjustment', () => {
     const Harness = () => {
-      const { control } = useForm<{ schedule: { rules: unknown[] } }>();
+      const { control } = useForm<{ schedule: unknown }>();
       return (
         <HookFormRRStackRuleForm
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookName={
-            'schedule.rules.0' as Path<{ schedule: { rules: unknown[] } }>
-          }
+          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
@@ -92,15 +88,13 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
 
   it('handles clearing dates properly', () => {
     const Harness = () => {
-      const { control } = useForm<{ schedule: { rules: unknown[] } }>();
+      const { control } = useForm<{ schedule: unknown }>();
       return (
         <HookFormRRStackRuleForm
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookName={
-            'schedule.rules.0' as Path<{ schedule: { rules: unknown[] } }>
-          }
+          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
@@ -116,15 +110,13 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
 
   it('displays date picker fields', () => {
     const Harness = () => {
-      const { control } = useForm<{ schedule: { rules: unknown[] } }>();
+      const { control } = useForm<{ schedule: unknown }>();
       return (
         <HookFormRRStackRuleForm
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookName={
-            'schedule.rules.0' as Path<{ schedule: { rules: unknown[] } }>
-          }
+          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
@@ -137,15 +129,13 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
 
   it('creates proper date range when both dates are selected', () => {
     const Harness = () => {
-      const { control } = useForm<{ schedule: { rules: unknown[] } }>();
+      const { control } = useForm<{ schedule: unknown }>();
       return (
         <HookFormRRStackRuleForm
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookName={
-            'schedule.rules.0' as Path<{ schedule: { rules: unknown[] } }>
-          }
+          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
@@ -165,15 +155,13 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
 
   it('preserves timestamp values without automatic adjustment', () => {
     const Harness = () => {
-      const { control } = useForm<{ schedule: { rules: unknown[] } }>();
+      const { control } = useForm<{ schedule: unknown }>();
       return (
         <HookFormRRStackRuleForm
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookName={
-            'schedule.rules.0' as Path<{ schedule: { rules: unknown[] } }>
-          }
+          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };

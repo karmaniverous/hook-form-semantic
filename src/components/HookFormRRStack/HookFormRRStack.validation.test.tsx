@@ -284,7 +284,7 @@ describe('HookFormRRStack Validation', () => {
     });
   });
 
-  it.skip('RRStackRuleDescription updates when setting Start/End (includeBounds)', async () => {
+  it.skip('HookFormRRStackRuleDescription updates when setting Start/End (includeBounds)', async () => {
     const { getByText } = renderWithDescribeProps({ includeBounds: true });
     fireEvent.click(getByText('Add Rule'));
     const description = screen.getByTestId('rule-description-0');
@@ -309,7 +309,7 @@ describe('HookFormRRStack Validation', () => {
     });
   });
 
-  it('RRStackRuleDescription updates when setting Months while monthly (without DoM)', async () => {
+  it('HookFormRRStackRuleDescription updates when setting Months while monthly (without DoM)', async () => {
     const { getByText } = renderWithDescribeProps();
     fireEvent.click(getByText('Add Rule'));
     const description = screen.getByTestId('rule-description-0');
@@ -340,7 +340,7 @@ describe('HookFormRRStack Validation', () => {
     });
   });
 
-  it('RRStackRuleDescription updates when setting Weekday and Position (weekly)', async () => {
+  it('HookFormRRStackRuleDescription updates when setting Weekday and Position (weekly)', async () => {
     const { getByText } = renderWithDescribeProps();
     fireEvent.click(getByText('Add Rule'));
     const description = screen.getByTestId('rule-description-0');
@@ -378,7 +378,7 @@ describe('HookFormRRStack Validation', () => {
     });
   });
 
-  it('updates RRStackRuleDescription when effect changes', async () => {
+  it('updates HookFormRRStackRuleDescription when effect changes', async () => {
     render(<TestForm />);
 
     // Add a rule and open the editor
@@ -417,22 +417,17 @@ describe('HookFormRRStack Validation', () => {
 
 // Helpers for description-focused tests
 const getFieldByLabel = (root: HTMLElement, labelText: string) => {
-  // Find the label element with exact text, then return its nearest field
-  // container instead of matching any ancestor that contains the label.
-  const labels = Array.from(root.querySelectorAll('label'));
-  const labelEl =
-    labels.find((l) => (l.textContent ?? '').trim().includes(labelText)) ??
-    null;
-
-  if (!labelEl) {
-    throw new Error(`Label not found: ${labelText}`);
+  // Robustly find a field by matching the text of its first child,
+  // which may be a <label> or a custom InfoLabel <span>.
+  const fields = Array.from(
+    root.querySelectorAll<HTMLElement>('[data-testid="form-field"]'),
+  );
+  for (const f of fields) {
+    const first = f.firstElementChild as HTMLElement | null;
+    const txt = (first?.textContent ?? '').trim();
+    if (txt.includes(labelText)) return f;
   }
-
-  const field = labelEl.closest(
-    '[data-testid="form-field"]',
-  ) as HTMLElement | null;
-  if (!field) throw new Error(`Field not found for label: ${labelText}`);
-  return field;
+  throw new Error(`Label not found: ${labelText}`);
 };
 
 type DescribeProps = {
@@ -470,7 +465,7 @@ const renderWithDescribeProps = (describe?: DescribeProps) => {
   return render(<Harness />);
 };
 
-describe('RRStackRuleDescription — reflects rule settings and describe options', () => {
+describe('HookFormRRStackRuleDescription — reflects rule settings and describe options', () => {
   it('updates when setting Frequency/Hours/Minutes', async () => {
     const { getByText } = renderWithDescribeProps();
     fireEvent.click(getByText('Add Rule'));

@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-09-30T00:00:00Z
+# When updated: 2025-10-02T00:00:00Z
 
 ## Next up
 
@@ -25,6 +25,21 @@
   - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and UI behavior unchanged; add focused tests per section.
 
 ## Completed (recent)
+
+- Fix(DateRangePicker barrel): re-export DateRange, defaultPresets,
+  filterPresets, extractTimestamps from source modules; component exports
+  unchanged. Unblocked build/docs/typecheck.
+- Fix(hooks): tighten useHookForm generics (TName extends FieldPath<TFieldValues>);
+  remove any, type useWatch generically; resolves TS2344 and ESLint.
+- Fix(RRStack types): remove unused import from
+  src/components/HookFormRRStack/types.ts; lint clean.
+- Fix(bench typing): use HookFormRRStackData for FormData.schedule in
+  HookFormRRStack.bench.tsx; resolves hookName inference (never).
+- Tests(RRStackRuleForm.timestamp): migrate to hookName prop and pass
+  'schedule.rules.0'; adjust harness types; resolves TS errors and runtime
+  substring exception.
+- Tests(RRStack validation): robust field finder matches first child text in
+  [data-testid="form-field"] to support InfoLabel.
 
 - Tests: adapt label-based queries to support InfoLabel (non-<label> labels). Updated helpers to read the first child of each [data-testid="form-field"] and match on its text content. Fixes “Label not found: Frequency/Effect” errors.
 

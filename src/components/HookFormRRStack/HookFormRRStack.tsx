@@ -27,8 +27,8 @@ import { reprefix } from '@/types/PrefixedPartial';
 import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
 
+import type { HookFormRRStackRuleDescriptionPropsBase } from './HookFormHookFormRRStackRuleDescription';
 import { HookFormRRStackRule } from './HookFormRRStackRule';
-import type { RRStackRuleDescriptionPropsBase } from './RRStackRuleDescription';
 import { timezoneOptions } from './timezoneOptions';
 import type { HookFormRRStackPath } from './types';
 
@@ -55,7 +55,7 @@ export interface HookFormRRStackProps<
       | 'value'
     >,
     PrefixProps<
-      Omit<RRStackRuleDescriptionPropsBase, 'index' | 'rrstack'>,
+      Omit<HookFormRRStackRuleDescriptionPropsBase, 'index' | 'rrstack'>,
       'describe'
     >,
     PrefixProps<Omit<UseRRStackProps, 'json' | 'timezone'>, 'rrstack'> {

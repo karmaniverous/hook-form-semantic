@@ -12,7 +12,7 @@ import { deprefixProps } from '@/utils/deprefixProps';
 
 export interface UseHookFormProps<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Props extends HookFormProps<any>,
+  Props extends HookFormProps<any, any>,
   Prefix extends string = never,
 > {
   props: Props;
@@ -27,11 +27,14 @@ export const useHookForm = <
   props,
   prefixes = [] as const,
 }: UseHookFormProps<Props, Prefix>) => {
-  // Infer the form value type T from the HookFormProps<T> passed in.
   type TFieldValues =
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Props extends HookFormProps<infer T, any> ? T : FieldValues;
+
   type TName =
-    Props extends HookFormProps<any, infer T> ? T : FieldPath<TFieldValues>;
+    Props extends HookFormProps<TFieldValues, infer T>
+      ? T
+      : FieldPath<TFieldValues>;
 
   const { deprefixed, hookProps, rest } = useMemo(() => {
     // Split props into deprefixed groups and the rest.

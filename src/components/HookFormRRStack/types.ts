@@ -5,7 +5,6 @@ import type {
   RuleOptionsJson,
 } from '@karmaniverous/rrstack';
 import type { FieldPathByValue, FieldValues } from 'react-hook-form';
-import { H } from 'vitest/dist/chunks/environment.d.cL3nLXbE.js';
 
 export type HookFormRRStackRuleOptionsData = Omit<
   RuleOptionsJson,

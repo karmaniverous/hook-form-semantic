@@ -4,12 +4,10 @@ import { Form } from 'semantic-ui-react';
 import { bench, describe } from 'vitest';
 
 import { HookFormRRStack } from './HookFormRRStack';
+import type { HookFormRRStackData } from './types';
 
 type FormData = {
-  schedule: {
-    timezone: string;
-    rules: unknown[];
-  };
+  schedule: HookFormRRStackData;
 };
 
 function Harness() {

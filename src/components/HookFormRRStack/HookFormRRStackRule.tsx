@@ -8,16 +8,16 @@ import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 
+import type { HookFormRRStackRuleDescriptionPropsBase } from './HookFormHookFormRRStackRuleDescription';
+import { HookFormRRStackRuleDescription } from './HookFormHookFormRRStackRuleDescription';
 import { HookFormRRStackRuleForm } from './HookFormRRStackRuleForm';
-import type { RRStackRuleDescriptionPropsBase } from './RRStackRuleDescription';
-import { RRStackRuleDescription } from './RRStackRuleDescription';
 interface HookFormRRStackRuleProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > extends HookFormProps<TFieldValues, TName>,
     Pick<AccordionTitleProps, 'onClick'>,
     PrefixProps<
-      Omit<RRStackRuleDescriptionPropsBase, 'index' | 'rrstack'>,
+      Omit<HookFormRRStackRuleDescriptionPropsBase, 'index' | 'rrstack'>,
       'describe'
     > {
   activeIndex: number | null;
@@ -174,7 +174,7 @@ export const HookFormRRStackRule = <
           </div>
         </div>
 
-        <RRStackRuleDescription
+        <HookFormRRStackRuleDescription
           as="div"
           data-testid={`rule-description-${index}`}
           index={index}
