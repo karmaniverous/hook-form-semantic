@@ -83,6 +83,7 @@ export const HookFormRRStack = <
       className,
       label,
       timestampFormat = 'yyyy-MM-dd HH:mm:ss',
+      logger,
       ...fieldProps
     },
   } = useHookForm({ props, prefixes: ['describe', 'rrstack'] as const });
@@ -95,12 +96,23 @@ export const HookFormRRStack = <
   const handleChange = useCallback(
     (rrstack: UseRRStackOutput['rrstack']) => {
       rrstackOnChange?.(rrstack);
-      hookFieldOnChange({ target: { value: rrstack2rhf(rrstack.toJson()) } });
+      const json = rrstack.toJson();
+      const mapped = rrstack2rhf(json);
+      logger?.debug?.('rrstack2rhf', { rrstack: json, rhf: mapped });
+      hookFieldOnChange({ target: { value: mapped } });
     },
-    [hookFieldOnChange, rrstackOnChange],
+    [hookFieldOnChange, rrstackOnChange, logger],
   );
 
-  const json = useWatch({ control, name, compute: (v) => rhf2rrstack(v) });
+  const json = useWatch({
+    control,
+    name,
+    compute: (v) => {
+      const next = rhf2rrstack(v);
+      logger?.debug?.('rhf2rrstack', { rhf: v, rrstack: next });
+      return next;
+    },
+  });
 
   const { rrstack, version } = useRRStack({
     json,
@@ -161,6 +173,7 @@ export const HookFormRRStack = <
           <HookFormField<TFieldValues, { value: string }>
             control={Dropdown}
             hookControl={control}
+            logger={logger}
             hookName={`${name}.timezone` as Path<TFieldValues>}
             label="Timezone"
             placeholder="Select timezone"
@@ -202,6 +215,7 @@ export const HookFormRRStack = <
               onClick={() =>
                 setActiveIndex(activeIndex === index ? null : index)
               }
+              logger={logger}
               rrstack={rrstack}
               setActiveIndex={setActiveIndex}
               hookControl={control}

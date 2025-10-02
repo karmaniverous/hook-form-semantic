@@ -40,6 +40,7 @@ export const HookFormRRStackRuleWeekdays = <
     deprefixed: {
       hook: { name, control },
     },
+    rest: { logger },
   } = useHookForm({ props });
 
   return (
@@ -50,6 +51,7 @@ export const HookFormRRStackRuleWeekdays = <
         <HookFormField<TFieldValues, { value: number[] }>
           compact
           control={Dropdown}
+          logger={logger}
           hookControl={control}
           hookName={`${name}.options.byweekday` as Path<TFieldValues>}
           label={
@@ -67,6 +69,7 @@ export const HookFormRRStackRuleWeekdays = <
         <HookFormField<TFieldValues, { value: number[] }>
           compact
           control={Dropdown}
+          logger={logger}
           hookControl={control}
           hookName={`${name}.options.bysetpos` as Path<TFieldValues>}
           label={

@@ -35,6 +35,7 @@ export const HookFormRRStackRuleForm = <
     deprefixed: {
       hook: { name, control },
     },
+    rest: { logger },
   } = useHookForm({ props });
 
   const freq = useWatch({
@@ -47,11 +48,13 @@ export const HookFormRRStackRuleForm = <
       <HookFormRRStackRuleEffect<TFieldValues>
         hookControl={control}
         hookName={name}
+        logger={logger}
       />
 
       <HookFormRRStackRuleRange<TFieldValues>
         hookControl={control}
         hookName={`${name}.options` as Path<TFieldValues>}
+        logger={logger}
       />
 
       {freq && freq !== 'span' && (
@@ -61,6 +64,7 @@ export const HookFormRRStackRuleForm = <
               <HookFormRRStackRuleMonthdays<TFieldValues>
                 hookControl={control}
                 hookName={name as Path<TFieldValues>}
+                logger={logger}
               />
             </Grid.Column>
 
@@ -68,6 +72,7 @@ export const HookFormRRStackRuleForm = <
               <HookFormRRStackRuleWeekdays<TFieldValues>
                 hookControl={control}
                 hookName={name as Path<TFieldValues>}
+                logger={logger}
               />
             </Grid.Column>
 
@@ -75,6 +80,7 @@ export const HookFormRRStackRuleForm = <
               <HookFormRRStackRuleTime<TFieldValues>
                 hookControl={control}
                 hookName={name as Path<TFieldValues>}
+                logger={logger}
               />
             </Grid.Column>
           </Grid>
@@ -82,6 +88,7 @@ export const HookFormRRStackRuleForm = <
           <HookFormRRStackRuleDuration<TFieldValues>
             hookControl={control}
             hookName={`${name}.duration` as Path<TFieldValues>}
+            logger={logger}
           />
         </>
       )}

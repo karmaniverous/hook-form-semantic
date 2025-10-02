@@ -39,7 +39,7 @@ export const HookFormRRStackRule = <
       describe: describeProps,
       hook: { name, control },
     },
-    rest: { activeIndex, index, onClick, rrstack, setActiveIndex },
+    rest: { activeIndex, index, logger, onClick, rrstack, setActiveIndex },
   } = useHookForm({ props, prefixes: ['describe'] as const });
 
   const handleUp = useCallback(() => {
@@ -192,6 +192,7 @@ export const HookFormRRStackRule = <
             index={index}
             hookControl={control}
             hookName={name}
+            logger={logger}
             rrstack={rrstack}
           />
         </Segment>

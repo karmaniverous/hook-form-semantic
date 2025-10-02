@@ -22,6 +22,7 @@ export const HookFormRRStackRuleTime = <
     deprefixed: {
       hook: { name, control },
     },
+    rest: { logger },
   } = useHookForm({ props });
 
   return (
@@ -30,6 +31,7 @@ export const HookFormRRStackRuleTime = <
       <Form.Group widths="equal" style={{ marginBottom: 0 }}>
         <HookFormField<TFieldValues, { value: string }>
           control={Input}
+          logger={logger}
           hookControl={control}
           hookName={`${name}.options.byhourText` as Path<TFieldValues>}
           label={
@@ -43,6 +45,7 @@ export const HookFormRRStackRuleTime = <
         />
         <HookFormField<TFieldValues, { value: string }>
           control={Input}
+          logger={logger}
           hookControl={control}
           hookName={`${name}.options.byminuteText` as Path<TFieldValues>}
           label={

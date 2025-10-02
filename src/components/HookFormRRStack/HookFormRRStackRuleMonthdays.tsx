@@ -37,6 +37,7 @@ export const HookFormRRStackRuleMonthdays = <
     deprefixed: {
       hook: { name, control },
     },
+    rest: { logger },
   } = useHookForm({ props });
 
   return (
@@ -46,6 +47,7 @@ export const HookFormRRStackRuleMonthdays = <
         <HookFormField<TFieldValues, { value: number[] }>
           compact
           control={Dropdown}
+          logger={logger}
           hookControl={control}
           hookName={`${name}.options.bymonth` as Path<TFieldValues>}
           label={
@@ -62,6 +64,7 @@ export const HookFormRRStackRuleMonthdays = <
 
         <HookFormField<TFieldValues, { value: string }>
           control={Input}
+          logger={logger}
           hookControl={control}
           hookName={`${name}.options.bymonthdayText` as Path<TFieldValues>}
           label={

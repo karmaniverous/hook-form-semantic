@@ -27,12 +27,14 @@ export const HookFormRRStackRuleEffect = <
     deprefixed: {
       hook: { name, control },
     },
+    rest: { logger },
   } = useHookForm({ props });
 
   return (
     <Form.Group>
       <HookFormField<TFieldValues, { value: string }>
         control={Input}
+        logger={logger}
         hookControl={control}
         hookName={`${name}.label` as Path<TFieldValues>}
         label={
@@ -49,6 +51,7 @@ export const HookFormRRStackRuleEffect = <
       <HookFormField<TFieldValues, { value: 'active' | 'blackout' }>
         compact
         control={Dropdown}
+        logger={logger}
         hookControl={control}
         hookName={`${name}.effect` as Path<TFieldValues>}
         label={

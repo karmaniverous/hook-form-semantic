@@ -26,6 +26,12 @@
 
 ## Completed (recent)
 
+- RRStack (logging & round-trip visibility):
+  - Threaded useHookForm rest.logger through HookFormRRStack and all subcomponents; passed to HookForm* children so each field logs its value via useHookForm.
+  - Bridged logger into useRRStack (logs rrstack lifecycle events).
+  - Added logger.debug at RHF↔RRStack mapping boundaries (rhf2rrstack, rrstack2rhf).
+  - Enabled logger={console} in HookFormRRStack tests to validate round-trip with minimal refreshes.
+
 - Test setup:
   - Decomposed vitest.setup.tsx to side‑effect imports (semantic/pickers/inputs/json‑wysiwyg).
   - Updated doubles to derive key prop types from Semantic UI React (StrictCheckboxProps, StrictDropdownProps).

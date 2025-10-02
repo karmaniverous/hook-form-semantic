@@ -40,6 +40,7 @@ export const HookFormRRStackRuleRange = <
     deprefixed: {
       hook: { name, control },
     },
+    rest: { logger },
   } = useHookForm({ props });
 
   const freq = useWatch({
@@ -53,6 +54,7 @@ export const HookFormRRStackRuleRange = <
 
       <Form.Group style={{ alignItems: 'flex-end' }}>
         <HookFormDatePicker<TFieldValues>
+          logger={logger}
           hookControl={control}
           hookName={`${name}.starts` as Path<TFieldValues>}
           label="Start Date"
@@ -60,6 +62,7 @@ export const HookFormRRStackRuleRange = <
         />
 
         <HookFormDatePicker<TFieldValues>
+          logger={logger}
           hookControl={control}
           hookName={`${name}.ends` as Path<TFieldValues>}
           label="End Date"
@@ -69,6 +72,7 @@ export const HookFormRRStackRuleRange = <
         <HookFormField<TFieldValues, { value: string }>
           compact
           control={Dropdown}
+          logger={logger}
           hookControl={control}
           hookName={`${name}.freq` as Path<TFieldValues>}
           label={
@@ -86,6 +90,7 @@ export const HookFormRRStackRuleRange = <
         {freq && freq !== 'span' && (
           <>
             <HookFormNumeric<TFieldValues>
+              logger={logger}
               hookControl={control}
               hookName={`${name}.interval` as Path<TFieldValues>}
               label={
@@ -99,6 +104,7 @@ export const HookFormRRStackRuleRange = <
             />
 
             <HookFormNumeric<TFieldValues>
+              logger={logger}
               hookControl={control}
               hookName={`${name}.count` as Path<TFieldValues>}
               label={

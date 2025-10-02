@@ -38,6 +38,7 @@ const TestForm = () => {
       <HookFormRRStack
         hookName="schedule"
         hookControl={control}
+        logger={console}
         label="Schedule Configuration"
       />
       <button type="submit">Submit</button>
@@ -454,6 +455,7 @@ const renderWithDescribeProps = (describe?: DescribeProps) => {
         <HookFormRRStack<TF>
           hookName="schedule"
           hookControl={control}
+          logger={console}
           describeIncludeBounds={describe?.includeBounds}
           describeIncludeTimeZone={describe?.includeTimeZone}
           describeFormatTimeZone={describe?.formatTimeZone}
