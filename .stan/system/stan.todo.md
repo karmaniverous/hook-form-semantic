@@ -26,6 +26,10 @@
 
 ## Completed (recent)
 
+- Tests(rrstack recurring): set Duration before changing Frequency in
+  validation tests (monthly/weekly/daily) to avoid interim compile with
+  zero duration under the new engine policy.
+
 - Tests(rrstack recurring): set minimal Duration (Min = 1) in validation
   tests when switching Frequency to monthly/weekly/daily so rrstack
   compiles under the “recurring rules require a positive duration” policy.

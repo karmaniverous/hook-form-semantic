@@ -319,13 +319,6 @@ describe('HookFormRRStack Validation', () => {
     const contents = await screen.findAllByTestId('accordion-content');
     const content = contents[0] as HTMLElement;
 
-    // Frequency → monthly
-    const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
-    fireEvent.change(freqDropdown, { target: { value: 'monthly' } });
-
     // Recurring rules require a positive duration. Set Duration → Min = 1.
     // Use the Duration field labeled "Min" (distinct from "Minutes" in Time).
     const durMinField = getFieldByLabel(content, 'Min');
@@ -333,6 +326,13 @@ describe('HookFormRRStack Validation', () => {
       name: '',
     }) as HTMLInputElement;
     fireEvent.change(durMinInput, { target: { value: '1' } });
+
+    // Frequency → monthly
+    const freqField = getFieldByLabel(content, 'Frequency');
+    const freqDropdown = within(freqField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(freqDropdown, { target: { value: 'monthly' } });
 
     // Set a Month (multi-select mock supports fallback to single value)
     const monthsField = getFieldByLabel(content, 'Months');
@@ -358,19 +358,19 @@ describe('HookFormRRStack Validation', () => {
     const contents = await screen.findAllByTestId('accordion-content');
     const content = contents[0] as HTMLElement;
 
-    // Frequency → weekly
-    const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
-    fireEvent.change(freqDropdown, { target: { value: 'weekly' } });
-
     // Recurring rules require a positive duration. Set Duration → Min = 1.
     const durMinField = getFieldByLabel(content, 'Min');
     const durMinInput = within(durMinField).getByRole('spinbutton', {
       name: '',
     }) as HTMLInputElement;
     fireEvent.change(durMinInput, { target: { value: '1' } });
+
+    // Frequency → weekly
+    const freqField = getFieldByLabel(content, 'Frequency');
+    const freqDropdown = within(freqField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(freqDropdown, { target: { value: 'weekly' } });
 
     // Weekday: Monday (0)
     const wdField = getFieldByLabel(content, 'Weekdays');
@@ -491,19 +491,19 @@ describe('HookFormRRStackRuleDescription — reflects rule settings and describe
     const contents = await screen.findAllByTestId('accordion-content');
     const content = contents[0] as HTMLElement;
 
-    // Frequency → daily
-    const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
-    fireEvent.change(freqDropdown, { target: { value: 'daily' } });
-
     // Recurring rules require a positive duration. Set Duration → Min = 1.
     const durMinField = getFieldByLabel(content, 'Min');
     const durMinInput = within(durMinField).getByRole('spinbutton', {
       name: '',
     }) as HTMLInputElement;
     fireEvent.change(durMinInput, { target: { value: '1' } });
+
+    // Frequency → daily
+    const freqField = getFieldByLabel(content, 'Frequency');
+    const freqDropdown = within(freqField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(freqDropdown, { target: { value: 'daily' } });
 
     // Time constraints
     const hoursInput = within(content).getByPlaceholderText(
