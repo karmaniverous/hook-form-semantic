@@ -26,6 +26,12 @@
 
 ## Completed (recent)
 
+- Fix(imports): correct RRStack rule description import paths in
+  HookFormRRStack.tsx and HookFormRRStackRule.tsx to
+  './HookFormRRStackRuleDescription'.
+- Tests(timestamp): update legacy HookFormRRStackRuleForm.timestamp test to use
+  hookName 'schedule.rules.0' and a precise form type; removes RHF path errors.
+
 - Fix(DateRangePicker barrel): re-export DateRange, defaultPresets,
   filterPresets, extractTimestamps from source modules; component exports
   unchanged. Unblocked build/docs/typecheck.

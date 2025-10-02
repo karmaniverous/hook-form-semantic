@@ -27,8 +27,8 @@ import { reprefix } from '@/types/PrefixedPartial';
 import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
 
-import type { HookFormRRStackRuleDescriptionPropsBase } from './HookFormHookFormRRStackRuleDescription';
 import { HookFormRRStackRule } from './HookFormRRStackRule';
+import type { HookFormRRStackRuleDescriptionPropsBase } from './HookFormRRStackRuleDescription';
 import { timezoneOptions } from './timezoneOptions';
 import type { HookFormRRStackPath } from './types';
 

@@ -8,8 +8,10 @@ import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 
-import type { HookFormRRStackRuleDescriptionPropsBase } from './HookFormHookFormRRStackRuleDescription';
-import { HookFormRRStackRuleDescription } from './HookFormHookFormRRStackRuleDescription';
+import {
+  HookFormRRStackRuleDescription,
+  type HookFormRRStackRuleDescriptionPropsBase,
+} from './HookFormRRStackRuleDescription';
 import { HookFormRRStackRuleForm } from './HookFormRRStackRuleForm';
 interface HookFormRRStackRuleProps<
   TFieldValues extends FieldValues = FieldValues,

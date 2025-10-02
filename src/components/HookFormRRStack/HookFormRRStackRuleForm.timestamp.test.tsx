@@ -49,7 +49,7 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
+          hookName={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
@@ -73,7 +73,7 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
+          hookName={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
@@ -94,7 +94,7 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
+          hookName={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
@@ -116,7 +116,7 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
+          hookName={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
@@ -135,7 +135,7 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
+          hookName={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
@@ -161,7 +161,7 @@ describe('HookFormRRStackRuleForm Timestamp Handling', () => {
           index={0}
           rrstack={rrstack}
           hookControl={control}
-          hookNameBase={'schedule' as Path<{ schedule: unknown }>}
+          hookName={'schedule' as Path<{ schedule: unknown }>}
         />
       );
     };
