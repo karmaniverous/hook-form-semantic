@@ -1,6 +1,10 @@
 import type { DescribeOptions } from '@karmaniverous/rrstack';
 import { type UseRRStackOutput } from '@karmaniverous/rrstack/react';
-import type { ComponentPropsWithoutRef, ElementType } from 'react';
+import {
+  type ComponentPropsWithoutRef,
+  type ElementType,
+  useMemo,
+} from 'react';
 
 export interface HookFormRRStackRuleDescriptionPropsBase
   extends DescribeOptions {
@@ -31,13 +35,19 @@ export const HookFormRRStackRuleDescription = <T extends ElementType = 'span'>({
 }: HookFormRRStackRuleDescriptionProps<T>) => {
   const As = (as ?? 'span') as ElementType;
 
-  const text = rrstack.describeRule(index, {
-    includeBounds,
-    includeTimeZone,
-    formatTimeZone,
-  });
+  const text = useMemo(
+    () =>
+      index > 0 && index < rrstack.rules.length
+        ? rrstack.describeRule(index, {
+            includeBounds,
+            includeTimeZone,
+            formatTimeZone,
+          })
+        : null,
+    [index, rrstack, includeBounds, includeTimeZone, formatTimeZone],
+  );
 
-  return index >= 0 && index < rrstack.rules.length ? (
+  return text ? (
     <As className={className} {...rest}>
       {text}
     </As>

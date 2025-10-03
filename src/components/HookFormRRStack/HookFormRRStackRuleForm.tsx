@@ -1,4 +1,10 @@
 import type { UseRRStackOutput } from '@karmaniverous/rrstack/react';
+import { useEffect, useMemo } from 'react';
+import type {
+  ArrayPath,
+  FieldArray,
+  UseFieldArrayReturn,
+} from 'react-hook-form';
 import {
   type FieldPath,
   type FieldValues,
@@ -9,6 +15,7 @@ import { Container, Grid } from 'semantic-ui-react';
 
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
+import type { PrefixProps } from '@/types/PrefixProps';
 
 import { HookFormRRStackRuleDuration } from './HookFormRRStackRuleDuration';
 import { HookFormRRStackRuleEffect } from './HookFormRRStackRuleEffect';
@@ -16,11 +23,16 @@ import { HookFormRRStackRuleMonthdays } from './HookFormRRStackRuleMonthdays';
 import { HookFormRRStackRuleRange } from './HookFormRRStackRuleRange';
 import { HookFormRRStackRuleTime } from './HookFormRRStackRuleTime';
 import { HookFormRRStackRuleWeekdays } from './HookFormRRStackRuleWeekdays';
+import type { HookFormRRStackRuleData } from './types';
 
 interface HookFormRRStackRuleFormProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> extends HookFormProps<TFieldValues, TName> {
+> extends HookFormProps<TFieldValues, TName>,
+    PrefixProps<
+      Pick<UseFieldArrayReturn<TFieldValues>, 'update'>,
+      'fieldArray'
+    > {
   index: number;
   rrstack: UseRRStackOutput['rrstack'];
 }
@@ -33,15 +45,34 @@ export const HookFormRRStackRuleForm = <
 ) => {
   const {
     deprefixed: {
+      fieldArray: { update },
       hook: { name, control },
     },
-    rest: { logger },
-  } = useHookForm({ props });
+    rest: { index, logger },
+  } = useHookForm({ props, prefixes: ['fieldArray'] });
 
-  const freq = useWatch({
+  const rule = useWatch({
     control,
-    name: `${name}.options.freq` as Path<TFieldValues>,
-  });
+    name: name as Path<TFieldValues>,
+  }) as FieldArray<
+    TFieldValues,
+    ArrayPath<TFieldValues>
+  > extends HookFormRRStackRuleData
+    ? FieldArray<TFieldValues, ArrayPath<TFieldValues>>
+    : never;
+
+  const { duration, options: { freq } = {} } = useMemo(
+    () => rule ?? {},
+    [rule],
+  );
+
+  useEffect(() => {
+    if (freq && freq !== 'span' && !Object.values(duration ?? {}).some(Boolean))
+      update(index, { ...rule, duration: { days: 1 } }) as FieldArray<
+        TFieldValues,
+        ArrayPath<TFieldValues>
+      >;
+  }, [rule, update, index, freq, duration]);
 
   return (
     <Container>

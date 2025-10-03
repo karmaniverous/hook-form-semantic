@@ -1,6 +1,10 @@
 import type { UseRRStackOutput } from '@karmaniverous/rrstack/react';
 import { useCallback } from 'react';
-import type { FieldPath, FieldValues } from 'react-hook-form';
+import type {
+  FieldPath,
+  FieldValues,
+  UseFieldArrayReturn,
+} from 'react-hook-form';
 import type { AccordionTitleProps } from 'semantic-ui-react';
 import { Accordion, Button, Icon, Label, Segment } from 'semantic-ui-react';
 
@@ -21,8 +25,13 @@ interface HookFormRRStackRuleProps<
     PrefixProps<
       Omit<HookFormRRStackRuleDescriptionPropsBase, 'index' | 'rrstack'>,
       'describe'
+    >,
+    PrefixProps<
+      Pick<UseFieldArrayReturn<TFieldValues>, 'move' | 'remove' | 'update'>,
+      'fieldArray'
     > {
   activeIndex: number | null;
+  count: number;
   index: number;
   rrstack: UseRRStackOutput['rrstack'];
   setActiveIndex: (index: number | null) => void;
@@ -37,63 +46,60 @@ export const HookFormRRStackRule = <
   const {
     deprefixed: {
       describe: describeProps,
+      fieldArray: { move, remove, update },
       hook: { name, control },
     },
-    rest: { activeIndex, index, logger, onClick, rrstack, setActiveIndex },
-  } = useHookForm({ props, prefixes: ['describe'] as const });
+    rest: {
+      activeIndex,
+      count,
+      index,
+      logger,
+      onClick,
+      rrstack,
+      setActiveIndex,
+    },
+  } = useHookForm({ props, prefixes: ['describe', 'fieldArray'] as const });
 
   const handleUp = useCallback(() => {
     if (index > 0) {
-      rrstack.up(index);
-      if (activeIndex === index) {
-        setActiveIndex(index - 1);
-      } else if (activeIndex === index - 1) {
-        setActiveIndex(index);
-      }
+      move(index, index - 1);
+      if (activeIndex === index) setActiveIndex(index - 1);
+      else if (activeIndex === index - 1) setActiveIndex(index);
     }
-  }, [index, rrstack, activeIndex, setActiveIndex]);
+  }, [index, move, activeIndex, setActiveIndex]);
 
   const handleDown = useCallback(() => {
-    if (index < rrstack.rules.length - 1) {
-      rrstack.down(index);
-      if (activeIndex === index) {
-        setActiveIndex(index + 1);
-      } else if (activeIndex === index + 1) {
-        setActiveIndex(index);
-      }
+    if (index < count - 1) {
+      move(index, index + 1);
+      if (activeIndex === index) setActiveIndex(index + 1);
+      else if (activeIndex === index + 1) setActiveIndex(index);
     }
-  }, [index, rrstack, activeIndex, setActiveIndex]);
+  }, [index, count, move, activeIndex, setActiveIndex]);
 
   const handleTop = useCallback(() => {
     if (index > 0) {
-      rrstack.top(index);
-      if (activeIndex === index) {
-        setActiveIndex(0);
-      } else if (activeIndex !== null && activeIndex < index) {
+      move(index, 0);
+      if (activeIndex === index) setActiveIndex(0);
+      else if (activeIndex !== null && activeIndex < index)
         setActiveIndex(activeIndex + 1);
-      }
     }
-  }, [index, rrstack, activeIndex, setActiveIndex]);
+  }, [index, move, activeIndex, setActiveIndex]);
 
   const handleBottom = useCallback(() => {
-    if (index < rrstack.rules.length - 1) {
-      rrstack.bottom(index);
-      if (activeIndex === index) {
-        setActiveIndex(rrstack.rules.length - 1);
-      } else if (activeIndex !== null && activeIndex > index) {
+    if (index < count - 1) {
+      move(index, count - 1);
+      if (activeIndex === index) setActiveIndex(count - 1);
+      else if (activeIndex !== null && activeIndex > index)
         setActiveIndex(activeIndex - 1);
-      }
     }
-  }, [index, rrstack, activeIndex, setActiveIndex]);
+  }, [index, count, move, activeIndex, setActiveIndex]);
 
   const handleDelete = useCallback(() => {
-    rrstack.removeRule(index);
-    if (activeIndex === index) {
-      setActiveIndex(null);
-    } else if (activeIndex !== null && activeIndex > index) {
+    remove(index);
+    if (activeIndex === index) setActiveIndex(null);
+    else if (activeIndex !== null && activeIndex > index)
       setActiveIndex(activeIndex - 1);
-    }
-  }, [index, rrstack, activeIndex, setActiveIndex]);
+  }, [remove, index, activeIndex, setActiveIndex]);
 
   // Safely access current rule and key attributes
   const ruleAtIndex = rrstack.rules[index];
@@ -144,7 +150,7 @@ export const HookFormRRStackRule = <
               />
 
               <Button
-                disabled={index === rrstack.rules.length - 1}
+                disabled={index === count - 1}
                 icon="angle down"
                 onClick={handleDown}
                 size="mini"
@@ -153,7 +159,7 @@ export const HookFormRRStackRule = <
               />
 
               <Button
-                disabled={index === rrstack.rules.length - 1}
+                disabled={index === count - 1}
                 icon="angle double down"
                 onClick={handleBottom}
                 size="mini"
@@ -189,6 +195,7 @@ export const HookFormRRStackRule = <
       >
         <Segment basic style={{ fontSize: '0.9em', padding: 0 }}>
           <HookFormRRStackRuleForm<TFieldValues, TName>
+            fieldArrayUpdate={update}
             index={index}
             hookControl={control}
             hookName={name}

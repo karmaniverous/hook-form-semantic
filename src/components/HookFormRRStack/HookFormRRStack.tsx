@@ -1,11 +1,13 @@
-import {
-  useRRStack,
-  type UseRRStackOutput,
-  type UseRRStackProps,
-} from '@karmaniverous/rrstack/react';
+import { useRRStack, type UseRRStackProps } from '@karmaniverous/rrstack/react';
 import { omit } from 'radash';
 import { useCallback, useMemo, useState } from 'react';
-import { type FieldValues, type Path, useWatch } from 'react-hook-form';
+import type { ArrayPath, FieldArray } from 'react-hook-form';
+import {
+  type FieldValues,
+  type Path,
+  useFieldArray,
+  useWatch,
+} from 'react-hook-form';
 import {
   Accordion,
   Button,
@@ -20,7 +22,6 @@ import {
 
 import { HookFormField } from '@/components/HookFormField';
 import { rhf2rrstack } from '@/components/HookFormRRStack/rhf2rrstack';
-import { rrstack2rhf } from '@/components/HookFormRRStack/rrstack2rhf';
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import { reprefix } from '@/types/PrefixedPartial';
@@ -30,7 +31,7 @@ import { concatClassNames } from '@/utils/concatClassNames';
 import { HookFormRRStackRule } from './HookFormRRStackRule';
 import type { HookFormRRStackRuleDescriptionPropsBase } from './HookFormRRStackRuleDescription';
 import { timezoneOptions } from './timezoneOptions';
-import type { HookFormRRStackPath } from './types';
+import type { HookFormRRStackPath, HookFormRRStackRuleData } from './types';
 
 export interface HookFormRRStackProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -71,13 +72,13 @@ export const HookFormRRStack = <
 ) => {
   const {
     controller: {
-      field: { onChange: hookFieldOnChange, ...hookFieldProps },
+      field: hookFieldProps,
       fieldState: { error },
     },
     deprefixed: {
       describe: describeProps,
       hook: { control, name },
-      rrstack: { onChange: rrstackOnChange, ...rrstackProps },
+      rrstack: rrstackProps,
     },
     rest: {
       className,
@@ -93,38 +94,23 @@ export const HookFormRRStack = <
     [describeProps],
   );
 
-  const handleChange = useCallback(
-    (rrstack: UseRRStackOutput['rrstack']) => {
-      rrstackOnChange?.(rrstack);
-
-      const json = rrstack.toJson();
-      const mapped = rrstack2rhf(json);
-      logger?.debug?.('rrstack2rhf', { rrstack: json, rhf: mapped });
-
-      hookFieldOnChange(mapped as unknown);
-    },
-    [rrstackOnChange, logger, hookFieldOnChange],
-  );
-
   const json = useWatch({
     control,
     name,
     compute: (v) => {
       const next = rhf2rrstack(v);
-      logger?.debug?.('rhf2rrstack', { rhf: v, rrstack: next });
+      logger?.debug?.('rhf2rrstack', { name, rhf: v, rrstack: next });
       return next;
     },
   });
 
-  const { rrstack } = useRRStack({
-    json,
-    onChange: handleChange,
-    ...rrstackProps,
-  });
+  const { rrstack, version } = useRRStack({ json, ...rrstackProps });
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const { starts, ends } = useMemo(() => {
+    void version;
+
     const formatTimestamp = (ts: number | null | undefined) =>
       ts ? rrstack.formatInstant(ts, { format: timestampFormat }) : 'Not Set';
 
@@ -134,25 +120,23 @@ export const HookFormRRStack = <
       starts: formatTimestamp(start),
       ends: formatTimestamp(end),
     };
-  }, [rrstack, timestampFormat]);
+  }, [rrstack, timestampFormat, version]);
+
+  const { fields, append, remove, move, update } = useFieldArray({
+    control,
+    name: `${name}.rules` as ArrayPath<TFieldValues>,
+  });
 
   const handleAddRule = useCallback(() => {
-    rrstack.addRule();
-    setActiveIndex(rrstack.rules.length - 1);
-  }, [rrstack]);
+    append({ effect: 'active', options: { freq: 'span' } } as FieldArray<
+      TFieldValues,
+      ArrayPath<TFieldValues>
+    > extends HookFormRRStackRuleData
+      ? FieldArray<TFieldValues, ArrayPath<TFieldValues>>
+      : never);
 
-  // Show loading state while RRStack is initializing
-  if (!rrstack) {
-    return (
-      <Form.Field>
-        {fieldProps.label && <label>{fieldProps.label}</label>}
-        <Message info size="small">
-          <Message.Header>Loading</Message.Header>
-          <Message.Content>Initializing RRStack...</Message.Content>
-        </Message>
-      </Form.Field>
-    );
-  }
+    setActiveIndex(fields.length);
+  }, [append, fields.length]);
 
   return (
     <Form.Field
@@ -199,29 +183,34 @@ export const HookFormRRStack = <
           alignItems: 'center',
         }}
       >
-        <Header size="small">Rules ({rrstack.rules.length})</Header>
+        <Header size="small">Rules ({fields.length})</Header>
+
         <Button type="button" primary onClick={handleAddRule} size="small">
           <Icon name="plus" />
           Add Rule
         </Button>
       </Segment>
 
-      {rrstack.rules.length ? (
+      {fields.length ? (
         <Accordion fluid styled>
-          {rrstack.rules.map((rule, index) => (
+          {fields.map((field, index) => (
             <HookFormRRStackRule<TFieldValues>
               {...reprifixedDescribeProps}
               activeIndex={activeIndex}
+              count={fields.length}
+              fieldArrayMove={move}
+              fieldArrayRemove={remove}
+              fieldArrayUpdate={update}
               index={index}
-              key={`${name}.rules.${index}`}
+              hookControl={control}
+              hookName={`${name}.rules.${index}` as Path<TFieldValues>}
+              key={field.id}
+              logger={logger}
               onClick={() =>
                 setActiveIndex(activeIndex === index ? null : index)
               }
-              logger={logger}
               rrstack={rrstack}
               setActiveIndex={setActiveIndex}
-              hookControl={control}
-              hookName={`${name}.rules.${index}` as Path<TFieldValues>}
             />
           ))}
         </Accordion>

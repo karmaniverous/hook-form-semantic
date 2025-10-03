@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-10-02T00:28:00Z
+# When updated: 2025-10-03T00:00:00Z
 
 ## Next up
 
@@ -30,6 +30,18 @@
   - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and UI behavior unchanged; add focused tests per section.
 
 ## Completed (recent)
+
+- RRStack UI (RHF-first rules; no engine writeback):
+  - Removed rrstack→RHF writeback in HookFormRRStack; rrstack now consumes RHF JSON only.
+  - Managed schedule.rules with useFieldArray; render rules via fields and use fields.length for the header count.
+  - “Add Rule” now appends a default span/active rule to RHF; accordion opens the new index.
+  - Movement & delete are defined in HookFormRRStackRule using moveRule/removeRule passed from the parent; no top‑level handler passthroughs.
+
+- Default duration policy (Option B):
+  - Implemented in HookFormRRStackRuleForm with a local useFieldArray.update call to set duration.days = 1 when freq switches from span → recurring and duration is empty.
+  - No setValue required; no rrstack→RHF refresh.
+
+- Kept Starts/Ends logic unchanged (rrstack remains the source for descriptions/bounds), as requested.
 
 - Tests(wysiwyg):
   - Stabilized HookFormWysiwygEditor test for lazy-loaded editor by waiting for
