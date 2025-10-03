@@ -49,7 +49,7 @@ export const HookFormRRStackRuleMonthdays = <
           control={Dropdown}
           logger={logger}
           hookControl={control}
-          hookName={`${name}.options.bymonth` as Path<TFieldValues>}
+          hookName={`${name}.bymonth` as Path<TFieldValues>}
           label={
             <InfoLabel
               text="Months"

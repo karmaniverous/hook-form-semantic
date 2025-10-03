@@ -63,7 +63,7 @@ export const HookFormRRStackRuleForm = <
             <Grid.Column style={{ paddingLeft: 0 }}>
               <HookFormRRStackRuleMonthdays<TFieldValues>
                 hookControl={control}
-                hookName={name as Path<TFieldValues>}
+                hookName={`${name}.options` as Path<TFieldValues>}
                 logger={logger}
               />
             </Grid.Column>
@@ -71,7 +71,7 @@ export const HookFormRRStackRuleForm = <
             <Grid.Column style={{ paddingLeft: 0 }}>
               <HookFormRRStackRuleWeekdays<TFieldValues>
                 hookControl={control}
-                hookName={name as Path<TFieldValues>}
+                hookName={`${name}.options` as Path<TFieldValues>}
                 logger={logger}
               />
             </Grid.Column>
@@ -79,7 +79,7 @@ export const HookFormRRStackRuleForm = <
             <Grid.Column style={{ paddingLeft: 0, paddingRight: 0 }}>
               <HookFormRRStackRuleTime<TFieldValues>
                 hookControl={control}
-                hookName={name as Path<TFieldValues>}
+                hookName={`${name}.options` as Path<TFieldValues>}
                 logger={logger}
               />
             </Grid.Column>

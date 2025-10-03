@@ -45,7 +45,7 @@ export const HookFormNumeric = <
       fieldState,
     },
     deprefixed: { numeric: numericProps },
-    rest: fieldProps,
+    rest: { fieldProps },
   } = useHookForm({ props, prefixes: ['numeric'] as const });
 
   return (
