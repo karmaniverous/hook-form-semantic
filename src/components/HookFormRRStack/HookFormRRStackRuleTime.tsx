@@ -28,7 +28,7 @@ export const HookFormRRStackRuleTime = <
   return (
     <Segment>
       <Header size="tiny">Time</Header>
-      <Form.Group widths="equal" style={{ marginBottom: 0 }}>
+      <Form.Group style={{ marginBottom: 0 }} widths={2}>
         <HookFormField<TFieldValues, { value: string }>
           control={Input}
           logger={logger}
@@ -43,6 +43,7 @@ export const HookFormRRStackRuleTime = <
           placeholder="9, 13, 17"
           size="small"
         />
+
         <HookFormField<TFieldValues, { value: string }>
           control={Input}
           logger={logger}

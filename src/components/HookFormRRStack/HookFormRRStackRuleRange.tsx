@@ -52,26 +52,27 @@ export const HookFormRRStackRuleRange = <
     <Segment style={{ marginBottom: 0, paddingBottom: 0 }}>
       <Header size="tiny">Valid Range</Header>
 
-      <Form.Group style={{ alignItems: 'flex-end' }}>
+      <Form.Group style={{ alignItems: 'flex-end' }} widths={3}>
         <HookFormDatePicker<TFieldValues>
+          fluid
           logger={logger}
           hookControl={control}
           hookName={`${name}.starts` as Path<TFieldValues>}
           label="Start Date"
-          width={5}
+          size
         />
 
         <HookFormDatePicker<TFieldValues>
+          fluid
           logger={logger}
           hookControl={control}
           hookName={`${name}.ends` as Path<TFieldValues>}
           label="End Date"
-          width={5}
         />
 
         <HookFormField<TFieldValues, { value: string }>
-          compact
           control={Dropdown}
+          fluid
           logger={logger}
           hookControl={control}
           hookName={`${name}.freq` as Path<TFieldValues>}
@@ -84,12 +85,12 @@ export const HookFormRRStackRuleRange = <
           options={FREQUENCY_OPTIONS}
           selection
           style={{ width: '100%', height: '42px' }}
-          width={2}
         />
 
         {freq && freq !== 'span' && (
           <>
             <HookFormNumeric<TFieldValues>
+              fluid
               logger={logger}
               hookControl={control}
               hookName={`${name}.interval` as Path<TFieldValues>}
@@ -100,10 +101,10 @@ export const HookFormRRStackRuleRange = <
                 />
               }
               numericDecimalScale={0}
-              width={2}
             />
 
             <HookFormNumeric<TFieldValues>
+              fluid
               logger={logger}
               hookControl={control}
               hookName={`${name}.count` as Path<TFieldValues>}
@@ -114,7 +115,6 @@ export const HookFormRRStackRuleRange = <
                 />
               }
               numericDecimalScale={0}
-              width={2}
             />
           </>
         )}

@@ -1,4 +1,3 @@
-import type { UseRRStackOutput } from '@karmaniverous/rrstack/react';
 import { useEffect, useMemo } from 'react';
 import type {
   ArrayPath,
@@ -16,6 +15,7 @@ import { Container, Grid } from 'semantic-ui-react';
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
+import { path2index } from '@/utils/path2index';
 
 import { HookFormRRStackRuleDuration } from './HookFormRRStackRuleDuration';
 import { HookFormRRStackRuleEffect } from './HookFormRRStackRuleEffect';
@@ -32,10 +32,7 @@ interface HookFormRRStackRuleFormProps<
     PrefixProps<
       Pick<UseFieldArrayReturn<TFieldValues>, 'update'>,
       'fieldArray'
-    > {
-  index: number;
-  rrstack: UseRRStackOutput['rrstack'];
-}
+    > {}
 
 export const HookFormRRStackRuleForm = <
   TFieldValues extends FieldValues = FieldValues,
@@ -48,8 +45,10 @@ export const HookFormRRStackRuleForm = <
       fieldArray: { update },
       hook: { name, control },
     },
-    rest: { index, logger },
+    rest: { logger },
   } = useHookForm({ props, prefixes: ['fieldArray'] });
+
+  const index = useMemo(() => path2index(name), [name]);
 
   const rule = useWatch({
     control,
@@ -67,7 +66,12 @@ export const HookFormRRStackRuleForm = <
   );
 
   useEffect(() => {
-    if (freq && freq !== 'span' && !Object.values(duration ?? {}).some(Boolean))
+    if (
+      index &&
+      freq &&
+      freq !== 'span' &&
+      !Object.values(duration ?? {}).some(Boolean)
+    )
       update(index, { ...rule, duration: { days: 1 } }) as FieldArray<
         TFieldValues,
         ArrayPath<TFieldValues>

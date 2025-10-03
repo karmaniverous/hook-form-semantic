@@ -1,4 +1,4 @@
-import type { UseRRStackOutput } from '@karmaniverous/rrstack/react';
+import type { DescribeOptions } from '@karmaniverous/rrstack';
 import { useCallback } from 'react';
 import type {
   FieldPath,
@@ -12,20 +12,16 @@ import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 
-import {
-  HookFormRRStackRuleDescription,
-  type HookFormRRStackRuleDescriptionPropsBase,
-} from './HookFormRRStackRuleDescription';
+import { HookFormRRStackRuleDescription } from './HookFormRRStackRuleDescription';
 import { HookFormRRStackRuleForm } from './HookFormRRStackRuleForm';
-interface HookFormRRStackRuleProps<
+import type { HookFormRRStackRuleData } from './types';
+
+export interface HookFormRRStackRuleProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > extends HookFormProps<TFieldValues, TName>,
     Pick<AccordionTitleProps, 'onClick'>,
-    PrefixProps<
-      Omit<HookFormRRStackRuleDescriptionPropsBase, 'index' | 'rrstack'>,
-      'describe'
-    >,
+    PrefixProps<DescribeOptions, 'describe'>,
     PrefixProps<
       Pick<UseFieldArrayReturn<TFieldValues>, 'move' | 'remove' | 'update'>,
       'fieldArray'
@@ -33,7 +29,6 @@ interface HookFormRRStackRuleProps<
   activeIndex: number | null;
   count: number;
   index: number;
-  rrstack: UseRRStackOutput['rrstack'];
   setActiveIndex: (index: number | null) => void;
 }
 
@@ -44,20 +39,15 @@ export const HookFormRRStackRule = <
   props: HookFormRRStackRuleProps<TFieldValues, TName>,
 ) => {
   const {
+    controller: {
+      field: { value },
+    },
     deprefixed: {
       describe: describeProps,
       fieldArray: { move, remove, update },
       hook: { name, control },
     },
-    rest: {
-      activeIndex,
-      count,
-      index,
-      logger,
-      onClick,
-      rrstack,
-      setActiveIndex,
-    },
+    rest: { activeIndex, count, index, logger, onClick, setActiveIndex },
   } = useHookForm({ props, prefixes: ['describe', 'fieldArray'] as const });
 
   const handleUp = useCallback(() => {
@@ -102,9 +92,9 @@ export const HookFormRRStackRule = <
   }, [remove, index, activeIndex, setActiveIndex]);
 
   // Safely access current rule and key attributes
-  const ruleAtIndex = rrstack.rules[index];
-  const effect = (ruleAtIndex?.effect ?? 'active') as 'active' | 'blackout';
-  const ruleLabel = ruleAtIndex?.label || `Rule ${index + 1}`;
+  console.log('rule:', { name, value });
+  const { effect, label } = value as HookFormRRStackRuleData;
+
   return (
     <>
       <Accordion.Title
@@ -127,7 +117,9 @@ export const HookFormRRStackRule = <
             <Label color={effect === 'active' ? 'green' : 'red'} size="mini">
               {effect.toUpperCase()}
             </Label>
-            <span style={{ fontSize: '0.9em' }}>{ruleLabel}</span>
+            <span style={{ fontSize: '0.9em' }}>
+              {label ?? `Rule ${index + 1}`}
+            </span>
           </div>
           <div style={{ display: 'flex', gap: 2 }}>
             <Button.Group size="mini">
@@ -179,11 +171,10 @@ export const HookFormRRStackRule = <
           </div>
         </div>
 
-        <HookFormRRStackRuleDescription
-          as="div"
-          data-testid={`rule-description-${index}`}
-          index={index}
-          rrstack={rrstack}
+        <HookFormRRStackRuleDescription<TFieldValues, TName, 'label'>
+          as="label"
+          hookControl={control}
+          hookName={name}
           style={{ fontWeight: 'normal', marginTop: 4, marginLeft: 16 }}
           {...describeProps}
         />
@@ -196,11 +187,9 @@ export const HookFormRRStackRule = <
         <Segment basic style={{ fontSize: '0.9em', padding: 0 }}>
           <HookFormRRStackRuleForm<TFieldValues, TName>
             fieldArrayUpdate={update}
-            index={index}
             hookControl={control}
             hookName={name}
             logger={logger}
-            rrstack={rrstack}
           />
         </Segment>
       </Accordion.Content>

@@ -43,7 +43,7 @@ export const HookFormRRStackRuleMonthdays = <
   return (
     <Segment>
       <Header size="tiny">Months</Header>
-      <Form.Group widths="equal" style={{ marginBottom: 0 }}>
+      <Form.Group style={{ marginBottom: 0 }}>
         <HookFormField<TFieldValues, { value: number[] }>
           compact
           control={Dropdown}
@@ -60,6 +60,7 @@ export const HookFormRRStackRuleMonthdays = <
           options={MONTH_OPTIONS}
           search
           selection
+          width={7}
         />
 
         <HookFormField<TFieldValues, { value: string }>
@@ -75,6 +76,7 @@ export const HookFormRRStackRuleMonthdays = <
           }
           placeholder="25 (for 25th)"
           size="small"
+          width={9}
         />
       </Form.Group>
     </Segment>

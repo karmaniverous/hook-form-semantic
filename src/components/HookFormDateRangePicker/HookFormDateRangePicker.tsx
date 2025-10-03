@@ -57,6 +57,7 @@ export interface HookFormDateRangePickerProps<
     PrefixProps<Omit<DateRangePickerProps, 'value'>, 'datePicker'>,
     PrefixProps<Omit<DateTimeRangePickerProps, 'value'>, 'timePicker'> {
   presets?: Presets;
+  showIncludeTime?: boolean;
 }
 
 export const HookFormDateRangePicker = <
@@ -75,7 +76,7 @@ export const HookFormDateRangePicker = <
       datePicker: { onChange: onDateChange, ...datePickerProps },
       timePicker: { onChange: onTimeChange, ...timePickerProps },
     },
-    rest: { className, label, ...fieldProps },
+    rest: { className, label, showIncludeTime, ...fieldProps },
   } = useHookForm({ props, prefixes: ['datePicker', 'timePicker'] as const });
 
   const [includeTime, setIncludeTime] = useState<boolean | undefined>(false);
@@ -159,11 +160,13 @@ export const HookFormDateRangePicker = <
             />
           )}
 
-          <Checkbox
-            checked={includeTime}
-            label="Include Time"
-            onChange={(event, data) => setIncludeTime(data.checked)}
-          />
+          {showIncludeTime && (
+            <Checkbox
+              checked={includeTime}
+              label="Include Time"
+              onChange={(event, data) => setIncludeTime(data.checked)}
+            />
+          )}
         </div>
       )}
 

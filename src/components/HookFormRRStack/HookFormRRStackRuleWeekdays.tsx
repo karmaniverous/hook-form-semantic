@@ -47,7 +47,7 @@ export const HookFormRRStackRuleWeekdays = <
     <Segment>
       <Header size="tiny">Weekdays</Header>
 
-      <Form.Group widths="equal" style={{ marginBottom: '-5px' }}>
+      <Form.Group style={{ marginBottom: '-5px' }} widths={2}>
         <HookFormField<TFieldValues, { value: number[] }>
           compact
           control={Dropdown}

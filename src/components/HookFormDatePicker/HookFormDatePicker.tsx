@@ -29,14 +29,16 @@ export interface HookFormDatePickerProps<
       | 'value'
     >,
     PrefixProps<Omit<DatePickerProps, 'value'>, 'datePicker'>,
-    PrefixProps<Omit<DateTimePickerProps, 'value'>, 'timePicker'> {}
+    PrefixProps<Omit<DateTimePickerProps, 'value'>, 'timePicker'> {
+  showIncludeTime?: boolean;
+}
 
 export const HookFormDatePicker = <
   TFieldValues extends Record<string, unknown> = Record<string, unknown>,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({
-  ...props
-}: HookFormDatePickerProps<TFieldValues, TName>) => {
+>(
+  props: HookFormDatePickerProps<TFieldValues, TName>,
+) => {
   const {
     controller: {
       field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
@@ -46,7 +48,7 @@ export const HookFormDatePicker = <
       datePicker: { onChange: onDateChange, ...datePickerProps },
       timePicker: { onChange: onTimeChange, ...timePickerProps },
     },
-    rest: { className, label, ...fieldProps },
+    rest: { className, label, showIncludeTime, ...fieldProps },
   } = useHookForm({
     props,
     prefixes: ['datePicker', 'timePicker'] as const,
@@ -74,11 +76,13 @@ export const HookFormDatePicker = <
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <label>{label}</label>
 
-          <Checkbox
-            checked={includeTime}
-            label="Include Time"
-            onChange={(event, data) => setIncludeTime(data.checked)}
-          />
+          {showIncludeTime && (
+            <Checkbox
+              checked={includeTime}
+              label="Include Time"
+              onChange={(event, data) => setIncludeTime(data.checked)}
+            />
+          )}
         </div>
       )}
 
