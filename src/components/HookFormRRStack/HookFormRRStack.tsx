@@ -115,7 +115,7 @@ export const HookFormRRStack = <
     },
   });
 
-  const { rrstack, version } = useRRStack({
+  const { rrstack } = useRRStack({
     json,
     onChange: handleChange,
     ...rrstackProps,
@@ -133,8 +133,7 @@ export const HookFormRRStack = <
       starts: formatTimestamp(start),
       ends: formatTimestamp(end),
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rrstack, timestampFormat, version]);
+  }, [rrstack, timestampFormat]);
 
   const handleAddRule = useCallback(() => {
     rrstack.addRule();
