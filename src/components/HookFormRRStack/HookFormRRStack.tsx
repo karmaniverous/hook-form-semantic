@@ -96,13 +96,14 @@ export const HookFormRRStack = <
   const handleChange = useCallback(
     (rrstack: UseRRStackOutput['rrstack']) => {
       rrstackOnChange?.(rrstack);
+
       const json = rrstack.toJson();
       const mapped = rrstack2rhf(json);
       logger?.debug?.('rrstack2rhf', { rrstack: json, rhf: mapped });
-      // Write the mapped JSON directly to RHF so nested Controllers update reliably.
+
       hookFieldOnChange(mapped as unknown);
     },
-    [hookFieldOnChange, rrstackOnChange, logger],
+    [rrstackOnChange, logger, hookFieldOnChange],
   );
 
   const json = useWatch({
@@ -212,7 +213,7 @@ export const HookFormRRStack = <
               {...reprifixedDescribeProps}
               activeIndex={activeIndex}
               index={index}
-              key={index}
+              key={`${name}.rules.${index}`}
               onClick={() =>
                 setActiveIndex(activeIndex === index ? null : index)
               }
