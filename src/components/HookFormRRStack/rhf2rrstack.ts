@@ -1,6 +1,7 @@
 import type { RRStackOptions, RuleJson } from '@karmaniverous/rrstack';
 import { omit } from 'radash';
 
+import { conformRule } from './conformRule';
 import { csv2int } from './csv2int';
 import type { HookFormRRStackData, HookFormRRStackRuleData } from './types';
 
@@ -28,7 +29,9 @@ export function rhf2rrstack(rhf: HookFormRRStackData): RRStackOptions {
 export const rhfrule2rrstackrule = (
   rule: HookFormRRStackRuleData,
 ): RuleJson => {
-  const options = rule.options ?? {};
+  const { conformedRule } = conformRule(rule);
+
+  const options = conformedRule.options ?? {};
 
   const freq =
     options.freq && options.freq !== 'span' ? options.freq : undefined;
@@ -40,25 +43,26 @@ export const rhfrule2rrstackrule = (
     options.ends instanceof Date ? options.ends.getTime() : undefined;
 
   const duration =
-    rule.duration && Object.values(rule.duration).some(Boolean)
-      ? rule.duration
+    conformedRule.duration &&
+    Object.values(conformedRule.duration).some(Boolean)
+      ? conformedRule.duration
       : undefined;
 
   return {
-    label: rule.label ?? undefined,
-    effect: rule.effect ?? 'active',
     duration,
+    effect: conformedRule.effect ?? 'active',
+    label: conformedRule.label ?? undefined,
     options: {
       ...omit(options, ['bymonthdayText', 'byhourText', 'byminuteText']),
-      freq,
-      starts,
-      ends,
-      bymonth: options.bymonth ?? undefined,
-      byweekday: options.byweekday ?? undefined,
-      bysetpos: options.bysetpos ?? undefined,
-      bymonthday: csv2int(options.bymonthdayText, { min: 1, max: 31 }),
       byhour: csv2int(options.byhourText, { min: 0, max: 23 }),
       byminute: csv2int(options.byminuteText, { min: 0, max: 59 }),
+      bymonth: options.bymonth ?? undefined,
+      bymonthday: csv2int(options.bymonthdayText, { min: 1, max: 31 }),
+      bysetpos: options.bysetpos ?? undefined,
+      byweekday: options.byweekday ?? undefined,
+      ends,
+      freq,
+      starts,
     },
   };
 };

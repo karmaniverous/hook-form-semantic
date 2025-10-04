@@ -1,5 +1,4 @@
 import type { DescribeOptions, UnixTimeUnit } from '@karmaniverous/rrstack';
-import { omit, pick } from 'radash';
 import { useEffect } from 'react';
 import type {
   ArrayPath,
@@ -15,6 +14,7 @@ import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 
+import { conformRule } from './conformRule';
 import { HookFormRRStackRuleDescription } from './HookFormRRStackRuleDescription';
 import { HookFormRRStackRuleForm } from './HookFormRRStackRuleForm';
 import type { HookFormRRStackRuleData } from './types';
@@ -48,6 +48,9 @@ export const HookFormRRStackRule = <
   props: HookFormRRStackRuleProps<TFieldValues, TName>,
 ) => {
   const {
+    controller: {
+      field: { value },
+    },
     deprefixed: {
       describe: describeProps,
       fieldArray: { update },
@@ -65,43 +68,20 @@ export const HookFormRRStackRule = <
       onRuleUp,
       timeUnit,
     },
-    watched,
   } = useHookForm({ props, prefixes: ['describe', 'fieldArray'] as const });
 
   useEffect(() => {
-    const rule = watched as HookFormRRStackRuleData;
+    const { changed, conformedRule } = conformRule(value);
 
-    const { options, duration } = rule;
-
-    const { freq } = options;
-
-    // Clean up rule if freq is 'span' and duration or other options are set
-    if (
-      freq &&
-      freq === 'span' &&
-      (Object.values(duration ?? {}).some(Boolean) ||
-        Object.values(
-          omit(rule.options ?? {}, ['freq', 'ends', 'starts']),
-        ).some(Boolean))
-    )
-      update(index, {
-        ...omit(rule, ['duration', 'options']),
-        options: pick(options, ['freq', 'ends', 'starts']),
-      } as FieldArray<TFieldValues, ArrayPath<TFieldValues>>);
-    // Ensure a minimal duration of 1 day if freq is not 'span' and no duration is set
-    else if (
-      freq &&
-      freq !== 'span' &&
-      !Object.values(duration ?? {}).some(Boolean)
-    )
-      update(index, { ...rule, duration: { days: 1 } } as FieldArray<
-        TFieldValues,
-        ArrayPath<TFieldValues>
-      >);
-  }, [update, index, watched]);
+    if (changed)
+      update(
+        index,
+        conformedRule as FieldArray<TFieldValues, ArrayPath<TFieldValues>>,
+      );
+  }, [update, index, value.options.freq, value]);
 
   // Safely access current rule and key attributes
-  const { effect, label } = watched as HookFormRRStackRuleData;
+  const { effect, label } = value as HookFormRRStackRuleData;
 
   return (
     <>
@@ -134,7 +114,12 @@ export const HookFormRRStackRule = <
               <Button
                 disabled={!onRuleTop}
                 icon="angle double up"
-                onClick={() => onRuleTop?.(index)}
+                onClick={(e) => {
+                  if (onRuleTop) {
+                    e.stopPropagation();
+                    onRuleTop(index);
+                  }
+                }}
                 size="mini"
                 title="Move to top"
                 type="button"
@@ -143,7 +128,12 @@ export const HookFormRRStackRule = <
               <Button
                 disabled={!onRuleUp}
                 icon="angle up"
-                onClick={() => onRuleUp?.(index)}
+                onClick={(e) => {
+                  if (onRuleUp) {
+                    e.stopPropagation();
+                    onRuleUp(index);
+                  }
+                }}
                 size="mini"
                 title="Move up"
                 type="button"
@@ -152,7 +142,12 @@ export const HookFormRRStackRule = <
               <Button
                 disabled={!onRuleDown}
                 icon="angle down"
-                onClick={() => onRuleDown?.(index)}
+                onClick={(e) => {
+                  if (onRuleDown) {
+                    e.stopPropagation();
+                    onRuleDown(index);
+                  }
+                }}
                 size="mini"
                 title="Move down"
                 type="button"
@@ -161,7 +156,12 @@ export const HookFormRRStackRule = <
               <Button
                 disabled={!onRuleBottom}
                 icon="angle double down"
-                onClick={() => onRuleBottom?.(index)}
+                onClick={(e) => {
+                  if (onRuleBottom) {
+                    e.stopPropagation();
+                    onRuleBottom(index);
+                  }
+                }}
                 size="mini"
                 title="Move to bottom"
                 type="button"
@@ -172,7 +172,12 @@ export const HookFormRRStackRule = <
               color="red"
               disabled={!onRuleDelete}
               icon="delete"
-              onClick={() => onRuleDelete?.(index)}
+              onClick={(e) => {
+                if (onRuleDelete) {
+                  e.stopPropagation();
+                  onRuleDelete(index);
+                }
+              }}
               size="mini"
               title="Delete rule"
               type="button"

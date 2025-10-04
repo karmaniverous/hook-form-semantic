@@ -137,47 +137,67 @@ export const HookFormRRStack = <
       options: { freq: 'span' },
     } as FieldArray<TFieldValues, ArrayPath<TFieldValues>>;
 
-    if (activeIndex !== null && activeIndex < fields.length - 1)
-      insert(activeIndex + 1, defaultRule);
-    else append(defaultRule);
+    const newIndex = activeIndex === null ? fields.length : activeIndex + 1;
 
-    setActiveIndex((activeIndex ?? fields.length - 1) + 1);
+    if (newIndex === fields.length) append(defaultRule);
+    else insert(newIndex, defaultRule);
+
+    if (newIndex !== activeIndex) setActiveIndex(newIndex);
   }, [activeIndex, append, fields.length, insert]);
 
   const handleRuleDelete = useCallback(
     (index: number) => {
       remove(index);
 
-      setActiveIndex(
-        activeIndex === null || fields.length <= 1
+      const newActiveIndex =
+        activeIndex === null || activeIndex === index
           ? null
-          : activeIndex === fields.length - 1
+          : activeIndex > index
             ? activeIndex - 1
-            : activeIndex,
-      );
+            : activeIndex;
+
+      if (newActiveIndex !== activeIndex) setActiveIndex(newActiveIndex);
     },
-    [remove, activeIndex, fields.length],
+    [remove, activeIndex],
   );
 
   const handleRuleUp = useCallback(
     (index: number) => {
       if (index > 0) {
-        move(index, index - 1);
+        const newIndex = index - 1;
 
-        if (activeIndex === index) setActiveIndex(index - 1);
-        else if (activeIndex === index - 1) setActiveIndex(index);
+        move(index, newIndex);
+
+        const newActiveIndex =
+          activeIndex === index
+            ? newIndex
+            : activeIndex === newIndex
+              ? index
+              : activeIndex;
+
+        if (newActiveIndex !== activeIndex) setActiveIndex(newActiveIndex);
       }
     },
-    [move, activeIndex, setActiveIndex],
+    [move, activeIndex],
   );
 
   const handleRuleDown = useCallback(
     (index: number) => {
       if (index < fields.length - 1) {
-        move(index, index + 1);
+        const newIndex = index + 1;
 
-        if (activeIndex === index) setActiveIndex(index + 1);
-        else if (activeIndex === index + 1) setActiveIndex(index);
+        const newActiveIndex =
+          activeIndex === index
+            ? newIndex
+            : activeIndex === newIndex
+              ? index
+              : activeIndex;
+
+        console.log({ index, newIndex, activeIndex, newActiveIndex });
+
+        move(index, newIndex);
+
+        if (newActiveIndex !== activeIndex) setActiveIndex(newActiveIndex);
       }
     },
     [fields.length, move, activeIndex],
@@ -186,33 +206,47 @@ export const HookFormRRStack = <
   const handleRuleTop = useCallback(
     (index: number) => {
       if (index > 0) {
-        move(index, 0);
+        const newIndex = 0;
 
-        if (activeIndex === index) setActiveIndex(0);
-        else if (activeIndex !== null && activeIndex < index)
-          setActiveIndex(activeIndex + 1);
+        move(index, newIndex);
+
+        const newActiveIndex =
+          activeIndex === index
+            ? newIndex
+            : activeIndex === null || activeIndex > index
+              ? activeIndex
+              : activeIndex + 1;
+
+        if (newActiveIndex !== activeIndex) setActiveIndex(newActiveIndex);
       }
     },
-    [move, activeIndex, setActiveIndex],
+    [move, activeIndex],
   );
 
   const handleRuleBottom = useCallback(
     (index: number) => {
       if (index < fields.length - 1) {
-        move(index, fields.length - 1);
+        const newIndex = fields.length - 1;
 
-        if (activeIndex === index) setActiveIndex(fields.length - 1);
-        else if (activeIndex !== null && activeIndex > index)
-          setActiveIndex(activeIndex - 1);
+        move(index, newIndex);
+
+        const newActiveIndex =
+          activeIndex === index
+            ? newIndex
+            : activeIndex === null || activeIndex < index
+              ? activeIndex
+              : activeIndex - 1;
+
+        if (newActiveIndex !== activeIndex) setActiveIndex(newActiveIndex);
       }
     },
-    [fields.length, move, activeIndex, setActiveIndex],
+    [fields.length, move, activeIndex],
   );
 
   return (
     <Form.Field
       {...fieldProps}
-      {...omit(hookFieldProps as Record<string, unknown>, ['ref'])}
+      {...omit(hookFieldProps, ['onChange', 'ref'])}
       className={concatClassNames(className, 'hook-form-rrstack')}
     >
       {label && <label>{label}</label>}
