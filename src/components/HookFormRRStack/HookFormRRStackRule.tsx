@@ -39,6 +39,7 @@ export interface HookFormRRStackRuleProps<
   onRuleTop?: RuleMutation;
   onRuleUp?: RuleMutation;
   timeUnit: UnixTimeUnit;
+  endDatesInclusive?: boolean;
 }
 
 export const HookFormRRStackRule = <
@@ -67,6 +68,7 @@ export const HookFormRRStackRule = <
       onRuleTop,
       onRuleUp,
       timeUnit,
+      endDatesInclusive,
     },
   } = useHookForm({ props, prefixes: ['describe', 'fieldArray'] as const });
 
@@ -191,6 +193,7 @@ export const HookFormRRStackRule = <
           hookName={name}
           style={{ fontWeight: 'normal', marginTop: 4, marginLeft: 16 }}
           timeUnit={timeUnit}
+          endDatesInclusive={endDatesInclusive}
           {...describeProps}
         />
       </Accordion.Title>

@@ -1,8 +1,8 @@
 # Development Plan
 
-#
+# 
 
-# When updated: 2025-10-03T00:00:00Z
+# When updated: 2025-10-04T00:00:00Z
 
 ## Next up
 
@@ -30,6 +30,12 @@
   - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and UI behavior unchanged; add focused tests per section.
 
 ## Completed (recent)
+
+- RRStack UI: endDatesInclusive policy
+  - Added endDatesInclusive?: boolean to HookFormRRStack; defaults to false.
+  - Threaded through to rule mapping and description. When true, End Date clamps
+    to 00:00 of the day following the configured end date in the selected timezone
+    (inclusive semantics), regardless of any time-of-day set.
 
 - RRStack UI (RHF-first rules; no engine writeback):
   - Removed rrstack→RHF writeback in HookFormRRStack; rrstack now consumes RHF JSON only.

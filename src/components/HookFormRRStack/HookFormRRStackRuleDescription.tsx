@@ -21,6 +21,7 @@ export interface HookFormRRStackRuleDescriptionPropsBase<
     DescribeOptions {
   fallback?: React.ReactNode;
   timeUnit: UnixTimeUnit;
+  endDatesInclusive?: boolean;
 }
 
 type HookFormRRStackRuleDescriptionProps<
@@ -55,6 +56,7 @@ export const HookFormRRStackRuleDescription = <
       includeBounds,
       includeTimeZone,
       timeUnit,
+      endDatesInclusive = false,
       ...rest
     },
     watched,
@@ -75,6 +77,9 @@ export const HookFormRRStackRuleDescription = <
     if (watched && timezone) {
       const rule = rhfrule2rrstackrule(
         watched as unknown as HookFormRRStackRuleData,
+        timezone,
+        timeUnit,
+        endDatesInclusive,
       );
 
       console.log('rule', rule);
@@ -94,6 +99,7 @@ export const HookFormRRStackRuleDescription = <
     includeBounds,
     includeTimeZone,
     formatTimeZone,
+    endDatesInclusive,
   ]);
 
   return text ? (

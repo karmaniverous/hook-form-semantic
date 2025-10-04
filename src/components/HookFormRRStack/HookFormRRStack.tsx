@@ -1,4 +1,5 @@
 import type { DescribeOptions, RRStackOptions } from '@karmaniverous/rrstack';
+import type { UnixTimeUnit } from '@karmaniverous/rrstack';
 import { useRRStack, type UseRRStackProps } from '@karmaniverous/rrstack/react';
 import { get } from 'radash';
 import { useCallback, useMemo, useState } from 'react';
@@ -63,6 +64,7 @@ export interface HookFormRRStackProps<
       'rrstack'
     > {
   timestampFormat?: string;
+  endDatesInclusive?: boolean;
 }
 
 export const HookFormRRStack = <
@@ -82,6 +84,7 @@ export const HookFormRRStack = <
       rrstack: { defaultEffect, timeUnit = 'ms', ...rrstackProps },
     },
     rest: {
+      endDatesInclusive = false,
       className,
       label,
       timestampFormat = 'yyyy-LL-dd HH:mm',
@@ -105,12 +108,15 @@ export const HookFormRRStack = <
   const rrstackJson = useMemo(() => {
     const rhf: HookFormRRStackData = get(form, name);
 
-    const rrstack = rhf2rrstack(rhf);
+    const rrstack = rhf2rrstack(rhf, {
+      timeUnit: timeUnit as UnixTimeUnit,
+      endDatesInclusive,
+    });
 
     logger?.debug?.('rhf2rrstack', { rhf, rrstack });
 
     return rrstack;
-  }, [form, logger, name]);
+  }, [form, logger, name, timeUnit, endDatesInclusive]);
 
   const { rrstack, version } = useRRStack({
     json: { ...rrstackJson, defaultEffect, timeUnit },
@@ -326,6 +332,7 @@ export const HookFormRRStack = <
               onRuleTop={index > 0 ? handleRuleTop : undefined}
               onRuleUp={index > 0 ? handleRuleUp : undefined}
               timeUnit={timeUnit}
+              endDatesInclusive={endDatesInclusive}
               {...reprifixedDescribeProps}
             />
           ))}
