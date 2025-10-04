@@ -142,14 +142,14 @@ export const HookFormRRStack = <
       remove(index);
 
       setActiveIndex(
-        activeIndex === null
+        activeIndex === null || fields.length <= 1
           ? null
-          : activeIndex > 0
+          : activeIndex === fields.length - 1
             ? activeIndex - 1
             : activeIndex,
       );
     },
-    [remove, activeIndex, setActiveIndex],
+    [remove, activeIndex, fields.length],
   );
 
   const handleRuleUp = useCallback(
