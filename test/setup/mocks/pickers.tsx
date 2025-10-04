@@ -92,11 +92,13 @@ vi.mock('react-datetime-picker', () => {
 vi.mock('@wojtekmaj/react-daterange-picker', () => {
   type Props = {
     onChange?: (value: [Date | null, Date | null]) => void;
-  } & React.HTMLAttributes<HTMLDivElement>;
-  const Comp: React.FC<Props> = ({ onChange, ...p }) =>
+  };
+  const Comp: React.FC<Props> = ({ onChange }) =>
     React.createElement(
       'div',
-      { ...p, 'data-testid': 'daterange-picker' },
+      {
+        'data-testid': 'daterange-picker',
+      } as React.HTMLAttributes<HTMLDivElement>,
       React.createElement('input', {
         'data-testid': 'daterange-start',
         type: 'date',
@@ -122,11 +124,13 @@ vi.mock('@wojtekmaj/react-daterange-picker', () => {
 vi.mock('@wojtekmaj/react-datetimerange-picker', () => {
   type Props = {
     onChange?: (value: [Date | null, Date | null]) => void;
-  } & React.HTMLAttributes<HTMLDivElement>;
-  const Comp: React.FC<Props> = ({ onChange, ...p }) =>
+  };
+  const Comp: React.FC<Props> = ({ onChange }) =>
     React.createElement(
       'div',
-      { ...p, 'data-testid': 'datetimerange-picker' },
+      {
+        'data-testid': 'datetimerange-picker',
+      } as React.HTMLAttributes<HTMLDivElement>,
       React.createElement('input', {
         'data-testid': 'datetimerange-start',
         type: 'datetime-local',

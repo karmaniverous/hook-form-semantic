@@ -15,6 +15,7 @@ function Harness() {
       hookControl={control}
       hookName="birthDate"
       label="Birth Date"
+      showIncludeTime
     />
   );
 }

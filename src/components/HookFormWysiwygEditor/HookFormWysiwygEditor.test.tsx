@@ -30,7 +30,9 @@ describe('HookFormWysiwygEditor', () => {
         timeout: 5000,
       },
     );
-    const editor = await screen.findByTestId('rdw-editor', { timeout: 5000 });
+    const editor = await screen.findByTestId('rdw-editor', undefined, {
+      timeout: 5000,
+    });
     fireEvent.click(editor);
     await waitFor(() => expect(api.getValues('desc')).toBe('<p>converted</p>'));
   });

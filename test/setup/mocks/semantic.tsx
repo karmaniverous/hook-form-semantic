@@ -13,6 +13,7 @@ vi.mock('semantic-ui-react', () => {
 
   const FormComponent: React.FC<FormProps> = ({ children, ...p }) =>
     React.createElement('form', p, children);
+  (FormComponent as unknown as { displayName?: string }).displayName = 'Form';
 
   type FieldProps = React.PropsWithChildren<
     React.HTMLAttributes<HTMLDivElement> & {
@@ -29,9 +30,14 @@ vi.mock('semantic-ui-react', () => {
     label,
     ...p
   }) => {
+    // If a control is provided, render it and forward children as its content.
     const child =
       control != null
-        ? React.createElement(control as React.ElementType, { ...p })
+        ? React.createElement(
+            control as React.ElementType,
+            { ...(p as Record<string, unknown>) },
+            children,
+          )
         : children;
 
     const divProps: React.HTMLAttributes<HTMLDivElement> &
@@ -58,6 +64,7 @@ vi.mock('semantic-ui-react', () => {
       { ...props, 'data-testid': 'form-group', 'data-widths': widths },
       children,
     );
+  (FormGroup as unknown as { displayName?: string }).displayName = 'FormGroup';
 
   interface FormType extends React.FC<FormProps> {
     Field: React.FC<FieldProps>;
@@ -126,14 +133,13 @@ vi.mock('semantic-ui-react', () => {
     value,
     placeholder,
     multiple,
-    ...rest
+    // NOTE: we intentionally do NOT spread non-DOM props (button, selection, fluid, search, compact, basic, etc.)
   }) =>
     React.createElement(
       'select',
       {
         'data-testid': 'dropdown',
         multiple: !!multiple,
-        ...rest,
         value:
           value === undefined || value === null
             ? multiple
@@ -159,15 +165,14 @@ vi.mock('semantic-ui-react', () => {
                   )?.value,
               )
               .filter((v) => v !== undefined);
-            onChange?.(e, { ...(rest as StrictDropdownProps), value: vals });
+            onChange?.(e, { value: vals } as StrictDropdownProps);
           } else {
             const opt = (options as unknown as Array<{ value: unknown }>).find(
               (o) => String(o.value) === e.currentTarget.value,
             );
             onChange?.(e, {
-              ...(rest as StrictDropdownProps),
               value: opt?.value,
-            });
+            } as StrictDropdownProps);
           }
         },
       } as React.SelectHTMLAttributes<HTMLSelectElement>,
@@ -197,10 +202,10 @@ vi.mock('semantic-ui-react', () => {
   interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     icon?: unknown;
   }
-  const Button: React.FC<ButtonProps> = ({ onClick, icon, children, ...r }) =>
+  const Button: React.FC<ButtonProps> = ({ onClick, icon, children }) =>
     React.createElement(
       'button',
-      { ...r, onClick, 'data-icon': String(icon ?? '') },
+      { onClick, 'data-icon': String(icon ?? '') },
       children ?? String(icon ?? ''),
     );
   (Button as unknown as { displayName?: string }).displayName = 'Button';

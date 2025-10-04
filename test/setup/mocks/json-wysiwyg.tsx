@@ -49,13 +49,22 @@ vi.mock('react-draft-wysiwyg', () => {
       editorState?: unknown;
       editorStyle?: React.CSSProperties;
     } & React.HTMLAttributes<HTMLDivElement>
-  >(({ onEditorStateChange, ...p }, ref) =>
-    React.createElement('div', {
-      ...p,
+  >(
+    (
+      {
+        onEditorStateChange,
+        editorState: _editorState,
+        editorStyle: _editorStyle,
+        ...p
+      },
       ref,
-      'data-testid': 'rdw-editor',
-      onClick: () => onEditorStateChange?.({ getCurrentContent: () => ({}) }),
-    }),
+    ) =>
+      React.createElement('div', {
+        ...p,
+        ref,
+        'data-testid': 'rdw-editor',
+        onClick: () => onEditorStateChange?.({ getCurrentContent: () => ({}) }),
+      }),
   );
   (Editor as unknown as { displayName?: string }).displayName = 'Editor';
   return { Editor };

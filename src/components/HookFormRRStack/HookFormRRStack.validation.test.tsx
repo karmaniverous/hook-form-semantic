@@ -236,8 +236,10 @@ describe('HookFormRRStack Validation', () => {
     expect(startsField).toBeTruthy();
     expect(endsField).toBeTruthy();
 
-    // Extract value-only text (exclude labels)
+    // Extract value-only text (prefer control={Label} content)
     const getFieldValueText = (field: HTMLElement) => {
+      const valueNode = field.querySelector('[data-testid="label"]');
+      if (valueNode) return (valueNode.textContent ?? '').trim();
       const textNodes = Array.from(field.childNodes).filter(
         (n) => n.nodeType === Node.TEXT_NODE,
       );
@@ -310,9 +312,11 @@ describe('HookFormRRStack Validation', () => {
   });
 
   it('HookFormRRStackRuleDescription updates when setting Months while monthly (without DoM)', async () => {
-    const { getByText } = renderWithDescribeProps();
+    const { getByText, container } = renderWithDescribeProps();
     fireEvent.click(getByText('Add Rule'));
-    const description = screen.getByTestId('rule-description-0');
+    const description = container.querySelector(
+      '.hook-form-rrstack-rule-description',
+    ) as HTMLElement;
     const before = (description.textContent ?? '').trim();
 
     // Wait for content
@@ -341,9 +345,11 @@ describe('HookFormRRStack Validation', () => {
   });
 
   it('HookFormRRStackRuleDescription updates when setting Weekday and Position (weekly)', async () => {
-    const { getByText } = renderWithDescribeProps();
+    const { getByText, container } = renderWithDescribeProps();
     fireEvent.click(getByText('Add Rule'));
-    const description = screen.getByTestId('rule-description-0');
+    const description = container.querySelector(
+      '.hook-form-rrstack-rule-description',
+    ) as HTMLElement;
     const before = (description.textContent ?? '').trim();
 
     // Wait for content
@@ -379,13 +385,15 @@ describe('HookFormRRStack Validation', () => {
   });
 
   it('updates HookFormRRStackRuleDescription when effect changes', async () => {
-    render(<TestForm />);
+    const { container } = render(<TestForm />);
 
     // Add a rule and open the editor
     fireEvent.click(screen.getByText('Add Rule'));
 
     // Select the description node directly for reliable assertions
-    const description = screen.getByTestId('rule-description-0');
+    const description = container.querySelector(
+      '.hook-form-rrstack-rule-description',
+    ) as HTMLElement;
     const initialText = (description.textContent ?? '').trim();
 
     // Wait for the editor content to appear, then change Effect
@@ -466,9 +474,11 @@ const renderWithDescribeProps = (describe?: DescribeProps) => {
 
 describe('HookFormRRStackRuleDescription — reflects rule settings and describe options', () => {
   it('updates when setting Frequency/Hours/Minutes', async () => {
-    const { getByText } = renderWithDescribeProps();
+    const { getByText, container } = renderWithDescribeProps();
     fireEvent.click(getByText('Add Rule'));
-    const description = screen.getByTestId('rule-description-0');
+    const description = container.querySelector(
+      '.hook-form-rrstack-rule-description',
+    ) as HTMLElement;
     const before = (description.textContent ?? '').trim();
 
     // Wait for the active accordion content to appear and scope all queries
@@ -497,5 +507,55 @@ describe('HookFormRRStackRuleDescription — reflects rule settings and describe
       const after = (description.textContent ?? '').trim();
       expect(after).not.toBe(before);
     });
+  });
+});
+
+// Single logged test to exercise round‑trip and default duration policy.
+describe('HookFormRRStack (logged round-trip)', () => {
+  it('freq → yearly sets default duration days = 1', async () => {
+    interface TF extends FieldValues {
+      schedule: RRStackOptions;
+    }
+    const LoggedHarness = () => {
+      const { control } = useForm<TF>({
+        defaultValues: {
+          schedule: {
+            timezone: 'UTC',
+            rules: [],
+          },
+        },
+      });
+      return (
+        <Form>
+          <HookFormRRStack<TF>
+            hookName="schedule"
+            hookControl={control}
+            // Enable logging only for this test
+            logger={console}
+          />
+        </Form>
+      );
+    };
+
+    const { getByText, container } = render(<LoggedHarness />);
+    // Create a new rule
+    fireEvent.click(getByText('Add Rule'));
+
+    // Work inside the active accordion content
+    const content = container.querySelector(
+      '[data-testid="accordion-content"]',
+    ) as HTMLElement;
+
+    // Change Frequency → yearly
+    const freqField = getFieldByLabel(content, 'Frequency');
+    const freqDropdown = within(freqField).getByTestId(
+      'dropdown',
+    ) as HTMLSelectElement;
+    fireEvent.change(freqDropdown, { target: { value: 'yearly' } });
+
+    // Assert default duration days = 1 after RRStack round-trip
+    const daysField = getFieldByLabel(content, 'Days');
+    const daysInput = daysField.querySelector('input') as HTMLInputElement;
+    await waitFor(() => expect(daysInput.value).toBe('1'));
   });
 });
