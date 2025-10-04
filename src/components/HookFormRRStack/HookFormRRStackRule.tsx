@@ -1,6 +1,8 @@
 import type { DescribeOptions } from '@karmaniverous/rrstack';
-import { useCallback } from 'react';
+import { useEffect } from 'react';
 import type {
+  ArrayPath,
+  FieldArray,
   FieldPath,
   FieldValues,
   UseFieldArrayReturn,
@@ -16,6 +18,8 @@ import { HookFormRRStackRuleDescription } from './HookFormRRStackRuleDescription
 import { HookFormRRStackRuleForm } from './HookFormRRStackRuleForm';
 import type { HookFormRRStackRuleData } from './types';
 
+type RuleMutation = (index: number) => void;
+
 export interface HookFormRRStackRuleProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
@@ -23,13 +27,16 @@ export interface HookFormRRStackRuleProps<
     Pick<AccordionTitleProps, 'onClick'>,
     PrefixProps<DescribeOptions, 'describe'>,
     PrefixProps<
-      Pick<UseFieldArrayReturn<TFieldValues>, 'move' | 'remove' | 'update'>,
+      Pick<UseFieldArrayReturn<TFieldValues>, 'update'>,
       'fieldArray'
     > {
-  activeIndex: number | null;
-  count: number;
+  active?: boolean;
   index: number;
-  setActiveIndex: (index: number | null) => void;
+  onRuleBottom?: RuleMutation;
+  onRuleDelete?: RuleMutation;
+  onRuleDown?: RuleMutation;
+  onRuleTop?: RuleMutation;
+  onRuleUp?: RuleMutation;
 }
 
 export const HookFormRRStackRule = <
@@ -44,52 +51,36 @@ export const HookFormRRStackRule = <
     },
     deprefixed: {
       describe: describeProps,
-      fieldArray: { move, remove, update },
+      fieldArray: { update },
       hook: { name, control },
     },
-    rest: { activeIndex, count, index, logger, onClick, setActiveIndex },
+    rest: {
+      active,
+      index,
+      logger,
+      onClick,
+      onRuleBottom,
+      onRuleDelete,
+      onRuleDown,
+      onRuleTop,
+      onRuleUp,
+    },
   } = useHookForm({ props, prefixes: ['describe', 'fieldArray'] as const });
 
-  const handleUp = useCallback(() => {
-    if (index > 0) {
-      move(index, index - 1);
-      if (activeIndex === index) setActiveIndex(index - 1);
-      else if (activeIndex === index - 1) setActiveIndex(index);
-    }
-  }, [index, move, activeIndex, setActiveIndex]);
+  useEffect(() => {
+    const rule = value as HookFormRRStackRuleData;
 
-  const handleDown = useCallback(() => {
-    if (index < count - 1) {
-      move(index, index + 1);
-      if (activeIndex === index) setActiveIndex(index + 1);
-      else if (activeIndex === index + 1) setActiveIndex(index);
-    }
-  }, [index, count, move, activeIndex, setActiveIndex]);
+    const {
+      options: { freq },
+      duration,
+    } = rule;
 
-  const handleTop = useCallback(() => {
-    if (index > 0) {
-      move(index, 0);
-      if (activeIndex === index) setActiveIndex(0);
-      else if (activeIndex !== null && activeIndex < index)
-        setActiveIndex(activeIndex + 1);
-    }
-  }, [index, move, activeIndex, setActiveIndex]);
-
-  const handleBottom = useCallback(() => {
-    if (index < count - 1) {
-      move(index, count - 1);
-      if (activeIndex === index) setActiveIndex(count - 1);
-      else if (activeIndex !== null && activeIndex > index)
-        setActiveIndex(activeIndex - 1);
-    }
-  }, [index, count, move, activeIndex, setActiveIndex]);
-
-  const handleDelete = useCallback(() => {
-    remove(index);
-    if (activeIndex === index) setActiveIndex(null);
-    else if (activeIndex !== null && activeIndex > index)
-      setActiveIndex(activeIndex - 1);
-  }, [remove, index, activeIndex, setActiveIndex]);
+    if (freq && freq !== 'span' && !Object.values(duration ?? {}).some(Boolean))
+      update(index, { ...rule, duration: { days: 1 } } as FieldArray<
+        TFieldValues,
+        ArrayPath<TFieldValues>
+      >);
+  }, [update, index, value]);
 
   // Safely access current rule and key attributes
   const { effect, label } = value as HookFormRRStackRuleData;
@@ -97,8 +88,8 @@ export const HookFormRRStackRule = <
   return (
     <>
       <Accordion.Title
-        key={`title-${index}`}
-        active={index === activeIndex}
+        key={`${name}.title`}
+        active={active}
         index={index}
         onClick={onClick}
         style={{ fontSize: '0.9em', padding: '0.8em 1em' }}
@@ -123,36 +114,36 @@ export const HookFormRRStackRule = <
           <div style={{ display: 'flex', gap: 2 }}>
             <Button.Group size="mini">
               <Button
-                disabled={index === 0}
+                disabled={!onRuleTop}
                 icon="angle double up"
-                onClick={handleTop}
+                onClick={() => onRuleTop?.(index)}
                 size="mini"
                 title="Move to top"
                 type="button"
               />
 
               <Button
-                disabled={index === 0}
+                disabled={!onRuleUp}
                 icon="angle up"
-                onClick={handleUp}
+                onClick={() => onRuleUp?.(index)}
                 size="mini"
                 title="Move up"
                 type="button"
               />
 
               <Button
-                disabled={index === count - 1}
+                disabled={!onRuleDown}
                 icon="angle down"
-                onClick={handleDown}
+                onClick={() => onRuleDown?.(index)}
                 size="mini"
                 title="Move down"
                 type="button"
               />
 
               <Button
-                disabled={index === count - 1}
+                disabled={!onRuleBottom}
                 icon="angle double down"
-                onClick={handleBottom}
+                onClick={() => onRuleBottom?.(index)}
                 size="mini"
                 title="Move to bottom"
                 type="button"
@@ -161,8 +152,9 @@ export const HookFormRRStackRule = <
 
             <Button
               color="red"
+              disabled={!onRuleDelete}
               icon="delete"
-              onClick={handleDelete}
+              onClick={() => onRuleDelete?.(index)}
               size="mini"
               title="Delete rule"
               type="button"
@@ -179,13 +171,9 @@ export const HookFormRRStackRule = <
         />
       </Accordion.Title>
 
-      <Accordion.Content
-        key={`content-${index}`}
-        active={index === activeIndex}
-      >
+      <Accordion.Content key={`${name}.content`} active={active}>
         <Segment basic style={{ fontSize: '0.9em', padding: 0 }}>
           <HookFormRRStackRuleForm<TFieldValues, TName>
-            fieldArrayUpdate={update}
             hookControl={control}
             hookName={name}
             logger={logger}

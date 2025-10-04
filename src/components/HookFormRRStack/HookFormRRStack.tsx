@@ -31,7 +31,7 @@ import { prefixProps } from '@/utils/prefixProps';
 
 import { HookFormRRStackRule } from './HookFormRRStackRule';
 import { timezoneOptions } from './timezoneOptions';
-import type { HookFormRRStackPath, HookFormRRStackRuleData } from './types';
+import type { HookFormRRStackPath } from './types';
 
 export interface HookFormRRStackProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -119,21 +119,88 @@ export const HookFormRRStack = <
     };
   }, [rrstack, timestampFormat, version]);
 
-  const { fields, append, remove, move, update } = useFieldArray({
+  const { append, fields, insert, move, remove, update } = useFieldArray({
     control,
     name: `${name}.rules` as ArrayPath<TFieldValues>,
   });
 
-  const handleAddRule = useCallback(() => {
-    append({ effect: 'active', options: { freq: 'span' } } as FieldArray<
-      TFieldValues,
-      ArrayPath<TFieldValues>
-    > extends HookFormRRStackRuleData
-      ? FieldArray<TFieldValues, ArrayPath<TFieldValues>>
-      : never);
+  const handleRuleAdd = useCallback(() => {
+    const defaultRule = {
+      effect: 'active',
+      options: { freq: 'span' },
+    } as FieldArray<TFieldValues, ArrayPath<TFieldValues>>;
 
-    setActiveIndex(fields.length);
-  }, [append, fields.length]);
+    if (activeIndex !== null && activeIndex < fields.length - 1)
+      insert(activeIndex + 1, defaultRule);
+    else append(defaultRule);
+
+    setActiveIndex((activeIndex ?? fields.length - 1) + 1);
+  }, [activeIndex, append, fields.length, insert]);
+
+  const handleRuleDelete = useCallback(
+    (index: number) => {
+      remove(index);
+
+      setActiveIndex(
+        activeIndex === null
+          ? null
+          : activeIndex > 0
+            ? activeIndex - 1
+            : activeIndex,
+      );
+    },
+    [remove, activeIndex, setActiveIndex],
+  );
+
+  const handleRuleUp = useCallback(
+    (index: number) => {
+      if (index > 0) {
+        move(index, index - 1);
+
+        if (activeIndex === index) setActiveIndex(index - 1);
+        else if (activeIndex === index - 1) setActiveIndex(index);
+      }
+    },
+    [move, activeIndex, setActiveIndex],
+  );
+
+  const handleRuleDown = useCallback(
+    (index: number) => {
+      if (index < fields.length - 1) {
+        move(index, index + 1);
+
+        if (activeIndex === index) setActiveIndex(index + 1);
+        else if (activeIndex === index + 1) setActiveIndex(index);
+      }
+    },
+    [fields.length, move, activeIndex],
+  );
+
+  const handleRuleTop = useCallback(
+    (index: number) => {
+      if (index > 0) {
+        move(index, 0);
+
+        if (activeIndex === index) setActiveIndex(0);
+        else if (activeIndex !== null && activeIndex < index)
+          setActiveIndex(activeIndex + 1);
+      }
+    },
+    [move, activeIndex, setActiveIndex],
+  );
+
+  const handleRuleBottom = useCallback(
+    (index: number) => {
+      if (index < fields.length - 1) {
+        move(index, fields.length - 1);
+
+        if (activeIndex === index) setActiveIndex(fields.length - 1);
+        else if (activeIndex !== null && activeIndex > index)
+          setActiveIndex(activeIndex - 1);
+      }
+    },
+    [fields.length, move, activeIndex, setActiveIndex],
+  );
 
   return (
     <Form.Field
@@ -182,7 +249,7 @@ export const HookFormRRStack = <
       >
         <Header size="small">Rules ({fields.length})</Header>
 
-        <Button type="button" primary onClick={handleAddRule} size="small">
+        <Button type="button" primary onClick={handleRuleAdd} size="small">
           <Icon name="plus" />
           Add Rule
         </Button>
@@ -192,11 +259,7 @@ export const HookFormRRStack = <
         <Accordion fluid styled>
           {fields.map((field, index) => (
             <HookFormRRStackRule<TFieldValues>
-              {...reprifixedDescribeProps}
-              activeIndex={activeIndex}
-              count={fields.length}
-              fieldArrayMove={move}
-              fieldArrayRemove={remove}
+              active={activeIndex === index}
               fieldArrayUpdate={update}
               index={index}
               hookControl={control}
@@ -206,7 +269,16 @@ export const HookFormRRStack = <
               onClick={() =>
                 setActiveIndex(activeIndex === index ? null : index)
               }
-              setActiveIndex={setActiveIndex}
+              onRuleBottom={
+                index < fields.length - 1 ? handleRuleBottom : undefined
+              }
+              onRuleDelete={handleRuleDelete}
+              onRuleDown={
+                index < fields.length - 1 ? handleRuleDown : undefined
+              }
+              onRuleTop={index > 0 ? handleRuleTop : undefined}
+              onRuleUp={index > 0 ? handleRuleUp : undefined}
+              {...reprifixedDescribeProps}
             />
           ))}
         </Accordion>

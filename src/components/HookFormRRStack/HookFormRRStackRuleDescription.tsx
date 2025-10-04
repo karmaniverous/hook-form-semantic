@@ -62,10 +62,7 @@ export const HookFormRRStackRuleDescription = <
 
   const [timezone, timeUnit]: [TimeZoneId, UnixTimeUnit] = useWatch({
     control,
-    name: [
-      `${rootName}.timezone`,
-      `${rootName}.rules.${props.hook?.name}.timeUnit`,
-    ],
+    name: [`${rootName}.timezone`, `${rootName}.timeUnit`],
   });
 
   const text = useMemo(

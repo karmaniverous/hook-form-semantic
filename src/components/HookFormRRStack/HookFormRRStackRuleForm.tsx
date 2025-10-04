@@ -1,21 +1,8 @@
-import { useEffect, useMemo } from 'react';
-import type {
-  ArrayPath,
-  FieldArray,
-  UseFieldArrayReturn,
-} from 'react-hook-form';
-import {
-  type FieldPath,
-  type FieldValues,
-  type Path,
-  useWatch,
-} from 'react-hook-form';
+import { type FieldPath, type FieldValues, type Path } from 'react-hook-form';
 import { Container, Grid } from 'semantic-ui-react';
 
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
-import type { PrefixProps } from '@/types/PrefixProps';
-import { path2index } from '@/utils/path2index';
 
 import { HookFormRRStackRuleDuration } from './HookFormRRStackRuleDuration';
 import { HookFormRRStackRuleEffect } from './HookFormRRStackRuleEffect';
@@ -25,14 +12,10 @@ import { HookFormRRStackRuleTime } from './HookFormRRStackRuleTime';
 import { HookFormRRStackRuleWeekdays } from './HookFormRRStackRuleWeekdays';
 import type { HookFormRRStackRuleData } from './types';
 
-interface HookFormRRStackRuleFormProps<
+type HookFormRRStackRuleFormProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> extends HookFormProps<TFieldValues, TName>,
-    PrefixProps<
-      Pick<UseFieldArrayReturn<TFieldValues>, 'update'>,
-      'fieldArray'
-    > {}
+> = HookFormProps<TFieldValues, TName>;
 
 export const HookFormRRStackRuleForm = <
   TFieldValues extends FieldValues = FieldValues,
@@ -41,42 +24,17 @@ export const HookFormRRStackRuleForm = <
   props: HookFormRRStackRuleFormProps<TFieldValues, TName>,
 ) => {
   const {
+    controller: {
+      field: { value },
+    },
     deprefixed: {
-      fieldArray: { update },
       hook: { name, control },
     },
     rest: { logger },
   } = useHookForm({ props, prefixes: ['fieldArray'] });
 
-  const index = useMemo(() => path2index(name), [name]);
-
-  const rule = useWatch({
-    control,
-    name: name as Path<TFieldValues>,
-  }) as FieldArray<
-    TFieldValues,
-    ArrayPath<TFieldValues>
-  > extends HookFormRRStackRuleData
-    ? FieldArray<TFieldValues, ArrayPath<TFieldValues>>
-    : never;
-
-  const { duration, options: { freq } = {} } = useMemo(
-    () => rule ?? {},
-    [rule],
-  );
-
-  useEffect(() => {
-    if (
-      index &&
-      freq &&
-      freq !== 'span' &&
-      !Object.values(duration ?? {}).some(Boolean)
-    )
-      update(index, { ...rule, duration: { days: 1 } }) as FieldArray<
-        TFieldValues,
-        ArrayPath<TFieldValues>
-      >;
-  }, [rule, update, index, freq, duration]);
+  // Safely access current rule and key attributes
+  const { options: { freq } = {} } = value as HookFormRRStackRuleData;
 
   return (
     <Container>

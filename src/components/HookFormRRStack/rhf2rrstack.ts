@@ -1,8 +1,4 @@
-import type {
-  DurationParts,
-  RRStackOptions,
-  RuleJson,
-} from '@karmaniverous/rrstack';
+import type { RRStackOptions, RuleJson } from '@karmaniverous/rrstack';
 import { omit } from 'radash';
 
 import { csv2int } from './csv2int';
@@ -43,11 +39,10 @@ export const rhfrule2rrstackrule = (
   const ends =
     options.ends instanceof Date ? options.ends.getTime() : undefined;
 
-  const duration: DurationParts | undefined = freq
-    ? rule.duration && Object.values(rule.duration).some(Boolean)
+  const duration =
+    rule.duration && Object.values(rule.duration).some(Boolean)
       ? rule.duration
-      : { days: 1 }
-    : undefined;
+      : undefined;
 
   return {
     label: rule.label ?? undefined,
