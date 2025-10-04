@@ -3,12 +3,7 @@ import { useRRStack, type UseRRStackProps } from '@karmaniverous/rrstack/react';
 import { omit } from 'radash';
 import { useCallback, useMemo, useState } from 'react';
 import type { ArrayPath, FieldArray } from 'react-hook-form';
-import {
-  type FieldValues,
-  type Path,
-  useFieldArray,
-  useWatch,
-} from 'react-hook-form';
+import { type FieldValues, type Path, useFieldArray } from 'react-hook-form';
 import {
   Accordion,
   Button,
@@ -88,6 +83,7 @@ export const HookFormRRStack = <
       logger,
       ...fieldProps
     },
+    watched,
   } = useHookForm({ props, prefixes: ['describe', 'rrstack'] as const });
 
   const reprifixedDescribeProps = useMemo(
@@ -95,15 +91,16 @@ export const HookFormRRStack = <
     [describeProps],
   );
 
-  const json = useWatch({
+  const { append, fields, insert, move, remove, update } = useFieldArray({
     control,
-    name,
-    compute: (v) => {
-      const next = rhf2rrstack(v);
-      logger?.debug?.('rhf2rrstack', { name, rhf: v, rrstack: next });
-      return next;
-    },
+    name: `${name}.rules` as ArrayPath<TFieldValues>,
   });
+
+  const json = useMemo(() => {
+    const next = rhf2rrstack(watched);
+    logger?.debug?.('rhf2rrstack', { name, rhf: watched, rrstack: next });
+    return next;
+  }, [logger, name, watched]);
 
   const { rrstack, version } = useRRStack({
     json: { ...json, defaultEffect, timeUnit },
@@ -125,11 +122,6 @@ export const HookFormRRStack = <
       ends: formatTimestamp(end),
     };
   }, [rrstack, timestampFormat, version]);
-
-  const { append, fields, insert, move, remove, update } = useFieldArray({
-    control,
-    name: `${name}.rules` as ArrayPath<TFieldValues>,
-  });
 
   const handleRuleAdd = useCallback(() => {
     const defaultRule = {
