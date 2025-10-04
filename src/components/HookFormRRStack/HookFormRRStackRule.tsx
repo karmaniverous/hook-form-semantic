@@ -48,9 +48,6 @@ export const HookFormRRStackRule = <
   props: HookFormRRStackRuleProps<TFieldValues, TName>,
 ) => {
   const {
-    controller: {
-      field: { value },
-    },
     deprefixed: {
       describe: describeProps,
       fieldArray: { update },
@@ -68,10 +65,11 @@ export const HookFormRRStackRule = <
       onRuleUp,
       timeUnit,
     },
+    watched,
   } = useHookForm({ props, prefixes: ['describe', 'fieldArray'] as const });
 
   useEffect(() => {
-    const rule = value as HookFormRRStackRuleData;
+    const rule = watched as HookFormRRStackRuleData;
 
     const { options, duration } = rule;
 
@@ -100,10 +98,10 @@ export const HookFormRRStackRule = <
         TFieldValues,
         ArrayPath<TFieldValues>
       >);
-  }, [update, index, value]);
+  }, [update, index, watched]);
 
   // Safely access current rule and key attributes
-  const { effect, label } = value as HookFormRRStackRuleData;
+  const { effect, label } = watched as HookFormRRStackRuleData;
 
   return (
     <>

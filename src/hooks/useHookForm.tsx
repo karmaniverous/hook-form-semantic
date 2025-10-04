@@ -51,14 +51,14 @@ export const useHookForm = <
 
   const controller = useController<TFieldValues, TName>(hookProps);
 
-  const watchedValue = useWatch({
+  const watched = useWatch({
     control: hookProps.control,
     name: hookProps.name,
   });
 
   useEffect(() => {
-    props.logger?.debug(`${hookProps.name} form data`, watchedValue);
-  }, [watchedValue, props.logger, hookProps.name]);
+    props.logger?.debug(`${hookProps.name} form data`, watched);
+  }, [hookProps.name, props.logger, watched]);
 
-  return { controller, deprefixed, rest };
+  return { controller, deprefixed, rest, watched };
 };

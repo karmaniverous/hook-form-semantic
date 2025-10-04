@@ -71,7 +71,7 @@ export const HookFormRRStackRuleWeekdays = <
           control={Dropdown}
           logger={logger}
           hookControl={control}
-          hookName={`${name}.options.bysetpos` as Path<TFieldValues>}
+          hookName={`${name}.bysetpos` as Path<TFieldValues>}
           label={
             <InfoLabel
               text="Position"

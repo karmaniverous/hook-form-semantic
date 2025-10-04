@@ -13,8 +13,15 @@ This document augments the system prompt with repo‑specific assistant guidance
     - Await accordion content before querying inside it.
 
 - HookFormRRStack → RRStackRuleDescription (live updates):
-  - Forward describe* props via HookFormRRStackRule.
-  - RRStackRuleDescription derives text from rrstack.describeRule(index, { includeBounds, includeTimeZone, formatTimeZone }) and MUST recompute on render (do not memoize solely on rrstack identity).
+  - Forward describe\* props via HookFormRRStackRule.
+  - RRStackRuleDescription derives text by calling `describeRule(value, timezone, timeUnit, { includeBounds, includeTimeZone, formatTimeZone })` with the current RHF rule value and the watched timezone. It MUST recompute on render (do not memoize solely on rrstack identity).
+
+Implementation guardrails
+
+- RHF is the single source of truth. Do not write values back from rrstack into RHF.
+- Derive `RRStackOptions` for useRRStack via `useWatch({ control, name, compute })` and feed only what’s needed to render effective bounds (starts/ends) in the parent.
+  - Note: `compute` is an official `useWatch` prop (see RHF docs: https://react-hook-form.com/docs/usewatch). Use it to map RHF’s schedule shape to the engine’s `RRStackOptions` without extra effects.
+- Rule descriptions should not depend on a live rrstack instance; compute them from the RHF rule value + timezone/timeUnit.
 
 - Benchmarks:
   - Implement benchmarks under src/\*_/_.bench.{ts,tsx}; discovered by Vitest’s benchmark include; excluded from coverage; Knip aware.

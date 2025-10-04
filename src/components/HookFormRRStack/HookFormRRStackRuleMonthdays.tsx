@@ -67,7 +67,7 @@ export const HookFormRRStackRuleMonthdays = <
           control={Input}
           logger={logger}
           hookControl={control}
-          hookName={`${name}.options.bymonthdayText` as Path<TFieldValues>}
+          hookName={`${name}.bymonthdayText` as Path<TFieldValues>}
           label={
             <InfoLabel
               text="DoM"

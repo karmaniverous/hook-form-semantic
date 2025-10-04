@@ -11,6 +11,9 @@ import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import { concatClassNames } from '@/utils/concatClassNames';
 
+import { rhfrule2rrstackrule } from './rhf2rrstack';
+import type { HookFormRRStackRuleData } from './types';
+
 export interface HookFormRRStackRuleDescriptionPropsBase<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
@@ -40,9 +43,6 @@ export const HookFormRRStackRuleDescription = <
   props: HookFormRRStackRuleDescriptionProps<TFieldValues, TName, T>,
 ) => {
   const {
-    controller: {
-      field: { value },
-    },
     deprefixed: {
       hook: { control, name },
     },
@@ -56,6 +56,7 @@ export const HookFormRRStackRuleDescription = <
       timeUnit,
       ...rest
     },
+    watched,
   } = useHookForm({ props });
 
   const As = (as ?? 'span') as ElementType;
@@ -67,17 +68,30 @@ export const HookFormRRStackRuleDescription = <
     name: `${rootName}.timezone`,
   });
 
-  const text = useMemo(
-    () =>
-      value && timezone
-        ? describeRule(value, timezone, timeUnit, {
-            includeBounds,
-            includeTimeZone,
-            formatTimeZone,
-          })
-        : null,
-    [value, timezone, timeUnit, includeBounds, includeTimeZone, formatTimeZone],
-  );
+  const text = useMemo(() => {
+    console.log('rhf', { watched, timezone });
+
+    if (watched && timezone) {
+      const rule = rhfrule2rrstackrule(
+        watched as unknown as HookFormRRStackRuleData,
+      );
+
+      console.log('rule', rule);
+
+      return describeRule(rule, timezone, timeUnit, {
+        includeBounds,
+        includeTimeZone,
+        formatTimeZone,
+      });
+    } else return null;
+  }, [
+    watched,
+    timezone,
+    timeUnit,
+    includeBounds,
+    includeTimeZone,
+    formatTimeZone,
+  ]);
 
   return text ? (
     <As

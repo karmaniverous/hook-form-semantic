@@ -42,18 +42,24 @@ Authoritative UI layout (HookFormRRStackRuleForm)
   - Recurring rules require a strictly positive duration (sum of parts > 0).
   - Span rules must omit duration.
 
-Data modeling (rrstack is source of truth)
+Data modeling (RHF is source of truth; rrstack is derived)
 
-- RuleJson.options:
-  - starts / ends are epoch milliseconds (number) when present.
-  - freq is absent (undefined) to represent a Span rule.
-  - interval and count are defined and editable only when Frequency is present (recurrence).
-  - bymonth, bymonthday, byweekday, bysetpos, byhour, byminute are optional and omitted when empty.
+- RHF form value owns the schedule JSON (timezone + rules). The engine is fed from RHF; there is no rrstack→RHF writeback.
+- RuleJson.options (engine JSON):
+  - starts / ends are epoch timestamps in the configured unit when present.
+  - freq is omitted (undefined) to represent a Span rule.
+  - interval and count apply only when Frequency is present (recurrence).
+  - bymonth, bymonthday, byweekday, bysetpos, byhour, byminute are omitted when empty.
 
-- UI ↔ engine mapping:
-  - UI holds dates as Date | null; engine persists clamp timestamps as epoch ms | undefined.
-  - UI holds hours/minutes/monthdays as tolerant CSV text (e.g., "9, 13"); engine persists as number[] or omits.
-  - “Span” is represented in UI as options.freq === 'span', but maps to undefined in engine JSON.
+- UI ↔ engine mapping (one way):
+  - UI holds dates as Date | null; mapping converts to epoch numbers | undefined for the engine.
+  - UI holds hours/minutes/monthdays as tolerant CSV text (e.g., "9, 13"); mapping converts to number[] or omits when empty.
+  - UI represents span as options.freq === 'span'; mapping omits freq for the engine.
+  - Implementation: useWatch({ control, name, compute }) is used to transform the RHF schedule value into RRStackOptions for useRRStack consumption. No reverse mapping is performed.
+
+- Time unit configuration:
+  - The RRStack timeUnit is a component concern (default 'ms'); it is not required to live in the RHF schedule value.
+  - If a timeUnit is provided via props, it is applied when constructing the rrstack used for derived outputs (bounds/description).
 
 Default duration (recurring rules)
 
