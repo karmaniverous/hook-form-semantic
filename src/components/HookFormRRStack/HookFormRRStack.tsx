@@ -1,9 +1,13 @@
 import type { DescribeOptions, RRStackOptions } from '@karmaniverous/rrstack';
 import { useRRStack, type UseRRStackProps } from '@karmaniverous/rrstack/react';
-import { omit } from 'radash';
 import { useCallback, useMemo, useState } from 'react';
 import type { ArrayPath, FieldArray } from 'react-hook-form';
-import { type FieldValues, type Path, useFieldArray } from 'react-hook-form';
+import {
+  type FieldValues,
+  type Path,
+  useFieldArray,
+  useWatch,
+} from 'react-hook-form';
 import {
   Accordion,
   Button,
@@ -26,7 +30,7 @@ import { prefixProps } from '@/utils/prefixProps';
 
 import { HookFormRRStackRule } from './HookFormRRStackRule';
 import { timezoneOptions } from './timezoneOptions';
-import type { HookFormRRStackPath } from './types';
+import type { HookFormRRStackData, HookFormRRStackPath } from './types';
 
 export interface HookFormRRStackProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -68,7 +72,6 @@ export const HookFormRRStack = <
 ) => {
   const {
     controller: {
-      field: hookFieldProps,
       fieldState: { error },
     },
     deprefixed: {
@@ -83,7 +86,6 @@ export const HookFormRRStack = <
       logger,
       ...fieldProps
     },
-    watched,
   } = useHookForm({ props, prefixes: ['describe', 'rrstack'] as const });
 
   const reprifixedDescribeProps = useMemo(
@@ -96,14 +98,31 @@ export const HookFormRRStack = <
     name: `${name}.rules` as ArrayPath<TFieldValues>,
   });
 
-  const json = useMemo(() => {
-    const next = rhf2rrstack(watched);
-    logger?.debug?.('rhf2rrstack', { name, rhf: watched, rrstack: next });
-    return next;
-  }, [logger, name, watched]);
+  const timezone = useWatch({
+    control,
+    name: `${name}.timezone` as Path<TFieldValues>,
+  });
+
+  const rules = useWatch({
+    control,
+    name: `${name}.rules` as Path<TFieldValues>,
+  });
+
+  const rrstackJson = useMemo(() => {
+    const rhf: HookFormRRStackData = {
+      rules,
+      timezone,
+    };
+
+    const rrstack = rhf2rrstack(rhf);
+
+    logger?.debug?.('rhf2rrstack', { rhf, rrstack });
+
+    return rrstack;
+  }, [logger, rules, timezone]);
 
   const { rrstack, version } = useRRStack({
-    json: { ...json, defaultEffect, timeUnit },
+    json: { ...rrstackJson, defaultEffect, timeUnit },
     ...rrstackProps,
   });
 
@@ -238,7 +257,6 @@ export const HookFormRRStack = <
   return (
     <Form.Field
       {...fieldProps}
-      {...omit(hookFieldProps, ['onChange', 'ref'])}
       className={concatClassNames(className, 'hook-form-rrstack')}
     >
       {label && <label>{label}</label>}
