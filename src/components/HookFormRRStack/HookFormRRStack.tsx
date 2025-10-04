@@ -1,5 +1,6 @@
 import type { DescribeOptions, RRStackOptions } from '@karmaniverous/rrstack';
 import { useRRStack, type UseRRStackProps } from '@karmaniverous/rrstack/react';
+import { get } from 'radash';
 import { useCallback, useMemo, useState } from 'react';
 import type { ArrayPath, FieldArray } from 'react-hook-form';
 import {
@@ -16,6 +17,7 @@ import {
   type FormFieldProps,
   Header,
   Icon,
+  Label,
   Message,
   Segment,
 } from 'semantic-ui-react';
@@ -82,7 +84,7 @@ export const HookFormRRStack = <
     rest: {
       className,
       label,
-      timestampFormat = 'yyyy-MM-dd HH:mm:ss',
+      timestampFormat = 'yyyy-LL-dd HH:mm',
       logger,
       ...fieldProps
     },
@@ -98,28 +100,17 @@ export const HookFormRRStack = <
     name: `${name}.rules` as ArrayPath<TFieldValues>,
   });
 
-  const timezone = useWatch({
-    control,
-    name: `${name}.timezone` as Path<TFieldValues>,
-  });
-
-  const rules = useWatch({
-    control,
-    name: `${name}.rules` as Path<TFieldValues>,
-  });
+  const form = useWatch({ control });
 
   const rrstackJson = useMemo(() => {
-    const rhf: HookFormRRStackData = {
-      rules,
-      timezone,
-    };
+    const rhf: HookFormRRStackData = get(form, name);
 
     const rrstack = rhf2rrstack(rhf);
 
     logger?.debug?.('rhf2rrstack', { rhf, rrstack });
 
     return rrstack;
-  }, [logger, rules, timezone]);
+  }, [form, logger, name]);
 
   const { rrstack, version } = useRRStack({
     json: { ...rrstackJson, defaultEffect, timeUnit },
@@ -132,7 +123,9 @@ export const HookFormRRStack = <
     void version;
 
     const formatTimestamp = (ts: number | null | undefined) =>
-      ts ? rrstack.formatInstant(ts, { format: timestampFormat }) : 'Not Set';
+      ts
+        ? rrstack.formatInstant(ts, { format: timestampFormat })
+        : 'Indefinite';
 
     const { start, end } = rrstack.getEffectiveBounds();
 
@@ -283,10 +276,13 @@ export const HookFormRRStack = <
             selection
             options={timezoneOptions}
           />
+          <Form.Field control={Label} label="Starts">
+            {starts}
+          </Form.Field>
 
-          <Form.Field label="Starts">{starts}</Form.Field>
-
-          <Form.Field label="Ends">{ends}</Form.Field>
+          <Form.Field control={Label} label="Ends">
+            {ends}
+          </Form.Field>
         </Form.Group>
       </Segment>
 

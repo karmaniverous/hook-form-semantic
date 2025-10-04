@@ -228,7 +228,7 @@ describe('HookFormRRStack Validation', () => {
   it('updates Starts & Ends when rule dates are set and changed', async () => {
     render(<TestForm />);
 
-    // Initially both should be "Not Set"
+    // Initially both should be "Indefinite"
     const startsLabel = screen.getByText('Starts');
     const endsLabel = screen.getByText('Ends');
     const startsField = startsLabel.parentElement as HTMLElement;
@@ -247,8 +247,8 @@ describe('HookFormRRStack Validation', () => {
         .trim();
     };
 
-    expect(getFieldValueText(startsField)).toBe('Not Set');
-    expect(getFieldValueText(endsField)).toBe('Not Set');
+    expect(getFieldValueText(startsField)).toBe('Indefinite');
+    expect(getFieldValueText(endsField)).toBe('Indefinite');
 
     // Add a rule
     fireEvent.click(screen.getByText('Add Rule'));
@@ -257,16 +257,16 @@ describe('HookFormRRStack Validation', () => {
     const inputs = await screen.findAllByTestId('date-picker');
     expect(inputs.length).toBeGreaterThanOrEqual(2);
 
-    // Set start date -> Starts should update from "Not Set"
+    // Set start date -> Starts should update from "Indefinite"
     fireEvent.change(inputs[0], { target: { value: '2025-01-01' } });
     await waitFor(() => {
-      expect(getFieldValueText(startsField)).not.toBe('Not Set');
+      expect(getFieldValueText(startsField)).not.toBe('Indefinite');
     });
 
-    // Set end date -> Ends should update from "Not Set"
+    // Set end date -> Ends should update from "Indefinite"
     fireEvent.change(inputs[1], { target: { value: '2025-01-02' } });
     await waitFor(() => {
-      expect(getFieldValueText(endsField)).not.toBe('Not Set');
+      expect(getFieldValueText(endsField)).not.toBe('Indefinite');
     });
 
     // Change start date again -> Starts should change text

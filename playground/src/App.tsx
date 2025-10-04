@@ -261,11 +261,11 @@ export default function App() {
         <Header as="h2">HookFormRRStack Demo</Header>
 
         <HookFormRRStack<FormData>
+          describeBoundsFormat="yyyy-LL-dd"
           describeIncludeBounds
           hookName="rrstack"
           hookControl={control}
-          label="Schedule Rules"
-          logger={console}
+          label="Scheduling Rules"
         />
 
         <Divider />

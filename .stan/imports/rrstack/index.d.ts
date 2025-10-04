@@ -249,6 +249,7 @@ type DescribeTranslator = (desc: RuleDescriptor, opts?: TranslatorOptions) => st
  * Requirements addressed:
  * - Provide a human-readable rule description leveraging rrule's toText().
  * - Include effect and duration; optionally include timezone and bounds.
+ * - Include effect and duration; optionally include timezone and bounds.
  * - Allow custom formatting of the timezone label.
  */
 
@@ -263,6 +264,19 @@ interface DescribeOptions {
      * `(timezone formatTimeZone(tzId))` instead of the raw tz id.
      */
     formatTimeZone?: (tzId: string) => string;
+    /**
+     * Optional format string for bounds when `includeBounds` is true.
+     * When provided, bound instants are rendered via Luxon's `toFormat(boundsFormat)`
+     * in the rule's timezone. When omitted, bounds use ISO with milliseconds
+     * suppressed (default behavior).
+     *
+     * Examples:
+     * - 'yyyy-LL-dd' → "2025-04-01"
+     * - "dd LLL yyyy 'at' HH:mm" → "01 Apr 2025 at 07:30"
+     *
+     * Backward compatible: if undefined, behavior is unchanged.
+     */
+    boundsFormat?: string;
     /** Optional translator override ('strict-en' or custom) */
     translator?: 'strict-en' | DescribeTranslator;
     /** Options for the translator. */

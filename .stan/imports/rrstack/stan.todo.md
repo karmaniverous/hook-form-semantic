@@ -18,6 +18,31 @@ Next up (near‑term, prioritized)
 
 Completed (recent)
 
+- Docs: descriptions/bounds formatting
+  - README “Rule description helpers”: corrected default (includeTimeZone is
+    opt‑in) and added boundsFormat example.
+  - Handbook “Descriptions”: added a short boundsFormat section with examples.
+
+- DescribeOptions bounds formatting:
+  - Added `boundsFormat?: string` to DescribeOptions for customizing how
+    includeBounds dates are rendered. When provided, bounds use Luxon
+    `toFormat(boundsFormat)` in the rule’s timezone; otherwise ISO formatting
+    is preserved. Added tests for both span and recurring rules.
+
+- Time conversion utilities (final test fix):
+  - Luxon may normalize invalid wall times (e.g., 02:30 → 03:30) while reporting
+    `isValid=true`. We now detect normalization (mismatched wall fields) and treat
+    it as invalid for our policy, then probe successive wall minutes via
+    `DateTime.fromObject` to pick the earliest valid minute (02:30 → 03:00).
+  - All tests green.
+  - Tightened the minute-probing loop to accept a candidate only when the constructed
+    wall fields match the requested minute exactly (in addition to `isValid`). This
+    prevents accepting normalized times like 03:30 at 02:30 and ensures we land at 03:00.
+
+- Time conversion utilities (tests green):
+  - Resolved the remaining spring-forward test by probing successive wall minutes
+    with DateTime.fromObject (wall construction) to find the earliest valid minute    at/after the requested time (02:30 → 03:00). Avoids timeline-based additions
+    that could land at 03:30 across the gap.
 - Docs (API): Added TSDoc/TypeDoc comments for time helpers (`wallTimeToEpoch`, `dateOnlyToEpoch`, `epochToWallDate`) including parameters, errors, DST semantics, and examples. They are exported from the root and will render in the API reference.
 
 - Time conversion utilities (follow-up fixes):

@@ -48,6 +48,7 @@ export const HookFormRRStackRuleDescription = <
     },
     rest: {
       as,
+      boundsFormat,
       className,
       fallback = null,
       formatTimeZone,
@@ -79,6 +80,7 @@ export const HookFormRRStackRuleDescription = <
       console.log('rule', rule);
 
       return describeRule(rule, timezone, timeUnit, {
+        boundsFormat,
         includeBounds,
         includeTimeZone,
         formatTimeZone,
@@ -88,6 +90,7 @@ export const HookFormRRStackRuleDescription = <
     watched,
     timezone,
     timeUnit,
+    boundsFormat,
     includeBounds,
     includeTimeZone,
     formatTimeZone,
