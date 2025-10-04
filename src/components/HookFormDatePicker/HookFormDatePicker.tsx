@@ -4,7 +4,7 @@ import DatePicker, { type DatePickerProps } from 'react-date-picker';
 import DateTimePicker, {
   type DateTimePickerProps,
 } from 'react-datetime-picker';
-import type { FieldPath } from 'react-hook-form';
+import type { FieldPath, FieldValues } from 'react-hook-form';
 import { Checkbox, Form, type FormFieldProps } from 'semantic-ui-react';
 
 import { useHookForm } from '@/hooks/useHookForm';
@@ -13,7 +13,7 @@ import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
 
 export interface HookFormDatePickerProps<
-  TFieldValues extends Record<string, unknown> = Record<string, unknown>,
+  TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > extends HookFormProps<TFieldValues, TName>,
     Omit<
@@ -34,7 +34,7 @@ export interface HookFormDatePickerProps<
 }
 
 export const HookFormDatePicker = <
-  TFieldValues extends Record<string, unknown> = Record<string, unknown>,
+  TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(
   props: HookFormDatePickerProps<TFieldValues, TName>,
@@ -105,7 +105,7 @@ export const HookFormDatePicker = <
               returnValue: 'start',
             }}
             {...timePickerProps}
-            {...omit(hookFieldProps as Record<string, unknown>, ['ref'])}
+            {...omit(hookFieldProps, ['ref'])}
             value={(value as Date | null) ?? null}
           />
         ) : (
@@ -121,7 +121,7 @@ export const HookFormDatePicker = <
               returnValue: 'start',
             }}
             {...datePickerProps}
-            {...omit(hookFieldProps as Record<string, unknown>, ['ref'])}
+            {...omit(hookFieldProps, ['ref'])}
             value={(value as Date | null) ?? null}
           />
         )}

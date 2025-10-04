@@ -4,6 +4,7 @@ import DateRangePicker, {
 import DateTimeRangePicker, {
   type DateTimeRangePickerProps,
 } from '@wojtekmaj/react-datetimerange-picker';
+import { omit } from 'radash';
 import {
   type SyntheticEvent,
   useCallback,
@@ -190,11 +191,11 @@ export const HookFormDateRangePicker = <
               returnValue: 'range',
             }}
             {...timePickerProps}
-            {...({
-              ...hookFieldProps,
+            {...{
+              ...omit(hookFieldProps, ['ref']),
               // Normalize value to DateRange
               value: ((value as DateRange) ?? [null, null]) as DateRange,
-            } as Record<string, unknown>)}
+            }}
           />
         ) : (
           <DateRangePicker
@@ -210,10 +211,10 @@ export const HookFormDateRangePicker = <
               returnValue: 'range',
             }}
             {...datePickerProps}
-            {...({
-              ...hookFieldProps,
+            {...{
+              ...omit(hookFieldProps, ['ref']),
               value: ((value as DateRange) ?? [null, null]) as DateRange,
-            } as Record<string, unknown>)}
+            }}
           />
         )}
       </div>

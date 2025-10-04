@@ -1,3 +1,4 @@
+import type { DescribeOptions } from '@karmaniverous/rrstack';
 import { useRRStack, type UseRRStackProps } from '@karmaniverous/rrstack/react';
 import { omit } from 'radash';
 import { useCallback, useMemo, useState } from 'react';
@@ -24,12 +25,11 @@ import { HookFormField } from '@/components/HookFormField';
 import { rhf2rrstack } from '@/components/HookFormRRStack/rhf2rrstack';
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
-import { reprefix } from '@/types/PrefixedPartial';
 import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
+import { prefixProps } from '@/utils/prefixProps';
 
 import { HookFormRRStackRule } from './HookFormRRStackRule';
-import type { HookFormRRStackRuleDescriptionPropsBase } from './HookFormRRStackRuleDescription';
 import { timezoneOptions } from './timezoneOptions';
 import type { HookFormRRStackPath, HookFormRRStackRuleData } from './types';
 
@@ -55,10 +55,7 @@ export interface HookFormRRStackProps<
       | 'type'
       | 'value'
     >,
-    PrefixProps<
-      Omit<HookFormRRStackRuleDescriptionPropsBase, 'index' | 'rrstack'>,
-      'describe'
-    >,
+    PrefixProps<DescribeOptions, 'describe'>,
     PrefixProps<Omit<UseRRStackProps, 'json' | 'timezone'>, 'rrstack'> {
   timestampFormat?: string;
 }
@@ -90,7 +87,7 @@ export const HookFormRRStack = <
   } = useHookForm({ props, prefixes: ['describe', 'rrstack'] as const });
 
   const reprifixedDescribeProps = useMemo(
-    () => reprefix(describeProps, 'describe'),
+    () => prefixProps(describeProps, 'describe'),
     [describeProps],
   );
 
@@ -209,7 +206,6 @@ export const HookFormRRStack = <
               onClick={() =>
                 setActiveIndex(activeIndex === index ? null : index)
               }
-              rrstack={rrstack}
               setActiveIndex={setActiveIndex}
             />
           ))}

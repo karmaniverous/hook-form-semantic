@@ -1,11 +1,14 @@
 import type { Deprefix } from '@/types/Deprefix';
 import type { HookFormProps } from '@/types/HookFormProps';
 
-export function deprefixProps<
+export const deprefixProps = <
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Props extends HookFormProps<any>,
   const Prefix extends string = never,
->(props: Props, prefixes: readonly Prefix[]) {
+>(
+  props: Props,
+  prefixes: readonly Prefix[],
+) => {
   type PrefixWithHook = 'hook' | Prefix;
 
   const prefixesWithHook = ['hook', ...prefixes] as const;
@@ -35,4 +38,4 @@ export function deprefixProps<
   }
 
   return result;
-}
+};

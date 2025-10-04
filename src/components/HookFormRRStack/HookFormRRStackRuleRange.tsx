@@ -54,16 +54,13 @@ export const HookFormRRStackRuleRange = <
 
       <Form.Group style={{ alignItems: 'flex-end' }} widths={3}>
         <HookFormDatePicker<TFieldValues>
-          fluid
           logger={logger}
           hookControl={control}
           hookName={`${name}.starts` as Path<TFieldValues>}
           label="Start Date"
-          size
         />
 
         <HookFormDatePicker<TFieldValues>
-          fluid
           logger={logger}
           hookControl={control}
           hookName={`${name}.ends` as Path<TFieldValues>}

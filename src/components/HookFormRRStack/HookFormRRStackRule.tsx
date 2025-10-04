@@ -92,7 +92,6 @@ export const HookFormRRStackRule = <
   }, [remove, index, activeIndex, setActiveIndex]);
 
   // Safely access current rule and key attributes
-  console.log('rule:', { name, value });
   const { effect, label } = value as HookFormRRStackRuleData;
 
   return (
