@@ -1,4 +1,4 @@
-import type { DescribeOptions } from '@karmaniverous/rrstack';
+import type { DescribeOptions, RRStackOptions } from '@karmaniverous/rrstack';
 import { useRRStack, type UseRRStackProps } from '@karmaniverous/rrstack/react';
 import { omit } from 'radash';
 import { useCallback, useMemo, useState } from 'react';
@@ -56,7 +56,11 @@ export interface HookFormRRStackProps<
       | 'value'
     >,
     PrefixProps<DescribeOptions, 'describe'>,
-    PrefixProps<Omit<UseRRStackProps, 'json' | 'timezone'>, 'rrstack'> {
+    PrefixProps<
+      Omit<UseRRStackProps, 'json' | 'timezone'> &
+        Pick<RRStackOptions, 'defaultEffect' | 'timeUnit'>,
+      'rrstack'
+    > {
   timestampFormat?: string;
 }
 
@@ -75,7 +79,7 @@ export const HookFormRRStack = <
     deprefixed: {
       describe: describeProps,
       hook: { control, name },
-      rrstack: rrstackProps,
+      rrstack: { defaultEffect, timeUnit = 'ms', ...rrstackProps },
     },
     rest: {
       className,
@@ -101,7 +105,10 @@ export const HookFormRRStack = <
     },
   });
 
-  const { rrstack, version } = useRRStack({ json, ...rrstackProps });
+  const { rrstack, version } = useRRStack({
+    json: { ...json, defaultEffect, timeUnit },
+    ...rrstackProps,
+  });
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -278,6 +285,7 @@ export const HookFormRRStack = <
               }
               onRuleTop={index > 0 ? handleRuleTop : undefined}
               onRuleUp={index > 0 ? handleRuleUp : undefined}
+              timeUnit={timeUnit}
               {...reprifixedDescribeProps}
             />
           ))}

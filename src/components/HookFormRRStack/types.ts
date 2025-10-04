@@ -33,7 +33,7 @@ export type HookFormRRStackRuleData = Omit<RuleJson, 'options'> & {
   options: HookFormRRStackRuleOptionsData;
 };
 
-export type HookFormRRStackData = Omit<RRStackOptions, 'rules'> & {
+export type HookFormRRStackData = Pick<RRStackOptions, 'timezone'> & {
   rules: HookFormRRStackRuleData[];
 };
 

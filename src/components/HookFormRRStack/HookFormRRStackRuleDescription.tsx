@@ -17,6 +17,7 @@ export interface HookFormRRStackRuleDescriptionPropsBase<
 > extends HookFormProps<TFieldValues, TName>,
     DescribeOptions {
   fallback?: React.ReactNode;
+  timeUnit: UnixTimeUnit;
 }
 
 type HookFormRRStackRuleDescriptionProps<
@@ -52,6 +53,7 @@ export const HookFormRRStackRuleDescription = <
       formatTimeZone,
       includeBounds,
       includeTimeZone,
+      timeUnit,
       ...rest
     },
   } = useHookForm({ props });
@@ -60,14 +62,14 @@ export const HookFormRRStackRuleDescription = <
 
   const rootName = useMemo(() => (name as string).split(/\./)[0], [name]);
 
-  const [timezone, timeUnit]: [TimeZoneId, UnixTimeUnit] = useWatch({
+  const timezone: TimeZoneId = useWatch({
     control,
-    name: [`${rootName}.timezone`, `${rootName}.timeUnit`],
+    name: `${rootName}.timezone`,
   });
 
   const text = useMemo(
     () =>
-      value && timezone && timeUnit
+      value && timezone
         ? describeRule(value, timezone, timeUnit, {
             includeBounds,
             includeTimeZone,

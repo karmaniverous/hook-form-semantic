@@ -1,4 +1,5 @@
-import type { DescribeOptions } from '@karmaniverous/rrstack';
+import type { DescribeOptions, UnixTimeUnit } from '@karmaniverous/rrstack';
+import { omit, pick } from 'radash';
 import { useEffect } from 'react';
 import type {
   ArrayPath,
@@ -37,6 +38,7 @@ export interface HookFormRRStackRuleProps<
   onRuleDown?: RuleMutation;
   onRuleTop?: RuleMutation;
   onRuleUp?: RuleMutation;
+  timeUnit: UnixTimeUnit;
 }
 
 export const HookFormRRStackRule = <
@@ -64,18 +66,36 @@ export const HookFormRRStackRule = <
       onRuleDown,
       onRuleTop,
       onRuleUp,
+      timeUnit,
     },
   } = useHookForm({ props, prefixes: ['describe', 'fieldArray'] as const });
 
   useEffect(() => {
     const rule = value as HookFormRRStackRuleData;
 
-    const {
-      options: { freq },
-      duration,
-    } = rule;
+    const { options, duration } = rule;
 
-    if (freq && freq !== 'span' && !Object.values(duration ?? {}).some(Boolean))
+    const { freq } = options;
+
+    // Clean up rule if freq is 'span' and duration or other options are set
+    if (
+      freq &&
+      freq === 'span' &&
+      (Object.values(duration ?? {}).some(Boolean) ||
+        Object.values(
+          omit(rule.options ?? {}, ['freq', 'ends', 'starts']),
+        ).some(Boolean))
+    )
+      update(index, {
+        ...omit(rule, ['duration', 'options']),
+        options: pick(options, ['freq', 'ends', 'starts']),
+      } as FieldArray<TFieldValues, ArrayPath<TFieldValues>>);
+    // Ensure a minimal duration of 1 day if freq is not 'span' and no duration is set
+    else if (
+      freq &&
+      freq !== 'span' &&
+      !Object.values(duration ?? {}).some(Boolean)
+    )
       update(index, { ...rule, duration: { days: 1 } } as FieldArray<
         TFieldValues,
         ArrayPath<TFieldValues>
@@ -167,6 +187,7 @@ export const HookFormRRStackRule = <
           hookControl={control}
           hookName={name}
           style={{ fontWeight: 'normal', marginTop: 4, marginLeft: 16 }}
+          timeUnit={timeUnit}
           {...describeProps}
         />
       </Accordion.Title>
