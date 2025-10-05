@@ -6,6 +6,7 @@ import {
   addRules,
   benchCleanup,
   getFieldByLabel,
+  newUser,
   renderRRStack,
 } from './bench.utils';
 

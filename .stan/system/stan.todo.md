@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-10-05T05:05:00Z
+# When updated: 2025-10-05T06:05:00Z
 
 ## Next up
 
@@ -13,6 +13,10 @@
 
 ## Completed (recent)
 
+- Utils: adjust offsetTruncatedDate truncation semantics so offsetDays is applied
+  from day=1 baseline for 'month'/'year'; fixes remaining yearly truncation test.
+- Bench: align helpers and call sites; replace dynamic user-event import/new with
+  shared newUser(); remove unused params; resolves TS2554/TS2351 and lint errors.
 - Bench: split HookFormRRStack.bench.tsx into focused async benches under bench/, use userEvent and explicit waits to ensure each case performs work. This removes “NaNx faster than …” rows from the summary.
 - Utils: fix offsetTruncatedDate 'month'/'year' truncation to set day=1 (not 0); resolves off-by-one month in tests.
 - Tests: add small, focused unit tests for csv2int and offsetTruncatedDate to increase coverage on pure helpers.

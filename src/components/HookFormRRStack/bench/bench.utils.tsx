@@ -59,7 +59,7 @@ export async function addRuleAndGetContent() {
   return { user, content };
 }
 
-export async function addRules(container: HTMLElement, count: number) {
+export async function addRules(count: number) {
   const user = newUser();
   for (let i = 0; i < count; i++) {
     await user.click(screen.getByText('Add Rule'));

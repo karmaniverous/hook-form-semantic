@@ -11,13 +11,13 @@ import {
 describe('HookFormRRStack (bench: rule editing)', () => {
   bench('add rule', async () => {
     renderRRStack();
-    await addRuleAndGetContent(document.body);
+    await addRuleAndGetContent();
     benchCleanup();
   });
 
   bench('edit label', async () => {
     const { container } = renderRRStack();
-    const { user } = await addRuleAndGetContent(container);
+    const { user } = await addRuleAndGetContent();
     const input = within(container).getByPlaceholderText('Rule label');
     await user.clear(input as HTMLInputElement);
     await user.type(input as HTMLInputElement, 'Test Rule');
@@ -25,8 +25,7 @@ describe('HookFormRRStack (bench: rule editing)', () => {
   });
 
   bench('toggle Effect (Active ↔ Blackout)', async () => {
-    const { container } = renderRRStack();
-    const { user, content } = await addRuleAndGetContent(container);
+    const { user, content } = await addRuleAndGetContent();
 
     const effectField = getFieldByLabel(content, 'Effect');
     const effectDropdown = within(effectField).getByTestId('dropdown');

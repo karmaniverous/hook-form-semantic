@@ -10,8 +10,8 @@ import {
 
 describe('HookFormRRStack (bench: recurrence)', () => {
   bench('set Frequency → daily; set Interval/Count', async () => {
-    const { container } = renderRRStack();
-    const { user, content } = await addRuleAndGetContent(container);
+    renderRRStack();
+    const { user, content } = await addRuleAndGetContent();
 
     // Frequency
     const freqField = getFieldByLabel(content, 'Frequency');
@@ -34,8 +34,8 @@ describe('HookFormRRStack (bench: recurrence)', () => {
   });
 
   bench('edit Time constraints (Hours, Minutes)', async () => {
-    const { container } = renderRRStack();
-    const { user, content } = await addRuleAndGetContent(container);
+    renderRRStack();
+    const { user, content } = await addRuleAndGetContent();
 
     // Frequency → daily to reveal time fields
     const freqField = getFieldByLabel(content, 'Frequency');
