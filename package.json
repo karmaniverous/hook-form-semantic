@@ -119,7 +119,7 @@
   "module": "dist/mjs/src/index.js",
   "name": "@karmaniverous/hook-form-semantic",
   "peerDependencies": {
-    "@karmaniverous/rrstack": "^0.13.2",
+    "@karmaniverous/rrstack": "^0.15.0",
     "@types/react": ">=18.0.0",
     "@types/react-dom": ">=18.0.0",
     "@wojtekmaj/react-daterange-picker": "^7.0.0",

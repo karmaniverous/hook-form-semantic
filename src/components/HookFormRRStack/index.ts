@@ -5,3 +5,4 @@ export type {
   HookFormRRStackRuleData,
   HookFormRRStackRuleOptionsData,
 } from './types';
+export type { HookFormRRStackPath } from './types';

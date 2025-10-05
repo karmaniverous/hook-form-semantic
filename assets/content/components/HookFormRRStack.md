@@ -10,6 +10,10 @@ Value type: `RRStackOptions` (timezone, timeUnit, rules).
 
 Peer dependency: `@karmaniverous/rrstack` (install in your app when using this component).
 
+Options
+
+- `endDatesInclusive?: boolean` (default: `false`) — when `true`, an End Date entered without a time is treated as inclusive in the rule’s timezone (clamped to midnight of the next day). This matches common reporting expectations for “through end of day”.
+
 ## Minimal embed
 
 ```tsx

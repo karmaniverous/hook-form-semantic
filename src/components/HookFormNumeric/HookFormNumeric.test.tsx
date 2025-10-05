@@ -8,7 +8,7 @@ type FormData = { age: number | undefined };
 let api: ReturnType<typeof useForm<FormData>>;
 
 function Harness() {
-  api = useForm<FormData>({ defaultValues: { age: undefined } });
+  api = useForm<FormData>({ defaultValues: { age: 0 } });
   const { control } = api;
   return (
     <HookFormNumeric<FormData>

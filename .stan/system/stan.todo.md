@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-10-05T02:55:00Z
+# When updated: 2025-10-05T03:25:00Z
 
 ## Next up
 
@@ -15,7 +15,6 @@
 - Light UX pass on labels/help text for Valid Range to ensure clarity (no behavior changes).
 - Consider gating any remaining console.debug lines in HookFormRRStackRuleForm behind NODE_ENV !== 'production' (stray logs removed in this pass).
 - Revisit Frequency/Duration description paths to ensure non‑continuous daily rules always yield distinct text (doc example parity).
-- Apply test act() policy: sweep high‑noise tests (RRStack UI) to wrap interactions in `act` (or use `userEvent`), reducing console warnings. Start with validation.ui.test.tsx and expand as needed until CI is warning‑free.
 
 - Major upgrades (incl. zod v4): audit for deprecated imports/usages.
   - Current repo does not import zod directly; no deprecated zod APIs in use.
@@ -34,6 +33,16 @@
   - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and UI behavior unchanged; add focused tests per section.
 
 ## Completed (recent)
+
+- Dependencies: align @karmaniverous/rrstack peer range to ^0.15.0 to match devDependency and avoid install friction.
+
+- Tests (RRStack UI): wrapped state‑changing interactions in validation.ui.test.tsx with React act() to eliminate “not wrapped in act(…)” warnings.
+
+- Tests (Numeric): fixed uncontrolled→controlled warning by initializing the HookFormNumeric test harness with a controlled default value (age: 0).
+
+- Docs (HookFormRRStack): added endDatesInclusive option documentation, clarifying inclusive end‑of‑day behavior in the component’s timezone.
+
+- Docs (TypeDoc): exported Logger and HookFormRRStackPath so TypeDoc includes them; silences two previously reported warnings.
 
 - Lint: explicitly ignore Promise from JSON editor destroy() with `void` in useEffect cleanup to satisfy @typescript-eslint/no-floating-promises.
 
