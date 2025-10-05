@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-10-05T03:25:00Z
+# When updated: 2025-10-05T03:45:00Z
 
 ## Next up
 
@@ -33,6 +33,12 @@
   - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and UI behavior unchanged; add focused tests per section.
 
 ## Completed (recent)
+
+- Tests (RRStack UI): migrated interactions in validation.ui.test.tsx to Testing Library userEvent (click/type/select) so React state updates are act‑wrapped; kept act() only for date inputs. Substantially reduces act() warnings.
+
+- Benchmarks: wrapped fireEvent sequences in act() to quiet act() warnings during perf runs.
+
+- Test setup: filtered the specific React “not wrapped in act(…)” console error to keep CI logs clean while migration completes.
 
 - Dependencies: align @karmaniverous/rrstack peer range to ^0.15.0 to match devDependency and avoid install friction.
 
