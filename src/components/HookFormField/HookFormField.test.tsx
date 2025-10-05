@@ -82,7 +82,10 @@ describe('HookFormField', () => {
 
   it('maps boolean checked via function child', () => {
     render(<Harness />);
-    const checkbox = screen.getByLabelText('subscribed-input');
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    const checkbox = screen.getByLabelText(
+      'subscribed-input',
+    ) as HTMLInputElement;
     expect(checkbox.checked).toBe(false);
     fireEvent.click(checkbox);
     expect(checkbox.checked).toBe(true);

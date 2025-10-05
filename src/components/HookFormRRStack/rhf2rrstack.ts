@@ -21,7 +21,7 @@ import type { HookFormRRStackData, HookFormRRStackRuleData } from './types';
  */
 export function rhf2rrstack(
   rhf: HookFormRRStackData,
-  opts?: { timeUnit?: UnixTimeUnit; endDatesInclusive?: boolean },
+  opts: { timeUnit?: UnixTimeUnit; endDatesInclusive?: boolean } = {},
 ): RRStackOptions {
   const unit: UnixTimeUnit = opts?.timeUnit ?? 'ms';
   const inclusive = opts?.endDatesInclusive ?? false;

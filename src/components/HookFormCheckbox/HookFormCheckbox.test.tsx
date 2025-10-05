@@ -32,7 +32,8 @@ function Harness() {
 describe('HookFormCheckbox', () => {
   it('toggles value via control labels', () => {
     render(<Harness />);
-    const input = screen.getByRole('checkbox');
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    const input = screen.getByRole('checkbox') as HTMLInputElement;
     expect(input.checked).toBe(false);
     fireEvent.click(screen.getByText('Enable'));
     expect(input.checked).toBe(true);

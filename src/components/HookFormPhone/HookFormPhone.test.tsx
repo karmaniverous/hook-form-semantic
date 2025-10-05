@@ -23,7 +23,8 @@ function Harness() {
 describe('HookFormPhone', () => {
   it('updates RHF value and renders placeholder mask', async () => {
     render(<Harness />);
-    const input = screen.getByRole('textbox');
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    const input = screen.getByRole('textbox') as HTMLInputElement;
     expect(input.placeholder).toContain('+1');
     fireEvent.change(input, { target: { value: '+12025550123' } });
     await waitFor(() => expect(api.getValues('phone')).toBe('+12025550123'));
