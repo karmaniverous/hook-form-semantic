@@ -80,7 +80,7 @@ export const HookFormRRStackRuleDescription = <
         endDatesInclusive,
       );
 
-      return describeRule(rule, timezone, timeUnit, {
+      return describeRule(rule, timezone as unknown as TimeZoneId, timeUnit, {
         boundsFormat,
         includeBounds,
         includeTimeZone,

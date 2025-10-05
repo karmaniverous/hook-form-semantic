@@ -31,6 +31,15 @@
 
 ## Completed (recent)
 
+- Lint/TS (typed): finalize remaining errors from typecheck/lint:
+  - eslint.config.ts: safely access plugin recommended rules (react-hooks, vitest) via typed guards; silence one unsafe assignment on plugins; keep playground ignored.
+  - picker mocks: also omit intrinsic onChange so custom (Date|null) signature compiles under TS2430.
+  - RRStackRuleDescription: cast timezone to TimeZoneId for describeRule; prior rhfrule2rrstackrule cast retained.
+  - WysiwygEditor: avoid unsafe destructuring by typing html-to-draftjs result.
+  - RRStackRule: narrow rule value before conformRule and effect/label access to eliminate unsafe member access.
+  - Tests: cast HTMLElement → HTMLInputElement/HTML\*Element in Checkbox, HookFormField (boolean), and Phone tests to use .checked/.placeholder without TS2339.
+  - JsonEditor: kept void on optional onChange calls (no-floating-promises).
+
 - Lint/TS: make all linting type-aware and ensure tests are covered.
   - ESLint: switched to @typescript-eslint recommendedTypeChecked and enabled parserOptions.projectService so typed rules apply repo-wide (tests/mocks included).
   - Typecheck: expanded tsconfig.json include to cover test/\*_/_ and Vitest setup/config so tsc reports compiler diagnostics for test/mocks (e.g., “No overload matches this call” in semantic-ui mocks).

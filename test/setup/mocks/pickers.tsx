@@ -5,7 +5,10 @@ import { vi } from 'vitest';
 vi.mock('react-date-picker', () => {
   const isoDate = (d: Date) => d.toISOString().slice(0, 10); // YYYY-MM-DD
   interface DatePickerMockProps
-    extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value'> {
+    extends Omit<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      'value' | 'onChange'
+    > {
     onChange?: (value: Date | null) => void;
     value?: Date | string | null | undefined;
   }
@@ -46,7 +49,10 @@ vi.mock('react-date-picker', () => {
 vi.mock('react-datetime-picker', () => {
   const isoLocalMinute = (d: Date) => d.toISOString().slice(0, 16);
   interface DateTimePickerMockProps
-    extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value'> {
+    extends Omit<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      'value' | 'onChange'
+    > {
     onChange?: (value: Date | null) => void;
     value?: Date | string | null | undefined;
   }

@@ -10,6 +10,20 @@ import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort';
 import tsDocPlugin from 'eslint-plugin-tsdoc';
 import tseslint from 'typescript-eslint';
+
+// Safely access optional plugin recommended rule sets (types don't declare them)
+const vitestRecommendedRules =
+  (
+    vitest as unknown as {
+      configs?: { recommended?: { rules?: Record<string, unknown> } };
+    }
+  ).configs?.recommended?.rules ?? {};
+const reactHooksRecommendedRules =
+  (
+    reactHooksPlugin as unknown as {
+      configs?: { recommended?: { rules?: Record<string, unknown> } };
+    }
+  ).configs?.recommended?.rules ?? {};
 export default tseslint.config(
   // Global ignores to keep lint focus on source.
   {
@@ -38,10 +52,11 @@ export default tseslint.config(
   // Test files: Vitest recommended rules.
   {
     files: ['**/*.test.ts', '**/*.test.tsx', '**/*.test.js', '**/*.test.jsx'],
+
     plugins: { vitest },
     rules: {
       // Use Vitest's recommended rules under flat config
-      ...vitest.configs.recommended.rules,
+      ...vitestRecommendedRules,
     },
   },
 
@@ -106,7 +121,7 @@ export default tseslint.config(
       // New JSX transform
       ...(reactPlugin.configs?.['jsx-runtime']?.rules ?? {}),
       // Hooks recommended
-      ...(reactHooksPlugin.configs?.recommended?.rules ?? {}),
+      ...reactHooksRecommendedRules,
       // a11y recommended
       ...(jsxA11yPlugin.configs?.recommended?.rules ?? {}),
       'react/prop-types': 'off',

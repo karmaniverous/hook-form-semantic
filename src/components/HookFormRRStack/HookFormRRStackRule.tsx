@@ -72,18 +72,20 @@ export const HookFormRRStackRule = <
     },
   } = useHookForm({ props, prefixes: ['describe', 'fieldArray'] as const });
 
+  const currentRule = value as HookFormRRStackRuleData;
+
   useEffect(() => {
-    const { changed, conformedRule } = conformRule(value);
+    const { changed, conformedRule } = conformRule(currentRule);
 
     if (changed)
       update(
         index,
         conformedRule as FieldArray<TFieldValues, ArrayPath<TFieldValues>>,
       );
-  }, [update, index, value.options.freq, value]);
+  }, [update, index, currentRule.options.freq, currentRule]);
 
   // Safely access current rule and key attributes
-  const { effect, label } = value as HookFormRRStackRuleData;
+  const { effect, label } = currentRule;
 
   return (
     <>
