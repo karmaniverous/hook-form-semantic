@@ -2,6 +2,33 @@
 
 This document augments the system prompt with repo‑specific assistant guidance. Durable product requirements live in `.stan/system/stan.requirements.md`.
 
+Component naming (displayName) policy
+
+- Library components (HookForm*):
+  - Optional: do not add `displayName` universally.
+  - Required when React cannot infer a helpful name:
+    - forwardRef/memo/HOC/lazy wrappers.
+    - Any case that triggers the `react/display-name` rule.
+  - Rationale: avoid noise; keep explicit names where DevTools/linting needs them.
+- Test doubles/mocks:
+  - Always set `displayName` to keep lint clean and error output readable.
+
+Testing policy — React state updates and act()
+
+- Goal: no “not wrapped in act(…)” warnings in CI.
+- State‑changing interactions must be contained in one of:
+  - `act(() => { …fireEvent… })` or `await act(async () => { … })` for async.
+  - userEvent (preferred for click/type), which wraps `act` internally.
+  - A `waitFor`/`findBy*` await that observes the resulting change (when the
+    interaction is immediately followed by assertions gated on a re‑render).
+- Guidance:
+  - Prefer Testing Library userEvent for realistic input (click/type/select).
+  - For composed interactions, wrap the block in `act` or factor a helper
+    (e.g., `actAsync(fn)`).
+  - Do not change component behavior to satisfy this; tests own the responsibility
+    to await or wrap updates.
+
+
 ## Testing & Benchmarking Policy
 
 - Unit tests and component interaction:
@@ -11,6 +38,12 @@ This document augments the system prompt with repo‑specific assistant guidance
     - getFieldByLabel should find the exact label element and return its closest [data-testid="form-field"] container.
     - Labels may include InfoLabel icons; use “includes” on label text.
     - Await accordion content before querying inside it.
+  - Act policy:
+    - Wrap state‑changing interactions in `act` or use `userEvent`; alternatively,
+      await the resulting render via `waitFor`/`findBy*`. Aim for zero “not wrapped
+      in act” warnings.
+  - displayName policy:
+    - Mocks and wrapped components must set `displayName`; plain named HookForm* components need not.
 
 - HookFormRRStack → RRStackRuleDescription (live updates):
   - Forward describe\* props via HookFormRRStackRule.

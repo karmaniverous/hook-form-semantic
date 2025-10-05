@@ -2,11 +2,10 @@
 
 #
 
-# When updated: 2025-10-05T00:30:00Z
+# When updated: 2025-10-05T01:05:00Z
 
 ## Next up
-
-- (Optional) Gate remaining UI debug logs by env or dedicated flag if future diagnostics are needed outside tests.
+- (Optional) Gate remaining UI debug logs by env or dedicated flag if future diagnostics are needed outside tests.
 - (Optional) Silence boolean-attribute warnings in semantic Dropdown mock (map to data-\* or omit).
 - (Optional) Finish a11y cleanup for HookFormCheckbox interactive labels if not already applied in your local branch.
 
@@ -15,10 +14,13 @@
 - Light UX pass on labels/help text for Valid Range to ensure clarity (no behavior changes).
 - Consider gating any remaining console.debug lines in HookFormRRStackRuleForm behind NODE_ENV !== 'production' (stray logs removed in this pass).
 - Revisit Frequency/Duration description paths to ensure non‑continuous daily rules always yield distinct text (doc example parity).
+- Apply test act() policy: sweep high‑noise tests (RRStack UI) to wrap
+  interactions in `act` (or use `userEvent`), reducing console warnings.
+  Start with validation.ui.test.tsx and expand as needed until CI is
+  warning‑free.
 
 - Silence/refactor “Function components cannot be given refs” warnings:
-  - Option A: omit ref from RHF hookFieldProps spread (e.g., in HookFormRRStack) when passing props to Form.Field.
-  - Option B: update semantic-ui-react test doubles to forwardRef where refs are expected.
+  - Option A: omit ref from RHF hookFieldProps spread (e.g., in HookFormRRStack) when passing props to Form.Field.  - Option B: update semantic-ui-react test doubles to forwardRef where refs are expected.
 
 - Benchmarks: wrap fireEvent sequences in act() or switch to userEvent to quiet “not wrapped in act” warnings (optional; perf-only).
 
@@ -30,10 +32,18 @@
 
 ## Completed (recent)
 
+- Docs(project): add durable testing policy for act()/userEvent/waitFor and
+  clarify displayName policy (required for mocks and wrapped components; optional
+  for plain HookForm*). Updated .stan/system/stan.project.md.
+
+- Mocks(semantic-ui-react): add displayName for Icon, Message (Header/Content),
+  Segment, ButtonGroup, Accordion (Title/Content), Container, Popup, Grid and
+  Grid.Column. Filter `activeIndex` from Menu mock props to avoid DOM warnings.
+  Lint now reports zero react/display-name errors in mocks.
+
 - Tests(mocks): add semantic-ui-react Menu double with items onItemClick to support HookFormMenu tests. Set displayName for Header, Card, and Card subcomponents to satisfy react/display-name.
 
-- Types(rrstack ui tests): switch validation.ui.test.tsx form shape to use HookFormRRStackData for schedule; resolves TS2322 on hookName inference.
-
+- Types(rrstack ui tests): switch validation.ui.test.tsx form shape to use HookFormRRStackData for schedule; resolves TS2322 on hookName inference.
 - Lint(a11y): add single-line suppression for the intentional label-as-button in HookFormCheckbox (project requirement).
 
 - Lint(a11y): Preserve clickable <label> semantics in HookFormCheckbox and add a line-level eslint disable for jsx-a11y/no-noninteractive-element-to-interactive-role on the intentional role="button" label. Product behavior unchanged.

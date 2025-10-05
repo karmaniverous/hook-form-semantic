@@ -1,3 +1,4 @@
+import { omit } from 'radash';
 import React from 'react';
 import type {
   MenuItemProps,
@@ -262,6 +263,7 @@ export const Icon: React.FC<
     { ...props, 'data-testid': 'icon', 'data-name': name },
     name,
   );
+(Icon as unknown as { displayName?: string }).displayName = 'Icon';
 
 export const Message: React.FC<
   React.PropsWithChildren<
@@ -300,6 +302,11 @@ const MessageContent: React.FC<
     children,
   );
 Object.assign(Message, { Header: MessageHeader, Content: MessageContent });
+(Message as unknown as { displayName?: string }).displayName = 'Message';
+(MessageHeader as unknown as { displayName?: string }).displayName =
+  'MessageHeader';
+(MessageContent as unknown as { displayName?: string }).displayName =
+  'MessageContent';
 
 export const Segment: React.FC<
   React.PropsWithChildren<
@@ -311,6 +318,7 @@ export const Segment: React.FC<
     { ...props, 'data-testid': 'segment', 'data-basic': basic },
     children,
   );
+(Segment as unknown as { displayName?: string }).displayName = 'Segment';
 
 const ButtonGroup: React.FC<
   React.PropsWithChildren<
@@ -323,16 +331,19 @@ const ButtonGroup: React.FC<
     children,
   );
 Object.assign(Button, { Group: ButtonGroup });
+(ButtonGroup as unknown as { displayName?: string }).displayName =
+  'ButtonGroup';
 
 // Minimal Menu double for tests (supports items + onItemClick)
 export const Menu: React.FC<StrictMenuProps> = ({
   items = [],
   onItemClick,
+  // strip DOM-unknown props to avoid console warnings
   ...props
 }) =>
   React.createElement(
     'div',
-    { ...props, 'data-testid': 'menu' },
+    { ...omit(props, ['activeIndex']), 'data-testid': 'menu' },
     ...(items as Array<Partial<MenuItemProps>>).map((item, idx) =>
       React.createElement(
         'div',
@@ -373,6 +384,8 @@ const AccordionTitle: React.FC<AccordionTitleProps> = ({
     },
     children,
   );
+(AccordionTitle as unknown as { displayName?: string }).displayName =
+  'AccordionTitle';
 
 interface AccordionContentProps extends React.HTMLAttributes<HTMLDivElement> {
   active?: boolean;
@@ -390,6 +403,8 @@ const AccordionContent: React.FC<AccordionContentProps> = ({
         children,
       )
     : null;
+(AccordionContent as unknown as { displayName?: string }).displayName =
+  'AccordionContent';
 
 interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
   fluid?: boolean;
@@ -413,6 +428,7 @@ export const Accordion: React.FC<AccordionProps> = ({
     children,
   );
 Object.assign(Accordion, { Title: AccordionTitle, Content: AccordionContent });
+(Accordion as unknown as { displayName?: string }).displayName = 'Accordion';
 
 export const Container: React.FC<
   React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
@@ -422,6 +438,7 @@ export const Container: React.FC<
     { ...props, 'data-testid': 'container' },
     children,
   );
+(Container as unknown as { displayName?: string }).displayName = 'Container';
 
 export const Popup: React.FC<
   React.PropsWithChildren<{
@@ -432,6 +449,7 @@ export const Popup: React.FC<
     inverted?: boolean;
   }>
 > = ({ trigger }) => React.createElement(React.Fragment, {}, trigger);
+(Popup as unknown as { displayName?: string }).displayName = 'Popup';
 
 const GridColumn: React.FC<
   React.PropsWithChildren<
@@ -443,6 +461,7 @@ const GridColumn: React.FC<
     { ...props, 'data-testid': 'grid-column', 'data-width': width },
     children,
   );
+(GridColumn as unknown as { displayName?: string }).displayName = 'GridColumn';
 
 interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
   columns?: number;
@@ -466,3 +485,4 @@ export const Grid: React.FC<GridProps> = ({
     children,
   );
 Object.assign(Grid, { Column: GridColumn });
+(Grid as unknown as { displayName?: string }).displayName = 'Grid';
