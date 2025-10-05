@@ -54,7 +54,7 @@ const JSONEditorReact = forwardRef<HTMLDivElement, JSONEditorReactProps>(
       return () => {
         if (refEditor.current) {
           try {
-            refEditor.current.destroy();
+            void refEditor.current.destroy();
             refEditor.current = null;
           } catch (error) {
             console.warn('Failed to destroy JSON editor:', error);

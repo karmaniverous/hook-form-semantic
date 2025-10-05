@@ -35,6 +35,8 @@
 
 ## Completed (recent)
 
+- Lint: explicitly ignore Promise from JSON editor destroy() with `void` in useEffect cleanup to satisfy @typescript-eslint/no-floating-promises.
+
 - TS/Lint residuals (post majors):
   - Tests: cast DOM nodes to HTMLInputElement for `.checked`/`.placeholder` in HookFormCheckbox/HookFormField/HookFormPhone tests.
   - JsonEditor: explicitly void optional onChange calls (editor + fallback) to satisfy @typescript‑eslint/no‑floating‑promises.
