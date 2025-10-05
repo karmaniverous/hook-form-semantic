@@ -24,7 +24,7 @@ function Harness() {
 describe('HookFormNumeric', () => {
   it('updates RHF with numeric value', () => {
     render(<Harness />);
-    const input = screen.getByTestId('numeric-input') as HTMLInputElement;
+    const input = screen.getByTestId('numeric-input');
     fireEvent.change(input, { target: { value: '42' } });
     expect(api.getValues('age')).toBe(42);
   });

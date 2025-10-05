@@ -35,7 +35,7 @@ export const offsetTruncatedDate = ({
     ? new Date()
     : isNumber(date)
       ? new Date(date)
-      : (date as Date);
+      : date;
 
   const truncation = truncateAt
     ? (

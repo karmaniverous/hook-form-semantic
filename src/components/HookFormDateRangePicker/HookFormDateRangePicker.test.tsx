@@ -31,8 +31,8 @@ function Harness() {
 describe('HookFormDateRangePicker', () => {
   it('sets start/end and applies preset', () => {
     render(<Harness />);
-    const start = screen.getByTestId('daterange-start') as HTMLInputElement;
-    const end = screen.getByTestId('daterange-end') as HTMLInputElement;
+    const start = screen.getByTestId('daterange-start');
+    const end = screen.getByTestId('daterange-end');
     fireEvent.change(start, { target: { value: '2020-01-03' } });
     let v = api.getValues('range');
     expect(v[0]?.getDate()).toBe(3);
@@ -42,7 +42,7 @@ describe('HookFormDateRangePicker', () => {
     expect(v[1]?.getDate()).toBe(5);
 
     // Apply preset via dropdown select
-    const dropdown = screen.getByTestId('dropdown') as HTMLSelectElement;
+    const dropdown = screen.getByTestId('dropdown');
     fireEvent.change(dropdown, { target: { value: 'today' } });
     v = api.getValues('range');
     expect(v[0]?.getFullYear()).toBe(2020);

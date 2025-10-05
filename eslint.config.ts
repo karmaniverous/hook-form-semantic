@@ -31,8 +31,8 @@ export default tseslint.config(
     ...eslint.configs.recommended,
   },
 
-  // TypeScript (non type-checked) recommendations.
-  ...tseslint.configs.recommended,
+  // TypeScript (type-checked) recommendations.
+  ...tseslint.configs.recommendedTypeChecked,
 
   // Test files: Vitest recommended rules.
   {
@@ -64,8 +64,11 @@ export default tseslint.config(
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parserOptions: {
-        // Windows: force a resolved absolute path to work around a
-        // typescript-eslint parser bug affecting tsconfigRootDir.
+        // Use the TypeScript Project Service so type-aware rules run across the repo
+        // (tests/mocks included) without hard-coding a project list.
+        // See: https://typescript-eslint.io/linting/typed-linting/project-service/
+        projectService: true,
+        // Ensure relative resolution is correct on Windows and CI
         tsconfigRootDir: path.resolve(),
       },
     },

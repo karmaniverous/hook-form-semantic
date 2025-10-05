@@ -61,9 +61,7 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
   bench('edit label', () => {
     const { container, getByText } = renderRRStack();
     fireEvent.click(getByText('Add Rule'));
-    const input = within(container).getByPlaceholderText(
-      'Rule label',
-    ) as HTMLInputElement;
+    const input = within(container).getByPlaceholderText('Rule label');
     fireEvent.change(input, { target: { value: 'Test Rule' } });
     cleanup();
   });
@@ -75,9 +73,7 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
       '[data-testid="accordion-content"]',
     ) as HTMLElement;
     const effectField = getFieldByLabel(content, 'Effect');
-    const effectDropdown = within(effectField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const effectDropdown = within(effectField).getByTestId('dropdown');
     fireEvent.change(effectDropdown, { target: { value: 'blackout' } });
     fireEvent.change(effectDropdown, { target: { value: 'active' } });
     cleanup();
@@ -92,23 +88,21 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
 
     // Frequency
     const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const freqDropdown = within(freqField).getByTestId('dropdown');
     fireEvent.change(freqDropdown, { target: { value: 'daily' } });
 
     // Interval
     const intervalField = getFieldByLabel(content, 'Interval');
     const intervalInput = within(intervalField).getByRole('spinbutton', {
       name: '',
-    }) as HTMLInputElement;
+    });
     fireEvent.change(intervalInput, { target: { value: '2' } });
 
     // Count
     const countField = getFieldByLabel(content, 'Count');
     const countInput = within(countField).getByRole('spinbutton', {
       name: '',
-    }) as HTMLInputElement;
+    });
     fireEvent.change(countInput, { target: { value: '10' } });
 
     cleanup();
@@ -123,20 +117,14 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
 
     // Frequency → daily to reveal time fields
     const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const freqDropdown = within(freqField).getByTestId('dropdown');
     fireEvent.change(freqDropdown, { target: { value: 'daily' } });
 
     // Hours: use unique placeholder in Time column to avoid picking Duration field
-    const hoursInput = within(content).getByPlaceholderText(
-      '9, 13, 17',
-    ) as HTMLInputElement;
+    const hoursInput = within(content).getByPlaceholderText('9, 13, 17');
     fireEvent.change(hoursInput, { target: { value: '9, 13, 17' } });
 
-    const minutesInput = within(content).getByPlaceholderText(
-      '0, 30',
-    ) as HTMLInputElement;
+    const minutesInput = within(content).getByPlaceholderText('0, 30');
     fireEvent.change(minutesInput, { target: { value: '0, 30' } });
 
     cleanup();
@@ -151,9 +139,7 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
 
     // Frequency → daily to reveal duration section (also shown for span, but keep consistent)
     const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const freqDropdown = within(freqField).getByTestId('dropdown');
     fireEvent.change(freqDropdown, { target: { value: 'daily' } });
 
     for (const [label, value] of [
@@ -181,15 +167,11 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
 
     // Switch to Monthly to reveal the Months/DoM/Weekdays/Position section
     const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const freqDropdown = within(freqField).getByTestId('dropdown');
     fireEvent.change(freqDropdown, { target: { value: 'monthly' } });
 
     // Enter Days of Month (local text input; safe in current mocks)
-    const domInput = within(content).getByPlaceholderText(
-      '25 (for 25th)',
-    ) as HTMLInputElement;
+    const domInput = within(content).getByPlaceholderText('25 (for 25th)');
     fireEvent.change(domInput, { target: { value: '1, 15, 31' } });
 
     cleanup();
@@ -203,9 +185,7 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
     ) as HTMLElement;
 
     const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const freqDropdown = within(freqField).getByTestId('dropdown');
     fireEvent.change(freqDropdown, { target: { value: 'weekly' } });
     fireEvent.change(freqDropdown, { target: { value: 'monthly' } });
     fireEvent.change(freqDropdown, { target: { value: 'daily' } });
@@ -221,9 +201,7 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
     ) as HTMLElement;
 
     const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const freqDropdown = within(freqField).getByTestId('dropdown');
     fireEvent.change(freqDropdown, { target: { value: 'span' } });
 
     cleanup();
@@ -238,22 +216,20 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
 
     // Ensure recurrence fields visible
     const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const freqDropdown = within(freqField).getByTestId('dropdown');
     fireEvent.change(freqDropdown, { target: { value: 'daily' } });
 
     const intervalField = getFieldByLabel(content, 'Interval');
     const intervalInput = within(intervalField).getByRole('spinbutton', {
       name: '',
-    }) as HTMLInputElement;
+    });
     fireEvent.change(intervalInput, { target: { value: '3' } });
     fireEvent.change(intervalInput, { target: { value: '' } });
 
     const countField = getFieldByLabel(content, 'Count');
     const countInput = within(countField).getByRole('spinbutton', {
       name: '',
-    }) as HTMLInputElement;
+    });
     fireEvent.change(countInput, { target: { value: '7' } });
     fireEvent.change(countInput, { target: { value: '' } });
 
@@ -322,20 +298,14 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
     ) as HTMLElement;
 
     const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const freqDropdown = within(freqField).getByTestId('dropdown');
     fireEvent.change(freqDropdown, { target: { value: 'daily' } });
 
-    const hoursInput = within(content).getByPlaceholderText(
-      '9, 13, 17',
-    ) as HTMLInputElement;
+    const hoursInput = within(content).getByPlaceholderText('9, 13, 17');
     fireEvent.change(hoursInput, { target: { value: '8, 12, 16' } });
     fireEvent.change(hoursInput, { target: { value: '' } });
 
-    const minutesInput = within(content).getByPlaceholderText(
-      '0, 30',
-    ) as HTMLInputElement;
+    const minutesInput = within(content).getByPlaceholderText('0, 30');
     fireEvent.change(minutesInput, { target: { value: '15, 45' } });
     fireEvent.change(minutesInput, { target: { value: '' } });
 
@@ -345,9 +315,7 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
   bench('change Timezone', () => {
     const { container } = renderRRStack();
     const tzField = getFieldByLabel(container, 'Timezone');
-    const tzDropdown = within(tzField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const tzDropdown = within(tzField).getByTestId('dropdown');
     fireEvent.change(tzDropdown, { target: { value: 'America/New_York' } });
     cleanup();
   });
@@ -365,7 +333,7 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
         '[data-testid="accordion-title"]',
       ),
     );
-    const target = titles[1]!;
+    const target = titles[1];
 
     const btnTop = within(target).getByTitle('Move to top');
     const btnUp = within(target).getByTitle('Move up');

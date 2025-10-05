@@ -26,11 +26,11 @@ function Harness() {
 describe('HookFormSort', () => {
   it('changes field and toggles direction', () => {
     render(<Harness />);
-    const select = screen.getByTestId('dropdown') as HTMLSelectElement;
+    const select = screen.getByTestId('dropdown');
     fireEvent.change(select, { target: { value: 'date' } });
     expect(api.getValues('sort')?.[0]).toBe('date');
 
-    const button = screen.getByRole('button') as HTMLButtonElement;
+    const button = screen.getByRole('button');
     const before = api.getValues('sort')?.[1];
     fireEvent.click(button);
     expect(api.getValues('sort')?.[1]).toBe(!before);

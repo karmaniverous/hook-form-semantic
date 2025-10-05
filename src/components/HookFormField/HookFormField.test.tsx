@@ -26,7 +26,7 @@ function Harness() {
         label="Name"
       >
         {(field) => {
-          const f = field as ControllerRenderProps<FormData, Path<FormData>>;
+          const f = field;
           return (
             <input
               aria-label="name-input"
@@ -75,16 +75,14 @@ function Harness() {
 describe('HookFormField', () => {
   it('maps string value via function child', () => {
     render(<Harness />);
-    const input = screen.getByLabelText('name-input') as HTMLInputElement;
+    const input = screen.getByLabelText('name-input');
     fireEvent.change(input, { target: { value: 'Alice' } });
     expect(api.getValues('name')).toBe('Alice');
   });
 
   it('maps boolean checked via function child', () => {
     render(<Harness />);
-    const checkbox = screen.getByLabelText(
-      'subscribed-input',
-    ) as HTMLInputElement;
+    const checkbox = screen.getByLabelText('subscribed-input');
     expect(checkbox.checked).toBe(false);
     fireEvent.click(checkbox);
     expect(checkbox.checked).toBe(true);

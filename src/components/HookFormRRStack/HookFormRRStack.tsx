@@ -109,7 +109,7 @@ export const HookFormRRStack = <
     const rhf: HookFormRRStackData = get(form, name);
 
     const rrstack = rhf2rrstack(rhf, {
-      timeUnit: timeUnit as UnixTimeUnit,
+      timeUnit: timeUnit,
       endDatesInclusive,
     });
 

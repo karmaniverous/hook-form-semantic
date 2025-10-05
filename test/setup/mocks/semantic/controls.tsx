@@ -31,7 +31,7 @@ const Field: React.FC<FieldProps> = ({
   const child =
     control != null
       ? React.createElement(
-          control as React.ElementType,
+          control,
           { ...(p as Record<string, unknown>) },
           children,
         )
@@ -359,8 +359,7 @@ export const Menu: React.FC<StrictMenuProps> = ({
           onClick: (e: React.SyntheticEvent<HTMLElement>) =>
             onItemClick?.(e, item as MenuItemProps),
         } as React.HTMLAttributes<HTMLDivElement>,
-        (item?.content as React.ReactNode) ??
-          (item?.name != null ? String(item.name) : String(idx)),
+        item?.content ?? (item?.name != null ? String(item.name) : String(idx)),
       ),
     ),
   );

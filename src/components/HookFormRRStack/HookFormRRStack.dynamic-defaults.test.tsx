@@ -59,9 +59,7 @@ describe('HookFormRRStack (diagnostics: default duration round-trip)', () => {
 
     // Change Frequency → yearly
     const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const freqDropdown = within(freqField).getByTestId('dropdown');
     fireEvent.change(freqDropdown, { target: { value: 'yearly' } });
 
     // Assert that RHF form state reflects injected default duration { days: 1 }
@@ -98,9 +96,7 @@ describe('HookFormRRStack (diagnostics: default duration round-trip)', () => {
       '[data-testid="accordion-content"]',
     ) as HTMLElement;
     const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const freqDropdown = within(freqField).getByTestId('dropdown');
     fireEvent.change(freqDropdown, { target: { value: 'yearly' } });
     const daysField = getFieldByLabel(content, 'Days');
     const daysInput = daysField.querySelector('input') as HTMLInputElement;

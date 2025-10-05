@@ -32,7 +32,7 @@ function Harness() {
 describe('HookFormCheckbox', () => {
   it('toggles value via control labels', () => {
     render(<Harness />);
-    const input = screen.getByRole('checkbox') as HTMLInputElement;
+    const input = screen.getByRole('checkbox');
     expect(input.checked).toBe(false);
     fireEvent.click(screen.getByText('Enable'));
     expect(input.checked).toBe(true);

@@ -135,7 +135,7 @@ export const HookFormDateRangePicker = <
       Object.keys(presets).find((k) => {
         const pv = presets[k]?.value;
         const resolved = isFn(pv) ? (pv as () => DateRange)() : pv;
-        return eqRange(current, resolved as DateRange);
+        return eqRange(current, resolved);
       }) ?? false;
     setPreset(key);
   }, [value, presets]);
@@ -194,7 +194,7 @@ export const HookFormDateRangePicker = <
             {...{
               ...omit(hookFieldProps, ['ref']),
               // Normalize value to DateRange
-              value: ((value as DateRange) ?? [null, null]) as DateRange,
+              value: (value as DateRange) ?? [null, null],
             }}
           />
         ) : (
@@ -213,7 +213,7 @@ export const HookFormDateRangePicker = <
             {...datePickerProps}
             {...{
               ...omit(hookFieldProps, ['ref']),
-              value: ((value as DateRange) ?? [null, null]) as DateRange,
+              value: (value as DateRange) ?? [null, null],
             }}
           />
         )}

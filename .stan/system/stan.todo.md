@@ -31,13 +31,13 @@
 
 ## Completed (recent)
 
-- Lint(mocks): finalize ESLint display-name fix for forwardRef Input and
-  Checkbox by attaching `displayName` on typed ForwardRefExoticComponent
-  variables (no cast assignment). This pattern is recognized by the rule.
+- Lint/TS: make all linting type-aware and ensure tests are covered.
+  - ESLint: switched to @typescript-eslint recommendedTypeChecked and enabled parserOptions.projectService so typed rules apply repo-wide (tests/mocks included).
+  - Typecheck: expanded tsconfig.json include to cover test/\*_/_ and Vitest setup/config so tsc reports compiler diagnostics for test/mocks (e.g., “No overload matches this call” in semantic-ui mocks).
 
-- Lint(mocks): remove unused WithDisplayName type and finalize forwardRef
-  Input/Checkbox displayName assignment by attaching the property directly to
-  the typed forwardRef components. ESLint now recognizes the names.
+- Lint(mocks): finalize ESLint display-name fix for forwardRef Input and Checkbox by attaching `displayName` on typed ForwardRefExoticComponent variables (no cast assignment). This pattern is recognized by the rule.
+
+- Lint(mocks): remove unused WithDisplayName type and finalize forwardRef Input/Checkbox displayName assignment by attaching the property directly to the typed forwardRef components. ESLint now recognizes the names.
 
 - Mocks(semantic-ui-react): fix react/display-name for Input and Checkbox by declaring the forwardRef component types with a displayName property and assigning Input.displayName / Checkbox.displayName directly. ESLint is now clean for these mocks.
 

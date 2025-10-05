@@ -109,17 +109,13 @@ describe('HookFormRRStack (UI validations)', () => {
     const before = (description.textContent ?? '').trim();
 
     const contents = await screen.findAllByTestId('accordion-content');
-    const content = contents[0] as HTMLElement;
+    const content = contents[0];
     const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const freqDropdown = within(freqField).getByTestId('dropdown');
     fireEvent.change(freqDropdown, { target: { value: 'monthly' } });
 
     const monthsField = getFieldByLabel(content, 'Months');
-    const monthsDropdown = within(monthsField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const monthsDropdown = within(monthsField).getByTestId('dropdown');
     fireEvent.change(monthsDropdown, { target: { value: '1' } }); // Jan
 
     await waitFor(() => {
@@ -137,23 +133,17 @@ describe('HookFormRRStack (UI validations)', () => {
     const before = (description.textContent ?? '').trim();
 
     const contents = await screen.findAllByTestId('accordion-content');
-    const content = contents[0] as HTMLElement;
+    const content = contents[0];
     const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const freqDropdown = within(freqField).getByTestId('dropdown');
     fireEvent.change(freqDropdown, { target: { value: 'weekly' } });
 
     const wdField = getFieldByLabel(content, 'Weekdays');
-    const wdDropdown = within(wdField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const wdDropdown = within(wdField).getByTestId('dropdown');
     fireEvent.change(wdDropdown, { target: { value: '0' } }); // Monday
 
     const posField = getFieldByLabel(content, 'Position');
-    const posDropdown = within(posField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const posDropdown = within(posField).getByTestId('dropdown');
     fireEvent.change(posDropdown, { target: { value: '1' } }); // 1st
 
     await waitFor(() => {
@@ -171,20 +161,14 @@ describe('HookFormRRStack (UI validations)', () => {
     const before = (description.textContent ?? '').trim();
 
     const contents = await screen.findAllByTestId('accordion-content');
-    const content = contents[0] as HTMLElement;
+    const content = contents[0];
     const freqField = getFieldByLabel(content, 'Frequency');
-    const freqDropdown = within(freqField).getByTestId(
-      'dropdown',
-    ) as HTMLSelectElement;
+    const freqDropdown = within(freqField).getByTestId('dropdown');
     fireEvent.change(freqDropdown, { target: { value: 'daily' } });
 
-    const hoursInput = within(content).getByPlaceholderText(
-      '9, 13, 17',
-    ) as HTMLInputElement;
+    const hoursInput = within(content).getByPlaceholderText('9, 13, 17');
     fireEvent.change(hoursInput, { target: { value: '9, 13' } });
-    const minutesInput = within(content).getByPlaceholderText(
-      '0, 30',
-    ) as HTMLInputElement;
+    const minutesInput = within(content).getByPlaceholderText('0, 30');
     fireEvent.change(minutesInput, { target: { value: '30' } });
 
     await waitFor(() => {
@@ -202,7 +186,7 @@ describe('HookFormRRStack (UI validations)', () => {
     const initial = (description.textContent ?? '').trim();
 
     const contents = await screen.findAllByTestId('accordion-content');
-    const content = contents[0] as HTMLElement;
+    const content = contents[0];
     const effectField = getFieldByLabel(content, 'Effect');
     const effectDropdown = effectField.querySelector(
       '[data-testid="dropdown"]',

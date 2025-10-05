@@ -23,7 +23,7 @@ function Harness() {
 describe('HookFormPhone', () => {
   it('updates RHF value and renders placeholder mask', async () => {
     render(<Harness />);
-    const input = screen.getByRole('textbox') as HTMLInputElement;
+    const input = screen.getByRole('textbox');
     expect(input.placeholder).toContain('+1');
     fireEvent.change(input, { target: { value: '+12025550123' } });
     await waitFor(() => expect(api.getValues('phone')).toBe('+12025550123'));
