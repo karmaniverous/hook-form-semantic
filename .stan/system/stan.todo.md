@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-10-05T01:48:00Z
+# When updated: 2025-10-05T01:55:00Z
 
 ## Next up
 
@@ -30,6 +30,10 @@
   - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and UI behavior unchanged; add focused tests per section.
 
 ## Completed (recent)
+
+- Lint(mocks): finalize ESLint display-name fix for forwardRef Input and
+  Checkbox by attaching `displayName` on typed ForwardRefExoticComponent
+  variables (no cast assignment). This pattern is recognized by the rule.
 
 - Lint(mocks): remove unused WithDisplayName type and finalize forwardRef
   Input/Checkbox displayName assignment by attaching the property directly to

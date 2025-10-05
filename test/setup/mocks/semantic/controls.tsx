@@ -82,24 +82,29 @@ export const Label: React.FC<
   React.createElement('div', { ...p, 'data-testid': 'label' }, children);
 (Label as unknown as { displayName?: string }).displayName = 'Label';
 
-export const Input = React.forwardRef<
-  HTMLInputElement,
-  Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
-    onChange?: (
-      event: React.SyntheticEvent<HTMLElement>,
-      data: { value?: string },
-    ) => void;
-  }
->(({ onChange, ...props }, ref) =>
-  React.createElement('input', {
-    ...props,
-    ref,
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (onChange) onChange(e, { value: e.target.value });
-    },
-  }),
-);
-(Input as unknown as { displayName?: string }).displayName = 'Input';
+type InputProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'onChange'
+> & {
+  onChange?: (
+    event: React.SyntheticEvent<HTMLElement>,
+    data: { value?: string },
+  ) => void;
+};
+
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ onChange, ...props }, ref) =>
+    React.createElement('input', {
+      ...props,
+      ref,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (onChange) onChange(e, { value: e.target.value });
+      },
+    }),
+) as React.ForwardRefExoticComponent<
+  InputProps & React.RefAttributes<HTMLInputElement>
+> & { displayName?: string };
+Input.displayName = 'Input';
 
 export const Checkbox = React.forwardRef<HTMLInputElement, StrictCheckboxProps>(
   ({ onChange, checked, label, ...rest }, ref) =>
@@ -120,8 +125,10 @@ export const Checkbox = React.forwardRef<HTMLInputElement, StrictCheckboxProps>(
       } as React.InputHTMLAttributes<HTMLInputElement>),
       label,
     ),
-);
-(Checkbox as unknown as { displayName?: string }).displayName = 'Checkbox';
+) as React.ForwardRefExoticComponent<
+  StrictCheckboxProps & React.RefAttributes<HTMLInputElement>
+> & { displayName?: string };
+Checkbox.displayName = 'Checkbox';
 
 export const Dropdown: React.FC<StrictDropdownProps> = ({
   onChange,
