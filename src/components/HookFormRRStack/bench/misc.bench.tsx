@@ -12,8 +12,7 @@ import {
 
 describe('HookFormRRStack (bench: misc)', () => {
   bench('set Frequency → span (Span rule)', async () => {
-    const { container } = renderRRStack();
-    const { user, content } = await addRuleAndGetContent(container);
+    const { user, content } = await addRuleAndGetContent();
     const freqField = getFieldByLabel(content, 'Frequency');
     const freqDropdown = within(freqField).getByTestId('dropdown');
     await user.selectOptions(freqDropdown, 'span');
@@ -21,8 +20,7 @@ describe('HookFormRRStack (bench: misc)', () => {
   });
 
   bench('clear Interval & Count after setting', async () => {
-    const { container } = renderRRStack();
-    const { user, content } = await addRuleAndGetContent(container);
+    const { user, content } = await addRuleAndGetContent();
     const freqField = getFieldByLabel(content, 'Frequency');
     const freqDropdown = within(freqField).getByTestId('dropdown');
     await user.selectOptions(freqDropdown, 'daily');
@@ -42,8 +40,7 @@ describe('HookFormRRStack (bench: misc)', () => {
   });
 
   bench('change Timezone', async () => {
-    const { container } = renderRRStack();
-    const { user } = await addRuleAndGetContent(container);
+    const { user } = await addRuleAndGetContent();
     const tzField = getFieldByLabel(document.body, 'Timezone');
     const tzDropdown = within(tzField).getByTestId('dropdown');
     await user.selectOptions(tzDropdown, 'America/New_York');
@@ -52,7 +49,7 @@ describe('HookFormRRStack (bench: misc)', () => {
 
   bench('move rules (top/up/down/bottom) and delete', async () => {
     const { container } = renderRRStack();
-    await addRules(container, 3);
+    await addRules(3);
 
     // Target the second rule's title row (index 1)
     const titles = Array.from(
@@ -61,30 +58,18 @@ describe('HookFormRRStack (bench: misc)', () => {
       ),
     );
     const target = titles[1];
-    const user =
-      new (await import('@testing-library/user-event')).default().setup?.() ??
-      undefined;
-    // Fallback: use within().getByTitle then fireEvent if user is not available
+    const user = newUser();
     const btnTop = within(target).getByTitle('Move to top');
     const btnUp = within(target).getByTitle('Move up');
     const btnDown = within(target).getByTitle('Move down');
     const btnBottom = within(target).getByTitle('Move to bottom');
     const btnDelete = within(target).getByTitle('Delete rule');
 
-    // userEvent preferred; fall back to fireEvent if needed
-    if (user && 'click' in user) {
-      await user.click(btnTop);
-      await user.click(btnDown);
-      await user.click(btnBottom);
-      await user.click(btnUp);
-      await user.click(btnDelete);
-    } else {
-      fireEvent.click(btnTop);
-      fireEvent.click(btnDown);
-      fireEvent.click(btnBottom);
-      fireEvent.click(btnUp);
-      fireEvent.click(btnDelete);
-    }
+    await user.click(btnTop);
+    await user.click(btnDown);
+    await user.click(btnBottom);
+    await user.click(btnUp);
+    await user.click(btnDelete);
     benchCleanup();
   });
 });
