@@ -35,6 +35,10 @@
 
 ## Completed (recent)
 
+- TS/Lint residuals (post majors):
+  - Tests: cast DOM nodes to HTMLInputElement for `.checked`/`.placeholder` in HookFormCheckbox/HookFormField/HookFormPhone tests.
+  - JsonEditor: explicitly void optional onChange calls (editor + fallback) to satisfy @typescript‑eslint/no‑floating‑promises.
+
 - TS/Lint residuals:
   - JsonEditor: explicitly void optional onChange calls to satisfy no‑floating‑promises.
   - WysiwygEditor: removed unsafe object destructuring of draft result when building ContentState.
