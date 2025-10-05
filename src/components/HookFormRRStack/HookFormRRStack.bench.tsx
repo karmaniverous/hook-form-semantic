@@ -12,6 +12,18 @@ import { bench, describe } from 'vitest';
 import { HookFormRRStack } from './HookFormRRStack';
 import type { HookFormRRStackData } from './types';
 
+// Reduce benchmark noise in CI by filtering the specific React act() warning.
+// We keep the filter narrow to avoid hiding other issues and enable it only on CI.
+if (process?.env?.CI) {
+  const __origError = console.error;
+  console.error = (...args: unknown[]) => {
+    const [first] = args;
+    if (typeof first === 'string' && first.includes('not wrapped in act('))
+      return;
+    __origError(...(args as [unknown, ...unknown[]]));
+  };
+}
+
 type FormData = {
   schedule: HookFormRRStackData;
 };

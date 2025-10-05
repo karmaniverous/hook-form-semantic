@@ -16,3 +16,5 @@ export * from './components/HookFormPhone';
 export * from './components/HookFormRRStack';
 export * from './components/HookFormSort';
 export * from './components/HookFormWysiwygEditor';
+// Types
+export type { Logger } from './types/Logger';

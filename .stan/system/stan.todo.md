@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-10-05T03:45:00Z
+# When updated: 2025-10-05T04:25:00Z
 
 ## Next up
 
@@ -34,6 +34,13 @@
 
 ## Completed (recent)
 
+- Docs (TypeDoc): add TSDoc to Logger and re‑export from package root so it’s
+  included in API docs; silences the warning about a referenced but missing
+  symbol.
+
+- Bench: CI‑only console.error filter in HookFormRRStack.bench.tsx to suppress
+  the specific “not wrapped in act(” warning without masking other errors; keeps
+  benchmark output clean.
 - Tests (RRStack UI): migrated interactions in validation.ui.test.tsx to Testing Library userEvent (click/type/select) so React state updates are act‑wrapped; kept act() only for date inputs. Substantially reduces act() warnings.
 
 - Benchmarks: wrapped fireEvent sequences in act() to quiet act() warnings during perf runs.
