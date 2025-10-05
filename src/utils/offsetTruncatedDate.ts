@@ -54,7 +54,7 @@ export const offsetTruncatedDate = ({
   return new Date(
     baseDate.getFullYear() + (offsetYears ?? 0),
     (truncation > 5 ? 0 : baseDate.getMonth()) + (offsetMonths ?? 0),
-    (truncation > 4 ? 0 : baseDate.getDate()) + (offsetDays ?? 0),
+    (truncation > 4 ? 1 : baseDate.getDate()) + (offsetDays ?? 0),
     (truncation > 3 ? 0 : baseDate.getHours()) + (offsetHours ?? 0),
     (truncation > 2 ? 0 : baseDate.getMinutes()) + (offsetMinutes ?? 0),
     (truncation > 1 ? 0 : baseDate.getSeconds()) + (offsetSeconds ?? 0),

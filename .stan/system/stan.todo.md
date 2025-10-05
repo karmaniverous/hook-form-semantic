@@ -13,21 +13,15 @@
 
 ## Completed (recent)
 
-- Tests: add small, focused unit tests for csv2int and offsetTruncatedDate to
-  increase coverage on pure helpers.
-- Bench: remove conditional guards and use getAllByTestId for date inputs in
-  HookFormRRStack.bench.tsx so each case performs work (avoids “NaNx” rows).
-- Tests (RRStack UI): stabilized “Frequency/Hours/Minutes” scenario by clearing
-  via change event (''), then typing with userEvent; avoids focus requirements
-  that can fail in happy‑dom while keeping act‑wrapped typing.
+- Bench: split HookFormRRStack.bench.tsx into focused async benches under bench/, use userEvent and explicit waits to ensure each case performs work. This removes “NaNx faster than …” rows from the summary.
+- Utils: fix offsetTruncatedDate 'month'/'year' truncation to set day=1 (not 0); resolves off-by-one month in tests.
+- Tests: add small, focused unit tests for csv2int and offsetTruncatedDate to increase coverage on pure helpers.
+- Bench: remove conditional guards and use getAllByTestId for date inputs in HookFormRRStack.bench.tsx so each case performs work (avoids “NaNx” rows).
+- Tests (RRStack UI): stabilized “Frequency/Hours/Minutes” scenario by clearing via change event (''), then typing with userEvent; avoids focus requirements that can fail in happy‑dom while keeping act‑wrapped typing.
 
-- Docs (TypeDoc): add TSDoc to Logger and re‑export from package root so it’s
-  included in API docs; silences the warning about a referenced but missing
-  symbol.
+- Docs (TypeDoc): add TSDoc to Logger and re‑export from package root so it’s included in API docs; silences the warning about a referenced but missing symbol.
 
-- Bench: CI‑only console.error filter in HookFormRRStack.bench.tsx to suppress
-  the specific “not wrapped in act(” warning without masking other errors; keeps
-  benchmark output clean.
+- Bench: CI‑only console.error filter in HookFormRRStack.bench.tsx to suppress the specific “not wrapped in act(” warning without masking other errors; keeps benchmark output clean.
 - TS/Lint residuals (post majors):
   - Tests: cast DOM nodes to HTMLInputElement for `.checked`/`.placeholder` in HookFormCheckbox/HookFormField/HookFormPhone tests.
   - JsonEditor: explicitly void optional onChange calls (editor + fallback) to satisfy @typescript‑eslint/no‑floating‑promises.
