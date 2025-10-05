@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-10-05T01:05:00Z
+# When updated: 2025-10-05T01:48:00Z
 
 ## Next up
 
@@ -30,6 +30,10 @@
   - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and UI behavior unchanged; add focused tests per section.
 
 ## Completed (recent)
+
+- Lint(mocks): remove unused WithDisplayName type and finalize forwardRef
+  Input/Checkbox displayName assignment by attaching the property directly to
+  the typed forwardRef components. ESLint now recognizes the names.
 
 - Mocks(semantic-ui-react): fix react/display-name for Input and Checkbox by declaring the forwardRef component types with a displayName property and assigning Input.displayName / Checkbox.displayName directly. ESLint is now clean for these mocks.
 

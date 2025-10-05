@@ -7,8 +7,6 @@ import type {
   StrictMenuProps,
 } from 'semantic-ui-react';
 
-type WithDisplayName<T> = T & { displayName?: string };
-
 type FormProps = React.PropsWithChildren<
   React.FormHTMLAttributes<HTMLFormElement>
 >;
