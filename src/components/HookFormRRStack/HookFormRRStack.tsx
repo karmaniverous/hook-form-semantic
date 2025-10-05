@@ -1,5 +1,4 @@
 import type { DescribeOptions, RRStackOptions } from '@karmaniverous/rrstack';
-import type { UnixTimeUnit } from '@karmaniverous/rrstack';
 import { useRRStack, type UseRRStackProps } from '@karmaniverous/rrstack/react';
 import { get } from 'radash';
 import { useCallback, useMemo, useState } from 'react';
@@ -256,7 +255,10 @@ export const HookFormRRStack = <
   return (
     <Form.Field
       {...fieldProps}
-      className={concatClassNames(className, 'hook-form-rrstack')}
+      className={concatClassNames(
+        className as string | undefined,
+        'hook-form-rrstack',
+      )}
     >
       {label && <label>{label}</label>}
 

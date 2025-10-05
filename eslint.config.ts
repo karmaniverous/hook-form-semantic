@@ -16,6 +16,7 @@ export default tseslint.config(
     ignores: [
       '.rollup.cache/**/*',
       '.stan/**/*',
+      'playground/**/*',
       'assets/**/*',
       'coverage/**/*',
       'diagrams/out/**/*',

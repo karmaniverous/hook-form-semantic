@@ -69,7 +69,10 @@ export const HookFormDatePicker = <
   return (
     <Form.Field
       {...fieldProps}
-      className={concatClassNames(className, 'hook-form-date-picker')}
+      className={concatClassNames(
+        className as string | undefined,
+        'hook-form-date-picker',
+      )}
       error={error?.message}
     >
       {label && (
@@ -80,7 +83,12 @@ export const HookFormDatePicker = <
             <Checkbox
               checked={includeTime}
               label="Include Time"
-              onChange={(event, data) => setIncludeTime(data.checked)}
+              onChange={(
+                _e: React.FormEvent<HTMLInputElement>,
+                data: { checked?: boolean },
+              ) => {
+                setIncludeTime(data.checked);
+              }}
             />
           )}
         </div>

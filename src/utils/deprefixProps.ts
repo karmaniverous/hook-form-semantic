@@ -30,11 +30,13 @@ export const deprefixProps = <
         ? stripped[0].toLowerCase() + stripped.slice(1)
         : stripped;
 
-      // @ts-expect-error Deprefixing logic
-      result.deprefixed[match][deprefixedKey] = props[key];
+      (result.deprefixed as Record<string, Record<string, unknown>>)[match][
+        deprefixedKey
+      ] = (props as Record<string, unknown>)[key];
     } else
-      // @ts-expect-error Rest logic
-      result.rest[key] = props[key];
+      (result.rest as Record<string, unknown>)[key] = (
+        props as Record<string, unknown>
+      )[key];
   }
 
   return result;

@@ -20,7 +20,11 @@ const TestForm = () => {
     defaultValues: { schedule: { timezone: 'UTC', rules: [] } },
   });
   return (
-    <Form onSubmit={handleSubmit(() => {})}>
+    <Form
+      onSubmit={(e) => {
+        void handleSubmit(() => {})(e);
+      }}
+    >
       <HookFormRRStack
         hookName="schedule"
         hookControl={control}

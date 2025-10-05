@@ -92,7 +92,7 @@ export const WysiwygEditor = forwardRef<Editor, WysiwygEditorProps>(
         }
       };
 
-      loadContentAsync();
+      void loadContentAsync();
     }, [updated, value]);
 
     const handleEditorStateChange = useCallback(

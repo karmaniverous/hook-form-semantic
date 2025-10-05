@@ -32,7 +32,7 @@ const JSONEditorReact = forwardRef<HTMLDivElement, JSONEditorReactProps>(
               onChange: (updatedContent: Content) => {
                 if ('text' in updatedContent) {
                   setContent(updatedContent.text);
-                  props.onChange?.(
+                  void props.onChange?.(
                     updatedContent,
                     { text: content },
                     { contentErrors: undefined, patchResult: undefined },
@@ -69,7 +69,7 @@ const JSONEditorReact = forwardRef<HTMLDivElement, JSONEditorReactProps>(
       setContent(e.target.value);
       // Simulate the onChange prop for form integration
       if (props.onChange) {
-        props.onChange(
+        void props.onChange(
           { text: e.target.value },
           { text: content },
           { contentErrors: undefined, patchResult: undefined },

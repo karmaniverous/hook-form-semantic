@@ -66,16 +66,16 @@ export const HookFormRRStackRuleDescription = <
 
   const rootName = useMemo(() => (name as string).split(/\./)[0], [name]);
 
-  const timezone: TimeZoneId = useWatch({
+  const timezone = useWatch({
     control,
     name: `${rootName}.timezone`,
-  });
+  }) as string;
 
   const text = useMemo(() => {
     if (watched && timezone) {
       const rule = rhfrule2rrstackrule(
         watched as unknown as HookFormRRStackRuleData,
-        timezone,
+        timezone as unknown as TimeZoneId,
         timeUnit,
         endDatesInclusive,
       );
@@ -109,6 +109,6 @@ export const HookFormRRStackRuleDescription = <
       {text}
     </As>
   ) : (
-    fallback
+    (fallback as unknown as JSX.Element | null)
   );
 };

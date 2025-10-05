@@ -39,6 +39,7 @@
     "test/**/*",
     "vitest.setup.tsx",
     "vitest.config.ts",
-    "rollup.config.ts"
+    "rollup.config.ts",
+    "eslint.config.ts"
   ]
 }

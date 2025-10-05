@@ -64,7 +64,9 @@ describe('HookFormRRStack (diagnostics: default duration round-trip)', () => {
 
     // Assert that RHF form state reflects injected default duration { days: 1 }
     await waitFor(() => {
-      const v = api.getValues('schedule.rules.0.duration.days' as Path<TF>);
+      const v = api.getValues(
+        'schedule.rules.0.duration.days' as Path<TF>,
+      ) as unknown as number;
       expect(v).toBe(1);
     });
   });

@@ -123,7 +123,12 @@ export const Checkbox = React.forwardRef<HTMLInputElement, StrictCheckboxProps>(
             checked: (e.target as HTMLInputElement).checked,
           } as StrictCheckboxProps),
       } as React.InputHTMLAttributes<HTMLInputElement>),
-      label,
+      // Normalize Semantic shorthand label to a ReactNode
+      label == null
+        ? null
+        : typeof label === 'string'
+          ? label
+          : (label as unknown as React.ReactNode),
     ),
 ) as React.ForwardRefExoticComponent<
   StrictCheckboxProps & React.RefAttributes<HTMLInputElement>
@@ -205,8 +210,11 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button: React.FC<ButtonProps> = ({ onClick, icon, children }) =>
   React.createElement(
     'button',
-    { onClick, 'data-icon': String(icon ?? '') },
-    children ?? String(icon ?? ''),
+    {
+      onClick,
+      'data-icon': typeof icon === 'string' ? icon : '',
+    },
+    children ?? (typeof icon === 'string' ? icon : undefined),
   );
 (Button as unknown as { displayName?: string }).displayName = 'Button';
 
@@ -357,7 +365,10 @@ export const Menu: React.FC<StrictMenuProps> = ({
         {
           key: String(item?.name ?? idx),
           onClick: (e: React.SyntheticEvent<HTMLElement>) =>
-            onItemClick?.(e, item as MenuItemProps),
+            onItemClick?.(
+              e as unknown as React.MouseEvent<HTMLAnchorElement>,
+              item as MenuItemProps,
+            ),
         } as React.HTMLAttributes<HTMLDivElement>,
         item?.content ?? (item?.name != null ? String(item.name) : String(idx)),
       ),

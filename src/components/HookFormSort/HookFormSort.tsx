@@ -74,22 +74,24 @@ export const HookFormSort = <
     rest: { label, ...fieldProps },
   } = useHookForm({ props, prefixes: ['button', 'dropdown'] as const });
 
+  const sortValue = value as Sort<string | undefined> | undefined;
+
   const handleDropdownChange = useCallback(
     (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) =>
       hookFieldOnChange({
         ...event,
-        target: { value: [data.value, value?.[1]] },
+        target: { value: [data.value, sortValue?.[1]] },
       }),
-    [hookFieldOnChange, value],
+    [hookFieldOnChange, sortValue],
   );
 
   const handleButtonClick = useCallback(
     (event: React.SyntheticEvent<HTMLElement>) =>
       hookFieldOnChange({
         ...event,
-        target: { value: [value?.[0], !value?.[1]] },
+        target: { value: [sortValue?.[0], !sortValue?.[1]] },
       }),
-    [hookFieldOnChange, value],
+    [hookFieldOnChange, sortValue],
   );
 
   return (
@@ -107,12 +109,12 @@ export const HookFormSort = <
           options={sortOptions || dropdownOptions}
           selection
           style={{ flexGrow: 1 }}
-          value={value?.[0]}
+          value={sortValue?.[0]}
         />
 
         <Button
           {...buttonProps}
-          icon={value?.[1] ? ascIcon : descIcon}
+          icon={sortValue?.[1] ? ascIcon : descIcon}
           onClick={handleButtonClick}
           type="button"
         />
