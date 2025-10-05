@@ -35,12 +35,14 @@
 
 ## Completed (recent)
 
+- TS/Lint residuals:
+  - JsonEditor: explicitly void optional onChange calls to satisfy no‑floating‑promises.
+  - WysiwygEditor: removed unsafe object destructuring of draft result when building ContentState.
+
 - TS/Lint fixes post‑upgrades:
   - Tests: cast DOM nodes to HTMLInputElement for `.checked`/`.placeholder`.
-  - Playground App: void handleSubmit wrapper in onSubmit to satisfy
-    @typescript‑eslint/no‑misused‑promises.
-  - RRStackRuleDescription: return fallback via fragment; avoid JSX namespace
-    usage and redundant union constituent.
+  - Playground App: void handleSubmit wrapper in onSubmit to satisfy @typescript‑eslint/no‑misused‑promises.
+  - RRStackRuleDescription: return fallback via fragment; avoid JSX namespace usage and redundant union constituent.
 
 - Lint scope: re‑enabled linting for playground to validate HookForm\* DX in a real app context. Removed playground from ESLint ignores.
 - ESLint flat config (tests): switched to spreading Vitest's recommended flat config object to avoid TS2322 on rules typing in the config block.

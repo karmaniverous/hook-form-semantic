@@ -77,17 +77,17 @@ export const WysiwygEditor = forwardRef<Editor, WysiwygEditorProps>(
 
           // Type assertion to ensure we have a function at this point
           const htmlToDraftFn = htmlToDraft as HtmlToDraftFunction;
-          const draftResult: {
+          type HtmlToDraftResult = {
             contentBlocks: Parameters<
               typeof ContentState.createFromBlockArray
             >[0];
             entityMap?: Parameters<typeof ContentState.createFromBlockArray>[1];
-          } = htmlToDraftFn(value ?? '');
-          const { contentBlocks, entityMap } = draftResult;
+          };
+          const draftResult = htmlToDraftFn(value ?? '') as HtmlToDraftResult;
 
           const contentState = ContentState.createFromBlockArray(
-            contentBlocks,
-            entityMap,
+            draftResult.contentBlocks,
+            draftResult.entityMap,
           );
 
           setEditorState(EditorState.createWithContent(contentState));
