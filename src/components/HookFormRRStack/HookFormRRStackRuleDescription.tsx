@@ -1,5 +1,6 @@
 import type { TimeZoneId, UnixTimeUnit } from '@karmaniverous/rrstack';
 import { type DescribeOptions, describeRule } from '@karmaniverous/rrstack';
+import type { JSX } from 'react';
 import {
   type ComponentPropsWithoutRef,
   type ElementType,
@@ -109,6 +110,6 @@ export const HookFormRRStackRuleDescription = <
       {text}
     </As>
   ) : (
-    (fallback as unknown as JSX.Element | null)
+    (fallback as JSX.Element | null)
   );
 };

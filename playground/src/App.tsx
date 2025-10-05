@@ -93,7 +93,11 @@ export default function App() {
     >
       <Header as="h1">Hook Form Semantic Playground</Header>
 
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form
+        onSubmit={(e) => {
+          void handleSubmit(onSubmit)(e);
+        }}
+      >
         <Header as="h2">HookFormField Demo</Header>
 
         <Form.Group widths="equal">

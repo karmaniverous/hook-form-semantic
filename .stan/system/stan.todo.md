@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-10-05T01:55:00Z
+# When updated: 2025-10-05T02:55:00Z
 
 ## Next up
 
@@ -17,6 +17,10 @@
 - Revisit Frequency/Duration description paths to ensure non‑continuous daily rules always yield distinct text (doc example parity).
 - Apply test act() policy: sweep high‑noise tests (RRStack UI) to wrap interactions in `act` (or use `userEvent`), reducing console warnings. Start with validation.ui.test.tsx and expand as needed until CI is warning‑free.
 
+- Major upgrades (incl. zod v4): audit for deprecated imports/usages.
+  - Current repo does not import zod directly; no deprecated zod APIs in use.
+  - Keep watching transitive impacts via RRStack dependency updates.
+
 - Silence/refactor “Function components cannot be given refs” warnings:
   - Option A: omit ref from RHF hookFieldProps spread (e.g., in HookFormRRStack) when passing props to Form.Field.
   - Option B: update semantic-ui-react test doubles to forwardRef where refs are expected.
@@ -30,6 +34,13 @@
   - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and UI behavior unchanged; add focused tests per section.
 
 ## Completed (recent)
+
+- TS/Lint fixes post‑upgrades:
+  - Tests: cast DOM nodes to HTMLInputElement for `.checked`/`.placeholder`.
+  - Playground App: void handleSubmit wrapper in onSubmit to satisfy
+    @typescript‑eslint/no‑misused‑promises.
+  - RRStackRuleDescription: return fallback via fragment; avoid JSX namespace
+    usage and redundant union constituent.
 
 - Lint scope: re‑enabled linting for playground to validate HookForm\* DX in a real app context. Removed playground from ESLint ignores.
 - ESLint flat config (tests): switched to spreading Vitest's recommended flat config object to avoid TS2322 on rules typing in the config block.
