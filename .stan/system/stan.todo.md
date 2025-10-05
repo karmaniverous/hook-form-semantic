@@ -2,37 +2,24 @@
 
 #
 
-# When updated: 2025-10-05T04:25:00Z
+# When updated: 2025-10-05T05:05:00Z
 
 ## Next up
 
-- (Optional) Gate remaining UI debug logs by env or dedicated flag if future diagnostics are needed outside tests.
 - (Optional) Silence boolean-attribute warnings in semantic Dropdown mock (map to data-\* or omit).
-- (Optional) Finish a11y cleanup for HookFormCheckbox interactive labels if not already applied in your local branch.
-
-- Verify “equal widths” rendering of the 6-field Months/Weekdays/Time row across default Semantic UI 16-col grid; adjust minor CSS only if needed (keep component logic unchanged).
-- Confirm stakeholder preference about default duration ({ days: 1 }) when switching Span → recurring; tweak if a different default is desired.
-- Light UX pass on labels/help text for Valid Range to ensure clarity (no behavior changes).
-- Consider gating any remaining console.debug lines in HookFormRRStackRuleForm behind NODE_ENV !== 'production' (stray logs removed in this pass).
-- Revisit Frequency/Duration description paths to ensure non‑continuous daily rules always yield distinct text (doc example parity).
-
-- Major upgrades (incl. zod v4): audit for deprecated imports/usages.
-  - Current repo does not import zod directly; no deprecated zod APIs in use.
-  - Keep watching transitive impacts via RRStack dependency updates.
-
-- Silence/refactor “Function components cannot be given refs” warnings:
-  - Option A: omit ref from RHF hookFieldProps spread (e.g., in HookFormRRStack) when passing props to Form.Field.
-  - Option B: update semantic-ui-react test doubles to forwardRef where refs are expected.
-
-- Benchmarks: wrap fireEvent sequences in act() or switch to userEvent to quiet “not wrapped in act” warnings (optional; perf-only).
-
-- Tests: add targeted assertions that description updates when Interval/Count change (if description semantics should reflect them). Keep/tighten Effect toggle coverage.
-
-- Split plan (long-file rule): decompose HookFormRRStackRuleForm into smaller modules:
-  - LabelEffectHeader, ValidRangeSection, RecurrenceConstraintsSection (Months/DoM/Weekdays/Position/Time), DurationSection.
-  - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and UI behavior unchanged; add focused tests per section.
+- Benchmarks: consider migrating remaining fireEvent paths to userEvent where feasible (keep act for native date inputs).
+- Split plan (long-file rule): decompose HookFormRRStackRuleForm into smaller modules (headers, Valid Range, Recurrence constraints, Duration).
+- Light UX pass on Valid Range help text; no behavior changes.
 
 ## Completed (recent)
+
+- Tests: add small, focused unit tests for csv2int and offsetTruncatedDate to
+  increase coverage on pure helpers.
+- Bench: remove conditional guards and use getAllByTestId for date inputs in
+  HookFormRRStack.bench.tsx so each case performs work (avoids “NaNx” rows).
+- Tests (RRStack UI): stabilized “Frequency/Hours/Minutes” scenario by clearing
+  via change event (''), then typing with userEvent; avoids focus requirements
+  that can fail in happy‑dom while keeping act‑wrapped typing.
 
 - Docs (TypeDoc): add TSDoc to Logger and re‑export from package root so it’s
   included in API docs; silences the warning about a referenced but missing
@@ -41,24 +28,6 @@
 - Bench: CI‑only console.error filter in HookFormRRStack.bench.tsx to suppress
   the specific “not wrapped in act(” warning without masking other errors; keeps
   benchmark output clean.
-- Tests (RRStack UI): migrated interactions in validation.ui.test.tsx to Testing Library userEvent (click/type/select) so React state updates are act‑wrapped; kept act() only for date inputs. Substantially reduces act() warnings.
-
-- Benchmarks: wrapped fireEvent sequences in act() to quiet act() warnings during perf runs.
-
-- Test setup: filtered the specific React “not wrapped in act(…)” console error to keep CI logs clean while migration completes.
-
-- Dependencies: align @karmaniverous/rrstack peer range to ^0.15.0 to match devDependency and avoid install friction.
-
-- Tests (RRStack UI): wrapped state‑changing interactions in validation.ui.test.tsx with React act() to eliminate “not wrapped in act(…)” warnings.
-
-- Tests (Numeric): fixed uncontrolled→controlled warning by initializing the HookFormNumeric test harness with a controlled default value (age: 0).
-
-- Docs (HookFormRRStack): added endDatesInclusive option documentation, clarifying inclusive end‑of‑day behavior in the component’s timezone.
-
-- Docs (TypeDoc): exported Logger and HookFormRRStackPath so TypeDoc includes them; silences two previously reported warnings.
-
-- Lint: explicitly ignore Promise from JSON editor destroy() with `void` in useEffect cleanup to satisfy @typescript-eslint/no-floating-promises.
-
 - TS/Lint residuals (post majors):
   - Tests: cast DOM nodes to HTMLInputElement for `.checked`/`.placeholder` in HookFormCheckbox/HookFormField/HookFormPhone tests.
   - JsonEditor: explicitly void optional onChange calls (editor + fallback) to satisfy @typescript‑eslint/no‑floating‑promises.

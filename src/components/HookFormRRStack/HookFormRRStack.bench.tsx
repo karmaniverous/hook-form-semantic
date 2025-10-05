@@ -316,16 +316,11 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
     const content = container.querySelector(
       '[data-testid="accordion-content"]',
     ) as HTMLElement;
-
-    const dateInputs = Array.from(
-      content.querySelectorAll<HTMLInputElement>('[data-testid="date-picker"]'),
-    );
-    if (dateInputs.length >= 2) {
-      act(() => {
-        fireEvent.change(dateInputs[0], { target: { value: '2025-01-01' } });
-        fireEvent.change(dateInputs[1], { target: { value: '2025-01-03' } });
-      });
-    }
+    const dateInputs = within(content).getAllByTestId('date-picker');
+    act(() => {
+      fireEvent.change(dateInputs[0], { target: { value: '2025-01-01' } });
+      fireEvent.change(dateInputs[1], { target: { value: '2025-01-03' } });
+    });
 
     cleanup();
   });
@@ -338,15 +333,10 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
     const content = container.querySelector(
       '[data-testid="accordion-content"]',
     ) as HTMLElement;
-
-    const dateInputs = Array.from(
-      content.querySelectorAll<HTMLInputElement>('[data-testid="date-picker"]'),
-    );
-    if (dateInputs.length >= 1) {
-      act(() => {
-        fireEvent.change(dateInputs[0], { target: { value: '2025-02-01' } });
-      });
-    }
+    const dateInputs = within(content).getAllByTestId('date-picker');
+    act(() => {
+      fireEvent.change(dateInputs[0], { target: { value: '2025-02-01' } });
+    });
     cleanup();
   });
 
@@ -358,19 +348,14 @@ describe('HookFormRRStack (benchmarks: React component interactions)', () => {
     const content = container.querySelector(
       '[data-testid="accordion-content"]',
     ) as HTMLElement;
-
-    const dateInputs = Array.from(
-      content.querySelectorAll<HTMLInputElement>('[data-testid="date-picker"]'),
-    );
-    if (dateInputs.length >= 2) {
-      act(() => {
-        fireEvent.change(dateInputs[0], { target: { value: '2025-03-01' } });
-        fireEvent.change(dateInputs[1], { target: { value: '2025-03-05' } });
-        // Clear both
-        fireEvent.change(dateInputs[0], { target: { value: '' } });
-        fireEvent.change(dateInputs[1], { target: { value: '' } });
-      });
-    }
+    const dateInputs = within(content).getAllByTestId('date-picker');
+    act(() => {
+      fireEvent.change(dateInputs[0], { target: { value: '2025-03-01' } });
+      fireEvent.change(dateInputs[1], { target: { value: '2025-03-05' } });
+      // Clear both
+      fireEvent.change(dateInputs[0], { target: { value: '' } });
+      fireEvent.change(dateInputs[1], { target: { value: '' } });
+    });
     cleanup();
   });
 

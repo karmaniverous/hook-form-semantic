@@ -184,13 +184,14 @@ describe('HookFormRRStack (UI validations)', () => {
     const freqDropdown = within(freqField).getByTestId('dropdown');
     await user.selectOptions(freqDropdown as HTMLSelectElement, 'daily');
 
+    // Clear via change event (stable in happy-dom), then type via userEvent
     const hoursInput = within(content).getByPlaceholderText('9, 13, 17');
-    await user.clear(hoursInput as HTMLInputElement);
-    await user.type(hoursInput as HTMLInputElement, '9, 13');
+    fireEvent.change(hoursInput, { target: { value: '' } });
+    await user.type(hoursInput, '9, 13');
 
     const minutesInput = within(content).getByPlaceholderText('0, 30');
-    await user.clear(minutesInput as HTMLInputElement);
-    await user.type(minutesInput as HTMLInputElement, '30');
+    fireEvent.change(minutesInput, { target: { value: '' } });
+    await user.type(minutesInput, '30');
 
     await waitFor(() => {
       const after = (description.textContent ?? '').trim();
