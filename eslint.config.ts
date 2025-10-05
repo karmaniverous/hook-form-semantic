@@ -11,26 +11,27 @@ import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort';
 import tsDocPlugin from 'eslint-plugin-tsdoc';
 import tseslint from 'typescript-eslint';
 
-// Safely access optional plugin recommended rule sets (types don't declare them)
-const vitestRecommendedRules =
-  (
-    vitest as unknown as {
-      configs?: { recommended?: { rules?: Record<string, unknown> } };
-    }
-  ).configs?.recommended?.rules ?? {};
+// Safely access optional plugin recommended rule sets (types may not declare them)
 const reactHooksRecommendedRules =
   (
     reactHooksPlugin as unknown as {
       configs?: { recommended?: { rules?: Record<string, unknown> } };
     }
   ).configs?.recommended?.rules ?? {};
+
+const vitestRecommendedRules =
+  (
+    vitest as unknown as {
+      configs?: { recommended?: { rules?: Record<string, unknown> } };
+    }
+  ).configs?.recommended?.rules ?? {};
+
 export default tseslint.config(
   // Global ignores to keep lint focus on source.
   {
     ignores: [
       '.rollup.cache/**/*',
       '.stan/**/*',
-      'playground/**/*',
       'assets/**/*',
       'coverage/**/*',
       'diagrams/out/**/*',
@@ -54,10 +55,9 @@ export default tseslint.config(
     files: ['**/*.test.ts', '**/*.test.tsx', '**/*.test.js', '**/*.test.jsx'],
 
     plugins: { vitest },
-    rules: {
-      // Use Vitest's recommended rules under flat config
-      ...vitestRecommendedRules,
-    },
+    // Spread recommended rules from the plugin (guarded above)
+    // Cast to satisfy TS config typing for rules entries.
+    rules: vitestRecommendedRules as unknown as Record<string, never>,
   },
 
   // Shared formatting and import sorting across JS/TS.
@@ -120,7 +120,7 @@ export default tseslint.config(
       ...(reactPlugin.configs?.recommended?.rules ?? {}),
       // New JSX transform
       ...(reactPlugin.configs?.['jsx-runtime']?.rules ?? {}),
-      // Hooks recommended
+      // Hooks recommended (guarded access)
       ...reactHooksRecommendedRules,
       // a11y recommended
       ...(jsxA11yPlugin.configs?.recommended?.rules ?? {}),

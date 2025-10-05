@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 
 import { HookFormSort } from './HookFormSort';
 
-type SortValue = ['auto' | string, boolean] | undefined;
+type SortValue = [string, boolean] | undefined;
 type FormData = { sort: SortValue };
 let api: ReturnType<typeof useForm<FormData>>;
 

@@ -31,6 +31,11 @@
 
 ## Completed (recent)
 
+- Lint scope: re‑enabled linting for playground to validate HookForm\* DX in a real app context. Removed playground from ESLint ignores.
+- ESLint flat config (tests): switched to spreading Vitest's recommended flat config object to avoid TS2322 on rules typing in the config block.
+- WYSIWYG editor: typed html‑to‑draftjs result before destructuring to satisfy @typescript‑eslint/no‑unsafe‑assignment.
+- HookFormSort test: removed redundant union literal in SortValue to satisfy @typescript‑eslint/no‑redundant‑type‑constituents.
+
 - Lint/TS (typed): finalize remaining errors from typecheck/lint:
   - eslint.config.ts: safely access plugin recommended rules (react-hooks, vitest) via typed guards; silence one unsafe assignment on plugins; keep playground ignored.
   - picker mocks: also omit intrinsic onChange so custom (Date|null) signature compiles under TS2430.
