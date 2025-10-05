@@ -1,7 +1,9 @@
 import React from 'react';
 import type {
+  MenuItemProps,
   StrictCheckboxProps,
   StrictDropdownProps,
+  StrictMenuProps,
 } from 'semantic-ui-react';
 
 type FormProps = React.PropsWithChildren<
@@ -200,6 +202,7 @@ export const Button: React.FC<ButtonProps> = ({ onClick, icon, children }) =>
   );
 (Button as unknown as { displayName?: string }).displayName = 'Button';
 
+// Header
 export const Header: React.FC<
   React.PropsWithChildren<
     React.HTMLAttributes<HTMLHeadingElement> & { size?: string }
@@ -210,6 +213,7 @@ export const Header: React.FC<
     props,
     children,
   );
+(Header as unknown as { displayName?: string }).displayName = 'Header';
 
 export const Card: React.FC<
   React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
@@ -244,6 +248,11 @@ Object.assign(Card, {
   Header: CardHeader,
   Meta: CardMeta,
 });
+(Card as unknown as { displayName?: string }).displayName = 'Card';
+(CardContent as unknown as { displayName?: string }).displayName =
+  'CardContent';
+(CardHeader as unknown as { displayName?: string }).displayName = 'CardHeader';
+(CardMeta as unknown as { displayName?: string }).displayName = 'CardMeta';
 
 export const Icon: React.FC<
   { name?: string } & React.HTMLAttributes<HTMLSpanElement>
@@ -314,6 +323,30 @@ const ButtonGroup: React.FC<
     children,
   );
 Object.assign(Button, { Group: ButtonGroup });
+
+// Minimal Menu double for tests (supports items + onItemClick)
+export const Menu: React.FC<StrictMenuProps> = ({
+  items = [],
+  onItemClick,
+  ...props
+}) =>
+  React.createElement(
+    'div',
+    { ...props, 'data-testid': 'menu' },
+    ...(items as Array<Partial<MenuItemProps>>).map((item, idx) =>
+      React.createElement(
+        'div',
+        {
+          key: String(item?.name ?? idx),
+          onClick: (e: React.SyntheticEvent<HTMLElement>) =>
+            onItemClick?.(e, item as MenuItemProps),
+        } as React.HTMLAttributes<HTMLDivElement>,
+        (item?.content as React.ReactNode) ??
+          (item?.name != null ? String(item.name) : String(idx)),
+      ),
+    ),
+  );
+(Menu as unknown as { displayName?: string }).displayName = 'Menu';
 
 interface AccordionTitleProps extends React.HTMLAttributes<HTMLDivElement> {
   active?: boolean;

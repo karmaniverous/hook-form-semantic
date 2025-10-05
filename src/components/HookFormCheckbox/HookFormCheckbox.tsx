@@ -101,6 +101,7 @@ export const HookFormCheckbox = <
         {checkLabel && (
           <label
             className="control"
+            // eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role
             role="button"
             tabIndex={0}
             onClick={() => (!value ? checkboxRef.current?.click() : undefined)}

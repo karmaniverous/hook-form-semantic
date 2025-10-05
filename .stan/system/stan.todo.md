@@ -1,15 +1,14 @@
 # Development Plan
 
-# 
+#
 
 # When updated: 2025-10-05T00:30:00Z
 
 ## Next up
 
 - (Optional) Gate remaining UI debug logs by env or dedicated flag if future diagnostics are needed outside tests.
-- (Optional) Silence boolean-attribute warnings in semantic Dropdown mock (map to data-* or omit).
+- (Optional) Silence boolean-attribute warnings in semantic Dropdown mock (map to data-\* or omit).
 - (Optional) Finish a11y cleanup for HookFormCheckbox interactive labels if not already applied in your local branch.
-
 
 - Verify “equal widths” rendering of the 6-field Months/Weekdays/Time row across default Semantic UI 16-col grid; adjust minor CSS only if needed (keep component logic unchanged).
 - Confirm stakeholder preference about default duration ({ days: 1 }) when switching Span → recurring; tweak if a different default is desired.
@@ -31,39 +30,29 @@
 
 ## Completed (recent)
 
-- Lint(a11y): Preserve clickable <label> semantics in HookFormCheckbox and add
-  a line-level eslint disable for jsx-a11y/no-noninteractive-element-to-interactive-role
-  on the intentional role="button" label. Product behavior unchanged.
+- Tests(mocks): add semantic-ui-react Menu double with items onItemClick to support HookFormMenu tests. Set displayName for Header, Card, and Card subcomponents to satisfy react/display-name.
 
-- Tests(rrstack): Decomposed HookFormRRStack.validation.test.tsx into focused
-  suites: validation.engine.test.ts (pure engine), validation.ui.test.tsx (UI),
-  validation.roundtrip.test.tsx (default-duration round-trip). Extracted shared
-  UI helpers to __testUtils__/fields.ts.
+- Types(rrstack ui tests): switch validation.ui.test.tsx form shape to use HookFormRRStackData for schedule; resolves TS2322 on hookName inference.
 
-- Mocks(semantic-ui-react): decomposed large semantic.tsx into a thin vi.mock
-  wrapper and a new test/setup/mocks/semantic/controls.tsx module exporting the
-  component doubles; added display names where applicable.
+- Lint(a11y): add single-line suppression for the intentional label-as-button in HookFormCheckbox (project requirement).
 
-- Tests(rrstack defaults UI): disambiguate label matching to pick “Days” (not
-  “Weekdays”) by switching helper matching to startsWith. Stabilizes the
-  default-duration assertion in validation tests.
+- Lint(a11y): Preserve clickable <label> semantics in HookFormCheckbox and add a line-level eslint disable for jsx-a11y/no-noninteractive-element-to-interactive-role on the intentional role="button" label. Product behavior unchanged.
 
-- Lint(a11y): convert interactive labels in HookFormCheckbox to real
-  <button type="button"> controls; resolves
-  jsx-a11y/no-noninteractive-element-to-interactive-role.
+- Tests(rrstack): Decomposed HookFormRRStack.validation.test.tsx into focused suites: validation.engine.test.ts (pure engine), validation.ui.test.tsx (UI), validation.roundtrip.test.tsx (default-duration round-trip). Extracted shared UI helpers to **testUtils**/fields.ts.
 
-- Lint(mocks): silence @typescript-eslint/no-unused-vars in
-  react-number-format and react-draft-wysiwyg test doubles via scoped
-  disable/enable comments.
+- Mocks(semantic-ui-react): decomposed large semantic.tsx into a thin vi.mock wrapper and a new test/setup/mocks/semantic/controls.tsx module exporting the component doubles; added display names where applicable.
 
-- Lint(mocks): add displayName to semantic-ui-react Field double to satisfy
-  react/display-name.
+- Tests(rrstack defaults UI): disambiguate label matching to pick “Days” (not “Weekdays”) by switching helper matching to startsWith. Stabilizes the default-duration assertion in validation tests.
+
+- Lint(a11y): convert interactive labels in HookFormCheckbox to real <button type="button"> controls; resolves jsx-a11y/no-noninteractive-element-to-interactive-role.
+
+- Lint(mocks): silence @typescript-eslint/no-unused-vars in react-number-format and react-draft-wysiwyg test doubles via scoped disable/enable comments.
+
+- Lint(mocks): add displayName to semantic-ui-react Field double to satisfy react/display-name.
 
 - RRStack UI: endDatesInclusive policy
   - Added endDatesInclusive?: boolean to HookFormRRStack; defaults to false.
-  - Threaded through to rule mapping and description. When true, End Date clamps
-    to 00:00 of the day following the configured end date in the selected timezone
-    (inclusive semantics), regardless of any time-of-day set.
+  - Threaded through to rule mapping and description. When true, End Date clamps to 00:00 of the day following the configured end date in the selected timezone (inclusive semantics), regardless of any time-of-day set.
 
 - RRStack UI (RHF-first rules; no engine writeback):
   - Removed rrstack→RHF writeback in HookFormRRStack; rrstack now consumes RHF JSON only.
@@ -78,22 +67,16 @@
 - Kept Starts/Ends logic unchanged (rrstack remains the source for descriptions/bounds), as requested.
 
 - Tests(wysiwyg):
-  - Stabilized HookFormWysiwygEditor test for lazy-loaded editor by waiting for
-    the Suspense fallback ("Loading editor...") to disappear and using a longer
-    timeout when querying for the editor node. Keeps the editor lazy-loaded.
+  - Stabilized HookFormWysiwygEditor test for lazy-loaded editor by waiting for the Suspense fallback ("Loading editor...") to disappear and using a longer timeout when querying for the editor node. Keeps the editor lazy-loaded.
 - Tests/logging:
-  - Removed logger={console} from existing RRStack tests and RuleForm timestamp
-    tests to eliminate verbose per-field logs from useHookForm.
-  - Added a single logged test that creates a rule, switches Frequency to
-    “yearly”, and asserts the Duration Days field is “1” after the RRStack
-    round-trip (verifying default duration policy).
+  - Removed logger={console} from existing RRStack tests and RuleForm timestamp tests to eliminate verbose per-field logs from useHookForm.
+  - Added a single logged test that creates a rule, switches Frequency to “yearly”, and asserts the Duration Days field is “1” after the RRStack round-trip (verifying default duration policy).
 
 - Mapping logs:
-  - Removed unconditional console.log from rhf2rrstack.ts and rrstack2rhf.ts so
-    mapping logs only appear when HookFormRRStack receives a logger.
+  - Removed unconditional console.log from rhf2rrstack.ts and rrstack2rhf.ts so mapping logs only appear when HookFormRRStack receives a logger.
 
 - RRStack (logging & round-trip visibility):
-  - Threaded useHookForm rest.logger through HookFormRRStack and all subcomponents; passed to HookForm* children so each field logs its value via useHookForm.
+  - Threaded useHookForm rest.logger through HookFormRRStack and all subcomponents; passed to HookForm\* children so each field logs its value via useHookForm.
   - Bridged logger into useRRStack (logs rrstack lifecycle events).
   - Added logger.debug at RHF↔RRStack mapping boundaries (rhf2rrstack, rrstack2rhf).
   - Enabled logger={console} in HookFormRRStack tests to validate round-trip with minimal refreshes.
@@ -139,16 +122,11 @@
 
 - Lint: added displayName to WysiwygEditor to quiet React display-name rule.
 
-- Lint(react): enable eslint-plugin-react, eslint-plugin-react-hooks, and
-  eslint-plugin-jsx-a11y with recommended rules for JSX/TSX files; disabled
-  react/prop-types and react/react-in-jsx-scope for TS + new JSX runtime.
+- Lint(react): enable eslint-plugin-react, eslint-plugin-react-hooks, and eslint-plugin-jsx-a11y with recommended rules for JSX/TSX files; disabled react/prop-types and react/react-in-jsx-scope for TS + new JSX runtime.
 
-- Types(rrstack): drop child TName generic in HookFormRRStackRuleForm and let
-  FieldPath infer from hookName (Path<TFieldValues>). Resolves TS2322 from
-  passing Path<TFieldValues> to children constrained by the parent TName.
+- Types(rrstack): drop child TName generic in HookFormRRStackRuleForm and let FieldPath infer from hookName (Path<TFieldValues>). Resolves TS2322 from passing Path<TFieldValues> to children constrained by the parent TName.
 
-- Tests(mocks): render NumericFormat as type="number" in vitest.setup so
-  role="spinbutton" queries succeed for Duration Min/Hours/Minutes fields.
+- Tests(mocks): render NumericFormat as type="number" in vitest.setup so role="spinbutton" queries succeed for Duration Min/Hours/Minutes fields.
 
 - Types(rrstack): replace unsafe "as TName" casts with "as Path<TFieldValues>" across RRStack subcomponents (Effect, Range, Monthdays, Weekdays, Time, Duration, and Timezone in HookFormRRStack). Let HookForm\* components infer TName where possible and pass strongly typed FieldPaths to RHF. This ensures each subcomponent targets its exact slice of the overall form shape.
 

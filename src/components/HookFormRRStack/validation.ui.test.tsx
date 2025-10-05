@@ -1,4 +1,3 @@
-import type { RRStackOptions } from '@karmaniverous/rrstack';
 import {
   fireEvent,
   render,
@@ -13,10 +12,11 @@ import { describe, expect, it } from 'vitest';
 
 import { HookFormRRStack } from './HookFormRRStack';
 import { getFieldByLabel, getFieldValueText } from './testUtils/fields';
+import type { HookFormRRStackData } from './types';
 
 // Shared harnesses
 const TestForm = () => {
-  const { control, handleSubmit } = useForm<{ schedule: RRStackOptions }>({
+  const { control, handleSubmit } = useForm<{ schedule: HookFormRRStackData }>({
     defaultValues: { schedule: { timezone: 'UTC', rules: [] } },
   });
   return (
@@ -37,7 +37,7 @@ const renderWithDescribeProps = (describe?: {
   formatTimeZone?: (tz: string) => string;
 }) => {
   interface TF extends FieldValues {
-    schedule: RRStackOptions;
+    schedule: HookFormRRStackData;
   }
   const Harness = () => {
     const { control } = useForm<TF>({
