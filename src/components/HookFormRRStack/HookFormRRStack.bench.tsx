@@ -41,7 +41,7 @@ const getFieldByLabel = (root: HTMLElement, labelText: string) => {
   for (const f of fields) {
     const first = f.firstElementChild as HTMLElement | null;
     const txt = (first?.textContent ?? '').trim();
-    if (txt.includes(labelText)) return f;
+    if (txt.startsWith(labelText)) return f;
   }
   throw new Error(`Field not found: ${labelText}`);
 };

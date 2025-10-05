@@ -95,6 +95,17 @@ Date components
 
 Validation policy
 
+HookFormCheckbox semantics (clickable labels)
+
+- The checkbox includes optional left/right “control” labels that toggle the value when clicked.
+- These are intentionally rendered as <label> elements for visual/semantic consistency with surrounding form labels.
+- Keyboard support (Enter/Space) is provided for accessibility.
+- Lint policy: the jsx-a11y/no-noninteractive-element-to-interactive-role complaint for this specific pattern may be suppressed at the line level to preserve the desired markup. Do not refactor the labels to <button> unless product design changes.
+
+Notes
+
+- The above is a product requirement for this component’s UI/UX. Lint exceptions should be minimal and localized (line-level).
+
 - Timezone values are validated via RRStack.isValidTimeZone.
 - Recurring rules require a positive DurationParts; Span rules must omit duration.
 - count/interval are optional but only when Frequency is present; hidden otherwise.

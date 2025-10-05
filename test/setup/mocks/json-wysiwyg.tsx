@@ -42,6 +42,7 @@ vi.mock('draft-js', () => {
 });
 
 vi.mock('react-draft-wysiwyg', () => {
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const Editor = React.forwardRef<
     HTMLDivElement,
     {
@@ -67,5 +68,6 @@ vi.mock('react-draft-wysiwyg', () => {
       }),
   );
   (Editor as unknown as { displayName?: string }).displayName = 'Editor';
+  /* eslint-enable @typescript-eslint/no-unused-vars */
   return { Editor };
 });

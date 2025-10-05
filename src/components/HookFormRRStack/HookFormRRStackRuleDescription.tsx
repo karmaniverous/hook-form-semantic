@@ -72,8 +72,6 @@ export const HookFormRRStackRuleDescription = <
   });
 
   const text = useMemo(() => {
-    console.log('rhf', { watched, timezone });
-
     if (watched && timezone) {
       const rule = rhfrule2rrstackrule(
         watched as unknown as HookFormRRStackRuleData,
@@ -81,8 +79,6 @@ export const HookFormRRStackRuleDescription = <
         timeUnit,
         endDatesInclusive,
       );
-
-      console.log('rule', rule);
 
       return describeRule(rule, timezone, timeUnit, {
         boundsFormat,

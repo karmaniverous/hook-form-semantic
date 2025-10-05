@@ -2,7 +2,7 @@
 
 # 
 
-# When updated: 2025-10-04T00:00:00Z
+# When updated: 2025-10-05T00:30:00Z
 
 ## Next up
 
@@ -30,6 +30,34 @@
   - Hoist shared parse/sync helpers to src/util; keep rule/rrstack updates and UI behavior unchanged; add focused tests per section.
 
 ## Completed (recent)
+
+- Lint(a11y): Preserve clickable <label> semantics in HookFormCheckbox and add
+  a line-level eslint disable for jsx-a11y/no-noninteractive-element-to-interactive-role
+  on the intentional role="button" label. Product behavior unchanged.
+
+- Tests(rrstack): Decomposed HookFormRRStack.validation.test.tsx into focused
+  suites: validation.engine.test.ts (pure engine), validation.ui.test.tsx (UI),
+  validation.roundtrip.test.tsx (default-duration round-trip). Extracted shared
+  UI helpers to __testUtils__/fields.ts.
+
+- Mocks(semantic-ui-react): decomposed large semantic.tsx into a thin vi.mock
+  wrapper and a new test/setup/mocks/semantic/controls.tsx module exporting the
+  component doubles; added display names where applicable.
+
+- Tests(rrstack defaults UI): disambiguate label matching to pick “Days” (not
+  “Weekdays”) by switching helper matching to startsWith. Stabilizes the
+  default-duration assertion in validation tests.
+
+- Lint(a11y): convert interactive labels in HookFormCheckbox to real
+  <button type="button"> controls; resolves
+  jsx-a11y/no-noninteractive-element-to-interactive-role.
+
+- Lint(mocks): silence @typescript-eslint/no-unused-vars in
+  react-number-format and react-draft-wysiwyg test doubles via scoped
+  disable/enable comments.
+
+- Lint(mocks): add displayName to semantic-ui-react Field double to satisfy
+  react/display-name.
 
 - RRStack UI: endDatesInclusive policy
   - Added endDatesInclusive?: boolean to HookFormRRStack; defaults to false.

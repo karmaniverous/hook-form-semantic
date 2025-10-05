@@ -3,6 +3,7 @@ import { vi } from 'vitest';
 
 // Numeric format
 vi.mock('react-number-format', () => {
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   interface ValueChange {
     floatValue?: number;
   }
@@ -35,6 +36,7 @@ vi.mock('react-number-format', () => {
         onValueChange?.({ floatValue: Number.isNaN(num) ? undefined : num });
       },
     });
+  /* eslint-enable @typescript-eslint/no-unused-vars */
   return { NumericFormat };
 });
 
