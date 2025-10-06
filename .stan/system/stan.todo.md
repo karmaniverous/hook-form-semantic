@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-10-06T02:15:00Z
+# When updated: 2025-10-06T02:35:00Z
 
 ## Next up
 
@@ -13,6 +13,13 @@
 
 ## Completed (recent)
 
+- Tests (tz bounds, Singapore): add an explicit Asia/Singapore scenario that
+  mirrors the playground screenshot with endDatesInclusive unset. The test sets
+  Start=2025‑10‑01, End=2025‑10‑31, switches Timezone to Asia/Singapore, and
+  asserts exact header values and description:
+  Starts=2025‑09‑30 00:00, Ends=2025‑10‑30 00:00, description includes
+  “[from 2025‑09‑30 00:00; until 2025‑10‑30 00:00]”. This confirms whether CI
+  observes the same browser result and isolates whether failures are test vs engine.
 - Tests (tz bounds): harden bounds/timezone tests to avoid environment‑specific
   brittleness. Updated src/components/HookFormRRStack/bounds.tz.test.tsx to:
   - Select the Timezone dropdown unambiguously within its field (getAllByTestId

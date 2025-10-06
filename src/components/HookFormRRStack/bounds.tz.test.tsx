@@ -52,6 +52,43 @@ describe('HookFormRRStack (timezone formatting: Starts/Ends vs RuleDescription)'
     await user.selectOptions(tzDropdown, tz);
   };
 
+  it('span (Asia/Singapore exact scenario): header and description match screenshot (no endDatesInclusive)', async () => {
+    renderHarness();
+    const user = userEvent.setup();
+
+    // Add span rule
+    await user.click(screen.getByText('Add Rule'));
+
+    // Open content and set date-only Start/End as in screenshot
+    const content = (await screen.findAllByTestId('accordion-content'))[0];
+    const [startInput, endInput] =
+      within(content).getAllByTestId('date-picker');
+    fireEvent.change(startInput, { target: { value: '2025-10-01' } });
+    fireEvent.change(endInput, { target: { value: '2025-10-31' } });
+
+    // Switch Timezone to Asia/Singapore
+    await setTimezone('Asia/Singapore');
+
+    const startsField = getFieldByLabel(document.body, 'Starts');
+    const endsField = getFieldByLabel(document.body, 'Ends');
+    const descEl = document.querySelector(
+      '.hook-form-rrstack-rule-description',
+    ) as HTMLElement;
+
+    // Assert exact values shown in your browser screenshot
+    await waitFor(() =>
+      expect(getFieldValueText(startsField)).toBe('2025-09-30 00:00'),
+    );
+    await waitFor(() =>
+      expect(getFieldValueText(endsField)).toBe('2025-10-30 00:00'),
+    );
+    await waitFor(() =>
+      expect((descEl.textContent ?? '').trim()).toContain(
+        '[from 2025-09-30 00:00; until 2025-10-30 00:00]',
+      ),
+    );
+  });
+
   it('span: header Starts/Ends and RuleDescription bounds reflect configured timezone and stay consistent', async () => {
     renderHarness();
     const user = userEvent.setup();
@@ -88,7 +125,7 @@ describe('HookFormRRStack (timezone formatting: Starts/Ends vs RuleDescription)'
     });
 
     // Switch timezone to UTC; header and description must update accordingly
-    await setTimezone('UTC');
+    await setTimezone('Etc/UTC');
     await waitFor(() => {
       const starts = getFieldValueText(startsField);
       const ends = getFieldValueText(endsField);
@@ -141,7 +178,7 @@ describe('HookFormRRStack (timezone formatting: Starts/Ends vs RuleDescription)'
     });
 
     // Switch timezone to UTC; bound should shift to 15:00
-    await setTimezone('UTC');
+    await setTimezone('Etc/UTC');
     await waitFor(() => {
       const starts = getFieldValueText(startsField);
       expect((descEl.textContent ?? '').trim()).toContain(`[from ${starts}]`);
