@@ -105,6 +105,8 @@ export const HookFormRRStack = <
   });
 
   const json = useMemo(() => {
+    if (!rhf) return { timezone: 'UTC' };
+
     const rrstack = rhf2rrstack(rhf, { endDatesInclusive });
 
     logger?.debug?.('rhf2rrstack', { rhf, rrstack });
