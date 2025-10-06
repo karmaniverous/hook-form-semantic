@@ -92,7 +92,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/mjs/src/index.js"
+      "default": "./dist/mjs/index.js"
     }
   },
   "files": [
@@ -117,7 +117,7 @@
     "wysiwyg-editor"
   ],
   "license": "BSD-3-Clause",
-  "module": "dist/mjs/src/index.js",
+  "module": "dist/mjs/index.js",
   "name": "@karmaniverous/hook-form-semantic",
   "peerDependencies": {
     "@karmaniverous/rrstack": "^0.15.0",
@@ -264,6 +264,6 @@
   "sideEffects": false,
   "type": "module",
   "types": "dist/index.d.ts",
-  "main": "dist/mjs/src/index.js",
-  "version": "0.4.1"
+  "main": "dist/mjs/index.js",
+  "version": "0.4.0"
 }
