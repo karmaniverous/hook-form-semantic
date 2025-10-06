@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-10-06T00:28:00Z
+# When updated: 2025-10-06T01:25:00Z
 
 ## Next up
 
@@ -12,6 +12,12 @@
 - Light UX pass on Valid Range help text; no behavior changes.
 
 ## Completed (recent)
+
+- Tests (tz bounds): add coverage asserting Starts/Ends (header) are formatted
+  in the configured timezone and stay consistent with RuleDescription bounds for
+  both span and recurring (daily) rules. Also assert updates when switching
+  timezone (America/Chicago → UTC). Uses describeIncludeBounds with a fixed
+  describeBoundsFormat to keep assertions deterministic across environments.
 
 - Tests: update rrstack2rhf tests to reflect new return type
   `{ rhf, timeUnit }`; assert timeUnit and use rhf.* in all expectations.
