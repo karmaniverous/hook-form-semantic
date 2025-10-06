@@ -92,7 +92,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/mjs/src/index.js"
+      "import": "./dist/mjs/src/index.js"
     }
   },
   "files": [
