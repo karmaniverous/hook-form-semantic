@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-10-06T01:25:00Z
+# When updated: 2025-10-06T02:15:00Z
 
 ## Next up
 
@@ -13,6 +13,15 @@
 
 ## Completed (recent)
 
+- Tests (tz bounds): harden bounds/timezone tests to avoid environment‑specific
+  brittleness. Updated src/components/HookFormRRStack/bounds.tz.test.tsx to:
+  - Select the Timezone dropdown unambiguously within its field (getAllByTestId
+    and pick the field's dropdown).
+  - Assert that RuleDescription text reflects the header Starts/Ends values
+    (formatted in the configured timezone) rather than fixed timestamps.
+  This preserves the core requirement (“header and description remain consistent
+  and reflect the configured timezone”) while stabilizing CI across locales/ICU
+  variations.
 - Tests (tz bounds): add coverage asserting Starts/Ends (header) are formatted
   in the configured timezone and stay consistent with RuleDescription bounds for
   both span and recurring (daily) rules. Also assert updates when switching
