@@ -2,8 +2,15 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.4.2](https://github.com/karmaniverous/hook-form-semantic/compare/0.4.1...0.4.2)
+
+- bugfix [`36ca8eb`](https://github.com/karmaniverous/hook-form-semantic/commit/36ca8ebdb081a44ddbd9b4d341fda983f529b25c)
+
 #### [0.4.1](https://github.com/karmaniverous/hook-form-semantic/compare/0.4.0...0.4.1)
 
+> 7 October 2025
+
+- chore: release v0.4.1 [`58467b5`](https://github.com/karmaniverous/hook-form-semantic/commit/58467b5e6300ee7cbd1040fb82571363cabd0b1c)
 - switched default to import [`fe7a0bd`](https://github.com/karmaniverous/hook-form-semantic/commit/fe7a0bdfa687dd5b3a5b23c47fcea28ca69da956)
 
 #### [0.4.0](https://github.com/karmaniverous/hook-form-semantic/compare/0.3.0...0.4.0)
