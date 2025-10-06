@@ -11,6 +11,7 @@ import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
+import { local2utcDateOnly, local2utcDateTime } from '@/utils/utc';
 
 export interface HookFormDatePickerProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -31,6 +32,7 @@ export interface HookFormDatePickerProps<
     PrefixProps<Omit<DatePickerProps, 'value'>, 'datePicker'>,
     PrefixProps<Omit<DateTimePickerProps, 'value'>, 'timePicker'> {
   showIncludeTime?: boolean;
+  utc?: boolean;
 }
 
 export const HookFormDatePicker = <
@@ -48,7 +50,7 @@ export const HookFormDatePicker = <
       datePicker: { onChange: onDateChange, ...datePickerProps },
       timePicker: { onChange: onTimeChange, ...timePickerProps },
     },
-    rest: { className, label, showIncludeTime, ...fieldProps },
+    rest: { className, label, showIncludeTime, utc = false, ...fieldProps },
   } = useHookForm({
     props,
     prefixes: ['datePicker', 'timePicker'] as const,
@@ -59,11 +61,18 @@ export const HookFormDatePicker = <
   const handleChange = useCallback(
     (...[v]: Parameters<NonNullable<DatePickerProps['onChange']>>) => {
       (includeTime ? onTimeChange : onDateChange)?.(v as Date | null);
+      const raw = v as Date | null;
+      const mapped =
+        utc && raw
+          ? includeTime
+            ? local2utcDateTime(raw)
+            : local2utcDateOnly(raw)
+          : raw;
       hookFieldOnChange({
-        target: { type: 'date', value: v as Date | null },
+        target: { type: 'date', value: mapped },
       } as unknown as React.SyntheticEvent<HTMLElement>);
     },
-    [hookFieldOnChange, includeTime, onDateChange, onTimeChange],
+    [hookFieldOnChange, includeTime, onDateChange, onTimeChange, utc],
   );
 
   return (

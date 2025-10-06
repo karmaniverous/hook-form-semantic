@@ -27,6 +27,7 @@ import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
 import { isFn } from '@/utils/isFn';
+import { local2utcDateOnly, local2utcDateTime } from '@/utils/utc';
 
 import type { DateRange } from './DateRange';
 import type { Presets } from './presets';
@@ -59,6 +60,7 @@ export interface HookFormDateRangePickerProps<
     PrefixProps<Omit<DateTimeRangePickerProps, 'value'>, 'timePicker'> {
   presets?: Presets;
   showIncludeTime?: boolean;
+  utc?: boolean;
 }
 
 export const HookFormDateRangePicker = <
@@ -77,7 +79,7 @@ export const HookFormDateRangePicker = <
       datePicker: { onChange: onDateChange, ...datePickerProps },
       timePicker: { onChange: onTimeChange, ...timePickerProps },
     },
-    rest: { className, label, showIncludeTime, ...fieldProps },
+    rest: { className, label, showIncludeTime, utc = false, ...fieldProps },
   } = useHookForm({ props, prefixes: ['datePicker', 'timePicker'] as const });
 
   const [includeTime, setIncludeTime] = useState<boolean | undefined>(false);
@@ -86,12 +88,28 @@ export const HookFormDateRangePicker = <
     (...[v]: Parameters<NonNullable<DateRangePickerProps['onChange']>>) => {
       // Call through to the widget's onChange (per selected mode)
       (includeTime ? onTimeChange : onDateChange)?.(v as DateRange);
-      // Bridge to RHF
+      // Bridge to RHF with optional UTC mapping
+      const raw = v as DateRange;
+      const mapped: DateRange =
+        utc && raw
+          ? [
+              raw[0]
+                ? includeTime
+                  ? local2utcDateTime(raw[0])
+                  : local2utcDateOnly(raw[0])
+                : null,
+              raw[1]
+                ? includeTime
+                  ? local2utcDateTime(raw[1])
+                  : local2utcDateOnly(raw[1])
+                : null,
+            ]
+          : raw;
       hookFieldOnChange({
-        target: { type: 'date', value: v as DateRange },
+        target: { type: 'date', value: mapped },
       } as unknown as React.SyntheticEvent<HTMLElement>);
     },
-    [hookFieldOnChange, includeTime, onDateChange, onTimeChange],
+    [hookFieldOnChange, includeTime, onDateChange, onTimeChange, utc],
   );
 
   const [preset, setPreset] = useState<string | false>(false);
@@ -118,11 +136,28 @@ export const HookFormDateRangePicker = <
           : value
         : [null, null];
 
+      const rv = resolvedValue as DateRange;
+      const mapped: DateRange =
+        utc && rv
+          ? [
+              rv[0]
+                ? includeTime
+                  ? local2utcDateTime(rv[0])
+                  : local2utcDateOnly(rv[0])
+                : null,
+              rv[1]
+                ? includeTime
+                  ? local2utcDateTime(rv[1])
+                  : local2utcDateOnly(rv[1])
+                : null,
+            ]
+          : rv;
+
       hookFieldOnChange({
-        target: { type: 'date', value: resolvedValue as DateRange },
+        target: { type: 'date', value: mapped },
       } as unknown as React.SyntheticEvent<HTMLElement>);
     },
-    [hookFieldOnChange, presets],
+    [hookFieldOnChange, presets, includeTime, utc],
   );
 
   useEffect(() => {

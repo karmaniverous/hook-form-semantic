@@ -1,8 +1,6 @@
 # Development Plan
 
-#
-
-# When updated: 2025-10-06T02:35:00Z
+# When updated: 2025-10-06T03:15:00Z
 
 ## Next up
 
@@ -13,43 +11,25 @@
 
 ## Completed (recent)
 
-- Tests (tz bounds, Singapore): add an explicit Asia/Singapore scenario that
-  mirrors the playground screenshot with endDatesInclusive unset. The test sets
-  Start=2025‑10‑01, End=2025‑10‑31, switches Timezone to Asia/Singapore, and
-  asserts exact header values and description:
-  Starts=2025‑09‑30 00:00, Ends=2025‑10‑30 00:00, description includes
-  “[from 2025‑09‑30 00:00; until 2025‑10‑30 00:00]”. This confirms whether CI
-  observes the same browser result and isolates whether failures are test vs engine.
-- Tests (tz bounds): harden bounds/timezone tests to avoid environment‑specific
-  brittleness. Updated src/components/HookFormRRStack/bounds.tz.test.tsx to:
-  - Select the Timezone dropdown unambiguously within its field (getAllByTestId
-    and pick the field's dropdown).
-  - Assert that RuleDescription text reflects the header Starts/Ends values
-    (formatted in the configured timezone) rather than fixed timestamps.
-  This preserves the core requirement (“header and description remain consistent
-  and reflect the configured timezone”) while stabilizing CI across locales/ICU
-  variations.
-- Tests (tz bounds): add coverage asserting Starts/Ends (header) are formatted
-  in the configured timezone and stay consistent with RuleDescription bounds for
-  both span and recurring (daily) rules. Also assert updates when switching
-  timezone (America/Chicago → UTC). Uses describeIncludeBounds with a fixed
-  describeBoundsFormat to keep assertions deterministic across environments.
+- Date pickers (UTC option):
+  - Added `utc?: boolean` to HookFormDatePicker and HookFormDateRangePicker. When true, components output UTC dates:
+    - date-only → selected calendar date at 00:00:00Z,
+    - datetime → same wall time interpreted in UTC (e.g., 09:00 → 09:00Z).
+  - Presets on the range picker are mapped according to `utc` and the current includeTime mode so stored values are UTC instants.
+  - Implemented small helpers in src/utils/utc.ts: `toUtcDateOnly` and `toUtcDateTimeFromLocal`.
+  - Tests: added focused UTC mapping tests for both single date and range pickers covering date-only, datetime, and time-based presets.
 
-- Tests: update rrstack2rhf tests to reflect new return type
-  `{ rhf, timeUnit }`; assert timeUnit and use rhf.* in all expectations.
-  Resolves TS and eslint typed‑rules errors.
-- Utils/tests: extract int2csv (number[] → CSV) mirroring csv2int and refactor
-  rrstack2rhf to use it. Normalize engine arrays (number | number[] | Weekday[])
-  to number[] and add rrstack2rhf unit tests for CSV fields, arrays, span
-  mapping, and inclusive end-date reversal.
-- Utils: add rrstack2rhf (engine → RHF) to exactly reverse rhf2rrstack. Maps
-  RRStackOptions back to HookFormRRStackData, restoring wall-time Date clamps via
-  epochToWallDate and reversing end-of-day inclusive semantics for midnight ends.
-  Exported from the HookFormRRStack barrel.
-- Utils: adjust offsetTruncatedDate truncation semantics so offsetDays is applied
-  from day=1 baseline for 'month'/'year'; fixes remaining yearly truncation test.
-- Bench: align helpers and call sites; replace dynamic user-event import/new with
-  shared newUser(); remove unused params; resolves TS2554/TS2351 and lint errors.
+- Tests (tz bounds, Singapore): add an explicit Asia/Singapore scenario that mirrors the playground screenshot with endDatesInclusive unset. The test sets Start=2025‑10‑01, End=2025‑10‑31, switches Timezone to Asia/Singapore, and asserts exact header values and description: Starts=2025‑09‑30 00:00, Ends=2025‑10‑30 00:00, description includes “[from 2025‑09‑30 00:00; until 2025‑10‑30 00:00]”. This confirms whether CI observes the same browser result and isolates whether failures are test vs engine.
+- Tests (tz bounds): harden bounds/timezone tests to avoid environment‑specific brittleness. Updated src/components/HookFormRRStack/bounds.tz.test.tsx to:
+  - Select the Timezone dropdown unambiguously within its field (getAllByTestId and pick the field's dropdown).
+  - Assert that RuleDescription text reflects the header Starts/Ends values (formatted in the configured timezone) rather than fixed timestamps. This preserves the core requirement (“header and description remain consistent and reflect the configured timezone”) while stabilizing CI across locales/ICU variations.
+- Tests (tz bounds): add coverage asserting Starts/Ends (header) are formatted in the configured timezone and stay consistent with RuleDescription bounds for both span and recurring (daily) rules. Also assert updates when switching timezone (America/Chicago → UTC). Uses describeIncludeBounds with a fixed describeBoundsFormat to keep assertions deterministic across environments.
+
+- Tests: update rrstack2rhf tests to reflect new return type `{ rhf, timeUnit }`; assert timeUnit and use rhf.\* in all expectations. Resolves TS and eslint typed‑rules errors.
+- Utils/tests: extract int2csv (number[] → CSV) mirroring csv2int and refactor rrstack2rhf to use it. Normalize engine arrays (number | number[] | Weekday[]) to number[] and add rrstack2rhf unit tests for CSV fields, arrays, span mapping, and inclusive end-date reversal.
+- Utils: add rrstack2rhf (engine → RHF) to exactly reverse rhf2rrstack. Maps RRStackOptions back to HookFormRRStackData, restoring wall-time Date clamps via epochToWallDate and reversing end-of-day inclusive semantics for midnight ends. Exported from the HookFormRRStack barrel.
+- Utils: adjust offsetTruncatedDate truncation semantics so offsetDays is applied from day=1 baseline for 'month'/'year'; fixes remaining yearly truncation test.
+- Bench: align helpers and call sites; replace dynamic user-event import/new with shared newUser(); remove unused params; resolves TS2554/TS2351 and lint errors.
 - Bench: split HookFormRRStack.bench.tsx into focused async benches under bench/, use userEvent and explicit waits to ensure each case performs work. This removes “NaNx faster than …” rows from the summary.
 - Utils: fix offsetTruncatedDate 'month'/'year' truncation to set day=1 (not 0); resolves off-by-one month in tests.
 - Tests: add small, focused unit tests for csv2int and offsetTruncatedDate to increase coverage on pure helpers.
