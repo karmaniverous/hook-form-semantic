@@ -265,7 +265,7 @@ export default function App() {
         <Header as="h2">HookFormRRStack Demo</Header>
 
         <HookFormRRStack<FormData>
-          describeBoundsFormat="yyyy-LL-dd"
+          describeBoundsFormat="yyyy-LL-dd hh:mm"
           describeIncludeBounds
           hookName="rrstack"
           hookControl={control}

@@ -58,7 +58,6 @@ export const HookFormRRStackRuleRange = <
           hookControl={control}
           hookName={`${name}.starts` as Path<TFieldValues>}
           label="Start Date"
-          utc
         />
 
         <HookFormDatePicker<TFieldValues>
@@ -66,7 +65,6 @@ export const HookFormRRStackRuleRange = <
           hookControl={control}
           hookName={`${name}.ends` as Path<TFieldValues>}
           label="End Date"
-          utc
         />
 
         <HookFormField<TFieldValues, { value: string }>

@@ -126,6 +126,8 @@ export const HookFormRRStack = <
 
     const { start, end } = rrstack.getEffectiveBounds();
 
+    console.log({ start, end });
+
     return {
       starts: formatTimestamp(start),
       ends: formatTimestamp(end),

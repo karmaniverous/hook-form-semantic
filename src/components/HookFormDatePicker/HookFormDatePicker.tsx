@@ -1,5 +1,5 @@
 import { omit } from 'radash';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import DatePicker, { type DatePickerProps } from 'react-date-picker';
 import DateTimePicker, {
   type DateTimePickerProps,
@@ -11,7 +11,7 @@ import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
-import { local2utcDateOnly, local2utcDateTime } from '@/utils/utc';
+import { local2utcDateTime, utc2localDateTime } from '@/utils/utc';
 
 export interface HookFormDatePickerProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -43,7 +43,7 @@ export const HookFormDatePicker = <
 ) => {
   const {
     controller: {
-      field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
+      field: { onChange: hookFieldOnChange, value: raw, ...hookFieldProps },
       fieldState: { error },
     },
     deprefixed: {
@@ -58,16 +58,18 @@ export const HookFormDatePicker = <
 
   const [includeTime, setIncludeTime] = useState<boolean | undefined>(false);
 
+  const value = useMemo(
+    () => (raw && utc ? utc2localDateTime(raw) : raw),
+    [raw, includeTime],
+  );
+
   const handleChange = useCallback(
     (...[v]: Parameters<NonNullable<DatePickerProps['onChange']>>) => {
       (includeTime ? onTimeChange : onDateChange)?.(v as Date | null);
+
       const raw = v as Date | null;
-      const mapped =
-        utc && raw
-          ? includeTime
-            ? local2utcDateTime(raw)
-            : local2utcDateOnly(raw)
-          : raw;
+      const mapped = utc && raw ? local2utcDateTime(raw) : raw;
+
       hookFieldOnChange({
         target: { type: 'date', value: mapped },
       } as unknown as React.SyntheticEvent<HTMLElement>);
@@ -123,7 +125,7 @@ export const HookFormDatePicker = <
             }}
             {...timePickerProps}
             {...omit(hookFieldProps, ['ref'])}
-            value={(value as Date | null) ?? null}
+            value={value ?? null}
           />
         ) : (
           <DatePicker
@@ -139,7 +141,7 @@ export const HookFormDatePicker = <
             }}
             {...datePickerProps}
             {...omit(hookFieldProps, ['ref'])}
-            value={(value as Date | null) ?? null}
+            value={value ?? null}
           />
         )}
       </div>

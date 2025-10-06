@@ -27,7 +27,7 @@ import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
 import { isFn } from '@/utils/isFn';
-import { local2utcDateOnly, local2utcDateTime } from '@/utils/utc';
+import { local2utcDateTime, utc2localDateTime } from '@/utils/utc';
 
 import type { DateRange } from './DateRange';
 import type { Presets } from './presets';
@@ -72,7 +72,7 @@ export const HookFormDateRangePicker = <
 }: HookFormDateRangePickerProps<TFieldValues, TName>) => {
   const {
     controller: {
-      field: { onChange: hookFieldOnChange, value, ...hookFieldProps },
+      field: { onChange: hookFieldOnChange, value: raw, ...hookFieldProps },
       fieldState: { error },
     },
     deprefixed: {
@@ -84,6 +84,11 @@ export const HookFormDateRangePicker = <
 
   const [includeTime, setIncludeTime] = useState<boolean | undefined>(false);
 
+  const value = useMemo(
+    () => (raw && utc ? (raw as DateRange).map(utc2localDateTime) : raw),
+    [raw, includeTime],
+  );
+
   const handleChange = useCallback(
     (...[v]: Parameters<NonNullable<DateRangePickerProps['onChange']>>) => {
       // Call through to the widget's onChange (per selected mode)
@@ -93,16 +98,8 @@ export const HookFormDateRangePicker = <
       const mapped: DateRange =
         utc && raw
           ? [
-              raw[0]
-                ? includeTime
-                  ? local2utcDateTime(raw[0])
-                  : local2utcDateOnly(raw[0])
-                : null,
-              raw[1]
-                ? includeTime
-                  ? local2utcDateTime(raw[1])
-                  : local2utcDateOnly(raw[1])
-                : null,
+              raw[0] ? local2utcDateTime(raw[0]) : null,
+              raw[1] ? local2utcDateTime(raw[1]) : null,
             ]
           : raw;
       hookFieldOnChange({
@@ -140,16 +137,8 @@ export const HookFormDateRangePicker = <
       const mapped: DateRange =
         utc && rv
           ? [
-              rv[0]
-                ? includeTime
-                  ? local2utcDateTime(rv[0])
-                  : local2utcDateOnly(rv[0])
-                : null,
-              rv[1]
-                ? includeTime
-                  ? local2utcDateTime(rv[1])
-                  : local2utcDateOnly(rv[1])
-                : null,
+              rv[0] ? local2utcDateTime(rv[0]) : null,
+              rv[1] ? local2utcDateTime(rv[1]) : null,
             ]
           : rv;
 

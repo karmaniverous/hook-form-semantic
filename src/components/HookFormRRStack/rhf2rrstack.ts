@@ -7,6 +7,8 @@ import type {
 import { dateOnlyToEpoch, wallTimeToEpoch } from '@karmaniverous/rrstack';
 import { omit } from 'radash';
 
+import { local2utcDateTime } from '@/utils/utc';
+
 import { conformRule } from './conformRule';
 import { csv2int } from './csv2int';
 import type { HookFormRRStackData, HookFormRRStackRuleData } from './types';
@@ -71,28 +73,28 @@ export const rhfrule2rrstackrule = (
   const freq =
     options.freq && options.freq !== 'span' ? options.freq : undefined;
 
+  const startsUtc = local2utcDateTime(options.starts);
+
   const starts =
-    options.starts instanceof Date
-      ? hasTime(options.starts)
-        ? wallTimeToEpoch(options.starts, timezone, timeUnit)
-        : dateOnlyToEpoch(options.starts, timezone, timeUnit)
+    startsUtc instanceof Date
+      ? hasTime(startsUtc)
+        ? wallTimeToEpoch(startsUtc, timezone, timeUnit)
+        : dateOnlyToEpoch(startsUtc, timezone, timeUnit)
       : undefined;
 
+  const endsUtc = local2utcDateTime(options.ends);
+
   const ends =
-    options.ends instanceof Date
+    endsUtc instanceof Date
       ? endDatesInclusive
         ? dateOnlyToEpoch(
-            new Date(
-              options.ends.getFullYear(),
-              options.ends.getMonth(),
-              options.ends.getDate() + 1,
-            ),
+            new Date(endsUtc.setUTCDate(endsUtc.getUTCDate() + 1)),
             timezone,
             timeUnit,
           )
-        : hasTime(options.ends)
-          ? wallTimeToEpoch(options.ends, timezone, timeUnit)
-          : dateOnlyToEpoch(options.ends, timezone, timeUnit)
+        : hasTime(endsUtc)
+          ? wallTimeToEpoch(endsUtc, timezone, timeUnit)
+          : dateOnlyToEpoch(endsUtc, timezone, timeUnit)
       : undefined;
 
   const duration =

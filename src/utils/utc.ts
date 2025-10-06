@@ -47,3 +47,43 @@ export const local2utcDateTime = (
     ),
   );
 };
+
+/**
+ * Reverse of {@link local2utcDateOnly} for display:
+ * Map a UTC instant to a local Date whose calendar date equals the UTC date,
+ * at local midnight. Useful for showing a stored UTC date-only value back in
+ * a date-only widget without shifting the calendar day.
+ *
+ * Example:
+ *  UTC 2025‑01‑02T00:00:00Z → new Date(2025, 0, 2) (local midnight)
+ */
+export const utc2localDateOnly = (
+  date: Date | null | undefined,
+): Date | null => {
+  if (!date) return date ?? null;
+  return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+};
+
+/**
+ * Reverse of {@link local2utcDateTime} for display:
+ * Map a UTC instant to a local Date that carries the same "wall clock" fields
+ * as the UTC time. This lets a local datetime widget show the exact HH:mm:ss.mmm
+ * that was encoded in UTC.
+ *
+ * Example:
+ *  UTC 2025‑01‑02T09:30:00Z → new Date(2025, 0, 2, 9, 30, 0, 0) (local)
+ */
+export const utc2localDateTime = (
+  date: Date | null | undefined,
+): Date | null => {
+  if (!date) return date ?? null;
+  return new Date(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds(),
+    date.getUTCMilliseconds(),
+  );
+};
