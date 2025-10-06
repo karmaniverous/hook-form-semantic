@@ -2,10 +2,17 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.4.1](https://github.com/karmaniverous/hook-form-semantic/compare/0.4.0...0.4.1)
+
+- switched default to import [`fe7a0bd`](https://github.com/karmaniverous/hook-form-semantic/commit/fe7a0bdfa687dd5b3a5b23c47fcea28ca69da956)
+
 #### [0.4.0](https://github.com/karmaniverous/hook-form-semantic/compare/0.3.0...0.4.0)
+
+> 7 October 2025
 
 - feat(rrstack): add rrstack2rhf to invert rhf2rrstack; export from barrel [`5d4b4b8`](https://github.com/karmaniverous/hook-form-semantic/commit/5d4b4b84fb2645fd18c99ecdca198a00825306eb)
 - feat(date-pickers): add utc option to output UTC dates [`ce1dddc`](https://github.com/karmaniverous/hook-form-semantic/commit/ce1dddc50df0e447f87c3bbaa8c22cc3274e47a1)
+- chore: release v0.4.0 [`6feb39d`](https://github.com/karmaniverous/hook-form-semantic/commit/6feb39d4e81e445e7ba8b9f5b4bdc72c9d0ea184)
 - test(rrstack): add tz-aware Starts/Ends vs RuleDescription bounds tests [`003f64e`](https://github.com/karmaniverous/hook-form-semantic/commit/003f64e79e59f2d0f780501cad724161f4bbe581)
 - updated rrstack [`22210f6`](https://github.com/karmaniverous/hook-form-semantic/commit/22210f6258c4a3dda02b8a3fb01789c91f15f25d)
 - wip [`ef6644f`](https://github.com/karmaniverous/hook-form-semantic/commit/ef6644f19ce6ee50c8b26d9529da64c178268014)
