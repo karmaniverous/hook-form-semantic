@@ -2,7 +2,7 @@
 
 #
 
-# When updated: 2025-10-05T06:05:00Z
+# When updated: 2025-10-06T00:28:00Z
 
 ## Next up
 
@@ -13,6 +13,17 @@
 
 ## Completed (recent)
 
+- Tests: update rrstack2rhf tests to reflect new return type
+  `{ rhf, timeUnit }`; assert timeUnit and use rhf.* in all expectations.
+  Resolves TS and eslint typed‑rules errors.
+- Utils/tests: extract int2csv (number[] → CSV) mirroring csv2int and refactor
+  rrstack2rhf to use it. Normalize engine arrays (number | number[] | Weekday[])
+  to number[] and add rrstack2rhf unit tests for CSV fields, arrays, span
+  mapping, and inclusive end-date reversal.
+- Utils: add rrstack2rhf (engine → RHF) to exactly reverse rhf2rrstack. Maps
+  RRStackOptions back to HookFormRRStackData, restoring wall-time Date clamps via
+  epochToWallDate and reversing end-of-day inclusive semantics for midnight ends.
+  Exported from the HookFormRRStack barrel.
 - Utils: adjust offsetTruncatedDate truncation semantics so offsetDays is applied
   from day=1 baseline for 'month'/'year'; fixes remaining yearly truncation test.
 - Bench: align helpers and call sites; replace dynamic user-event import/new with

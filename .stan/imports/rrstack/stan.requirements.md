@@ -1,12 +1,12 @@
 # RRStack — Requirements
 
-Last updated: 2025-10-05 (UTC)
+Last updated: 2025-10-01 (UTC)
 
 Purpose
 
 - Define durable, repository-specific requirements for RRStack (timezone‑aware RRULE stacking engine for Node/TypeScript).
-- This document captures functional and non‑functional requirements, API surface, algorithms, validation, error taxonomy, packaging, and documentation/testing policies.
-- Project-specific assistant instructions live in stan.project.md. The system prompt (stan.system.md) remains repo‑agnostic.
+- This document captures functional and non‑functional requirements, API surface, algorithms, packaging, and documentation/testing policies.
+- Project-specific assistant instructions live in stan.project.md. The system prompt (stan.system.md) remains repo-agnostic.
 
 Targets and runtime
 
@@ -48,7 +48,6 @@ Public API (core types and shapes)
   - freq?: 'yearly' | 'monthly' | 'weekly' | 'daily' | 'hourly' | 'minutely' | 'secondly'
   - starts?: number (timestamp in configured unit)
   - ends?: number (timestamp in configured unit)
-  - Other RRULE-compatible keys are accepted (dtstart/until/tzid are controlled internally).
 - DurationParts (integers; total > 0): years, months, weeks, days, hours, minutes, seconds
 - UnixTimeUnit: 'ms' | 's'
 - TimeZoneId: branded string (validated IANA zone)
@@ -85,7 +84,7 @@ Version handling (ingestion pipeline)
   - The “current RRStack version” is the engine’s build-time version (**RRSTACK_VERSION**). toJson() always writes that value.
 - Version detector and upgrader (front of update pipeline)
   - On every update(), detect the incoming JSON version string (may be missing or invalid).
-  - Invoke internal upgradeConfig(from: string | null, to: string, json: RRStackOptions):
+  - Invoke internal upgradeConfig(from: string | null, to: string, json: RRStackOptions): RRStackOptions.
     - Today: no-op (returns json unchanged).
     - Purpose: future-proofing for data model changes. It runs on every accepted version mismatch per policy.
 - UpdatePolicy (defaults and behavior)
@@ -110,48 +109,75 @@ Update API (single entry point)
   - Rules semantics: if rules is provided, it replaces the entire list (no per-rule merge).
   - Recompile exactly once at the end of a successful apply.
   - Returns a readonly array of Notice values; also invokes onNotice (if provided) for each notice in order.
+- Removal of updateOptions
+  - updateOptions is removed. Call update() for all JSON ingestion and partial merges.
+
+Unit conversion (when timeUnit changes)
+
+- If partial.rules is provided alongside a timeUnit change:
+  - Replace rules with the provided array; treat those timestamps as already in the new unit; do not convert those incoming rules.
+- If partial.rules is not provided:
+  - Convert all retained rules’ options.starts/options.ends from oldUnit → newUnit:
+    - ms → s: Math.trunc(ms / 1000)
+    - s → ms: s \* 1000
+  - DurationParts are unitless; no conversion.
+- Recompile in the new unit. Query semantics remain the same (computeOccurrenceEnd still rounds ends up in 's' mode to preserve [start, end)).
 
 Notices (return type and callback payloads)
 
 - Notice is a discriminated union with stable kinds and levels so hosts can branch or log consistently:
 
-```ts
-export type Notice =
-  | {
-      kind: 'versionUp';
-      level: 'error' | 'warn' | 'info';
-      from: string | null; // null when missing/invalid
-      to: string; // engine version
-      action: 'upgrade' | 'rejected' | 'ingestAsCurrent';
-      message?: string;
-    }
-  | {
-      kind: 'versionDown';
-      level: 'error' | 'warn' | 'info';
-      from: string | null;
-      to: string; // engine version
-      action: 'rejected' | 'ingestAsCurrent';
-      message?: string;
-    }
-  | {
-      kind: 'versionInvalid';
-      level: 'error' | 'warn' | 'info';
-      raw: unknown; // original incoming value
-      to: string; // engine version
-      action: 'rejected' | 'ingestAsCurrent';
-      message?: string;
-    }
-  | {
-      kind: 'timeUnitChange';
-      level: 'error' | 'warn' | 'info';
-      from: UnixTimeUnit;
-      to: UnixTimeUnit;
-      action: 'convertedExisting' | 'acceptedIncomingRules' | 'rejected';
-      convertedRuleCount?: number;
-      replacedRuleCount?: number;
-      message?: string;
-    };
-```
+  ```ts
+  export type Notice =
+    | {
+        kind: 'versionUp';
+        level: 'error' | 'warn' | 'info';
+        from: string | null; // null when missing/invalid
+        to: string; // engine version
+        action: 'upgrade' | 'rejected' | 'ingestAsCurrent';
+        message?: string;
+      }
+    | {
+        kind: 'versionDown';
+        level: 'error' | 'warn' | 'info';
+        from: string | null;
+        to: string; // engine version
+        action: 'rejected' | 'ingestAsCurrent';
+        message?: string;
+      }
+    | {
+        kind: 'versionInvalid';
+        level: 'error' | 'warn' | 'info';
+        raw: unknown; // original incoming value
+        to: string; // engine version
+        action: 'rejected' | 'ingestAsCurrent';
+        message?: string;
+      }
+    | {
+        kind: 'timeUnitChange';
+        level: 'error' | 'warn' | 'info';
+        from: UnixTimeUnit;
+        to: UnixTimeUnit;
+        action: 'convertedExisting' | 'acceptedIncomingRules' | 'rejected';
+        convertedRuleCount?: number; // when converting retained rules
+        replacedRuleCount?: number; // when replacing with incoming rules
+        message?: string;
+      };
+  ```
+
+Update policy type
+
+- The policy object accepted by update():
+
+  ```ts
+  export interface UpdatePolicy {
+    onVersionUp?: 'error' | 'warn' | 'off'; // default 'off'
+    onVersionDown?: 'error' | 'warn' | 'off'; // default 'error'
+    onVersionInvalid?: 'error' | 'warn' | 'off'; // default 'error'
+    onTimeUnitChange?: 'error' | 'warn' | 'off'; // default 'warn'
+    onNotice?: (n: Notice) => void;
+  }
+  ```
 
 Persistence and version
 
@@ -189,124 +215,86 @@ Effective bounds
   - Open-end detection: O(1) stack inspection — cascade is open-ended iff the last open-ended candidate is an active source (active open span, infinite active recurrence with any start, or active baseline).
   - Latest-bound: finite/local — compute a finite probe (max end across finite contributors) and run a bounded reverse sweep to find the latest active→blackout transition; short‑circuit when applicable. Never scan far-future.
 
-Validation (shape vs semantic) — STRICT
+Coverage helpers and horizons
 
-Shape validation (zod)
+- Compute occurrence ends in the rule timezone (Luxon), rounding up in 's' mode.
+- enumerationHorizon(rule): duration/frequency-aware window (ms|s).
+- epochToWallDate / floatingDateToZonedEpoch: convert between epoch (unit) and rrule floating Date with proper timezone.
 
-- zod is used to parse and normalize RRStackOptions and minimal rule constraints:
-  - Types, presence, and simple invariants (e.g., DurationParts integers and total > 0).
-  - zod does NOT attempt timezone/frequency-aware semantics.
+Validation policy (zod)
 
-Semantic validation (compile-time; tz/unit/freq-aware)
+- Minimal runtime checks:
+  - OptionsSchema: RRStackOptions parsing
+  - RuleLiteSchema: lightweight rule validation at mutation boundaries
+- Full rrule options validation occurs during compilation.
 
-- Per recurring rule (options.freq present), compile-time validation performs:
-  1. Duration non‑positive
-     - Duration must be strictly positive. Violations error with code 'DURATION_NON_POSITIVE'.
-  2. Duration < shortest inter‑start period (no self‑overlap)
-     - For YEARLY/MONTHLY/WEEKLY/DAILY freqs, the rule’s duration must be strictly less than the minimum elapsed time between any two consecutive starts produced by that rule in its timezone (“shortest inter‑start period”).
-     - Measure in the configured unit ('ms'|'s') on the real timeline (occurrence starts placed via tzid).
-     - Shortest period computation (sampling policy, conservative and bounded): • daily: sample within‑day sets (BYHOUR/BYMINUTE/BYSECOND) and a week’s worth of days.  
-       • weekly: sample 8 consecutive weeks.  
-       • monthly: sample 24 consecutive months (28/29/30/31-day variance).  
-       • yearly: sample 6–8 consecutive years (leap years and weekday positions).  
-       • clamps (count/ends) limiting the series to < 2 starts → treat min gap as Infinity (no overlap).
-     - Sub‑daily freqs (hourly/minutely/secondly): this validation is not enforced (for now) to avoid unrealistic constraints with integer units; revisit as needed.
-     - Violations error with code 'DURATION_EXCEEDS_SHORTEST_PERIOD' and include meta { freq, tz, unit, duration, shortestPeriod, sampledPairs, exampleStarts? }.
-  3. Invalid BYSETPOS usage (no real set to select from)
-     - BYSETPOS is invalid when, for the current freq and the provided BY\* lists, the per‑period candidate set cannot exceed 1 element; in such cases BYSETPOS would be a no‑op or non‑functional.
-     - Multiplicity hints (deterministic, array-length based): • YEARLY: set can exceed 1 iff (bymonth >1) OR (bymonthday >1) OR (byyearday >1) OR (byweekno >1) OR (byweekday non-empty) OR (byhour >1 OR byminute >1 OR bysecond >1).  
-       • MONTHLY: set can exceed 1 iff (bymonthday >1) OR (byweekday non-empty) OR (byhour/byminute/bysecond >1).  
-       • WEEKLY: set can exceed 1 iff (byweekday >1) OR (byhour/byminute/bysecond >1).  
-       • DAILY: set can exceed 1 iff (byhour >1) OR (byminute >1 with fixed hour) OR (bysecond >1 with fixed hour/minute).  
-       • HOURLY: set can exceed 1 iff (byminute >1) OR (bysecond >1).  
-       • MINUTELY: set can exceed 1 iff (bysecond >1).  
-       • SECONDLY: BYSETPOS always invalid (per-second period cannot create multiple candidates).
-     - Violations error with code 'BYSETPOS_WITHOUT_SET' and include meta { freq, tz, unit, bymonthLen, bymonthdayLen, byweekdayLen, byhourLen, byminuteLen, bysecondLen }.
-  4. Invalid timezone in the host environment
-     - Throws 'INVALID_TIME_ZONE'.
+Packaging and exports
 
-Invalid but tolerated combinations
-
-- We do not treat “bymonthday without bymonth” as invalid (it means “that day number in every month”).
-- Unusual combinations (e.g., weekly filtered by bymonthday) are allowed; description logic may not render all filters, but the rule remains valid.
-
-Error taxonomy and delivery (frontend‑friendly)
-
-Types (exported)
-
-```ts
-// Union
-export type RRStackError =
-  | RRStackZodError
-  | RRStackCompileError
-  | RRStackCompileAggregateError
-  | RRStackRuntimeError;
-
-// zod errors (shape)
-export interface RRStackZodError {
-  kind: 'zod';
-  message: string;
-  issues: Array<{ path: (string | number)[]; message: string; code?: string }>;
-}
-
-// compile-time semantic errors (single rule)
-export interface RRStackCompileError {
-  kind: 'compile';
-  code:
-    | 'DURATION_NON_POSITIVE'
-    | 'DURATION_EXCEEDS_SHORTEST_PERIOD'
-    | 'BYSETPOS_WITHOUT_SET'
-    | 'INVALID_TIME_ZONE';
-  message: string;
-  ruleIndex?: number;
-  meta?: Record<string, unknown>;
-}
-
-// aggregate over multiple rules
-export interface RRStackCompileAggregateError {
-  kind: 'compile-aggregate';
-  message: string;
-  errors: RRStackCompileError[]; // each with ruleIndex
-}
-
-// everything else
-export interface RRStackRuntimeError {
-  kind: 'runtime';
-  code: string;
-  message: string;
-  cause?: unknown;
-}
-
-// Predicates
-export function isRRStackError(e: unknown): e is RRStackError;
-export function isRRStackZodError(e: unknown): e is RRStackZodError;
-export function isRRStackCompileError(e: unknown): e is RRStackCompileError;
-export function isRRStackCompileAggregateError(
-  e: unknown,
-): e is RRStackCompileAggregateError;
-export function isRRStackRuntimeError(e: unknown): e is RRStackRuntimeError;
-```
-
-Where errors originate
-
-- zod errors: thrown during options normalization (constructor/update).
-- compile errors: thrown during compileRule; RRStack’s recompile step aggregates multiple per‑rule compile errors and throws a single RRStackCompileAggregateError with ruleIndex attributions.
-- runtime errors: unexpected exceptions (rare).
+- Rollup builds CJS and ESM outputs; types included.
+- Subpath export ./react provides React hooks (see below).
+- Runtime dependencies and peerDependencies are marked external; Node built-ins are external.
+- Replace plugin injects **RRSTACK_VERSION** at build time for browser-safe versioning.
 
 React adapter (./react)
 
-- Hooks observe a live RRStack instance without re‑wrapping its control surface:
-  - useRRStack({ json, onChange?, resetKey?, policy?, changeDebounce?, mutateDebounce?, renderDebounce?, logger? }) → { rrstack, version, flushChanges, flushMutations, cancelMutations, flushRender, error }
-    - error?: RRStackError | RRStackCompileAggregateError | null • Set when ingestion/commit fails; cleared on next successful commit.  
-      • onChange is not called when an error occurs.
+- Hooks observe a live RRStack instance without re-wrapping its control surface:
+  - useRRStack({ json, onChange?, resetKey?, policy?, changeDebounce?, mutateDebounce?, renderDebounce?, logger? }) → { rrstack, version, flushChanges, flushMutations, cancelMutations, flushRender }
     - mutateDebounce stages UI edits (rules/timezone) and commits once per window.
     - renderDebounce coalesces paints (optional leading; trailing always true).
-    - changeDebounce coalesces autosave calls (trailing always true).
+    - changeDebounce coalesces autosave calls (trailing always true; optional leading).
   - useRRStackSelector({ rrstack, selector, isEqual?, renderDebounce?, logger?, resetKey? }) → { selection, version, flushRender }
 - Ingestion loop (form → engine)
-  - The hook watches the json prop (by comparator ignoring version); when it changes, it invokes rrstack.update(json, policy) (debounced if configured). On commit, it triggers one onChange (debounced if configured).
-  - The optional policy applies to both ingestion and staged commits. Use onNotice to surface notices.
-  - On errors (zod/compile/runtime), the hook sets error and does not call onChange.
+  - The hook watches the json prop (by comparator ignoring version); when it changes, it invokes rrstack.update(json, policy) via the mutate manager (debounced if configured), then commits once per window.
+  - The optional `policy` prop is applied to both ingestion and staged commits; use `onNotice` to surface notices centrally.
+  - On commit, rrstack notifies and the hook calls onChange once (debounced if configured). onChange handlers typically persist rrstack.toJson().
+  - Using toJson() in onChange and the comparator guard avoids ping‑pong loops.
+- Staged vs compiled behavior
+  - Reads of rrstack.rules and rrstack.timezone (and rrstack.toJson()) reflect staged values before commit.
+  - Queries (isActiveAt, getSegments, etc.) reflect last committed compiled state until commit.
+
+Generated artifacts policy
+
+- assets/rrstackconfig.schema.json is generated (scripts/gen-schema.ts via zod-to-json-schema and post-processing).
+- Do not edit generated artifacts manually; run the generator and commit results.
+
+Release discipline
+
+- Do not bump package version or edit CHANGELOG.md in normal patches.
+- Versioning and changelog updates are owned by the release workflow (release-it + auto-changelog).
+
+Documentation
+
+- README and Handbook document:
+  - API surface and behavior (including segments limit, bounds semantics).
+  - timeUnit semantics, unit-change conversion details, and 's' rounding.
+  - Timezone/ICU environment notes.
+  - React hooks options, staged vs compiled, debounce knobs, and the form→engine ingestion flow via update().
+  - Algorithms (deep dive) page detailing the orchestration strategies.
+
+Testing
+
+- Unit tests cover:
+  - DST transitions (spring forward/fall back)
+  - Daily start-at-midnight patterns
+  - Odd-month and every-2-month scenarios with blackout/reactivation cascades
+  - Segment sweeps, range classification
+  - Effective bounds (open/closed sides, ties, blackout overrides, reverse sweep)
+  - update(): version policies (up/down/invalid), timeUnit change (retained vs incoming rules), notices and callback invocation
+  - React hooks (debounce behaviors, version bump rendering, ingestion via update)
+- Performance
+  - BENCH-gated micro-benchmarks (skipped by default) to characterize hot paths (e.g., getEffectiveBounds, isActiveAt, getSegments) under common workloads.
+
+API conventions (boolean options)
+
+- Boolean options are named such that their default is false. Undefined (falsy) must have the same meaning as an explicit false; explicit true is opt‑in.
+- DescribeOptions defaults (unchanged):
+  - includeTimeZone: false (opt‑in to append “(timezone <tz>)”).
+  - includeBounds: false (unchanged).
+
+Out of scope (current)
+
+- Per-field merges inside rules (update replaces the whole rules array when provided).
+- Full RRULE Options validation via zod (compile remains authoritative).
 
 Rule descriptions — pluggable translator and frequency lexicon
 
@@ -328,38 +316,25 @@ Translators (pluggable)
   - locale?: string (Luxon setLocale)
   - lowercase?: boolean
 - Built-in strict-en:
-  - Literal phrasing with complete constraints where supported.
+  - Literal phrasing with complete constraints.
   - Interval phrasing:
     - interval === 1 → noun form (“every year/month/week/day/hour/minute/second”)
     - interval > 1 → “every N {plural(noun)}”
   - Nth weekday: “on the third tuesday”; last via -1.
   - Time of day via formatLocalTime in rule tz.
   - COUNT/UNTIL appended (“for N occurrences”, “until YYYY‑MM‑DD”).
-- Coverage notes
-  - Yearly/monthly/weekly/daily have broad coverage; sub-daily freqs render cadence only.
 
-Testing
+Frequency lexicon
 
-- Unit tests cover:
-  - DST transitions (spring forward/fall back) and duration correctness.
-  - Daily start-at-midnight patterns.
-  - Odd-month and every-2-month scenarios with blackout/reactivation cascades.
-  - Segment sweeps, range classification, and effective bounds (open/closed sides, ties).
-  - update(): version policies (up/down/invalid), timeUnit change (retained vs incoming rules), notices and callback invocation.
-  - React hooks (debounce behaviors, ingestion via update).
-  - NEW: semantic validation tests • DURATION_EXCEEDS_SHORTEST_PERIOD across supported freqs (ms/s, clamps).  
-    • BYSETPOS_WITHOUT_SET across freqs (multiplicity heuristics).  
-    • Aggregate compile error (multiple rules) with ruleIndex and meta.  
-    • useRRStack.error behavior on failure and clearing on success.
+- Types:
+  - FrequencyAdjectiveLabels, FrequencyNounLabels, FrequencyLexicon
+- Constants:
+  - FREQUENCY_ADJECTIVE_EN, FREQUENCY_NOUN_EN, FREQUENCY_LEXICON_EN
+- UI helper:
+  - toFrequencyOptions(labels?: FrequencyAdjectiveLabels) → Array<{ value: FrequencyStr; label: string }>, ordered.
 
-Documentation
+Acceptance criteria (descriptions)
 
-- README and Handbook document:
-  - API surface and behavior (including segments limit, bounds semantics).
-  - timeUnit semantics, unit-change conversion details, and 's' rounding.
-  - Timezone/ICU environment notes.
-  - React hooks options, staged vs compiled, debounce knobs, and the form→engine ingestion flow via update().
-  - Algorithms (deep dive).
-  - NEW: Validation & error handling: • Non‑overlap (duration < shortest inter‑start period) validation.  
-    • Invalid BYSETPOS combinations.  
-    • Error taxonomy, aggregate errors, and useRRStack.error usage.
+- “Monthly 3rd Tuesday at 05:00” includes “third”, “tuesday”, and “5:00”.
+- “Daily at 09:00” includes “every day” and “9:00”.
+- COUNT and UNTIL phrasing matches descriptor; local time formatting honors hourCycle/timeFormat options.
