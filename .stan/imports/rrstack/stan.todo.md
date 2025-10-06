@@ -18,53 +18,71 @@ Next up (near‑term, prioritized)
 
 Completed (recent)
 
+- rrule floating-date seam (host-agnostic):
+  - Construct rrule Dates with rrule.datetime(y,m,d,hh,mi,ss) (UTC fields
+    carrying wall parts in the rule tz). Decode via UTC getters and rebuild
+    Luxon DateTime in the rule tz for epoch math. Eliminates host offset drift.
+
+- Bounds timezone remediation:
+  - Implemented rrule README cautions: rrule-facing Dates are now built with
+    host-local constructors from wall parts in the rule timezone (floating).
+  - Decoding uses LOCAL getters on rrule Dates and Luxon to obtain epoch in
+    the rule timezone (ms/s unit-aware).
+  - Removed all raw .getTime() usage on rrule Date outputs; all comparisons
+    go through floatingDateToZonedEpoch + computeOccurrenceEnd.
+
+- Tests (cross timezones):
+  - Hardened new cross‑timezone bounds/describe tests to assert local
+    wall‑clock values in the rule’s timezone (using Luxon) instead of raw
+    epoch equality, ensuring determinism on UTC+8 hosts.
+- Tests (cross timezones):
+  - Added realistic non‑UTC tests validating getEffectiveBounds and rule
+    descriptions across Europe/London, Asia/Tokyo, Australia/Sydney, and
+    Asia/Kolkata.
+- Bounds & descriptions (America/Chicago daily 1‑day rule):
+  - Fixed recurring bounds rendering when `includeBounds=true` by treating RRULE floating dates correctly (UTC fields reflect local wall time) and rebuilding them in the rule’s timezone before formatting. Removes wrong outputs like “from 2025‑09‑30 19:00”.
+  - Improved earliest‑bound pre‑pass: when the earliest blackout candidate is the domain minimum (baseline blackout), accept the earliest active start directly. This corrects the earliest start for the Chicago daily 1‑day case.
+  - Earliest pre‑pass refinement: use compiled `dtstart` as the base for `rrule.after(base, true)` (do not treat `dtstart` itself as the earliest start), falling back to the rule wall‑min when `dtstart` is absent. This removes environment‑dependent drift and preserves correct first occurrence selection (e.g., BYHOUR 05:00 with a midnight `dtstart`).
+  - Guard for “no BY time” recurrences: when no BYHOUR/BYMINUTE/BYSECOND are specified and a `dtstart` exists, treat `dtstart` as the earliest start directly (convert via `floatingDateToZonedEpoch`) instead of relying on `rrule.after(base, true)`. This eliminates the remaining +13 h drift on hosts far ahead of America/Chicago.
+
+- Description tests:
+  - Added America/Chicago assertion that the daily 1‑day rule with a `starts` clamp renders bounds as local midnight (`from 2025-10-01 00:00`) and not the incorrect `from 2025-09-30 07:00`.
+
 - Time helpers consistency:
   - Renamed helper parameter `zone` → `timezone` to align with RRStackOptions.
-  - Made `timeUnit` optional with `DEFAULT_TIME_UNIT` default in
-    `wallTimeToEpoch` and `dateOnlyToEpoch` (already defaulted in `epochToWallDate`).
+  - Made `timeUnit` optional with `DEFAULT_TIME_UNIT` default in `wallTimeToEpoch` and `dateOnlyToEpoch` (already defaulted in `epochToWallDate`).
   - Updated JSDoc `@param` tags (`unit` → `timeUnit`; `zone` → `timezone`) to clear TypeDoc warnings.
 
+- Tests:
+  - Added America/Chicago assertion for `RRStack.formatInstant` (CST, -06:00) to verify zone handling and local formatting.
+
+- Bounds tests:
+  - Added America/Chicago assertion that `getEffectiveBounds().start` equals the configured `starts` (1759294800000) for a daily 1‑day rule (open end).
+
 - Defaults and TS narrowing:
-  - Centralized defaults are now applied consistently during normalization
-    (DEFAULT_TIME_UNIT, DEFAULT_DEFAULT_EFFECT).
-  - DEFAULT_DEFAULT_EFFECT is exported as the literal `'auto'`, enabling proper
-    TypeScript narrowing in RRStack.baselineEffect and resolving TS2322 errors.
+  - Centralized defaults are now applied consistently during normalization (DEFAULT_TIME_UNIT, DEFAULT_DEFAULT_EFFECT).
+  - DEFAULT_DEFAULT_EFFECT is exported as the literal `'auto'`, enabling proper TypeScript narrowing in RRStack.baselineEffect and resolving TS2322 errors.
 
 - JSON Schema: OpenAPI‑safe duration shape
-  - Removed the duration.anyOf positivity injection from the generated schema to
-    improve compatibility with serverless-openapi-documenter and other OpenAPI tools.
-  - Duration remains optional in the published JSON Schema; advanced constraints
-    (e.g., “duration required when freq is present” and “strictly positive duration”)
-    continue to be enforced by Zod at runtime.
-  - Updated tests (schema.test.ts) to drop the anyOf assertion and verify presence
-    of duration properties and freq enum.
+  - Removed the duration.anyOf positivity injection from the generated schema to improve compatibility with serverless-openapi-documenter and other OpenAPI tools.
+  - Duration remains optional in the published JSON Schema; advanced constraints (e.g., “duration required when freq is present” and “strictly positive duration”) continue to be enforced by Zod at runtime.
+  - Updated tests (schema.test.ts) to drop the anyOf assertion and verify presence of duration properties and freq enum.
   - Updated README and requirements to document OpenAPI-safe policy.
 
 - Docs: descriptions/bounds formatting
-  - README “Rule description helpers”: corrected default (includeTimeZone is
-    opt‑in) and added boundsFormat example.
+  - README “Rule description helpers”: corrected default (includeTimeZone is opt‑in) and added boundsFormat example.
   - Handbook “Descriptions”: added a short boundsFormat section with examples.
 
 - DescribeOptions bounds formatting:
-  - Added `boundsFormat?: string` to DescribeOptions for customizing how
-    includeBounds dates are rendered. When provided, bounds use Luxon
-    `toFormat(boundsFormat)` in the rule’s timezone; otherwise ISO formatting
-    is preserved. Added tests for both span and recurring rules.
+  - Added `boundsFormat?: string` to DescribeOptions for customizing how includeBounds dates are rendered. When provided, bounds use Luxon `toFormat(boundsFormat)` in the rule’s timezone; otherwise ISO formatting is preserved. Added tests for both span and recurring rules.
 
 - Time conversion utilities (final test fix):
-  - Luxon may normalize invalid wall times (e.g., 02:30 → 03:30) while reporting
-    `isValid=true`. We now detect normalization (mismatched wall fields) and treat
-    it as invalid for our policy, then probe successive wall minutes via
-    `DateTime.fromObject` to pick the earliest valid minute (02:30 → 03:00).
+  - Luxon may normalize invalid wall times (e.g., 02:30 → 03:30) while reporting `isValid=true`. We now detect normalization (mismatched wall fields) and treat it as invalid for our policy, then probe successive wall minutes via `DateTime.fromObject` to pick the earliest valid minute (02:30 → 03:00).
   - All tests green.
-  - Tightened the minute-probing loop to accept a candidate only when the constructed
-    wall fields match the requested minute exactly (in addition to `isValid`). This
-    prevents accepting normalized times like 03:30 at 02:30 and ensures we land at 03:00.
+  - Tightened the minute-probing loop to accept a candidate only when the constructed wall fields match the requested minute exactly (in addition to `isValid`). This prevents accepting normalized times like 03:30 at 02:30 and ensures we land at 03:00.
 
 - Time conversion utilities (tests green):
-  - Resolved the remaining spring-forward test by probing successive wall minutes
-    with DateTime.fromObject (wall construction) to find the earliest valid minute    at/after the requested time (02:30 → 03:00). Avoids timeline-based additions
-    that could land at 03:30 across the gap.
+  - Resolved the remaining spring-forward test by probing successive wall minutes with DateTime.fromObject (wall construction) to find the earliest valid minute at/after the requested time (02:30 → 03:00). Avoids timeline-based additions that could land at 03:30 across the gap.
 - Docs (API): Added TSDoc/TypeDoc comments for time helpers (`wallTimeToEpoch`, `dateOnlyToEpoch`, `epochToWallDate`) including parameters, errors, DST semantics, and examples. They are exported from the root and will render in the API reference.
 
 - Time conversion utilities (follow-up fixes):
