@@ -325,7 +325,6 @@ export const HookFormRRStack = <
               }
               onRuleTop={index > 0 ? handleRuleTop : undefined}
               onRuleUp={index > 0 ? handleRuleUp : undefined}
-              timeUnit={rhf.timeUnit}
               endDatesInclusive={endDatesInclusive}
               {...reprifixedDescribeProps}
             />

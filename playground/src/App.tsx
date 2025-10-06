@@ -270,6 +270,7 @@ export default function App() {
           hookName="rrstack"
           hookControl={control}
           label="Scheduling Rules"
+          logger={console}
         />
 
         <Divider />

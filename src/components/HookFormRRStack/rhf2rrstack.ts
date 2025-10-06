@@ -23,14 +23,14 @@ export const rhf2rrstack = (
   rhf: HookFormRRStackData,
   opts: { endDatesInclusive?: boolean } = {},
 ): RRStackOptions => {
-  const { timeUnit } = rhf;
+  const { timeUnit, timezone } = rhf;
   const { endDatesInclusive } = opts;
 
   const rules: RuleJson[] = Array.isArray(rhf.rules)
     ? rhf.rules.map((r) =>
         rhfrule2rrstackrule(
           r,
-          rhf.timezone as unknown as TimeZoneId,
+          timezone as TimeZoneId,
           timeUnit,
           endDatesInclusive,
         ),
@@ -60,8 +60,8 @@ const hasTime = (d: Date) =>
  */
 export const rhfrule2rrstackrule = (
   rule: HookFormRRStackRuleData,
-  timezone?: TimeZoneId,
-  timeUnit: UnixTimeUnit = 'ms',
+  timezone: TimeZoneId,
+  timeUnit?: UnixTimeUnit,
   endDatesInclusive = false,
 ): RuleJson => {
   const { conformedRule } = conformRule(rule);
@@ -73,30 +73,26 @@ export const rhfrule2rrstackrule = (
 
   const starts =
     options.starts instanceof Date
-      ? timezone
-        ? hasTime(options.starts)
-          ? wallTimeToEpoch(options.starts, timezone, timeUnit)
-          : dateOnlyToEpoch(options.starts, timezone, timeUnit)
-        : options.starts.getTime()
+      ? hasTime(options.starts)
+        ? wallTimeToEpoch(options.starts, timezone, timeUnit)
+        : dateOnlyToEpoch(options.starts, timezone, timeUnit)
       : undefined;
 
   const ends =
     options.ends instanceof Date
-      ? timezone
-        ? endDatesInclusive
-          ? dateOnlyToEpoch(
-              new Date(
-                options.ends.getFullYear(),
-                options.ends.getMonth(),
-                options.ends.getDate() + 1,
-              ),
-              timezone,
-              timeUnit,
-            )
-          : hasTime(options.ends)
-            ? wallTimeToEpoch(options.ends, timezone, timeUnit)
-            : dateOnlyToEpoch(options.ends, timezone, timeUnit)
-        : options.ends.getTime()
+      ? endDatesInclusive
+        ? dateOnlyToEpoch(
+            new Date(
+              options.ends.getFullYear(),
+              options.ends.getMonth(),
+              options.ends.getDate() + 1,
+            ),
+            timezone,
+            timeUnit,
+          )
+        : hasTime(options.ends)
+          ? wallTimeToEpoch(options.ends, timezone, timeUnit)
+          : dateOnlyToEpoch(options.ends, timezone, timeUnit)
       : undefined;
 
   const duration =

@@ -1,4 +1,4 @@
-import type { TimeZoneId } from '@karmaniverous/rrstack';
+import type { TimeZoneId, UnixTimeUnit } from '@karmaniverous/rrstack';
 import { type DescribeOptions, describeRule } from '@karmaniverous/rrstack';
 import type { JSX } from 'react';
 import {
@@ -11,9 +11,10 @@ import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form';
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import { concatClassNames } from '@/utils/concatClassNames';
+import { getRootName } from '@/utils/getRootName';
 
 import { rhfrule2rrstackrule } from './rhf2rrstack';
-import type { HookFormRRStackData, HookFormRRStackRuleData } from './types';
+import type { HookFormRRStackRuleData } from './types';
 
 export interface HookFormRRStackRuleDescriptionPropsBase<
   TFieldValues extends FieldValues = FieldValues,
@@ -21,7 +22,6 @@ export interface HookFormRRStackRuleDescriptionPropsBase<
 > extends HookFormProps<TFieldValues, TName>,
     DescribeOptions {
   fallback?: React.ReactNode;
-  timeUnit: HookFormRRStackData['timeUnit'];
   endDatesInclusive?: boolean;
 }
 
@@ -56,7 +56,6 @@ export const HookFormRRStackRuleDescription = <
       formatTimeZone,
       includeBounds,
       includeTimeZone,
-      timeUnit,
       endDatesInclusive = false,
       ...rest
     },
@@ -65,18 +64,20 @@ export const HookFormRRStackRuleDescription = <
 
   const As = (as ?? 'span') as ElementType;
 
-  const rootName = useMemo(() => (name as string).split(/\./)[0], [name]);
+  const rootName = useMemo(() => getRootName(name, 2), [name]);
 
-  const timezone = useWatch({
+  console.log(rootName);
+
+  const [timezone, timeUnit] = useWatch({
     control,
-    name: `${rootName}.timezone`,
-  }) as string;
+    name: [`${rootName}.timezone`, `${rootName}.timeUnit`],
+  }) as [TimeZoneId, UnixTimeUnit];
 
   const text = useMemo(() => {
     if (watched && timezone) {
       const rule = rhfrule2rrstackrule(
         watched as unknown as HookFormRRStackRuleData,
-        timezone as unknown as TimeZoneId,
+        timezone,
         timeUnit,
         endDatesInclusive,
       );

@@ -17,7 +17,7 @@ import type { PrefixProps } from '@/types/PrefixProps';
 import { conformRule } from './conformRule';
 import { HookFormRRStackRuleDescription } from './HookFormRRStackRuleDescription';
 import { HookFormRRStackRuleForm } from './HookFormRRStackRuleForm';
-import type { HookFormRRStackData, HookFormRRStackRuleData } from './types';
+import type { HookFormRRStackRuleData } from './types';
 
 type RuleMutation = (index: number) => void;
 
@@ -38,7 +38,6 @@ export interface HookFormRRStackRuleProps<
   onRuleDown?: RuleMutation;
   onRuleTop?: RuleMutation;
   onRuleUp?: RuleMutation;
-  timeUnit: HookFormRRStackData['timeUnit'];
   endDatesInclusive?: boolean;
 }
 
@@ -67,7 +66,6 @@ export const HookFormRRStackRule = <
       onRuleDown,
       onRuleTop,
       onRuleUp,
-      timeUnit,
       endDatesInclusive,
     },
   } = useHookForm({ props, prefixes: ['describe', 'fieldArray'] as const });
@@ -194,7 +192,6 @@ export const HookFormRRStackRule = <
           hookControl={control}
           hookName={name}
           style={{ fontWeight: 'normal', marginTop: 4, marginLeft: 16 }}
-          timeUnit={timeUnit}
           endDatesInclusive={endDatesInclusive}
           {...describeProps}
         />
