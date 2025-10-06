@@ -2,9 +2,26 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.4.0](https://github.com/karmaniverous/hook-form-semantic/compare/0.3.0...0.4.0)
+
+- feat(rrstack): add rrstack2rhf to invert rhf2rrstack; export from barrel [`5d4b4b8`](https://github.com/karmaniverous/hook-form-semantic/commit/5d4b4b84fb2645fd18c99ecdca198a00825306eb)
+- feat(date-pickers): add utc option to output UTC dates [`ce1dddc`](https://github.com/karmaniverous/hook-form-semantic/commit/ce1dddc50df0e447f87c3bbaa8c22cc3274e47a1)
+- test(rrstack): add tz-aware Starts/Ends vs RuleDescription bounds tests [`003f64e`](https://github.com/karmaniverous/hook-form-semantic/commit/003f64e79e59f2d0f780501cad724161f4bbe581)
+- updated rrstack [`22210f6`](https://github.com/karmaniverous/hook-form-semantic/commit/22210f6258c4a3dda02b8a3fb01789c91f15f25d)
+- wip [`ef6644f`](https://github.com/karmaniverous/hook-form-semantic/commit/ef6644f19ce6ee50c8b26d9529da64c178268014)
+- wip [`c5255fb`](https://github.com/karmaniverous/hook-form-semantic/commit/c5255fba4795f49a50334ef2aaa76d9d7e4b1f3f)
+- test(rrstack): harden tz bounds tests; fix dropdown selection [`3ed7cc9`](https://github.com/karmaniverous/hook-form-semantic/commit/3ed7cc91316bdc707c00b7670cdb568fd9547c71)
+- wip [`c567ec7`](https://github.com/karmaniverous/hook-form-semantic/commit/c567ec7c481dc01793b0c8478b28be0a4af33010)
+- test(rrstack): add Asia/Singapore exact scenario; fix UTC selection [`11f2c2e`](https://github.com/karmaniverous/hook-form-semantic/commit/11f2c2e9c4b4e2ca695ecd780e1ea987b9c4ea07)
+- updated rrstack [`8dee282`](https://github.com/karmaniverous/hook-form-semantic/commit/8dee282b14de7110fc10cc7084c04016544b93f4)
+- skipped tests [`45120d7`](https://github.com/karmaniverous/hook-form-semantic/commit/45120d7db1b642f1f6df29a7f69f248249dd141a)
+
 #### [0.3.0](https://github.com/karmaniverous/hook-form-semantic/compare/0.2.3...0.3.0)
 
+> 5 October 2025
+
 - Refactored for new rrstack version. [`1ce21a4`](https://github.com/karmaniverous/hook-form-semantic/commit/1ce21a43e08d30825718beb856f6032279b80172)
+- chore: release v0.3.0 [`cb34cce`](https://github.com/karmaniverous/hook-form-semantic/commit/cb34cce2d3e86222df7bdd60b200e7835d2503bc)
 - chore(lint): add React, Hooks, and a11y recommended rules [`77c66ec`](https://github.com/karmaniverous/hook-form-semantic/commit/77c66ec70cb694cd523422d7d24629004559d6b8)
 - fix: stabilize RRStack tests; resolve lint a11y/unused-vars [`54ba984`](https://github.com/karmaniverous/hook-form-semantic/commit/54ba984e346440ed73e110e274a37083e700b21a)
 - refactor(rrstack): RHF-throughout + UI↔engine mapping [`52c7570`](https://github.com/karmaniverous/hook-form-semantic/commit/52c7570fc10e2f7b19aa488382e07dfc91c948d3)
