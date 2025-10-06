@@ -19,31 +19,31 @@ import type { HookFormRRStackData, HookFormRRStackRuleData } from './types';
  * - arrays pass through unchanged
  * Assumes timezone has been validated upstream.
  */
-export function rhf2rrstack(
+export const rhf2rrstack = (
   rhf: HookFormRRStackData,
-  opts: { timeUnit?: UnixTimeUnit; endDatesInclusive?: boolean } = {},
-): RRStackOptions {
-  const unit: UnixTimeUnit = opts?.timeUnit ?? 'ms';
-  const inclusive = opts?.endDatesInclusive ?? false;
+  opts: { endDatesInclusive?: boolean } = {},
+): RRStackOptions => {
+  const { timeUnit } = rhf;
+  const { endDatesInclusive } = opts;
 
   const rules: RuleJson[] = Array.isArray(rhf.rules)
     ? rhf.rules.map((r) =>
         rhfrule2rrstackrule(
           r,
           rhf.timezone as unknown as TimeZoneId,
-          unit,
-          inclusive,
+          timeUnit,
+          endDatesInclusive,
         ),
       )
     : [];
 
   const rrstack: RRStackOptions = {
-    timezone: rhf.timezone,
+    ...rhf,
     rules,
   };
 
   return rrstack;
-}
+};
 
 const hasTime = (d: Date) =>
   d.getHours() !== 0 ||
@@ -55,13 +55,13 @@ const hasTime = (d: Date) =>
  * Map a single RHF rule to engine RuleJson with timezone-aware clamps.
  * - Starts: date-only → midnight in tz; datetime → exact wall time in tz.
  * - Ends:
- *   • inclusive=true: ignore time-of-day and clamp to midnight of the NEXT day in tz
- *   • inclusive=false: date-only → midnight in tz; datetime → exact wall time in tz
+ *   • endDatesInclusive=true: ignore time-of-day and clamp to midnight of the NEXT day in tz
+ *   • endDatesInclusive=false: date-only → midnight in tz; datetime → exact wall time in tz
  */
 export const rhfrule2rrstackrule = (
   rule: HookFormRRStackRuleData,
   timezone?: TimeZoneId,
-  unit: UnixTimeUnit = 'ms',
+  timeUnit: UnixTimeUnit = 'ms',
   endDatesInclusive = false,
 ): RuleJson => {
   const { conformedRule } = conformRule(rule);
@@ -75,8 +75,8 @@ export const rhfrule2rrstackrule = (
     options.starts instanceof Date
       ? timezone
         ? hasTime(options.starts)
-          ? wallTimeToEpoch(options.starts, timezone, unit)
-          : dateOnlyToEpoch(options.starts, timezone, unit)
+          ? wallTimeToEpoch(options.starts, timezone, timeUnit)
+          : dateOnlyToEpoch(options.starts, timezone, timeUnit)
         : options.starts.getTime()
       : undefined;
 
@@ -91,11 +91,11 @@ export const rhfrule2rrstackrule = (
                 options.ends.getDate() + 1,
               ),
               timezone,
-              unit,
+              timeUnit,
             )
           : hasTime(options.ends)
-            ? wallTimeToEpoch(options.ends, timezone, unit)
-            : dateOnlyToEpoch(options.ends, timezone, unit)
+            ? wallTimeToEpoch(options.ends, timezone, timeUnit)
+            : dateOnlyToEpoch(options.ends, timezone, timeUnit)
         : options.ends.getTime()
       : undefined;
 

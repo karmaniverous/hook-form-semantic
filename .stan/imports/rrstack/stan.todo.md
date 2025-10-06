@@ -18,6 +18,18 @@ Next up (near‑term, prioritized)
 
 Completed (recent)
 
+- Time helpers consistency:
+  - Renamed helper parameter `zone` → `timezone` to align with RRStackOptions.
+  - Made `timeUnit` optional with `DEFAULT_TIME_UNIT` default in
+    `wallTimeToEpoch` and `dateOnlyToEpoch` (already defaulted in `epochToWallDate`).
+  - Updated JSDoc `@param` tags (`unit` → `timeUnit`; `zone` → `timezone`) to clear TypeDoc warnings.
+
+- Defaults and TS narrowing:
+  - Centralized defaults are now applied consistently during normalization
+    (DEFAULT_TIME_UNIT, DEFAULT_DEFAULT_EFFECT).
+  - DEFAULT_DEFAULT_EFFECT is exported as the literal `'auto'`, enabling proper
+    TypeScript narrowing in RRStack.baselineEffect and resolving TS2322 errors.
+
 - JSON Schema: OpenAPI‑safe duration shape
   - Removed the duration.anyOf positivity injection from the generated schema to
     improve compatibility with serverless-openapi-documenter and other OpenAPI tools.

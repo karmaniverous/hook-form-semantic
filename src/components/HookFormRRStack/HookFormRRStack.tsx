@@ -1,4 +1,4 @@
-import type { DescribeOptions, RRStackOptions } from '@karmaniverous/rrstack';
+import type { DescribeOptions } from '@karmaniverous/rrstack';
 import { useRRStack, type UseRRStackProps } from '@karmaniverous/rrstack/react';
 import { get } from 'radash';
 import { useCallback, useMemo, useState } from 'react';
@@ -57,11 +57,7 @@ export interface HookFormRRStackProps<
       | 'value'
     >,
     PrefixProps<DescribeOptions, 'describe'>,
-    PrefixProps<
-      Omit<UseRRStackProps, 'json' | 'timezone'> &
-        Pick<RRStackOptions, 'defaultEffect' | 'timeUnit'>,
-      'rrstack'
-    > {
+    PrefixProps<Omit<UseRRStackProps, 'json' | 'timezone'>, 'rrstack'> {
   timestampFormat?: string;
   endDatesInclusive?: boolean;
 }
@@ -80,7 +76,7 @@ export const HookFormRRStack = <
     deprefixed: {
       describe: describeProps,
       hook: { control, name },
-      rrstack: { defaultEffect, timeUnit = 'ms', ...rrstackProps },
+      rrstack: rrstackProps,
     },
     rest: {
       endDatesInclusive = false,
@@ -102,25 +98,21 @@ export const HookFormRRStack = <
     name: `${name}.rules` as ArrayPath<TFieldValues>,
   });
 
-  const form = useWatch({ control });
+  const rhf = useWatch({
+    control,
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    compute: (v) => get(v, name) as HookFormRRStackData,
+  });
 
-  const rrstackJson = useMemo(() => {
-    const rhf: HookFormRRStackData = get(form, name);
-
-    const rrstack = rhf2rrstack(rhf, {
-      timeUnit: timeUnit,
-      endDatesInclusive,
-    });
+  const json = useMemo(() => {
+    const rrstack = rhf2rrstack(rhf, { endDatesInclusive });
 
     logger?.debug?.('rhf2rrstack', { rhf, rrstack });
 
     return rrstack;
-  }, [form, logger, name, timeUnit, endDatesInclusive]);
+  }, [endDatesInclusive, logger, name, rhf]);
 
-  const { rrstack, version } = useRRStack({
-    json: { ...rrstackJson, defaultEffect, timeUnit },
-    ...rrstackProps,
-  });
+  const { rrstack, version } = useRRStack({ json, ...rrstackProps });
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -333,7 +325,7 @@ export const HookFormRRStack = <
               }
               onRuleTop={index > 0 ? handleRuleTop : undefined}
               onRuleUp={index > 0 ? handleRuleUp : undefined}
-              timeUnit={timeUnit}
+              timeUnit={rhf.timeUnit}
               endDatesInclusive={endDatesInclusive}
               {...reprifixedDescribeProps}
             />

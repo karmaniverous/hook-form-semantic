@@ -10,9 +10,11 @@ import { Options } from 'rrule';
  */
 
 /** Instant status classification for a timestamp. */
-type instantStatus = 'active' | 'blackout';
+type InstantStatus = 'active' | 'blackout';
+/** Default effect classification for an RRStack. */
+type DefaultEffect = InstantStatus | 'auto';
 /** Range classification across `[from, to)`. */
-type rangeStatus = instantStatus | 'partial';
+type RangeStatus = InstantStatus | 'partial';
 /** Time unit for inputs/outputs and internal computation. */
 type UnixTimeUnit = 'ms' | 's';
 /**
@@ -65,7 +67,7 @@ type RuleOptionsJson = Partial<Omit<Options, 'dtstart' | 'until' | 'tzid' | 'fre
 /** A single rule in the cascade. */
 interface RuleJson {
     /** `'active' | 'blackout'` — effect applied at covered instants. */
-    effect: instantStatus;
+    effect: InstantStatus;
     /** Structured duration for recurring rules; must be omitted for span rules. */
     duration?: DurationParts;
     /** Subset of rrule options (see {@link RuleOptionsJson}). */
@@ -86,7 +88,7 @@ interface RRStackOptions {
     /** Time unit ('ms' | 's'). Defaults to 'ms'. */
     timeUnit?: UnixTimeUnit;
     /** Baseline effect for uncovered instants. Defaults to 'auto'. */
-    defaultEffect?: instantStatus | 'auto';
+    defaultEffect?: DefaultEffect;
     /** Rule list. Defaults to empty. */
     rules?: RuleJson[];
 }
@@ -99,7 +101,7 @@ interface RRStackOptionsNormalized extends Omit<RRStackOptions, 'timeUnit' | 'ru
     timeUnit: UnixTimeUnit;
     rules: readonly RuleJson[];
     timezone: TimeZoneId;
-    defaultEffect: instantStatus | 'auto';
+    defaultEffect: DefaultEffect;
 }
 /**
  * Notices emitted by {@link RRStack.update | RRStack.update()} to describe
@@ -457,12 +459,12 @@ declare class RRStack {
     }): Iterable<{
         start: number;
         end: number;
-        status: instantStatus;
+        status: InstantStatus;
     }>; /**
      * Classify a range `[from, to)` as `'active'`, `'blackout'`, or `'partial'`.
      * @param from - Start of the window (inclusive), in the configured unit.
      * @param to - End of the window (exclusive), in the configured unit.   */
-    classifyRange(from: number, to: number): rangeStatus;
+    classifyRange(from: number, to: number): RangeStatus;
     /**   * Compute effective active bounds across all rules.
      * @returns `{ start?: number; end?: number; empty: boolean }`
      * - `start` and/or `end` are omitted for open-sided coverage.

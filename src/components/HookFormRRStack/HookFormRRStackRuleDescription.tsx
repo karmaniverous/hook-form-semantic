@@ -1,4 +1,4 @@
-import type { TimeZoneId, UnixTimeUnit } from '@karmaniverous/rrstack';
+import type { TimeZoneId } from '@karmaniverous/rrstack';
 import { type DescribeOptions, describeRule } from '@karmaniverous/rrstack';
 import type { JSX } from 'react';
 import {
@@ -13,7 +13,7 @@ import type { HookFormProps } from '@/types/HookFormProps';
 import { concatClassNames } from '@/utils/concatClassNames';
 
 import { rhfrule2rrstackrule } from './rhf2rrstack';
-import type { HookFormRRStackRuleData } from './types';
+import type { HookFormRRStackData, HookFormRRStackRuleData } from './types';
 
 export interface HookFormRRStackRuleDescriptionPropsBase<
   TFieldValues extends FieldValues = FieldValues,
@@ -21,7 +21,7 @@ export interface HookFormRRStackRuleDescriptionPropsBase<
 > extends HookFormProps<TFieldValues, TName>,
     DescribeOptions {
   fallback?: React.ReactNode;
-  timeUnit: UnixTimeUnit;
+  timeUnit: HookFormRRStackData['timeUnit'];
   endDatesInclusive?: boolean;
 }
 

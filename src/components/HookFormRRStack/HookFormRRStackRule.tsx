@@ -1,4 +1,4 @@
-import type { DescribeOptions, UnixTimeUnit } from '@karmaniverous/rrstack';
+import type { DescribeOptions } from '@karmaniverous/rrstack';
 import { useEffect } from 'react';
 import type {
   ArrayPath,
@@ -17,7 +17,7 @@ import type { PrefixProps } from '@/types/PrefixProps';
 import { conformRule } from './conformRule';
 import { HookFormRRStackRuleDescription } from './HookFormRRStackRuleDescription';
 import { HookFormRRStackRuleForm } from './HookFormRRStackRuleForm';
-import type { HookFormRRStackRuleData } from './types';
+import type { HookFormRRStackData, HookFormRRStackRuleData } from './types';
 
 type RuleMutation = (index: number) => void;
 
@@ -38,7 +38,7 @@ export interface HookFormRRStackRuleProps<
   onRuleDown?: RuleMutation;
   onRuleTop?: RuleMutation;
   onRuleUp?: RuleMutation;
-  timeUnit: UnixTimeUnit;
+  timeUnit: HookFormRRStackData['timeUnit'];
   endDatesInclusive?: boolean;
 }
 
