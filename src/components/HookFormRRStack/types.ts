@@ -1,39 +1,27 @@
-import type {
-  FrequencyStr,
-  RRStackOptions,
-  RuleJson,
-  RuleOptionsJson,
-} from '@karmaniverous/rrstack';
+import type { RRStackJson } from '@karmaniverous/rrstack';
 import type { FieldPathByValue, FieldValues } from 'react-hook-form';
 
+export type RRStackJsonRule = NonNullable<RRStackJson['rules']>[number];
+
+export type RRStackJsonRuleOptions = NonNullable<RRStackJsonRule['options']>;
+
 export type HookFormRRStackRuleOptionsData = Omit<
-  RuleOptionsJson,
-  | 'byhour'
-  | 'byminute'
-  | 'bymonth'
-  | 'bymonthday'
-  | 'bysetpos'
-  | 'byweekday'
-  | 'ends'
-  | 'freq'
-  | 'starts'
+  RRStackJsonRuleOptions,
+  'byhour' | 'byminute' | 'bymonthday' | 'ends' | 'freq' | 'starts'
 > & {
-  byhourText?: string;
-  byminuteText?: string;
-  bymonth?: number[];
-  bymonthdayText?: string;
-  bysetpos?: number[];
-  byweekday?: number[];
+  byhour?: string;
+  byminute?: string;
+  bymonthday?: string;
   ends?: Date | null;
-  freq?: FrequencyStr | 'span';
+  freq: NonNullable<RRStackJsonRuleOptions['freq']> | 'span';
   starts?: Date | null;
 };
 
-export type HookFormRRStackRuleData = Omit<RuleJson, 'options'> & {
+export type HookFormRRStackRuleData = Omit<RRStackJsonRule, 'options'> & {
   options: HookFormRRStackRuleOptionsData;
 };
 
-export type HookFormRRStackData = Omit<RRStackOptions, 'rules'> & {
+export type HookFormRRStackData = Omit<RRStackJson, 'rules'> & {
   rules: HookFormRRStackRuleData[];
 };
 

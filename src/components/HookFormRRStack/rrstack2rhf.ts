@@ -1,5 +1,5 @@
 import type {
-  RRStackOptions,
+  RRStackJson,
   TimeZoneId,
   UnixTimeUnit,
 } from '@karmaniverous/rrstack';
@@ -7,6 +7,46 @@ import { epochToWallDate } from '@karmaniverous/rrstack';
 
 import { int2csv } from './int2csv';
 import type { HookFormRRStackData, HookFormRRStackRuleData } from './types';
+
+// Normalize number | number[] | Weekday[] → number[] | undefined
+const toNumberArray = (v: unknown): number[] | undefined => {
+  if (typeof v === 'number' && Number.isFinite(v)) return [Math.trunc(v)];
+  if (Array.isArray(v)) {
+    const out: number[] = [];
+    for (const item of v) {
+      if (typeof item === 'number' && Number.isFinite(item)) {
+        out.push(Math.trunc(item));
+        continue;
+      }
+      if (
+        item != null &&
+        typeof item === 'object' &&
+        'weekday' in (item as Record<string, unknown>)
+      ) {
+        const wd = (item as { weekday?: unknown }).weekday;
+        if (typeof wd === 'number' && Number.isFinite(wd))
+          out.push(Math.trunc(wd));
+      }
+    }
+    return out.length ? out : undefined;
+  }
+  return undefined;
+};
+
+const toWall = (
+  epoch: number | undefined,
+  timezone: string,
+  timeUnit?: UnixTimeUnit,
+): Date | null => {
+  if (epoch === undefined) return null;
+  return epochToWallDate(epoch, timezone as TimeZoneId, timeUnit);
+};
+
+const isMidnightUTC = (d: Date) =>
+  d.getUTCHours() === 0 &&
+  d.getUTCMinutes() === 0 &&
+  d.getUTCSeconds() === 0 &&
+  d.getUTCMilliseconds() === 0;
 
 /**
  * Reverse mapping of {@link rhf2rrstack}: rrstack → RHF UI shape.
@@ -20,49 +60,12 @@ import type { HookFormRRStackData, HookFormRRStackRuleData } from './types';
  *   • When true and an rrstack `ends` falls exactly at local midnight, subtract
  *     one calendar day so the UI reflects the original end date (date-only).
  */
-export function rrstack2rhf<T extends RRStackOptions>(
-  rrstack: T,
+export const rrstack2rhf = (
+  rrstack: RRStackJson,
   opts: { endDatesInclusive?: boolean } = {},
-): { rhf: HookFormRRStackData; timeUnit: UnixTimeUnit } {
-  const timeUnit: UnixTimeUnit = rrstack.timeUnit ?? 'ms';
-  const timezone = rrstack.timezone as unknown as TimeZoneId;
-  const { endDatesInclusive = false } = opts;
-
-  // Normalize number | number[] | Weekday[] → number[] | undefined
-  const toNumberArray = (v: unknown): number[] | undefined => {
-    if (typeof v === 'number' && Number.isFinite(v)) return [Math.trunc(v)];
-    if (Array.isArray(v)) {
-      const out: number[] = [];
-      for (const item of v) {
-        if (typeof item === 'number' && Number.isFinite(item)) {
-          out.push(Math.trunc(item));
-          continue;
-        }
-        if (
-          item != null &&
-          typeof item === 'object' &&
-          'weekday' in (item as Record<string, unknown>)
-        ) {
-          const wd = (item as { weekday?: unknown }).weekday;
-          if (typeof wd === 'number' && Number.isFinite(wd))
-            out.push(Math.trunc(wd));
-        }
-      }
-      return out.length ? out : undefined;
-    }
-    return undefined;
-  };
-
-  const toWall = (t: number | undefined): Date | null => {
-    if (t === undefined) return null;
-    return epochToWallDate(t, timezone, timeUnit);
-  };
-
-  const isMidnightUTC = (d: Date) =>
-    d.getUTCHours() === 0 &&
-    d.getUTCMinutes() === 0 &&
-    d.getUTCSeconds() === 0 &&
-    d.getUTCMilliseconds() === 0;
+): { rhf: HookFormRRStackData; timeUnit: UnixTimeUnit } => {
+  const { endDatesInclusive } = opts;
+  const { timeUnit, timezone } = rrstack;
 
   const rules =
     Array.isArray(rrstack.rules) && rrstack.rules.length
@@ -81,8 +84,8 @@ export function rrstack2rhf<T extends RRStackOptions>(
           } = r.options ?? {};
 
           // Rebuild Date fields in wall time
-          const startsDate = toWall(starts);
-          const endsWall = toWall(ends);
+          const startsDate = toWall(starts, timezone, timeUnit);
+          const endsWall = toWall(ends, timezone, timeUnit);
           const endsDate =
             endsWall && endDatesInclusive && isMidnightUTC(endsWall)
               ? new Date(
@@ -118,9 +121,9 @@ export function rrstack2rhf<T extends RRStackOptions>(
               bymonth: byMonthArr ?? undefined,
               byweekday: byWeekdayArr ?? undefined,
               bysetpos: bySetPosArr ?? undefined,
-              byhourText: int2csv(byHourArr),
-              byminuteText: int2csv(byMinuteArr),
-              bymonthdayText: int2csv(byMonthDayArr),
+              byhour: int2csv(byHourArr),
+              byminute: int2csv(byMinuteArr),
+              bymonthday: int2csv(byMonthDayArr),
             },
           };
         })
@@ -131,6 +134,6 @@ export function rrstack2rhf<T extends RRStackOptions>(
       timezone: rrstack.timezone,
       rules,
     },
-    timeUnit,
+    timeUnit: timeUnit as UnixTimeUnit,
   };
-}
+};

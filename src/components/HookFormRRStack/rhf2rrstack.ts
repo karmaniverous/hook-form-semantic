@@ -1,6 +1,5 @@
 import type {
-  RRStackOptions,
-  RuleJson,
+  RRStackJson,
   TimeZoneId,
   UnixTimeUnit,
 } from '@karmaniverous/rrstack';
@@ -11,7 +10,11 @@ import { local2utcDateTime } from '@/utils/utc';
 
 import { conformRule } from './conformRule';
 import { csv2int } from './csv2int';
-import type { HookFormRRStackData, HookFormRRStackRuleData } from './types';
+import type {
+  HookFormRRStackData,
+  HookFormRRStackRuleData,
+  RRStackJsonRule,
+} from './types';
 
 /**
  * Map the RHF UI schedule (UI-friendly types) to the rrstack engine schedule.
@@ -24,11 +27,11 @@ import type { HookFormRRStackData, HookFormRRStackRuleData } from './types';
 export const rhf2rrstack = (
   rhf: HookFormRRStackData,
   opts: { endDatesInclusive?: boolean } = {},
-): RRStackOptions => {
+): RRStackJson => {
   const { timeUnit, timezone } = rhf;
   const { endDatesInclusive } = opts;
 
-  const rules: RuleJson[] = Array.isArray(rhf.rules)
+  const rules: RRStackJsonRule[] = Array.isArray(rhf.rules)
     ? rhf.rules.map((r) =>
         rhfrule2rrstackrule(
           r,
@@ -39,12 +42,10 @@ export const rhf2rrstack = (
       )
     : [];
 
-  const rrstack: RRStackOptions = {
+  return {
     ...rhf,
     rules,
   };
-
-  return rrstack;
 };
 
 const hasTime = (d: Date) =>
@@ -65,7 +66,7 @@ export const rhfrule2rrstackrule = (
   timezone: TimeZoneId,
   timeUnit?: UnixTimeUnit,
   endDatesInclusive = false,
-): RuleJson => {
+): RRStackJsonRule => {
   const { conformedRule } = conformRule(rule);
 
   const options = conformedRule.options ?? {};
@@ -108,11 +109,11 @@ export const rhfrule2rrstackrule = (
     effect: conformedRule.effect ?? 'active',
     label: conformedRule.label ?? undefined,
     options: {
-      ...omit(options, ['bymonthdayText', 'byhourText', 'byminuteText']),
-      byhour: csv2int(options.byhourText, { min: 0, max: 23 }),
-      byminute: csv2int(options.byminuteText, { min: 0, max: 59 }),
+      ...omit(options, ['bymonthday', 'byhour', 'byminute']),
+      byhour: csv2int(options.byhour, { min: 0, max: 23 }),
+      byminute: csv2int(options.byminute, { min: 0, max: 59 }),
       bymonth: options.bymonth ?? undefined,
-      bymonthday: csv2int(options.bymonthdayText, { min: 1, max: 31 }),
+      bymonthday: csv2int(options.bymonthday, { min: 1, max: 31 }),
       bysetpos: options.bysetpos ?? undefined,
       byweekday: options.byweekday ?? undefined,
       ends,

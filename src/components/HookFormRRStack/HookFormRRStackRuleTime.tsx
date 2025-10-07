@@ -33,7 +33,7 @@ export const HookFormRRStackRuleTime = <
           control={Input}
           logger={logger}
           hookControl={control}
-          hookName={`${name}.byhourText` as Path<TFieldValues>}
+          hookName={`${name}.byhour` as Path<TFieldValues>}
           label={
             <InfoLabel
               text="Hours"
@@ -48,7 +48,7 @@ export const HookFormRRStackRuleTime = <
           control={Input}
           logger={logger}
           hookControl={control}
-          hookName={`${name}.byminuteText` as Path<TFieldValues>}
+          hookName={`${name}.byminute` as Path<TFieldValues>}
           label={
             <InfoLabel
               text="Minutes"

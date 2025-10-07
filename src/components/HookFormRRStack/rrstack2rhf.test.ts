@@ -45,9 +45,9 @@ describe('rrstack2rhf', () => {
     expect(r.options.byweekday).toEqual([0, 2]);
     expect(r.options.bysetpos).toEqual([1, -1]);
     // CSV text restored for tolerant inputs
-    expect(r.options.byhourText).toBe('9, 13');
-    expect(r.options.byminuteText).toBe('0, 30');
-    expect(r.options.bymonthdayText).toBe('1, 15');
+    expect(r.options.byhour).toBe('9, 13');
+    expect(r.options.byminute).toBe('0, 30');
+    expect(r.options.bymonthday).toBe('1, 15');
   });
 
   it('marks span when engine freq is undefined and omits duration', () => {
