@@ -1,5 +1,9 @@
-import type { TimeZoneId, UnixTimeUnit } from '@karmaniverous/rrstack';
-import { type DescribeOptions, describeRule } from '@karmaniverous/rrstack';
+import type {
+  RuleJson,
+  TimeZoneId,
+  UnixTimeUnit,
+} from '@karmaniverous/rrstack';
+import { type DescribeConfig, describeRule } from '@karmaniverous/rrstack';
 import type { JSX } from 'react';
 import {
   type ComponentPropsWithoutRef,
@@ -19,8 +23,8 @@ import type { HookFormRRStackRuleData } from './types';
 export interface HookFormRRStackRuleDescriptionPropsBase<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> extends HookFormProps<TFieldValues, TName>,
-    DescribeOptions {
+> extends HookFormProps<TFieldValues, TName> {
+  describeConfig: DescribeConfig;
   fallback?: React.ReactNode;
   endDatesInclusive?: boolean;
 }
@@ -50,13 +54,10 @@ export const HookFormRRStackRuleDescription = <
     },
     rest: {
       as,
-      boundsFormat,
       className,
-      fallback = null,
-      formatTimeZone,
-      includeBounds,
-      includeTimeZone,
+      describeConfig,
       endDatesInclusive = false,
+      fallback = null,
       ...rest
     },
     watched,
@@ -66,39 +67,35 @@ export const HookFormRRStackRuleDescription = <
 
   const rootName = useMemo(() => getRootName(name, 2), [name]);
 
-  console.log(rootName);
-
   const [timezone, timeUnit] = useWatch({
     control,
     name: [`${rootName}.timezone`, `${rootName}.timeUnit`],
   }) as [TimeZoneId, UnixTimeUnit];
 
   const text = useMemo(() => {
+    const rule = rhfrule2rrstackrule(
+      watched as unknown as HookFormRRStackRuleData,
+      timezone,
+      timeUnit,
+      endDatesInclusive,
+    );
+
     if (watched && timezone) {
-      const rule = rhfrule2rrstackrule(
-        watched as unknown as HookFormRRStackRuleData,
+      console.log('Describing rule', {
+        rule,
         timezone,
         timeUnit,
         endDatesInclusive,
-      );
-
-      return describeRule(rule, timezone as unknown as TimeZoneId, timeUnit, {
-        boundsFormat,
-        includeBounds,
-        includeTimeZone,
-        formatTimeZone,
       });
+
+      return describeRule(
+        rule as RuleJson,
+        timezone as unknown as TimeZoneId,
+        timeUnit,
+        describeConfig,
+      );
     } else return null;
-  }, [
-    watched,
-    timezone,
-    timeUnit,
-    boundsFormat,
-    includeBounds,
-    includeTimeZone,
-    formatTimeZone,
-    endDatesInclusive,
-  ]);
+  }, [describeConfig, endDatesInclusive, timeUnit, timezone, watched]);
 
   return text ? (
     <As

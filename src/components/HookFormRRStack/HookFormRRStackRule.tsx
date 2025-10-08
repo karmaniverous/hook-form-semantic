@@ -1,4 +1,4 @@
-import type { DescribeOptions } from '@karmaniverous/rrstack';
+import type { DescribeConfig } from '@karmaniverous/rrstack';
 import { useEffect } from 'react';
 import type {
   ArrayPath,
@@ -26,12 +26,12 @@ export interface HookFormRRStackRuleProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > extends HookFormProps<TFieldValues, TName>,
     Pick<AccordionTitleProps, 'onClick'>,
-    PrefixProps<DescribeOptions, 'describe'>,
     PrefixProps<
       Pick<UseFieldArrayReturn<TFieldValues>, 'update'>,
       'fieldArray'
     > {
   active?: boolean;
+  describeConfig: DescribeConfig;
   index: number;
   onRuleBottom?: RuleMutation;
   onRuleDelete?: RuleMutation;
@@ -52,12 +52,12 @@ export const HookFormRRStackRule = <
       field: { value },
     },
     deprefixed: {
-      describe: describeProps,
       fieldArray: { update },
       hook: { name, control },
     },
     rest: {
       active,
+      describeConfig,
       index,
       logger,
       onClick,
@@ -68,7 +68,7 @@ export const HookFormRRStackRule = <
       onRuleUp,
       endDatesInclusive,
     },
-  } = useHookForm({ props, prefixes: ['describe', 'fieldArray'] as const });
+  } = useHookForm({ props, prefixes: ['fieldArray'] as const });
 
   const currentRule = value as HookFormRRStackRuleData;
 
@@ -189,11 +189,11 @@ export const HookFormRRStackRule = <
 
         <HookFormRRStackRuleDescription<TFieldValues, TName, 'label'>
           as="label"
+          describeConfig={describeConfig}
+          endDatesInclusive={endDatesInclusive}
           hookControl={control}
           hookName={name}
           style={{ fontWeight: 'normal', marginTop: 4, marginLeft: 16 }}
-          endDatesInclusive={endDatesInclusive}
-          {...describeProps}
         />
       </Accordion.Title>
 

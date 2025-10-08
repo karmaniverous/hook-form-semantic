@@ -36,8 +36,8 @@ interface FormData {
   isSubscribed: boolean;
   age: number;
   phone: string;
-  birthDate: Date;
-  dateRange: { start: Date; end: Date };
+  birthDate?: Date;
+  dateRange?: { start: Date; end: Date };
   favoriteColor: string;
   priorities: string[];
   sortBy: [string, boolean];
@@ -50,29 +50,38 @@ interface FormData {
   rrstack: HookFormRRStackData;
 }
 
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export default function App() {
   const { control, handleSubmit } = useForm<FormData>({
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      isSubscribed: false,
-      age: 0,
-      phone: '',
-      birthDate: undefined,
-      dateRange: undefined,
-      favoriteColor: '',
-      priorities: [],
-      sortBy: ['name', true],
-      config: {},
-      description: '',
-      content: '',
-      jsonData: { example: 'data' },
-      newsletter: false,
-      terms: false,
-      rrstack: {
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      },
+    defaultValues: async () => {
+      await sleep(1000);
+
+      return {
+        firstName: '',
+        lastName: '',
+        email: '',
+        isSubscribed: false,
+        age: 0,
+        phone: '',
+        birthDate: undefined,
+        dateRange: undefined,
+        favoriteColor: '',
+        priorities: [],
+        sortBy: ['name', true],
+        config: {},
+        description: '',
+        content: '',
+        jsonData: { example: 'data' },
+        newsletter: false,
+        terms: false,
+        rrstack: {
+          rules: [],
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        },
+      };
     },
   });
 
@@ -265,10 +274,12 @@ export default function App() {
         <Header as="h2">HookFormRRStack Demo</Header>
 
         <HookFormRRStack<FormData>
-          describeBoundsFormat="yyyy-LL-dd hh:mm"
-          describeIncludeBounds
+          describeBoundsFormat="yyyy-LL-dd"
+          describeShowBounds
+          describeShowRecurrenceCount
           hookName="rrstack"
           hookControl={control}
+          endDatesInclusive
           label="Scheduling Rules"
           logger={console}
         />

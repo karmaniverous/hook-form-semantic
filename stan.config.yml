@@ -3,16 +3,16 @@ cliDefaults:
     plan: false
     sequential: true
 excludes:
-  - '**/*.ico'
-  - '**/*.png'
-  - '**/*.svg'
+  - "**/*.ico"
+  - "**/*.png"
+  - "**/*.svg"
   - docs
   - package-lock.json
 imports:
   rrstack:
-    - '../rrstack/.stan/system/stan.requirements.md'
-    - '../rrstack/.stan/system/stan.todo.md'
-    - '../rrstack/dist/react/index.d.ts'
+    - ../rrstack/.stan/system/stan.requirements.md
+    - ../rrstack/.stan/system/stan.todo.md
+    - ../rrstack/dist/react/index.d.ts
 patchOpenCommand: code -g {file}
 scripts:
   typecheck: npm run typecheck
@@ -24,3 +24,4 @@ scripts:
   build: npm run build
   knip: npm run knip
 stanPath: .stan
+includes: []

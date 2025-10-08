@@ -1,4 +1,4 @@
-import type { DescribeOptions } from '@karmaniverous/rrstack';
+import type { DescribeConfig, RRStackOptions } from '@karmaniverous/rrstack';
 import { useRRStack, type UseRRStackProps } from '@karmaniverous/rrstack/react';
 import { get } from 'radash';
 import { useCallback, useMemo, useState } from 'react';
@@ -28,7 +28,6 @@ import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
-import { prefixProps } from '@/utils/prefixProps';
 
 import { HookFormRRStackRule } from './HookFormRRStackRule';
 import { timezoneOptions } from './timezoneOptions';
@@ -56,7 +55,7 @@ export interface HookFormRRStackProps<
       | 'type'
       | 'value'
     >,
-    PrefixProps<DescribeOptions, 'describe'>,
+    PrefixProps<DescribeConfig, 'describe'>,
     PrefixProps<Omit<UseRRStackProps, 'json' | 'timezone'>, 'rrstack'> {
   timestampFormat?: string;
   endDatesInclusive?: boolean;
@@ -88,11 +87,6 @@ export const HookFormRRStack = <
     },
   } = useHookForm({ props, prefixes: ['describe', 'rrstack'] as const });
 
-  const reprifixedDescribeProps = useMemo(
-    () => prefixProps(describeProps, 'describe'),
-    [describeProps],
-  );
-
   const { append, fields, insert, move, remove, update } = useFieldArray({
     control,
     name: `${name}.rules` as ArrayPath<TFieldValues>,
@@ -105,6 +99,8 @@ export const HookFormRRStack = <
   });
 
   const json = useMemo(() => {
+    if (!rhf) return undefined;
+
     const rrstack = rhf2rrstack(rhf, { endDatesInclusive });
 
     logger?.debug?.('rhf2rrstack', { rhf, rrstack });
@@ -112,7 +108,10 @@ export const HookFormRRStack = <
     return rrstack;
   }, [endDatesInclusive, logger, name, rhf]);
 
-  const { rrstack, version } = useRRStack({ json, ...rrstackProps });
+  const { rrstack, version } = useRRStack({
+    json: json as RRStackOptions,
+    ...rrstackProps,
+  });
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -125,8 +124,6 @@ export const HookFormRRStack = <
         : 'Indefinite';
 
     const { start, end } = rrstack.getEffectiveBounds();
-
-    console.log({ start, end });
 
     return {
       starts: formatTimestamp(start),
@@ -195,8 +192,6 @@ export const HookFormRRStack = <
             : activeIndex === newIndex
               ? index
               : activeIndex;
-
-        console.log({ index, newIndex, activeIndex, newActiveIndex });
 
         move(index, newIndex);
 
@@ -309,6 +304,7 @@ export const HookFormRRStack = <
           {fields.map((field, index) => (
             <HookFormRRStackRule<TFieldValues>
               active={activeIndex === index}
+              describeConfig={describeProps}
               fieldArrayUpdate={update}
               index={index}
               hookControl={control}
@@ -328,7 +324,6 @@ export const HookFormRRStack = <
               onRuleTop={index > 0 ? handleRuleTop : undefined}
               onRuleUp={index > 0 ? handleRuleUp : undefined}
               endDatesInclusive={endDatesInclusive}
-              {...reprifixedDescribeProps}
             />
           ))}
         </Accordion>
