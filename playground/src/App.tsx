@@ -277,9 +277,9 @@ export default function App() {
           describeBoundsFormat="yyyy-LL-dd"
           describeShowBounds
           describeShowRecurrenceCount
-          hookName="rrstack"
-          hookControl={control}
           endDatesInclusive
+          hookControl={control}
+          hookName="rrstack"
           label="Scheduling Rules"
           logger={console}
         />
