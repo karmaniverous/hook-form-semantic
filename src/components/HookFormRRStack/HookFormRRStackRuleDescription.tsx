@@ -81,13 +81,6 @@ export const HookFormRRStackRuleDescription = <
     );
 
     if (watched && timezone) {
-      console.log('Describing rule', {
-        rule,
-        timezone,
-        timeUnit,
-        endDatesInclusive,
-      });
-
       return describeRule(
         rule as RuleJson,
         timezone as unknown as TimeZoneId,
