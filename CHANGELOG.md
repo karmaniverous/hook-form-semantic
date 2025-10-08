@@ -2,8 +2,9 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
-#### [0.4.3](https://github.com/karmaniverous/hook-form-semantic/compare/0.4.2...0.4.3)
+#### [0.4.4](https://github.com/karmaniverous/hook-form-semantic/compare/0.4.2...0.4.4)
 
+- updated rrstack [`9714972`](https://github.com/karmaniverous/hook-form-semantic/commit/9714972859b5c3c2ed4ef189d89acac98412c774)
 - updated rrstack [`46c26b1`](https://github.com/karmaniverous/hook-form-semantic/commit/46c26b1c1921977b3298b322f4912144991767a9)
 - updated rrstack [`9f2e9c6`](https://github.com/karmaniverous/hook-form-semantic/commit/9f2e9c6b6534efa625a5f124b1c532dde987cd44)
 - updated knip config [`1ef7b9b`](https://github.com/karmaniverous/hook-form-semantic/commit/1ef7b9b7e6265dd5947698c707c82018b7a5b8a5)
