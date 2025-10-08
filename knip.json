@@ -25,7 +25,11 @@
     "semantic-ui-css",
     "vanilla-jsoneditor"
   ],
-  "ignore": [".stan/**", "playground/src/vite-env.d.ts"],
+  "ignore": [
+    ".stan/**",
+    "playground/src/vite-env.d.ts",
+    "src/utils/prefixProps.ts"
+  ],
   "project": ["*/**", "!docs/**"],
   "rules": {
     "exports": "off",
