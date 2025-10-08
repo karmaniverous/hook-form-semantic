@@ -265,5 +265,5 @@
   "type": "module",
   "types": "dist/index.d.ts",
   "main": "dist/mjs/index.js",
-  "version": "0.4.2"
+  "version": "0.4.3"
 }

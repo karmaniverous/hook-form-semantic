@@ -1,11 +1,11 @@
-import type { RRStackOptions } from '@karmaniverous/rrstack';
+import type { RRStackJson } from '@karmaniverous/rrstack';
 import { describe, expect, it } from 'vitest';
 
 import { rrstack2rhf } from './rrstack2rhf';
 
 describe('rrstack2rhf', () => {
   it('maps engine JSON to RHF UI shape with CSV/text and arrays', () => {
-    const engine: RRStackOptions = {
+    const engine: RRStackJson = {
       timezone: 'UTC',
       timeUnit: 'ms',
       rules: [
@@ -51,7 +51,7 @@ describe('rrstack2rhf', () => {
   });
 
   it('marks span when engine freq is undefined and omits duration', () => {
-    const engine: RRStackOptions = {
+    const engine: RRStackJson = {
       timezone: 'UTC',
       rules: [
         {
@@ -74,7 +74,7 @@ describe('rrstack2rhf', () => {
 
   it('reverses inclusive end-of-day semantics when endDatesInclusive=true', () => {
     // Engine ends at local midnight (UTC), should become previous day in UI
-    const engine: RRStackOptions = {
+    const engine: RRStackJson = {
       timezone: 'UTC',
       rules: [
         {

@@ -185,6 +185,14 @@ interface UpdatePolicy {
     onNotice?: (n: Notice) => void;
 }
 
+type FrequencyAdjectiveLabels = Record<FrequencyStr, string>;
+type FrequencyNounLabels = Record<FrequencyStr, string>;
+interface FrequencyLexicon {
+    adjective: FrequencyAdjectiveLabels;
+    noun: FrequencyNounLabels;
+    pluralize?: (noun: string, n: number) => string;
+}
+
 interface RuleDescriptorBase {
     kind: 'span' | 'recur';
     effect: 'active' | 'blackout';
@@ -226,64 +234,37 @@ interface RuleDescriptorSpan extends RuleDescriptorBase {
 }
 type RuleDescriptor = RuleDescriptorRecur | RuleDescriptorSpan;
 
-type FrequencyAdjectiveLabels = Record<FrequencyStr, string>;
-type FrequencyNounLabels = Record<FrequencyStr, string>;
-interface FrequencyLexicon {
-    adjective: FrequencyAdjectiveLabels;
-    noun: FrequencyNounLabels;
-    pluralize?: (noun: string, n: number) => string;
-}
-
-type OrdinalStyle = 'long' | 'short';
-interface TranslatorOptions {
-    frequency?: Partial<FrequencyLexicon>;
-    timeFormat?: 'hm' | 'hms' | 'auto';
-    hourCycle?: 'h23' | 'h12';
-    ordinals?: OrdinalStyle;
-    /** Optional BCP‑47 locale for labels (Luxon setLocale). Defaults to runtime locale. */
-    locale?: string;
-    /** Lowercase labels (strict style). Defaults to true. */
-    lowercase?: boolean;
-}
-type DescribeTranslator = (desc: RuleDescriptor, opts?: TranslatorOptions) => string;
+type DescribeTranslator = (desc: RuleDescriptor, cfg?: DescribeConfig) => string;
 
 /**
- * Requirements addressed:
- * - Provide a human-readable rule description leveraging rrule's toText().
- * - Bounds formatting must respect RRULE floating dates (UTC fields = local wall time).
- * - Include effect and duration; optionally include timezone and bounds.
- * - Include effect and duration; optionally include timezone and bounds.
- * - Allow custom formatting of the timezone label.
+ * Unified configuration for rule descriptions.
+ * Translators own the entire sentence (effect, duration, cadence, bounds, tz).
  */
-
-interface DescribeOptions {
-    /** Append "(timezone <tz>)" — default false */
-    includeTimeZone?: boolean;
-    /** Append "[from <dtstart>; until <until>]" if clamps are present — default false */
-    includeBounds?: boolean;
-    /**
-     * Optional formatter for the timezone label. When provided and
-     * includeTimeZone is true, the description will use
-     * `(timezone formatTimeZone(tzId))` instead of the raw tz id.
-     */
-    formatTimeZone?: (tzId: string) => string;
-    /**
-     * Optional format string for bounds when `includeBounds` is true.
-     * When provided, bound instants are rendered via Luxon's `toFormat(boundsFormat)`
-     * in the rule's timezone. When omitted, bounds use ISO with milliseconds
-     * suppressed (default behavior).
-     *
-     * Examples:
-     * - 'yyyy-LL-dd' → "2025-04-01"
-     * - "dd LLL yyyy 'at' HH:mm" → "01 Apr 2025 at 07:30"
-     *
-     * Backward compatible: if undefined, behavior is unchanged.
-     */
-    boundsFormat?: string;
-    /** Optional translator override ('strict-en' or custom) */
+interface DescribeConfig {
+    /** Translator chooser (default: 'strict-en'). */
     translator?: 'strict-en' | DescribeTranslator;
-    /** Options for the translator. */
-    translatorOptions?: TranslatorOptions;
+    /** Show "(timezone <label>)" after the sentence. */
+    showTimezone?: boolean;
+    /** Customize timezone label string. */
+    formatTimezoneLabel?: (tzId: string) => string;
+    /** Show inline bounds: "from … until …". */
+    showBounds?: boolean;
+    /** Format for bounds when shown (Luxon toFormat); default ISO without ms. */
+    boundsFormat?: string;
+    /** Append "for N occurrence(s)" when a COUNT is present. */
+    showRecurrenceCount?: boolean;
+    /** Time-of-day formatting in the rule timezone. */
+    timeFormat?: 'hm' | 'hms' | 'auto';
+    /** 24h vs 12h clock for time-of-day formatting. */
+    hourCycle?: 'h23' | 'h12';
+    /** Locale applied to label/time rendering (Luxon setLocale). */
+    locale?: string;
+    /** Ordinal labels (e.g., third vs 3rd). */
+    ordinals?: 'long' | 'short';
+    /** Lowercase labels (default: true). */
+    lowercase?: boolean;
+    /** Frequency lexicon overrides. */
+    lexicon?: Partial<FrequencyLexicon>;
 }
 
 /**
@@ -503,7 +484,7 @@ declare class RRStack {
      * // e.g., "Active for 1 hour: every day at 5:00 (timezone UTC) [from 2024-01-10T00:00:00Z]"
      * ```
      */
-    describeRule(index: number, opts?: DescribeOptions): string;
+    describeRule(index: number, cfg?: DescribeConfig): string;
     /**
      * Insert a rule at a specific index (or append when index is omitted).
      * Delegates to the {@link rules} setter (single recompile).
