@@ -28,8 +28,8 @@ describe('rrstack2rhf', () => {
       ],
     };
 
-    const { rhf, timeUnit } = rrstack2rhf(engine);
-    expect(timeUnit).toBe('ms');
+    const rhf = rrstack2rhf(engine);
+    expect(rhf.timeUnit).toBe('ms');
     expect(rhf.timezone).toBe('UTC');
     expect(rhf.rules).toHaveLength(1);
     const r = rhf.rules[0];
@@ -63,7 +63,7 @@ describe('rrstack2rhf', () => {
         },
       ],
     };
-    const { rhf } = rrstack2rhf(engine);
+    const rhf = rrstack2rhf(engine);
     const r = rhf.rules[0];
     expect(r.options.freq).toBe('span');
     expect(r.duration).toBeUndefined();
@@ -88,7 +88,7 @@ describe('rrstack2rhf', () => {
         },
       ],
     };
-    const { rhf } = rrstack2rhf(engine, { endDatesInclusive: true });
+    const rhf = rrstack2rhf(engine, { endDatesInclusive: true });
     const r = rhf.rules[0];
     expect(r.options.ends).toEqual(new Date(Date.UTC(2025, 0, 30, 0, 0, 0, 0)));
   });

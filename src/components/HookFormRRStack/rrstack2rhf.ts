@@ -63,7 +63,7 @@ const isMidnightUTC = (d: Date) =>
 export const rrstack2rhf = (
   rrstack: RRStackJson,
   opts: { endDatesInclusive?: boolean } = {},
-): { rhf: HookFormRRStackData; timeUnit: UnixTimeUnit } => {
+): HookFormRRStackData => {
   const { endDatesInclusive } = opts;
   const { timeUnit, timezone } = rrstack;
 
@@ -130,10 +130,7 @@ export const rrstack2rhf = (
       : [];
 
   return {
-    rhf: {
-      timezone: rrstack.timezone,
-      rules,
-    },
-    timeUnit: timeUnit as UnixTimeUnit,
+    ...rrstack,
+    rules,
   };
 };
