@@ -319,7 +319,7 @@ Optional release automation (release‑it) is configured. See scripts in package
 npm run docs
 ```
 
-Outputs static docs in `docs/` (config in `typedoc.json`). Hosted docs: [docs.karmanivero.us/hook-form-semantic](https://docs.karmanivero.us/hook-form-semantic)
+Outputs static docs in `docs/` (config in `typedoc.json`). Hosted docs: [here](https://docs.karmanivero.us/hook-form-semantic)
 
 ---
 
