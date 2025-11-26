@@ -151,7 +151,7 @@ export default function Example() {
 
 All components use RHF Controller wiring and propagate Semantic UI‑style errors. Pass Semantic UI props via the component’s prefixed prop groups (e.g., `menu*`, `dropdown*`) or directly where noted.
 
-- HookFormField
+- [HookFormField](./assets/content/components/HookFormField.md)
   - Generic wrapper for any input/control. Use `control={Input}` for simple cases or function‑as‑child for custom mapping.
   - Example (function child mapping checked/value):
 
@@ -185,7 +185,7 @@ All components use RHF Controller wiring and propagate Semantic UI‑style error
 />
 ```
 
-- HookFormPhone
+- [HookFormPhone](./assets/content/components/HookFormPhone.md)
   - International phone input using react-international-phone with validation via google-libphonenumber.
   - Example:
 
@@ -198,7 +198,7 @@ All components use RHF Controller wiring and propagate Semantic UI‑style error
 />
 ```
 
-- HookFormDatePicker
+- [HookFormDatePicker](./assets/content/components/HookFormDatePicker.md)
   - Single date with optional “Include Time” toggle (react-date-picker / react-datetime-picker).
   - Example:
 
@@ -210,7 +210,7 @@ All components use RHF Controller wiring and propagate Semantic UI‑style error
 />
 ```
 
-- HookFormDateRangePicker
+- [HookFormDateRangePicker](./assets/content/components/HookFormDateRangePicker.md)
   - Date or datetime ranges with presets.
   - Utilities exported: `defaultPresets`, `filterPresets`, `extractTimestamps`.
   - Example:
@@ -230,14 +230,14 @@ import {
 />;
 ```
 
-- HookFormMenu / HookFormMenuDisplayMode
+- [HookFormMenu](./assets/content/components/HookFormMenu.md) / [HookFormMenuDisplayMode](./assets/content/components/HookFormMenuDisplayMode.md)
   - Menu selection control; the DisplayMode variant ships a prebuilt “Cards/Table” selector.
 
 ```tsx
 <HookFormMenuDisplayMode<MyForm> hookControl={control} hookName="mode" />
 ```
 
-- HookFormSort
+- [HookFormSort](./assets/content/components/HookFormSort.md)
   - Dropdown + button to manage `[field, ascending]` tuple semantics.
 
 ```tsx
@@ -252,7 +252,7 @@ import {
 />
 ```
 
-- HookFormWysiwygEditor
+- [HookFormWysiwygEditor](./assets/content/components/HookFormWysiwygEditor.md)
   - Rich text editor (react-draft-wysiwyg); returns HTML string to RHF.
 
 ```tsx
@@ -263,7 +263,7 @@ import {
 />
 ```
 
-- HookFormJsonEditor
+- [HookFormJsonEditor](./assets/content/components/HookFormJsonEditor.md)
   - Vanilla JSON Editor integration; accepts/returns either JSON object or text.
 
 ```tsx
