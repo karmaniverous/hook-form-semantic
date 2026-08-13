@@ -53,7 +53,11 @@ const commonInputOptions = {
   // The subpath barrel is an explicit entry: with a single entry rollup
   // collapses the re-export-only module, and the ./core/phone export target
   // (dist/mjs/core/phone/index.js) is never emitted.
-  input: ['src/index.ts', 'src/core/phone/index.ts'],
+  input: [
+    'src/index.ts',
+    'src/core/phone/index.ts',
+    'src/core/rrstack/index.ts',
+  ],
   external: [
     ...Object.keys(pkg.dependencies ?? {}),
     ...Object.keys(pkg.peerDependencies ?? {}),
@@ -103,6 +107,20 @@ const config: RollupOptions[] = [
       {
         extend: true,
         file: `${outputPath}/core/phone/index.d.ts`,
+        format: 'esm',
+      },
+    ],
+  },
+
+  // Type definitions for the ./core/rrstack subpath export.
+  {
+    ...commonInputOptions,
+    input: 'src/core/rrstack/index.ts',
+    plugins: [...commonInputOptions.plugins, dtsPlugin()],
+    output: [
+      {
+        extend: true,
+        file: `${outputPath}/core/rrstack/index.d.ts`,
         format: 'esm',
       },
     ],

@@ -10,14 +10,14 @@ import type {
 import type { AccordionTitleProps } from 'semantic-ui-react';
 import { Accordion, Button, Icon, Label, Segment } from 'semantic-ui-react';
 
+import type { HookFormRRStackRuleData } from '@/core/rrstack';
+import { conformRule } from '@/core/rrstack';
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 
-import { conformRule } from './conformRule';
 import { HookFormRRStackRuleDescription } from './HookFormRRStackRuleDescription';
 import { HookFormRRStackRuleForm } from './HookFormRRStackRuleForm';
-import type { HookFormRRStackRuleData } from './types';
 
 type RuleMutation = (index: number) => void;
 

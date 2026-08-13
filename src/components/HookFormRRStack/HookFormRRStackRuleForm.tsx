@@ -1,6 +1,7 @@
 import { type FieldPath, type FieldValues, type Path } from 'react-hook-form';
 import { Container, Grid } from 'semantic-ui-react';
 
+import type { HookFormRRStackRuleData } from '@/core/rrstack';
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 
@@ -10,7 +11,6 @@ import { HookFormRRStackRuleMonthdays } from './HookFormRRStackRuleMonthdays';
 import { HookFormRRStackRuleRange } from './HookFormRRStackRuleRange';
 import { HookFormRRStackRuleTime } from './HookFormRRStackRuleTime';
 import { HookFormRRStackRuleWeekdays } from './HookFormRRStackRuleWeekdays';
-import type { HookFormRRStackRuleData } from './types';
 
 type HookFormRRStackRuleFormProps<
   TFieldValues extends FieldValues = FieldValues,

@@ -25,9 +25,9 @@ import { HookFormJsonEditor } from '@/components/HookFormJsonEditor';
 import { HookFormNumeric } from '@/components/HookFormNumeric';
 import { HookFormPhone } from '@/components/HookFormPhone';
 import { HookFormRRStack } from '@/components/HookFormRRStack';
-import type { HookFormRRStackData } from '@/components/HookFormRRStack/types';
 import { HookFormSort } from '@/components/HookFormSort';
 import { HookFormWysiwygEditor } from '@/components/HookFormWysiwygEditor';
+import type { HookFormRRStackData } from '@/core/rrstack';
 
 interface FormData {
   firstName: string;

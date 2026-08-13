@@ -12,9 +12,10 @@ import { useForm } from 'react-hook-form';
 import { Form } from 'semantic-ui-react';
 import { describe, expect, it } from 'vitest';
 
+import type { HookFormRRStackData } from '@/core/rrstack';
+
 import { HookFormRRStack } from './HookFormRRStack';
 import { getFieldByLabel, getFieldValueText } from './testUtils/fields';
-import type { HookFormRRStackData } from './types';
 
 // Shared harnesses
 const TestForm = () => {

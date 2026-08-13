@@ -4,8 +4,9 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Form } from 'semantic-ui-react';
 
+import type { HookFormRRStackData } from '@/core/rrstack';
+
 import { HookFormRRStack } from '../HookFormRRStack';
-import type { HookFormRRStackData } from '../types';
 
 // Reduce benchmark noise in CI by filtering the specific React act() warning.
 // Keep the filter narrow to avoid hiding other issues; enable it only on CI.

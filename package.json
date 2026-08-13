@@ -97,6 +97,10 @@
     "./core/phone": {
       "types": "./dist/core/phone/index.d.ts",
       "default": "./dist/mjs/core/phone/index.js"
+    },
+    "./core/rrstack": {
+      "types": "./dist/core/rrstack/index.d.ts",
+      "default": "./dist/mjs/core/rrstack/index.js"
     }
   },
   "files": [
@@ -149,13 +153,13 @@
     "vanilla-jsoneditor": "^3.9.0"
   },
   "peerDependenciesMeta": {
+    "@karmaniverous/rrstack": {
+      "optional": true
+    },
     "@types/react": {
       "optional": true
     },
     "@types/react-dom": {
-      "optional": true
-    },
-    "@karmaniverous/rrstack": {
       "optional": true
     },
     "@wojtekmaj/react-daterange-picker": {
@@ -201,6 +205,9 @@
       "optional": true
     },
     "semantic-ui-css": {
+      "optional": true
+    },
+    "semantic-ui-react": {
       "optional": true
     },
     "vanilla-jsoneditor": {

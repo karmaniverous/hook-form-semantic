@@ -5,9 +5,9 @@
     "src/**/index.ts"
   ],
   "ignoreDependencies": [
+    "@karmaniverous/rrstack",
     "@types/react",
     "@types/react-dom",
-    "@karmaniverous/rrstack",
     "@wojtekmaj/react-daterange-picker",
     "@wojtekmaj/react-datetimerange-picker",
     "draft-js",
@@ -23,6 +23,7 @@
     "react-number-format",
     "react-responsive",
     "semantic-ui-css",
+    "semantic-ui-react",
     "vanilla-jsoneditor"
   ],
   "ignore": [
@@ -30,12 +31,18 @@
     "playground/src/vite-env.d.ts",
     "src/utils/prefixProps.ts"
   ],
-  "project": ["*/**", "!docs/**"],
+  "project": [
+    "*/**",
+    "!docs/**"
+  ],
   "rules": {
     "exports": "off",
     "types": "off"
   },
   "vitest": {
-    "entry": ["*/**/*.test.!(*.*)", "*/**/*.bench.!(*.*)"]
+    "entry": [
+      "*/**/*.test.!(*.*)",
+      "*/**/*.bench.!(*.*)"
+    ]
   }
 }
