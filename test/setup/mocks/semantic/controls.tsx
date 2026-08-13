@@ -84,8 +84,9 @@ export const Label: React.FC<
 
 type InputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
-  'onChange'
+  'label' | 'onChange'
 > & {
+  label?: React.ReactNode;
   onChange?: (
     event: React.SyntheticEvent<HTMLElement>,
     data: { value?: string },
@@ -93,14 +94,20 @@ type InputProps = Omit<
 };
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ onChange, ...props }, ref) =>
-    React.createElement('input', {
+  ({ label, onChange, ...props }, ref) => {
+    const input = React.createElement('input', {
       ...props,
       ref,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) onChange(e, { value: e.target.value });
       },
-    }),
+    });
+    // Semantic renders an element label (the phone country Dropdown) as a
+    // sibling control; stringifying it onto the input hides it from tests.
+    return React.isValidElement(label)
+      ? React.createElement(React.Fragment, null, label, input)
+      : input;
+  },
 ) as React.ForwardRefExoticComponent<
   InputProps & React.RefAttributes<HTMLInputElement>
 > & { displayName?: string };
@@ -141,11 +148,15 @@ export const Dropdown: React.FC<StrictDropdownProps> = ({
   value,
   placeholder,
   multiple,
+  disabled,
+  search,
 }) =>
   React.createElement(
     'select',
     {
       'data-testid': 'dropdown',
+      disabled: !!disabled,
+      'data-search': search ? 'true' : undefined,
       multiple: !!multiple,
       value:
         value === undefined || value === null

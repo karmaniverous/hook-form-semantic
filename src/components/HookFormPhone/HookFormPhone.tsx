@@ -38,6 +38,15 @@ export interface HookFormPhoneProps<
   phonePlaceholderNumberChar?: string;
   mobileBreakpoint?: number;
   isValidating?: boolean;
+  /**
+   * Enable typeahead on the country selector. Off by default: the search
+   * variant renders a real text input inside the selector, which puts a
+   * caret in the tab order where users expect a button — tabbing from the
+   * previous field lands in the country filter and typed digits filter
+   * countries instead of dialling. The non-search dropdown is still fully
+   * keyboard operable (arrows, Enter, letter-jump).
+   */
+  countrySearch?: boolean;
 }
 
 const NEXT_PUBLIC_MOBILE_BREAKPOINT = 768;
@@ -91,7 +100,13 @@ export const HookFormPhone = <
       fieldState: { error },
     },
     deprefixed: { phone: phoneProps },
-    rest: { mobileBreakpoint, children, isValidating, ...fieldProps },
+    rest: {
+      mobileBreakpoint,
+      children,
+      countrySearch,
+      isValidating,
+      ...fieldProps
+    },
   } = useHookForm({ props: mergedProps, prefixes: ['phone'] as const });
 
   const { inputValue, phone, country, setCountry, handlePhoneValueChange } =
@@ -150,13 +165,20 @@ export const HookFormPhone = <
         <Dropdown
           button
           deburr
+          disabled={countryOptions.length === 1}
           fluid
           onChange={(e, data) =>
             setCountry(data.value as string, { focusOnInput: true })
           }
           options={countryOptions}
-          search
-          style={{ marginBottom: '0.5rem' }}
+          search={Boolean(countrySearch)}
+          // A single-country selector is informational, not broken: keep the
+          // disabled semantics (no tab stop, no click, aria-disabled) but not
+          // Semantic's dimming.
+          style={{
+            marginBottom: '0.5rem',
+            ...(countryOptions.length === 1 ? { opacity: 1 } : {}),
+          }}
           value={country.iso2}
         />
       )}
@@ -167,11 +189,14 @@ export const HookFormPhone = <
           isMobile ? undefined : (
             <Dropdown
               deburr
+              disabled={countryOptions.length === 1}
               onChange={(e, data) =>
                 setCountry(data.value as string, { focusOnInput: true })
               }
               options={countryOptions}
-              search
+              search={Boolean(countrySearch)}
+              // Informational, not broken — see the mobile Dropdown above.
+              style={countryOptions.length === 1 ? { opacity: 1 } : undefined}
               value={country.iso2}
             />
           )
