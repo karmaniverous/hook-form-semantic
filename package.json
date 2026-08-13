@@ -93,6 +93,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/mjs/index.js"
+    },
+    "./core/phone": {
+      "types": "./dist/core/phone/index.d.ts",
+      "default": "./dist/mjs/core/phone/index.js"
     }
   },
   "files": [

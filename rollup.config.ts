@@ -50,7 +50,10 @@ const commonAliases: Array<{ find: string; replacement: string }> = [
 ];
 
 const commonInputOptions = {
-  input: 'src/index.ts',
+  // The subpath barrel is an explicit entry: with a single entry rollup
+  // collapses the re-export-only module, and the ./core/phone export target
+  // (dist/mjs/core/phone/index.js) is never emitted.
+  input: ['src/index.ts', 'src/core/phone/index.ts'],
   external: [
     ...Object.keys(pkg.dependencies ?? {}),
     ...Object.keys(pkg.peerDependencies ?? {}),
@@ -74,14 +77,32 @@ const config: RollupOptions[] = [
     ],
   },
 
-  // Type definitions output.
+  // Type definitions output. Unlike the ESM build, each dts build rolls up
+  // to a single file, so each gets exactly one entry.
   {
     ...commonInputOptions,
+    input: 'src/index.ts',
     plugins: [...commonInputOptions.plugins, dtsPlugin()],
     output: [
       {
         extend: true,
         file: `${outputPath}/index.d.ts`,
+        format: 'esm',
+      },
+    ],
+  },
+
+  // Type definitions for the ./core/phone subpath export. The ESM output
+  // needs no extra entry: preserveModules already emits
+  // dist/mjs/core/phone/index.js from the main graph.
+  {
+    ...commonInputOptions,
+    input: 'src/core/phone/index.ts',
+    plugins: [...commonInputOptions.plugins, dtsPlugin()],
+    output: [
+      {
+        extend: true,
+        file: `${outputPath}/core/phone/index.d.ts`,
         format: 'esm',
       },
     ],

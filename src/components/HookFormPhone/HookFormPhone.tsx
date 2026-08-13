@@ -3,10 +3,7 @@ import { type ChangeEvent, type ReactNode, useMemo, useState } from 'react';
 import type { FieldPath } from 'react-hook-form';
 import { type FieldValues } from 'react-hook-form';
 import {
-  defaultCountries,
   FlagImage,
-  getActiveFormattingMask,
-  parseCountry,
   usePhoneInput,
   type UsePhoneInputConfig,
 } from 'react-international-phone';
@@ -19,11 +16,15 @@ import {
   Label,
 } from 'semantic-ui-react';
 
+import {
+  buildPhonePlaceholder,
+  getPhoneCountryOptions,
+  makePhoneValidate,
+  normalizePhoneFormattingChars,
+} from '@/core/phone';
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
-
-import { isPhoneValid } from './isPhoneValid';
 
 export interface HookFormPhoneProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -48,16 +49,19 @@ export const HookFormPhone = <
   props: HookFormPhoneProps<TFieldValues, TName>,
 ) => {
   // One-char formatting tokens (derive directly from props)
-  const [prefix, charAfterDialCode, placeholderNumberChar] = useMemo(() => {
-    const p = props.phonePrefix?.slice(0, 1) || '+';
-    const c = props.phoneCharAfterDialCode?.slice(0, 1) || ' ';
-    const n = props.phonePlaceholderNumberChar?.slice(0, 1) || '.';
-    return [p, c, n] as const;
-  }, [
-    props.phonePrefix,
-    props.phoneCharAfterDialCode,
-    props.phonePlaceholderNumberChar,
-  ]);
+  const chars = useMemo(
+    () =>
+      normalizePhoneFormattingChars({
+        charAfterDialCode: props.phoneCharAfterDialCode,
+        placeholderNumberChar: props.phonePlaceholderNumberChar,
+        prefix: props.phonePrefix,
+      }),
+    [
+      props.phonePrefix,
+      props.phoneCharAfterDialCode,
+      props.phonePlaceholderNumberChar,
+    ],
+  );
 
   const [dialCode, setDialCode] = useState('');
 
@@ -71,14 +75,11 @@ export const HookFormPhone = <
         ...props.hookRules,
         validate: {
           ...baseValidate,
-          valid: (v: string) =>
-            `${prefix}${dialCode}`.startsWith(v) ||
-            isPhoneValid(v) ||
-            'Invalid phone number!',
+          valid: makePhoneValidate(chars.prefix, dialCode),
         },
       },
     } as HookFormPhoneProps<TFieldValues, TName>;
-  }, [props, prefix, dialCode]);
+  }, [props, chars.prefix, dialCode]);
 
   const {
     controller: {
@@ -104,17 +105,16 @@ export const HookFormPhone = <
       value: hookFieldValue || '',
     });
 
-  const placeholder = useMemo(() => {
-    const mask = getActiveFormattingMask({ phone, country });
-    return `${phoneProps.disableDialCodeAndPrefix ? '' : `${prefix}${country.dialCode}${charAfterDialCode}`}${mask?.replaceAll('.', placeholderNumberChar)}`;
-  }, [
-    charAfterDialCode,
-    country,
-    phone,
-    phoneProps.disableDialCodeAndPrefix,
-    placeholderNumberChar,
-    prefix,
-  ]);
+  const placeholder = useMemo(
+    () =>
+      buildPhonePlaceholder({
+        chars,
+        country,
+        disableDialCodeAndPrefix: phoneProps.disableDialCodeAndPrefix,
+        phone,
+      }),
+    [chars, country, phone, phoneProps.disableDialCodeAndPrefix],
+  );
 
   const hookField = useMemo(
     () => ({
@@ -133,16 +133,12 @@ export const HookFormPhone = <
 
   const countryOptions = useMemo(
     () =>
-      (phoneProps.countries ?? defaultCountries).map((country) => {
-        const { dialCode, iso2, name } = parseCountry(country);
-
-        return {
-          image: <FlagImage iso2={iso2} size={20} />,
-          key: iso2,
-          text: `${name} (+${dialCode})`,
-          value: iso2,
-        };
-      }),
+      getPhoneCountryOptions(phoneProps.countries).map(({ iso2, label }) => ({
+        image: <FlagImage iso2={iso2} size={20} />,
+        key: iso2,
+        text: label,
+        value: iso2,
+      })),
     [phoneProps.countries],
   );
 

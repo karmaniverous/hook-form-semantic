@@ -1,2 +1,2 @@
 export { HookFormPhone, type HookFormPhoneProps } from './HookFormPhone';
-export { isPhoneValid } from './isPhoneValid';
+export { isPhoneValid } from '@/core/phone';
