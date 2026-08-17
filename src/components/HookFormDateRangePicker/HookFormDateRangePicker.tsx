@@ -22,15 +22,13 @@ import {
   type FormFieldProps,
 } from 'semantic-ui-react';
 
+import type { DateRange, Presets } from '@/core/dateRange';
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
 import { isFn } from '@/utils/isFn';
 import { local2utcDateTime, utc2localDateTime } from '@/utils/utc';
-
-import type { DateRange } from './DateRange';
-import type { Presets } from './presets';
 
 const eqDate = (a: Date | null | undefined, b: Date | null | undefined) =>
   (a == null && b == null) || (!!a && !!b && a.getTime() === b.getTime());

@@ -55,6 +55,7 @@ const commonInputOptions = {
   // (dist/mjs/core/phone/index.js) is never emitted.
   input: [
     'src/index.ts',
+    'src/core/dateRange/index.ts',
     'src/core/phone/index.ts',
     'src/core/rrstack/index.ts',
   ],
@@ -91,6 +92,20 @@ const config: RollupOptions[] = [
       {
         extend: true,
         file: `${outputPath}/index.d.ts`,
+        format: 'esm',
+      },
+    ],
+  },
+
+  // Type definitions for the ./core/dateRange subpath export.
+  {
+    ...commonInputOptions,
+    input: 'src/core/dateRange/index.ts',
+    plugins: [...commonInputOptions.plugins, dtsPlugin()],
+    output: [
+      {
+        extend: true,
+        file: `${outputPath}/core/dateRange/index.d.ts`,
         format: 'esm',
       },
     ],

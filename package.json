@@ -94,6 +94,10 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/mjs/index.js"
     },
+    "./core/dateRange": {
+      "types": "./dist/core/dateRange/index.d.ts",
+      "default": "./dist/mjs/core/dateRange/index.js"
+    },
     "./core/phone": {
       "types": "./dist/core/phone/index.d.ts",
       "default": "./dist/mjs/core/phone/index.js"
