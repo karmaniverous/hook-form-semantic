@@ -268,6 +268,7 @@
     "knip": "knip",
     "lint": "node --import tsx ./node_modules/eslint/bin/eslint.js .",
     "lint:fix": "node --import tsx ./node_modules/eslint/bin/eslint.js --fix .",
+    "prepare": "npm run build",
     "preview": "vite preview --config playground/vite.config.ts",
     "release": "dotenvx run -f .env.local -- release-it",
     "release:pre": "dotenvx run -f .env.local -- release-it --no-git.requireBranch --github.prerelease --preRelease",
