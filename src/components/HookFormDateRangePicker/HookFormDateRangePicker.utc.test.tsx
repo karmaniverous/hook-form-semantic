@@ -43,10 +43,7 @@ function Harness({
   );
 }
 
-// NOTE: Skipped, same gap as HookFormDatePicker.utc — utc=true leaves the
-// runner's offset on both ends instead of normalising to UTC. Documents it
-// rather than enforcing it.
-describe.skip('HookFormDateRangePicker (utc=true)', () => {
+describe('HookFormDateRangePicker (utc=true)', () => {
   it('stores date-only start/end as midnight UTC', () => {
     render(<Harness />);
     const start = screen.getByTestId('daterange-start');

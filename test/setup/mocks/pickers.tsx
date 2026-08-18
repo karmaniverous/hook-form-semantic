@@ -99,8 +99,19 @@ vi.mock('@wojtekmaj/react-daterange-picker', () => {
   type Props = {
     onChange?: (value: [Date | null, Date | null]) => void;
   };
-  const Comp: React.FC<Props> = ({ onChange }) =>
-    React.createElement(
+  /* Holds the range across edits. The real widget emits BOTH ends on every
+     change; a mock that emits [start, null] then [null, end] discards whichever
+     end was set first, so a two-step edit could never be asserted. */
+  const Comp: React.FC<Props> = ({ onChange }) => {
+    const range = React.useRef<[Date | null, Date | null]>([null, null]);
+    const set = (index: 0 | 1) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      range.current[index] = e.currentTarget.value
+        ? new Date(e.currentTarget.value)
+        : null;
+      onChange?.([range.current[0], range.current[1]]);
+    };
+
+    return React.createElement(
       'div',
       {
         'data-testid': 'daterange-picker',
@@ -108,22 +119,15 @@ vi.mock('@wojtekmaj/react-daterange-picker', () => {
       React.createElement('input', {
         'data-testid': 'daterange-start',
         type: 'date',
-        onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-          onChange?.([
-            e.currentTarget.value ? new Date(e.currentTarget.value) : null,
-            null,
-          ]),
+        onChange: set(0),
       } as React.InputHTMLAttributes<HTMLInputElement>),
       React.createElement('input', {
         'data-testid': 'daterange-end',
         type: 'date',
-        onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-          onChange?.([
-            null,
-            e.currentTarget.value ? new Date(e.currentTarget.value) : null,
-          ]),
+        onChange: set(1),
       } as React.InputHTMLAttributes<HTMLInputElement>),
     );
+  };
   return { __esModule: true, default: Comp };
 });
 
@@ -131,8 +135,19 @@ vi.mock('@wojtekmaj/react-datetimerange-picker', () => {
   type Props = {
     onChange?: (value: [Date | null, Date | null]) => void;
   };
-  const Comp: React.FC<Props> = ({ onChange }) =>
-    React.createElement(
+  /* Holds the range across edits. The real widget emits BOTH ends on every
+     change; a mock that emits [start, null] then [null, end] discards whichever
+     end was set first, so a two-step edit could never be asserted. */
+  const Comp: React.FC<Props> = ({ onChange }) => {
+    const range = React.useRef<[Date | null, Date | null]>([null, null]);
+    const set = (index: 0 | 1) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      range.current[index] = e.currentTarget.value
+        ? new Date(e.currentTarget.value)
+        : null;
+      onChange?.([range.current[0], range.current[1]]);
+    };
+
+    return React.createElement(
       'div',
       {
         'data-testid': 'datetimerange-picker',
@@ -140,21 +155,14 @@ vi.mock('@wojtekmaj/react-datetimerange-picker', () => {
       React.createElement('input', {
         'data-testid': 'datetimerange-start',
         type: 'datetime-local',
-        onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-          onChange?.([
-            e.currentTarget.value ? new Date(e.currentTarget.value) : null,
-            null,
-          ]),
+        onChange: set(0),
       } as React.InputHTMLAttributes<HTMLInputElement>),
       React.createElement('input', {
         'data-testid': 'datetimerange-end',
         type: 'datetime-local',
-        onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-          onChange?.([
-            null,
-            e.currentTarget.value ? new Date(e.currentTarget.value) : null,
-          ]),
+        onChange: set(1),
       } as React.InputHTMLAttributes<HTMLInputElement>),
     );
+  };
   return { __esModule: true, default: Comp };
 });

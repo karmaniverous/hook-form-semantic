@@ -21,10 +21,7 @@ function Harness({ showTime = false }: { showTime?: boolean }) {
   );
 }
 
-// NOTE: Skipped. utc=true does not normalise a date-only selection to
-// midnight UTC — the stored Date carries the runner's offset (2025-01-02T08:00Z
-// at UTC+8). Documents the gap rather than enforcing it.
-describe.skip('HookFormDatePicker (utc=true)', () => {
+describe('HookFormDatePicker (utc=true)', () => {
   it('stores date-only selection as midnight UTC', () => {
     render(<Harness />);
     const date = screen.getByTestId('date-picker');
