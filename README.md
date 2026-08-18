@@ -15,6 +15,7 @@ Highlights
 Contents
 
 - [Installation](#installation)
+- [Core](#core-no-semantic-ui) (no Semantic UI)
 - [CSS](#css-import-what-you-use) (what to import)
 - [Quick start](#quick-start)
 - [Components overview](#components-overview-mini-examples) (mini examples)
@@ -31,7 +32,13 @@ Contents
 Core peer dependencies (always install in your app)
 
 ```bash
-npm i @karmaniverous/hook-form-semantic react react-dom react-hook-form semantic-ui-react semantic-ui-css
+npm i @karmaniverous/hook-form-semantic react react-dom react-hook-form
+```
+
+Add Semantic UI for the components. Optional peers — skip them if you only use [Core](#core-no-semantic-ui).
+
+```bash
+npm i semantic-ui-react semantic-ui-css
 ```
 
 Install peers per component you use
@@ -73,6 +80,34 @@ npm i @karmaniverous/rrstack
 ESM only
 
 - This package ships ESM only. Most modern toolchains (Vite, Next, CRA v5+, Rollup, Webpack 5) work out of the box.
+
+## Core (no Semantic UI)
+
+Behaviour without JSX, for renderers built on something else. These subpaths import no Semantic UI, which is why `semantic-ui-react` and `semantic-ui-css` are optional peers.
+
+```ts
+import {
+  getPhoneCountryOptions,
+  isPhoneValid,
+  makePhoneValidate,
+} from '@karmaniverous/hook-form-semantic/core/phone';
+
+import {
+  conformRule,
+  rhf2rrstack,
+  timezoneOptions,
+} from '@karmaniverous/hook-form-semantic/core/rrstack';
+
+import {
+  defaultPresets,
+  extractTimestamps,
+  filterPresets,
+} from '@karmaniverous/hook-form-semantic/core/dateRange';
+```
+
+The Semantic components import the same modules, so behaviour matches.
+
+---
 
 ## CSS (import what you use)
 
@@ -329,6 +364,8 @@ Outputs static docs in `docs/` (config in `typedoc.json`). Hosted docs: [here](h
   - Smaller surface area and simpler builds. Most modern bundlers work natively.
 - Do I need all peer dependencies?
   - No. Install the peers for only the components you use (see “Install peers per component”).
+- Can I use this without Semantic UI?
+  - Yes, via the [Core](#core-no-semantic-ui) subpaths. Semantic is an optional peer.
 - Styling?
   - Import Semantic UI CSS and any widget CSS you use (date pickers, WYSIWYG, JSON editor).
 
