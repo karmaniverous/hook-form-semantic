@@ -14,6 +14,10 @@ import { describe, expect, it } from 'vitest';
 import { HookFormRRStack } from './HookFormRRStack';
 import { getFieldByLabel, getFieldValueText } from './testUtils/fields';
 
+// NOTE: Skipped. The header's Starts/Ends and RuleDescription disagree under a
+// configured timezone — header reads 2025-10-01 08:00 where the rule starts
+// 2025-09-30 00:00, and a bounded span describes as "Active continuously".
+// Documents the gap rather than enforcing it.
 describe.skip('HookFormRRStack (timezone formatting: Starts/Ends vs RuleDescription)', () => {
   const renderHarness = () => {
     interface TF extends FieldValues {
