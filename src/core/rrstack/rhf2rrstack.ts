@@ -6,8 +6,6 @@ import type {
 import { dateOnlyToEpoch, wallTimeToEpoch } from '@karmaniverous/rrstack';
 import { omit } from 'radash';
 
-import { local2utcDateTime } from '@/utils/utc';
-
 import { conformRule } from './conformRule';
 import { csv2int } from './csv2int';
 import type {
@@ -48,11 +46,17 @@ export const rhf2rrstack = (
   };
 };
 
+/* UTC fields, matching `isMidnightUTC` in rrstack2rhf and the engine's own
+   helpers — `wallTimeToEpoch` and `dateOnlyToEpoch` both read UTC fields and
+   treat a Date as FLOATING wall time. Reading local fields here was the bug:
+   the two directions disagreed, so a load/save round-trip drifted a schedule by
+   the editor's UTC offset and oscillated between two values on alternate saves.
+   Invisible at UTC+0, which is why it survived. */
 const hasTime = (d: Date) =>
-  d.getHours() !== 0 ||
-  d.getMinutes() !== 0 ||
-  d.getSeconds() !== 0 ||
-  d.getMilliseconds() !== 0;
+  d.getUTCHours() !== 0 ||
+  d.getUTCMinutes() !== 0 ||
+  d.getUTCSeconds() !== 0 ||
+  d.getUTCMilliseconds() !== 0;
 
 /**
  * Map a single RHF rule to engine RuleJson with timezone-aware clamps.
@@ -74,7 +78,10 @@ export const rhfrule2rrstackrule = (
   const freq =
     options.freq && options.freq !== 'span' ? options.freq : undefined;
 
-  const startsUtc = local2utcDateTime(options.starts);
+  /* No local→UTC remap. Both sources of this value are already floating:
+     rrstack2rhf builds one via epochToWallDate, and a date input yields UTC
+     midnight. Remapping shifted it a second time. */
+  const startsUtc = options.starts;
 
   const starts =
     startsUtc instanceof Date
@@ -83,13 +90,21 @@ export const rhfrule2rrstackrule = (
         : dateOnlyToEpoch(startsUtc, timezone, timeUnit)
       : undefined;
 
-  const endsUtc = local2utcDateTime(options.ends);
+  const endsUtc = options.ends;
 
   const ends =
     endsUtc instanceof Date
       ? endDatesInclusive
         ? dateOnlyToEpoch(
-            new Date(endsUtc.setUTCDate(endsUtc.getUTCDate() + 1)),
+            /* Copy, not `setUTCDate` on the source — that mutated the Date held
+               in form state, so re-saving advanced the end by another day. */
+            new Date(
+              Date.UTC(
+                endsUtc.getUTCFullYear(),
+                endsUtc.getUTCMonth(),
+                endsUtc.getUTCDate() + 1,
+              ),
+            ),
             timezone,
             timeUnit,
           )
