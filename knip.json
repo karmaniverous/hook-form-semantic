@@ -1,48 +1,17 @@
 {
-  "entry": [
-    "playground/src/main.tsx",
-    "playground/vite.config.ts",
-    "src/**/index.ts"
-  ],
-  "ignoreDependencies": [
-    "@karmaniverous/rrstack",
-    "@types/react",
-    "@types/react-dom",
-    "@wojtekmaj/react-daterange-picker",
-    "@wojtekmaj/react-datetimerange-picker",
-    "draft-js",
-    "draftjs-to-html",
-    "google-libphonenumber",
-    "html-to-draftjs",
-    "react-calendar",
-    "react-clock",
-    "react-date-picker",
-    "react-datetime-picker",
-    "react-draft-wysiwyg",
-    "react-international-phone",
-    "react-number-format",
-    "react-responsive",
-    "semantic-ui-css",
-    "semantic-ui-react",
-    "vanilla-jsoneditor"
-  ],
+  "entry": ["src/**/index.ts"],
   "ignore": [
     ".stan/**",
     "playground/src/vite-env.d.ts",
     "src/utils/prefixProps.ts"
   ],
-  "project": [
-    "*/**",
-    "!docs/**"
-  ],
+  "ignoreBinaries": ["plantuml"],
+  "project": ["*/**", "!docs/**"],
   "rules": {
     "exports": "off",
     "types": "off"
   },
   "vitest": {
-    "entry": [
-      "*/**/*.test.!(*.*)",
-      "*/**/*.bench.!(*.*)"
-    ]
+    "entry": ["*/**/*.test.!(*.*)", "*/**/*.bench.!(*.*)"]
   }
 }
