@@ -2,8 +2,18 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.4.10](https://github.com/karmaniverous/hook-form-semantic/compare/0.4.9...0.4.10)
+
+- updated docs [`b94b9e1`](https://github.com/karmaniverous/hook-form-semantic/commit/b94b9e11145ce3ecaa0d84035de9968a5be0ae57)
+- updated docs [`fc8a9f7`](https://github.com/karmaniverous/hook-form-semantic/commit/fc8a9f7d162ae6242f45427bce1e03059d2f13c3)
+- chore: add copilot review instructions [`14fe4d5`](https://github.com/karmaniverous/hook-form-semantic/commit/14fe4d57076b7d71fca39844daf6638a45b5b0c9)
+- npm install [`6936af4`](https://github.com/karmaniverous/hook-form-semantic/commit/6936af46e1d44a5fbdc479e6f50d45f1dc24207e)
+
 #### [0.4.9](https://github.com/karmaniverous/hook-form-semantic/compare/0.4.8...0.4.9)
 
+> 9 October 2025
+
+- chore: release v0.4.9 [`e4776f6`](https://github.com/karmaniverous/hook-form-semantic/commit/e4776f6cde0a81e8e48368cfd0bb6d43a104102d)
 - simplified rrstack2rhf [`df8d3a8`](https://github.com/karmaniverous/hook-form-semantic/commit/df8d3a86cde6200c3348ea93ec454f2fd8b91787)
 
 #### [0.4.8](https://github.com/karmaniverous/hook-form-semantic/compare/0.4.7...0.4.8)
