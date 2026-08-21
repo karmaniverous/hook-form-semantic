@@ -22,15 +22,18 @@ import {
   type FormFieldProps,
 } from 'semantic-ui-react';
 
+import type { DateRange, Presets } from '@/core/dateRange';
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
 import { isFn } from '@/utils/isFn';
-import { local2utcDateTime, utc2localDateTime } from '@/utils/utc';
-
-import type { DateRange } from './DateRange';
-import type { Presets } from './presets';
+import {
+  local2utcDateOnly,
+  local2utcDateTime,
+  utc2localDateOnly,
+  utc2localDateTime,
+} from '@/utils/utc';
 
 const eqDate = (a: Date | null | undefined, b: Date | null | undefined) =>
   (a == null && b == null) || (!!a && !!b && a.getTime() === b.getTime());
@@ -84,9 +87,14 @@ export const HookFormDateRangePicker = <
 
   const [includeTime, setIncludeTime] = useState<boolean | undefined>(false);
 
+  /* See HookFormDatePicker: the date-only and datetime mappings are not
+     interchangeable, and the widget reports the two differently. */
+  const toLocal = includeTime ? utc2localDateTime : utc2localDateOnly;
+  const toUtc = includeTime ? local2utcDateTime : local2utcDateOnly;
+
   const value = useMemo(
-    () => (raw && utc ? (raw as DateRange).map(utc2localDateTime) : raw),
-    [raw, includeTime],
+    () => (raw && utc ? (raw as DateRange).map(toLocal) : raw),
+    [raw, toLocal, utc],
   );
 
   const handleChange = useCallback(
@@ -97,16 +105,13 @@ export const HookFormDateRangePicker = <
       const raw = v as DateRange;
       const mapped: DateRange =
         utc && raw
-          ? [
-              raw[0] ? local2utcDateTime(raw[0]) : null,
-              raw[1] ? local2utcDateTime(raw[1]) : null,
-            ]
+          ? [raw[0] ? toUtc(raw[0]) : null, raw[1] ? toUtc(raw[1]) : null]
           : raw;
       hookFieldOnChange({
         target: { type: 'date', value: mapped },
       } as unknown as React.SyntheticEvent<HTMLElement>);
     },
-    [hookFieldOnChange, includeTime, onDateChange, onTimeChange, utc],
+    [hookFieldOnChange, includeTime, onDateChange, onTimeChange, toUtc, utc],
   );
 
   const [preset, setPreset] = useState<string | false>(false);
@@ -136,17 +141,14 @@ export const HookFormDateRangePicker = <
       const rv = resolvedValue as DateRange;
       const mapped: DateRange =
         utc && rv
-          ? [
-              rv[0] ? local2utcDateTime(rv[0]) : null,
-              rv[1] ? local2utcDateTime(rv[1]) : null,
-            ]
+          ? [rv[0] ? toUtc(rv[0]) : null, rv[1] ? toUtc(rv[1]) : null]
           : rv;
 
       hookFieldOnChange({
         target: { type: 'date', value: mapped },
       } as unknown as React.SyntheticEvent<HTMLElement>);
     },
-    [hookFieldOnChange, presets, includeTime, utc],
+    [hookFieldOnChange, presets, includeTime, toUtc, utc],
   );
 
   useEffect(() => {

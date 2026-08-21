@@ -12,13 +12,12 @@ import {
 } from 'react';
 import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form';
 
+import type { HookFormRRStackRuleData } from '@/core/rrstack';
+import { rhfrule2rrstackrule } from '@/core/rrstack';
 import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import { concatClassNames } from '@/utils/concatClassNames';
 import { getRootName } from '@/utils/getRootName';
-
-import { rhfrule2rrstackrule } from './rhf2rrstack';
-import type { HookFormRRStackRuleData } from './types';
 
 export interface HookFormRRStackRuleDescriptionPropsBase<
   TFieldValues extends FieldValues = FieldValues,

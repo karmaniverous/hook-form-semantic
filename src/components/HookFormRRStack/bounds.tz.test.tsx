@@ -14,7 +14,7 @@ import { describe, expect, it } from 'vitest';
 import { HookFormRRStack } from './HookFormRRStack';
 import { getFieldByLabel, getFieldValueText } from './testUtils/fields';
 
-describe.skip('HookFormRRStack (timezone formatting: Starts/Ends vs RuleDescription)', () => {
+describe('HookFormRRStack (timezone formatting: Starts/Ends vs RuleDescription)', () => {
   const renderHarness = () => {
     interface TF extends FieldValues {
       schedule: {
@@ -34,7 +34,10 @@ describe.skip('HookFormRRStack (timezone formatting: Starts/Ends vs RuleDescript
           <HookFormRRStack<TF>
             hookControl={control}
             hookName={'schedule' as Path<TF>}
-            describeIncludeBounds
+            /* showBounds, not includeBounds: the engine renamed the option and
+               a describeConfig key it does not recognise is silently dropped,
+               so the wrong name reads as "Active continuously". */
+            describeShowBounds
             describeBoundsFormat="yyyy-LL-dd HH:mm"
           />
         </Form>
@@ -52,7 +55,7 @@ describe.skip('HookFormRRStack (timezone formatting: Starts/Ends vs RuleDescript
     await user.selectOptions(tzDropdown, tz);
   };
 
-  it('span (Asia/Singapore exact scenario): header and description match screenshot (no endDatesInclusive)', async () => {
+  it('span (Asia/Singapore): header and description show the dates entered', async () => {
     renderHarness();
     const user = userEvent.setup();
 
@@ -75,16 +78,20 @@ describe.skip('HookFormRRStack (timezone formatting: Starts/Ends vs RuleDescript
       '.hook-form-rrstack-rule-description',
     ) as HTMLElement;
 
-    // Assert exact values shown in your browser screenshot
+    /* The dates entered, not a day earlier. The prior expectations captured a
+       screenshot taken while rhf2rrstack still remapped an already-floating
+       Date through local2utcDateTime, shifting both clamps by the editor's
+       offset. */
     await waitFor(() =>
-      expect(getFieldValueText(startsField)).toBe('2025-09-30 00:00'),
+      expect(getFieldValueText(startsField)).toBe('2025-10-01 00:00'),
     );
     await waitFor(() =>
-      expect(getFieldValueText(endsField)).toBe('2025-10-30 00:00'),
+      expect(getFieldValueText(endsField)).toBe('2025-10-31 00:00'),
     );
+    /* Prose, not the bracketed "[from …; until …]" the engine used to emit. */
     await waitFor(() =>
       expect((descEl.textContent ?? '').trim()).toContain(
-        '[from 2025-09-30 00:00; until 2025-10-30 00:00]',
+        'from 2025-10-01 00:00 until 2025-10-31 00:00',
       ),
     );
   });
@@ -120,22 +127,24 @@ describe.skip('HookFormRRStack (timezone formatting: Starts/Ends vs RuleDescript
       expect(ends).not.toBe('Indefinite');
       // Description matches header values
       expect((descEl.textContent ?? '').trim()).toContain(
-        `[from ${starts}; until ${ends}]`,
+        `from ${starts} until ${ends}`,
       );
     });
 
-    // Switch timezone to UTC; header and description must update accordingly
-    await setTimezone('Etc/UTC');
+    /* A real IANA zone: the dropdown is built from Intl.supportedValuesOf,
+       which omits the Etc/* and UTC aliases entirely. Singapore is the far
+       side of Chicago, so a stale conversion cannot coincide. */
+    await setTimezone('Asia/Singapore');
     await waitFor(() => {
       const starts = getFieldValueText(startsField);
       const ends = getFieldValueText(endsField);
       expect((descEl.textContent ?? '').trim()).toContain(
-        `[from ${starts}; until ${ends}]`,
+        `from ${starts} until ${ends}`,
       );
     });
   });
 
-  it('recurring (daily 09:00): header Starts and RuleDescription [from …] are consistent across timezones', async () => {
+  it('recurring (daily 09:00): header shows first occurrence, description shows start clamp', async () => {
     renderHarness();
     const user = userEvent.setup();
 
@@ -154,14 +163,16 @@ describe.skip('HookFormRRStack (timezone formatting: Starts/Ends vs RuleDescript
     const freqDropdown = within(freqField).getByTestId('dropdown');
     await user.selectOptions(freqDropdown as HTMLSelectElement, 'daily');
 
-    // Time: Hours = 9, Minutes = 0
-    const hoursInput = within(content).getByPlaceholderText('9, 13, 17');
-    fireEvent.change(hoursInput, { target: { value: '' } });
-    await user.type(hoursInput, '9');
-
-    const minutesInput = within(content).getByPlaceholderText('0, 30');
-    fireEvent.change(minutesInput, { target: { value: '' } });
-    await user.type(minutesInput, '0');
+    /* Re-query: changing Frequency remounts the accordion content, so a node
+       captured before the change is detached and typing into it is silently
+       lost. */
+    const live = () => screen.getAllByTestId('accordion-content')[0];
+    fireEvent.change(within(live()).getByPlaceholderText('9, 13, 17'), {
+      target: { value: '9' },
+    });
+    fireEvent.change(within(live()).getByPlaceholderText('0, 30'), {
+      target: { value: '0' },
+    });
 
     // Chicago (UTC-6) -> first occurrence: 2025-01-01 09:00 local
     const startsField = getFieldByLabel(document.body, 'Starts');
@@ -169,19 +180,29 @@ describe.skip('HookFormRRStack (timezone formatting: Starts/Ends vs RuleDescript
       expect(getFieldValueText(startsField)).toBe('2025-01-01 09:00'),
     );
 
+    /* The header reports the first OCCURRENCE, the description the rule's start
+       CLAMP. A recurring rule separates them by the recurrence time; only for a
+       span do they coincide. */
     const descEl = document.querySelector(
       '.hook-form-rrstack-rule-description',
     ) as HTMLElement;
     await waitFor(() => {
-      const starts = getFieldValueText(startsField);
-      expect((descEl.textContent ?? '').trim()).toContain(`[from ${starts}]`);
+      const text = (descEl.textContent ?? '').trim();
+      expect(text).toContain('at 9:00');
+      expect(text).toContain('from 2025-01-01 00:00');
     });
 
-    // Switch timezone to UTC; bound should shift to 15:00
-    await setTimezone('Etc/UTC');
-    await waitFor(() => {
-      const starts = getFieldValueText(startsField);
-      expect((descEl.textContent ?? '').trim()).toContain(`[from ${starts}]`);
-    });
+    /* Wall times are invariant under a timezone change. The rule means 9:00
+       wherever it is read, so switching zones moves the underlying instants and
+       leaves the display alone -- the same floating convention the round-trip
+       tests pin. */
+    await setTimezone('Asia/Singapore');
+    const tzDropdown = within(
+      getFieldByLabel(document.body, 'Timezone'),
+    ).getAllByTestId('dropdown')[0] as HTMLSelectElement;
+    await waitFor(() => expect(tzDropdown.value).toBe('Asia/Singapore'));
+
+    expect(getFieldValueText(startsField)).toBe('2025-01-01 09:00');
+    expect((descEl.textContent ?? '').trim()).toContain('at 9:00');
   });
 });

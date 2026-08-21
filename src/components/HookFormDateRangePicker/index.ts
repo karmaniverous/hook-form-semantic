@@ -1,8 +1,14 @@
-export type { DateRange } from './DateRange';
-export { extractTimestamps } from './extractTimestamps';
+/* The date-range logic lives in `@/core/dateRange`, which carries no JSX and no
+ * Semantic UI. Re-exported here so the package barrel keeps its existing
+ * surface — a consumer that only wants the presets should import the subpath
+ * and skip the component graph entirely. */
 export {
   HookFormDateRangePicker,
   type HookFormDateRangePickerProps,
 } from './HookFormDateRangePicker';
-export type { Presets } from './presets';
-export { defaultPresets, filterPresets } from './presets';
+export type { DateRange, Presets } from '@/core/dateRange';
+export {
+  defaultPresets,
+  extractTimestamps,
+  filterPresets,
+} from '@/core/dateRange';

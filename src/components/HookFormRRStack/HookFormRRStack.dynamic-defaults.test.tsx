@@ -71,11 +71,7 @@ describe('HookFormRRStack (diagnostics: default duration round-trip)', () => {
     });
   });
 
-  // NOTE: The UI reflection of the above default depends on RHF’s dynamic
-  // registration timing for newly-mounted fields. This test is intentionally
-  // skipped as it documents the current gap (input remains blank) rather than
-  // enforcing it.
-  it.skip('UI input reflects default duration days = 1 after freq → yearly', async () => {
+  it('UI input reflects default duration days = 1 after freq → yearly', async () => {
     interface TF extends FieldValues {
       schedule: RRStackOptions;
     }
@@ -100,8 +96,18 @@ describe('HookFormRRStack (diagnostics: default duration round-trip)', () => {
     const freqField = getFieldByLabel(content, 'Frequency');
     const freqDropdown = within(freqField).getByTestId('dropdown');
     fireEvent.change(freqDropdown, { target: { value: 'yearly' } });
-    const daysField = getFieldByLabel(content, 'Days');
-    const daysInput = daysField.querySelector('input') as HTMLInputElement;
-    await waitFor(() => expect(daysInput.value).toBe('1'));
+
+    /* Re-read the accordion content: the frequency change remounts it, and the
+       Days field queried off the pre-change node is detached, so its value
+       never updates however long the wait. */
+    await waitFor(() => {
+      const live = container.querySelector(
+        '[data-testid="accordion-content"]',
+      ) as HTMLElement;
+      const daysInput = getFieldByLabel(live, 'Days').querySelector(
+        'input',
+      ) as HTMLInputElement;
+      expect(daysInput.value).toBe('1');
+    });
   });
 });

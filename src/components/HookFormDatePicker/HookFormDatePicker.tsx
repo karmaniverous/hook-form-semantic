@@ -11,7 +11,12 @@ import { useHookForm } from '@/hooks/useHookForm';
 import type { HookFormProps } from '@/types/HookFormProps';
 import type { PrefixProps } from '@/types/PrefixProps';
 import { concatClassNames } from '@/utils/concatClassNames';
-import { local2utcDateTime, utc2localDateTime } from '@/utils/utc';
+import {
+  local2utcDateOnly,
+  local2utcDateTime,
+  utc2localDateOnly,
+  utc2localDateTime,
+} from '@/utils/utc';
 
 export interface HookFormDatePickerProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -58,9 +63,16 @@ export const HookFormDatePicker = <
 
   const [includeTime, setIncludeTime] = useState<boolean | undefined>(false);
 
+  /* Date-only and datetime map differently, and the widget reports them
+     differently: a date-only value arrives as UTC midnight, a datetime as local
+     wall time. Using the datetime pair for both shifted a date-only selection
+     by the runner's offset. */
+  const toLocal = includeTime ? utc2localDateTime : utc2localDateOnly;
+  const toUtc = includeTime ? local2utcDateTime : local2utcDateOnly;
+
   const value = useMemo(
-    () => (raw && utc ? utc2localDateTime(raw) : raw),
-    [raw, includeTime],
+    () => (raw && utc ? toLocal(raw) : raw),
+    [raw, toLocal, utc],
   );
 
   const handleChange = useCallback(
@@ -68,13 +80,13 @@ export const HookFormDatePicker = <
       (includeTime ? onTimeChange : onDateChange)?.(v as Date | null);
 
       const raw = v as Date | null;
-      const mapped = utc && raw ? local2utcDateTime(raw) : raw;
+      const mapped = utc && raw ? toUtc(raw) : raw;
 
       hookFieldOnChange({
         target: { type: 'date', value: mapped },
       } as unknown as React.SyntheticEvent<HTMLElement>);
     },
-    [hookFieldOnChange, includeTime, onDateChange, onTimeChange, utc],
+    [hookFieldOnChange, includeTime, onDateChange, onTimeChange, toUtc, utc],
   );
 
   return (

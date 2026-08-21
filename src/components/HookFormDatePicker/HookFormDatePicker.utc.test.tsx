@@ -21,7 +21,7 @@ function Harness({ showTime = false }: { showTime?: boolean }) {
   );
 }
 
-describe.skip('HookFormDatePicker (utc=true)', () => {
+describe('HookFormDatePicker (utc=true)', () => {
   it('stores date-only selection as midnight UTC', () => {
     render(<Harness />);
     const date = screen.getByTestId('date-picker');
