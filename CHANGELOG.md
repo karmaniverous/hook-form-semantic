@@ -2,8 +2,33 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [0.5.0](https://github.com/karmaniverous/hook-form-semantic/compare/0.4.10...0.5.0)
+
+- Feature/web 3573 semantic to tailwind [`#2`](https://github.com/karmaniverous/hook-form-semantic/pull/2)
+- [WEB-3573] document the core subpaths in TypeDoc, and test core/dateRange [`e04ba2c`](https://github.com/karmaniverous/hook-form-semantic/commit/e04ba2c23cb39017359d3248ac3fabbe05bbf12d)
+- [WEB-3573] patch-level dependency updates [`8dfef51`](https://github.com/karmaniverous/hook-form-semantic/commit/8dfef513e00ffc8d4164643751f788ffb1813ed0)
+- [WEB-3573] test against React 19, and move to vitest 4 [`5f27cbf`](https://github.com/karmaniverous/hook-form-semantic/commit/5f27cbf8fba7e349d67e38f212109236bad8a09a)
+- [WEB-3568] Extract core/phone: Semantic-free phone behaviour behind ./core/phone [`b2bc9b3`](https://github.com/karmaniverous/hook-form-semantic/commit/b2bc9b3ee0bb2b4b387d2324033c6c4448cb4aec)
+- [WEB-3573] fix schedule drift on every load/save cycle [`acd67d3`](https://github.com/karmaniverous/hook-form-semantic/commit/acd67d3a70c3929fa37217e213730cc2b4ac4a53)
+- [WEB-3573] fix utc=true for date-only values [`1581ec7`](https://github.com/karmaniverous/hook-form-semantic/commit/1581ec74051d1b526e70141c5397930d400f7a65)
+- [WEB-3568] Extract core/rrstack; make Semantic peers optional [`02b8a06`](https://github.com/karmaniverous/hook-form-semantic/commit/02b8a0644115dbfeb96ed47a43a6ee78aa128cfc)
+- [WEB-3573] unskipped rrstack bounds tests [`b6e6269`](https://github.com/karmaniverous/hook-form-semantic/commit/b6e6269724390a0c36c2915e588522cc4e2516a4)
+- [WEB-3568] Country selector: non-search by default, auto-disable (undimmed) for single country [`9f13a94`](https://github.com/karmaniverous/hook-form-semantic/commit/9f13a9481eb75d434fc59a07372dff8219b9f01b)
+- npm install [`ed4c972`](https://github.com/karmaniverous/hook-form-semantic/commit/ed4c97260ff3118f04681181fac2f2fcf7eec541)
+- resolved knip issues [`efcbb32`](https://github.com/karmaniverous/hook-form-semantic/commit/efcbb32ed2cb27b9e1948806ba1afdc9ba3501ab)
+- [WEB-3573] Merge main and fix merge conflicts [`d293bc0`](https://github.com/karmaniverous/hook-form-semantic/commit/d293bc0f46a3676fe953df00dbe5d422ec8045b1)
+- [WEB-3573] add a core/dateRange subpath [`fa89e1a`](https://github.com/karmaniverous/hook-form-semantic/commit/fa89e1a65fcb8b18155d5bce2db1610b4b4ee472)
+- [WEB-3573] README: document the core subpaths [`992966c`](https://github.com/karmaniverous/hook-form-semantic/commit/992966c3005b30eaba56967d9344afe7acc65651)
+- [WEB-3568] Sync the lockfile with the optional Semantic peers [`13965c1`](https://github.com/karmaniverous/hook-form-semantic/commit/13965c1ad0129e6dc2eeb19c149a4005b081aceb)
+- [WEB-3573] note why the skipped suites are skipped [`617f64b`](https://github.com/karmaniverous/hook-form-semantic/commit/617f64b167620efd330075f443d798f6b4b26b24)
+- [WEB-3568] chore: use forward slashes in the typescript.tsdk path [`8e26252`](https://github.com/karmaniverous/hook-form-semantic/commit/8e2625291eb33421d640940d1355a1f545b662f1)
+- [WEB-3573] build on install, so a git URL is consumable [`93a7e4f`](https://github.com/karmaniverous/hook-form-semantic/commit/93a7e4fc2fa9b6dd2b71455e3150b6ecc52cd488)
+
 #### [0.4.10](https://github.com/karmaniverous/hook-form-semantic/compare/0.4.9...0.4.10)
 
+> 21 August 2026
+
+- chore: release v0.4.10 [`ec2e0b9`](https://github.com/karmaniverous/hook-form-semantic/commit/ec2e0b969edb81f7f88e6d3142a9151f1c0c5a8d)
 - updated docs [`b94b9e1`](https://github.com/karmaniverous/hook-form-semantic/commit/b94b9e11145ce3ecaa0d84035de9968a5be0ae57)
 - updated docs [`fc8a9f7`](https://github.com/karmaniverous/hook-form-semantic/commit/fc8a9f7d162ae6242f45427bce1e03059d2f13c3)
 - chore: add copilot review instructions [`14fe4d5`](https://github.com/karmaniverous/hook-form-semantic/commit/14fe4d57076b7d71fca39844daf6638a45b5b0c9)
